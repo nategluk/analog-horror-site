@@ -720,6 +720,7 @@ body:not(.staff-mode) .guest-entertainments__card:hover {
 /* Thumbnails for entertainment cards (guest-only) */
 body:not(.staff-mode) .guest-thumb {
   height: 120px;
+  width: 100%;
   border-radius: 12px;
   border: 1px solid var(--border);
   background-color: color-mix(in srgb, var(--surface-alt) 88%, var(--accent) 12%);
@@ -737,6 +738,22 @@ body:not(.staff-mode) .guest-thumb {
   box-shadow: 0 6px 18px rgba(58, 47, 43, 0.08);
   transition: transform 0.22s ease, filter 0.22s ease;
   filter: saturate(0.92) contrast(0.98);
+}
+
+body:not(.staff-mode) img.guest-thumb {
+  display: block;
+  object-fit: cover;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.52) 0%,
+    rgba(255, 255, 255, 0.14) 46%,
+    rgba(255, 255, 255, 0.33) 100%
+  );
+}
+
+body:not(.staff-mode) img.guest-thumb.is-fallback-image {
+  object-fit: contain;
+  padding: 1rem;
 }
 
 body:not(.staff-mode) .guest-entertainments__card:hover .guest-thumb,

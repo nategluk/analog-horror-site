@@ -113,6 +113,28 @@
     loadCurrentTrack({ keepPlaying: wasPlaying });
   };
 
+  const initImageFallbacks = () => {
+    document.querySelectorAll("img[data-fallback-src]").forEach((img) => {
+      if (img.dataset.fallbackReady === "true") return;
+
+      const useFallback = () => {
+        const fallbackSrc = img.dataset.fallbackSrc;
+        if (!fallbackSrc || img.dataset.fallbackActive === "true") return;
+
+        img.dataset.fallbackActive = "true";
+        img.classList.add("is-fallback-image");
+        img.src = fallbackSrc;
+      };
+
+      img.dataset.fallbackReady = "true";
+      img.addEventListener("error", useFallback);
+
+      if (img.complete && img.naturalWidth === 0) {
+        useFallback();
+      }
+    });
+  };
+
   const initMusicPlayer = () => {
     if (audio) return;
     
@@ -203,6 +225,8 @@
     const hiringForms = document.querySelectorAll("[data-hiring-form]");
     const homeHeroes = [...document.querySelectorAll("[data-home-hero]")];
     const statusLabel = document.querySelector("[data-mode-label]");
+
+    initImageFallbacks();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Location image fallback</title>
+  <desc id="desc">Fallback graphic used when a location image cannot be loaded.</desc>
+  <rect width="640" height="360" fill="#211b1a"/>
+  <rect x="24" y="24" width="592" height="312" rx="18" fill="#2f2826" stroke="#7f6b5f" stroke-width="2"/>
+  <path d="M116 260l96-102 72 72 50-58 126 88H116z" fill="#6f5b52"/>
+  <circle cx="442" cy="118" r="34" fill="#c9a46f"/>
+  <text x="320" y="305" fill="#eadfd2" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">IMAGE SIGNAL LOST</text>
+</svg>
