@@ -228,6 +228,52 @@
             </article>
           </div>
         </section>
+
+        <section class="staff-content staff-archive-terminal" aria-labelledby="archive-heading">
+          <h2 id="archive-heading">База данных аномалий</h2>
+          
+          <div class="archive-login-screen" id="archive-login-screen">
+            <p class="archive-status blink">ДОСТУП В АРХИВ ОГРАНИЧЕН</p>
+            <p class="archive-prompt">Введите код авторизации для доступа к протоколам:</p>
+            <form id="archive-auth-form" class="archive-form">
+              <input type="password" id="archive-password" class="archive-input" placeholder="***" maxlength="3" autocomplete="off" />
+              <button type="submit" class="archive-submit">ВВОД</button>
+            </form>
+            <p id="archive-error" class="archive-error" hidden>ОШИБКА: НЕВЕРНЫЙ КОД</p>
+          </div>
+
+          <div class="archive-content" id="archive-content" hidden>
+            <p class="archive-success">ДОСТУП РАЗРЕШЕН. ЗАГРУЗКА ПОСЛЕДНИХ ФАЙЛОВ...</p>
+            
+            <div class="archive-grid">
+              <div class="archive-item">
+                <img src="assets/staff/archive/blueprint_01.png" alt="Чертеж биомассы" class="archive-thumbnail" data-full="assets/staff/archive/blueprint_01.png" />
+                <span class="archive-label">FILE_089: PROTOCOL_B</span>
+              </div>
+              <div class="archive-item">
+                <img src="assets/staff/archive/graph_01.png" alt="График аномалии" class="archive-thumbnail" data-full="assets/staff/archive/graph_01.png" />
+                <span class="archive-label">FILE_091: STATS_ANOMALY</span>
+              </div>
+              <div class="archive-item">
+                <img src="assets/staff/archive/artifact_01.png" alt="Артефакт" class="archive-thumbnail" data-full="assets/staff/archive/artifact_01.png" />
+                <span class="archive-label">FILE_094: OBJECT_VIEW</span>
+              </div>
+            </div>
+
+            <div class="archive-actions">
+              <button class="archive-button" type="button">ЗАПРОСИТЬ ОСТАЛЬНЫЕ ФАЙЛЫ</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lightbox Modal -->
+        <div id="image-lightbox" class="lightbox" hidden>
+          <div class="lightbox-content">
+            <button class="lightbox-close" aria-label="Закрыть">&times;</button>
+            <img id="lightbox-image" src="" alt="Full size" />
+            <div class="lightbox-caption"></div>
+          </div>
+        </div>
       </main>
 
       <footer class="site-footer">
@@ -268,6 +314,7 @@
           <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
           <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>

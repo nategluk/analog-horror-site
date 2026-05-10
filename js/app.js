@@ -246,6 +246,59 @@
           "Спасибо. Мы уже начали подготовку вашего вольера. Пожалуйста, не закрывайте окна в спальне сегодня ночью — наш курьер доставит ваш новый облик.";
       });
     });
+
+    // Archive Terminal Logic
+    const archiveForm = document.getElementById("archive-auth-form");
+    const archivePassword = document.getElementById("archive-password");
+    const archiveError = document.getElementById("archive-error");
+    const archiveLoginScreen = document.getElementById("archive-login-screen");
+    const archiveContent = document.getElementById("archive-content");
+    
+    // Lightbox Logic
+    const lightbox = document.getElementById("image-lightbox");
+    const lightboxImg = document.getElementById("lightbox-image");
+    const lightboxCaption = document.querySelector(".lightbox-caption");
+    const lightboxClose = document.querySelector(".lightbox-close");
+    const archiveThumbnails = document.querySelectorAll(".archive-thumbnail");
+
+    if (archiveForm) {
+      archiveForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (archivePassword.value === "312") {
+          archiveLoginScreen.hidden = true;
+          archiveContent.hidden = false;
+          playModeSwitchSound();
+        } else {
+          archiveError.hidden = false;
+          archivePassword.value = "";
+          archivePassword.focus();
+        }
+      });
+    }
+
+    if (lightbox && lightboxClose) {
+      archiveThumbnails.forEach(img => {
+        img.addEventListener("click", () => {
+          const fullSrc = img.getAttribute("data-full");
+          const caption = img.nextElementSibling ? img.nextElementSibling.textContent : "";
+          lightboxImg.src = fullSrc;
+          lightboxCaption.textContent = caption;
+          lightbox.hidden = false;
+        });
+      });
+
+      lightboxClose.addEventListener("click", () => {
+        lightbox.hidden = true;
+        lightboxImg.src = "";
+      });
+
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+          lightbox.hidden = true;
+          lightboxImg.src = "";
+        }
+      });
+    }
   };
 
   // --- SPA Router ---
