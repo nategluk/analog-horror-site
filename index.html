@@ -235,10 +235,10 @@
           <div class="archive-login-screen" id="archive-login-screen">
             <p class="archive-status blink">ДОСТУП В АРХИВ ОГРАНИЧЕН</p>
             <p class="archive-prompt">Введите код авторизации для доступа к протоколам:</p>
-            <form id="archive-auth-form" class="archive-form">
-              <input type="password" id="archive-password" class="archive-input" placeholder="***" maxlength="3" autocomplete="off" />
-              <button type="submit" class="archive-submit">ВВОД</button>
-            </form>
+            <div id="archive-auth-form" class="archive-form">
+              <input type="text" id="archive-password" class="archive-input" placeholder="***" maxlength="3" autocomplete="off" style="-webkit-text-security: disc;" />
+              <button type="button" id="archive-submit-btn" class="archive-submit">ВВОД</button>
+            </div>
             <p id="archive-error" class="archive-error" hidden>ОШИБКА: НЕВЕРНЫЙ КОД</p>
           </div>
 

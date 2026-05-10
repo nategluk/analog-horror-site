@@ -261,21 +261,29 @@
     const lightboxClose = document.querySelector(".lightbox-close");
     const archiveThumbnails = document.querySelectorAll(".archive-thumbnail");
 
-    if (archiveForm) {
-      archiveForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (archivePassword.value === "312") {
-          archiveLoginScreen.hidden = true;
-          archiveContent.hidden = false;
-          playModeSwitchSound();
-        } else {
-          archiveError.hidden = false;
-          archivePassword.value = "";
-          archivePassword.focus();
+    const archiveBtn = document.getElementById("archive-submit-btn");
+
+    const handleArchiveAuth = () => {
+      if (archivePassword.value === "312") {
+        archiveLoginScreen.hidden = true;
+        archiveContent.hidden = false;
+        playModeSwitchSound();
+      } else {
+        archiveError.hidden = false;
+        archivePassword.value = "";
+        archivePassword.focus();
+      }
+    };
+
+    if (archiveBtn) {
+      archiveBtn.addEventListener("click", handleArchiveAuth);
+      archivePassword.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleArchiveAuth();
         }
       });
     }
-
     if (lightbox && lightboxClose) {
       archiveThumbnails.forEach(img => {
         img.addEventListener("click", () => {
