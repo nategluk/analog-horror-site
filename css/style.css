@@ -60,22 +60,22 @@ body {
 /* ─── Guest: fullscreen liminal / dreamcore park + corporate nostalgia ─── */
 body:not(.staff-mode) {
   /* Uploaded imagery (guest-only). Put files into assets/guest/ (see README.txt). */
-  --img-bg-lobby: url("../assets/guest/bg-lobby.png");
-  --img-bg-corridor: url("../assets/guest/bg-corridor.png");
-  --img-bg-exterior: url("../assets/guest/bg-exterior.png");
-  --img-detskiy-zhir-mall: url("../assets/guest/locations/detskiy-zhir-mall.png");
-  --img-illusion-cinema: url("../assets/guest/locations/illusion-cinema.png");
-  --img-red-room-cafe: url("../assets/guest/locations/red-room-cafe.png");
-  --img-solnyshko-park: url("../assets/guest/locations/solnyshko-park.png");
-  --img-thumb-carousel: url("../assets/guest/thumb-carousel.png");
-  --img-thumb-cinema: url("../assets/guest/thumb-cinema.png");
-  --img-thumb-mirror: url("../assets/guest/thumb-mirror.png");
-  --img-thumb-ballpit: url("../assets/guest/thumb-ballpit.png");
-  --img-thumb-pool: url("../assets/guest/thumb-pool.png");
-  --img-pool: url("../assets/guest/pool.png");
-  --img-losiny-entrance: url("../assets/guest/locations/losiny-entrance.png");
-  --img-losiny-animators: url("../assets/guest/locations/losiny-animators.png");
-  --img-losiny-ad: url("../assets/guest/locations/losiny-ad.png");
+  --img-bg-lobby: url("../assets/guest/bg-lobby.webp");
+  --img-bg-corridor: url("../assets/guest/bg-corridor.webp");
+  --img-bg-exterior: url("../assets/guest/bg-exterior.webp");
+  --img-detskiy-zhir-mall: url("../assets/guest/locations/detskiy-zhir-mall.webp");
+  --img-illusion-cinema: url("../assets/guest/locations/illusion-cinema.webp");
+  --img-red-room-cafe: url("../assets/guest/locations/red-room-cafe.webp");
+  --img-solnyshko-park: url("../assets/guest/locations/solnyshko-park.webp");
+  --img-thumb-carousel: url("../assets/guest/thumb-carousel.webp");
+  --img-thumb-cinema: url("../assets/guest/thumb-cinema.webp");
+  --img-thumb-mirror: url("../assets/guest/thumb-mirror.webp");
+  --img-thumb-ballpit: url("../assets/guest/thumb-ballpit.webp");
+  --img-thumb-pool: url("../assets/guest/thumb-pool.webp");
+  --img-pool: url("../assets/guest/pool.webp");
+  --img-losiny-entrance: url("../assets/guest/locations/losiny-entrance.webp");
+  --img-losiny-animators: url("../assets/guest/locations/losiny-animators.webp");
+  --img-losiny-ad: url("../assets/guest/locations/losiny-ad.webp");
 
   background-color: #e5ccd8;
   background-image:
@@ -1134,7 +1134,7 @@ body.staff-mode .finance-route {
 }
 
 .recruitment-banner--guest {
-  background-image: url("../assets/guest/recruitment-guest.png");
+  background-image: url("../assets/guest/recruitment-guest.webp");
 }
 
 .recruitment-banner--guest::before {
@@ -1144,7 +1144,7 @@ body.staff-mode .finance-route {
 }
 
 .recruitment-banner--staff {
-  background-image: url("../assets/guest/recruitment-staff.png");
+  background-image: url("../assets/guest/recruitment-staff.webp");
   filter: grayscale(0.82) contrast(1.18) saturate(0.72);
 }
 
@@ -1406,7 +1406,7 @@ body.staff-mode .vhs-noise {
   display: flex;
   align-items: flex-end;
   margin-bottom: 1rem;
-  background-image: url("../assets/guest/bg-exterior.png");
+  background-image: url("../assets/guest/bg-exterior.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1414,7 +1414,7 @@ body.staff-mode .vhs-noise {
 }
 
 .hero--losiny-entrance {
-  background-image: url("../assets/guest/locations/losiny-entrance.png");
+  background-image: url("../assets/guest/locations/losiny-entrance.webp");
   background-position: center;
 }
 
@@ -1423,32 +1423,32 @@ body.staff-mode .vhs-noise {
 }
 
 .location-hero--losiny {
-  background-image: url("../assets/guest/locations/losiny-animators.png");
+  background-image: url("../assets/guest/locations/losiny-animators.webp");
   background-position: center;
 }
 
 .location-hero--dolphin {
-  background-image: url("../assets/guest/pool.png");
+  background-image: url("../assets/guest/pool.webp");
   background-position: center 58%;
 }
 
 .location-hero--solnyshko {
-  background-image: url("../assets/guest/locations/solnyshko-park.png");
+  background-image: url("../assets/guest/locations/solnyshko-park.webp");
   background-position: center;
 }
 
 .location-hero--mall {
-  background-image: url("../assets/guest/locations/detskiy-zhir-mall.png");
+  background-image: url("../assets/guest/locations/detskiy-zhir-mall.webp");
   background-position: center;
 }
 
 .location-hero--cinema {
-  background-image: url("../assets/guest/locations/illusion-cinema.png");
+  background-image: url("../assets/guest/locations/illusion-cinema.webp");
   background-position: center;
 }
 
 .location-hero--red-room {
-  background-image: url("../assets/guest/locations/red-room-cafe.png");
+  background-image: url("../assets/guest/locations/red-room-cafe.webp");
   background-position: center;
 }
 
