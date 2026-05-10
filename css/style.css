@@ -1618,6 +1618,9 @@ body.staff-mode .hero {
   }
 
   .recruitment-banner {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: auto;
     min-height: 360px;
     background-position: 58% center;
   }
