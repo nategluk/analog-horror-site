@@ -756,7 +756,33 @@ body:not(.staff-mode) img.guest-thumb.is-fallback-image {
   padding: 1rem;
 }
 
+body:not(.staff-mode) .location-card .guest-thumb-frame {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background-color: color-mix(in srgb, var(--surface-alt) 88%, var(--accent) 12%);
+  margin-bottom: 0.75rem;
+  box-shadow: 0 6px 18px rgba(58, 47, 43, 0.08);
+  transition: transform 0.22s ease, filter 0.22s ease;
+  filter: saturate(0.92) contrast(0.98);
+}
+
+body:not(.staff-mode) .location-card .guest-thumb-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body:not(.staff-mode) .location-card .guest-thumb-image.is-fallback-image {
+  object-fit: contain;
+  padding: 1rem;
+}
+
 body:not(.staff-mode) .guest-entertainments__card:hover .guest-thumb,
+body:not(.staff-mode) .location-card:hover .guest-thumb-frame,
 body:not(.staff-mode) .location-card:hover .guest-thumb {
   transform: translateY(-1px) scale(1.01);
   filter: saturate(0.98) contrast(1);
