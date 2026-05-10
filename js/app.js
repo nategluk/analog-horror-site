@@ -6,7 +6,7 @@
   const musicLibrary = {
     guest: [
       {
-        title: "Музыка парка",
+        title: "Услышь нас",
         src: audioAsset("assets/audio/guest/theme.MP3"),
       },
     ],
