@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 210" role="img" aria-labelledby="title desc">
+  <title id="title">Детский Жир</title>
+  <desc id="desc">Пастельный логотип развлекательного комплекса с улыбающимся солнцем.</desc>
+  <defs>
+    <linearGradient id="sun" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffd86a" />
+      <stop offset="1" stop-color="#f5b93d" />
+    </linearGradient>
+    <linearGradient id="pink" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f58aa7" />
+      <stop offset="1" stop-color="#dc607f" />
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-20%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#8c5260" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <g transform="translate(18 8)">
+      <g stroke="#f4b83b" stroke-linecap="round" stroke-width="12">
+        <path d="M102 24v-28" />
+        <path d="M58 36 43 10" />
+        <path d="M24 70-1 55" />
+        <path d="M146 36 161 10" />
+        <path d="M180 70 205 55" />
+        <path d="M202 112h28" />
+        <path d="M2 112h-28" />
+      </g>
+
+      <path
+        d="M34 122a68 68 0 0 1 136 0c22-16 42-1 46 20h22v36h-54v-13a31 31 0 0 0-62 0v13H83v-13a31 31 0 0 0-62 0v13h-54v-36h22c4-21 24-36 45-20Z"
+        fill="url(#pink)"
+      />
+      <circle cx="102" cy="112" r="57" fill="url(#sun)" />
+      <path d="M50 125c20 30 82 30 104 0" fill="none" stroke="#3d3a3a" stroke-linecap="round" stroke-width="8" />
+      <ellipse cx="74" cy="92" rx="8" ry="13" fill="#3d3a3a" />
+      <ellipse cx="130" cy="92" rx="8" ry="13" fill="#3d3a3a" />
+      <path d="M48 127c-12 0-24 5-33 13 12-24 14-42 17-64 7 27 18 39 16 51Z" fill="#e96f8e" />
+      <path d="M156 127c12 0 24 5 33 13-12-24-14-42-17-64-7 27-18 39-16 51Z" fill="#e96f8e" />
+    </g>
+
+    <text
+      x="300"
+      y="139"
+      fill="#3d3a3a"
+      font-family="Arial Black, Arial, sans-serif"
+      font-size="83"
+      font-weight="900"
+      letter-spacing="-1"
+    >Детский</text>
+    <text
+      x="680"
+      y="139"
+      fill="url(#pink)"
+      font-family="Arial Black, Arial, sans-serif"
+      font-size="83"
+      font-weight="900"
+      letter-spacing="-1"
+    >Жир</text>
+  </g>
+</svg>

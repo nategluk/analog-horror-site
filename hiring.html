@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Развлекательный Комплекс "Детский ЖИР" — Работа</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="vhs-noise" aria-hidden="true"></div>
+    <div class="site-wrapper glitch-target">
+      <header class="site-header">
+        <div class="logo-area">
+          <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
+            <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
+            <img class="staff-logo-image" src="assets/staff/logo.png" alt="Детский Жир" />
+          </h1>
+          <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
+        </div>
+      </header>
+
+      <nav class="site-nav" aria-label="Основная навигация">
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О компании</a></li>
+          <li><a href="locations.html">Локации</a></li>
+          <li><a href="staff.html">Персонал</a></li>
+          <li><a href="hiring.html" aria-current="page">Работа</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="donate.html">Поддержка</a></li>
+        </ul>
+      </nav>
+
+      <main class="panel hiring-panel">
+        <section class="guest-content hiring-guest" aria-labelledby="hiring-guest-heading">
+          <div class="recruitment-banner recruitment-banner--guest">
+            <div class="recruitment-banner__copy">
+              <h2 id="hiring-guest-heading">ТВОЙ ДОМ<br />ТАМ, ГДЕ<br />МЯГКО.</h2>
+              <p>«Лосиный Остров» ищет новых друзей.</p>
+              <a class="recruitment-banner__button" href="#friend-form">СТАТЬ СВОИМ</a>
+            </div>
+          </div>
+
+          <section class="hiring-form-shell" id="friend-form" aria-labelledby="friend-form-heading">
+            <h2 id="friend-form-heading">Анкета Друга</h2>
+            <form class="form-grid hiring-form" data-hiring-form="guest">
+              <label>
+                Насколько хорошо вы спите?
+                <input type="range" min="1" max="10" value="7" />
+              </label>
+              <label>
+                Ваш любимый детский запах
+                <select>
+                  <option>Хлорка</option>
+                  <option>Сахарная вата</option>
+                  <option>Старая бумага</option>
+                </select>
+              </label>
+              <label>
+                Готовы ли вы носить тяжелое, чтобы дарить тепло?
+                <select>
+                  <option>Да, если это поможет детям улыбаться</option>
+                  <option>Я уточню у администратора</option>
+                  <option>Только если внутри тихо</option>
+                </select>
+              </label>
+              <label>
+                Укажите ваш текущий вес
+                <input type="number" min="1" placeholder="Это важно для подбора мягкого инвентаря" />
+              </label>
+              <button type="submit">ОТПРАВИТЬ АНКЕТУ</button>
+            </form>
+            <p class="hiring-form__result" data-hiring-result="guest" aria-live="polite"></p>
+          </section>
+        </section>
+
+        <section class="staff-content hiring-staff" aria-labelledby="hiring-staff-heading">
+          <div class="recruitment-banner recruitment-banner--staff">
+            <div class="recruitment-banner__copy">
+              <h2 id="hiring-staff-heading">ОБЪЕКТ 312:<br />ТРЕБУЕТСЯ<br />ЗАМЕНА.</h2>
+              <p>Цикл — 12 часов. Доза гарантирована.</p>
+              <a class="recruitment-banner__button" href="#bio-contract">ПРИНЯТЬ УСЛОВИЯ</a>
+            </div>
+          </div>
+
+          <section class="bio-contract" id="bio-contract" aria-labelledby="bio-contract-heading">
+            <h2 id="bio-contract-heading">TYNDEX ROBOTICS // BIOLOGICAL CONTRACT NODE</h2>
+            <div class="terminal-lines">
+              <p><strong>СТАТУС ОБЪЕКТА:</strong> Потенциальное сырье / Изможденный (Уровень 1)</p>
+              <p>
+                <strong>ПУНКТ 3.1.2:</strong> Оператор обязуется не издавать человеческих звуков
+                внутри оболочки. Все речевые функции замещаются встроенным синтезатором
+                Администрации.
+              </p>
+              <p>
+                <strong>ШТРАФНЫЕ САНКЦИИ:</strong> В случае потери более 5% веса за смену
+                (дефицит жира), сотрудник переводится в категорию "Тир: Живая мишень".
+              </p>
+            </div>
+            <form class="form-grid hiring-form" data-hiring-form="staff">
+              <label>
+                ID оператора
+                <input type="text" placeholder="EMP-312-__" />
+              </label>
+              <label>
+                Согласие на замещение речевых функций
+                <select>
+                  <option>Подтверждаю</option>
+                  <option>Подтверждаю повторно</option>
+                </select>
+              </label>
+              <button type="submit">ПОДТВЕРДИТЬ ПЕРЕДАЧУ ТЕЛА</button>
+            </form>
+            <p class="hiring-form__result" data-hiring-result="staff" aria-live="polite"></p>
+          </section>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p class="guest-content">Нам всегда нужны новые друзья. Особенно те, кто хорошо спит.</p>
+        <p class="staff-content">HR LOG: REPLACEMENT FUNNEL READY // OBJECT 312 WATCHED</p>
+        <nav class="social-links" aria-label="Социальные сети">
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
+        </nav>
+        <div class="footer-trigger" title="service point" aria-hidden="true"></div>
+      </footer>
+    </div>
+    <script src="js/app.js"></script>
+  </body>
+</html>
