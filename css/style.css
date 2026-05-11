@@ -57,6 +57,41 @@ body {
   overflow-x: hidden;
 }
 
+@keyframes glitching-anim {
+  0% { filter: invert(0); transform: skew(0deg) translate(0, 0); }
+  20% { filter: invert(1) hue-rotate(90deg) contrast(2); transform: skew(10deg) translate(-15px, 5px); }
+  40% { filter: invert(0); transform: skew(-10deg) translate(15px, -5px); }
+  60% { filter: invert(1) hue-rotate(180deg) contrast(2); transform: skew(5deg) translate(-5px, 15px); }
+  80% { filter: invert(0); transform: skew(-5deg) translate(5px, -15px); }
+  100% { filter: invert(0); transform: skew(0deg) translate(0, 0); }
+}
+
+body.glitching {
+  animation: glitching-anim 0.2s infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.98; }
+  50% { opacity: 0.95; }
+  100% { opacity: 0.99; }
+}
+
+@keyframes scanline-roll {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+body.staff-mode ::selection {
+  background: var(--accent-2);
+  color: #000;
+}
+
 /* ─── Guest: fullscreen liminal / dreamcore park + corporate nostalgia ─── */
 body:not(.staff-mode) {
   /* Uploaded imagery (guest-only). Put files into assets/guest/ (see README.txt). */
@@ -134,10 +169,57 @@ body:not(.staff-mode)::after {
 
 body.staff-mode {
   background-image: radial-gradient(circle at 50% 10%, #111 0%, var(--bg) 60%, #000 100%);
+  text-shadow: 0 0 3px color-mix(in srgb, var(--accent) 60%, transparent);
+  animation: crt-flicker 0.15s infinite;
 }
 
 body.staff-mode::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+body.staff-mode::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--scanline-opacity)) 50%,
+    rgba(0, 0, 0, 0) 50%
+  );
+  background-size: 100% 4px;
+  mix-blend-mode: soft-light;
+  z-index: 4;
+}
+
+/* Rolling Scanline for Staff Mode */
+.site-wrapper::after {
+  content: "";
   display: none;
+}
+
+body.staff-mode .site-wrapper::after {
+  display: block;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 15vh;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(119, 255, 136, 0.05) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+  animation: scanline-roll 6s linear infinite;
 }
 
 body::before {
@@ -159,6 +241,13 @@ body::before {
 body:not(.staff-mode)::before {
   --scanline-opacity: 0.035;
   opacity: 0.85;
+  background-image: 
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, var(--scanline-opacity)) 50%,
+      rgba(0, 0, 0, 0) 50%
+    ),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
 }
 
 .site-wrapper {
@@ -789,8 +878,9 @@ body:not(.staff-mode) .location-card .guest-thumb-image.is-fallback-image {
 body:not(.staff-mode) .guest-entertainments__card:hover .guest-thumb,
 body:not(.staff-mode) .location-card:hover .guest-thumb-frame,
 body:not(.staff-mode) .location-card:hover .guest-thumb {
-  transform: translateY(-1px) scale(1.01);
-  filter: saturate(0.98) contrast(1);
+  transform: translateY(-1px) scale(1.02) skewX(-1deg);
+  filter: saturate(1.1) contrast(1.08);
+  transition: transform 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55), filter 0.15s ease;
 }
 
 body:not(.staff-mode) .guest-thumb--carousel {
