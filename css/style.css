@@ -1804,6 +1804,7 @@ body.staff-mode .cctv-dot.blink {
 
 body.staff-mode .staff-photo-vault {
   display: block;
+  overflow: hidden;
 }
 
 body.staff-mode .staff-photo-vault__kicker {
@@ -1824,11 +1825,16 @@ body.staff-mode .staff-photo-vault h2 {
 
 body.staff-mode .staff-photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
   gap: 1rem;
+  max-width: 100%;
 }
 
 body.staff-mode .staff-photo-card {
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
+  margin: 0 auto;
   overflow: hidden;
   background: #020302;
   border: 1px solid color-mix(in srgb, var(--border) 80%, var(--accent));
