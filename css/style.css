@@ -1575,7 +1575,10 @@ body.staff-mode .vhs-noise {
 }
 
 .location-poster {
-  margin: 0;
+  justify-self: center;
+  width: min(100%, 360px);
+  max-width: 100%;
+  margin: 0 auto;
   padding: 0.65rem;
   border: 1px solid var(--border);
   border-radius: 14px;
@@ -1586,6 +1589,9 @@ body.staff-mode .vhs-noise {
 .location-poster img {
   display: block;
   width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: 10px;
 }
 
