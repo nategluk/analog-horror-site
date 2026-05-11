@@ -135,6 +135,52 @@
     });
   };
 
+  const resolveUrlAttribute = (element, attribute, baseUrl) => {
+    const value = element.getAttribute(attribute);
+    if (!value || value.startsWith("#")) return;
+
+    try {
+      element.setAttribute(attribute, new URL(value, baseUrl).href);
+    } catch (err) {
+      // Leave unusual URLs untouched.
+    }
+  };
+
+  const resolveSrcsetAttribute = (element, attribute, baseUrl) => {
+    const value = element.getAttribute(attribute);
+    if (!value) return;
+
+    const resolved = value.split(",").map((candidate) => {
+      const parts = candidate.trim().split(/\s+/);
+      const url = parts.shift();
+      if (!url) return candidate.trim();
+
+      try {
+        return [new URL(url, baseUrl).href, ...parts].join(" ");
+      } catch (err) {
+        return candidate.trim();
+      }
+    }).join(", ");
+
+    element.setAttribute(attribute, resolved);
+  };
+
+  const resolveFragmentUrls = (fragment, baseUrl) => {
+    fragment.querySelectorAll("[src]").forEach((element) => {
+      resolveUrlAttribute(element, "src", baseUrl);
+    });
+
+    fragment.querySelectorAll("[poster], [data-fallback-src], [data-full]").forEach((element) => {
+      resolveUrlAttribute(element, "poster", baseUrl);
+      resolveUrlAttribute(element, "data-fallback-src", baseUrl);
+      resolveUrlAttribute(element, "data-full", baseUrl);
+    });
+
+    fragment.querySelectorAll("[srcset]").forEach((element) => {
+      resolveSrcsetAttribute(element, "srcset", baseUrl);
+    });
+  };
+
   const initMusicPlayer = () => {
     if (audio) return;
     
@@ -253,6 +299,28 @@
       hiddenTrigger.addEventListener("click", runGlitchAndToggle);
     }
 
+    document.querySelectorAll("[data-denied-cta]").forEach((button) => {
+      if (button.dataset.deniedReady === "true") return;
+
+      button.dataset.deniedReady = "true";
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        button.classList.add("is-denied");
+        button.textContent = button.dataset.deniedText || "ОТКАЗАНО";
+        button.setAttribute("aria-label", "Доступ отказан");
+
+        window.setTimeout(() => {
+          button.classList.remove("is-denied");
+          if (button.dataset.originalText) {
+            button.textContent = button.dataset.originalText;
+            button.removeAttribute("aria-label");
+          }
+        }, 1800);
+      });
+    });
+
     hiringForms.forEach((form) => {
       form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -353,6 +421,8 @@
       const newWrapper = doc.querySelector(".site-wrapper");
       
       if (newWrapper && currentWrapper) {
+        resolveFragmentUrls(newWrapper, response.url || url);
+
         // Detach player before replacing HTML
         if (player && player.parentNode) player.parentNode.removeChild(player);
         

@@ -1615,6 +1615,25 @@ body.staff-mode .vhs-noise {
   text-decoration: none;
   font-weight: 800;
   box-shadow: 0 8px 18px rgba(58, 47, 43, 0.2);
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.location-cta.is-denied {
+  background: linear-gradient(140deg, #7a0d16, #ff2f4f);
+  color: #fff;
+  box-shadow:
+    0 0 0 1px rgba(255, 47, 79, 0.5),
+    0 0 26px rgba(255, 47, 79, 0.34);
+  transform: translateX(-2px);
+}
+
+body.staff-mode .location-cta.is-denied {
+  color: #050505;
+  background: linear-gradient(140deg, var(--accent), #ff2f4f);
 }
 
 .staff-dossier {
