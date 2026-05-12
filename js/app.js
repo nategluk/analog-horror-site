@@ -340,6 +340,27 @@
     }
   };
 
+  let lastLogoTouch = 0;
+
+  const tripleTapHandler = (event) => {
+    if (event.touches && event.touches.length > 1) return;
+    if (event.cancelable) {
+      event.preventDefault();
+    }
+    lastLogoTouch = Date.now();
+    tripleClickHandler();
+  };
+
+  const logoClickHandler = (event) => {
+    if (Date.now() - lastLogoTouch < 700) {
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+      return;
+    }
+    tripleClickHandler();
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -367,7 +388,8 @@
     }
 
     if (logo) {
-      logo.addEventListener("click", tripleClickHandler);
+      logo.addEventListener("touchend", tripleTapHandler, { passive: false });
+      logo.addEventListener("click", logoClickHandler);
     }
 
     if (hiddenTrigger) {
