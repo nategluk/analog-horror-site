@@ -42,8 +42,10 @@
   let clicks = [];
   let switching = false;
   let isNavigating = false;
+  let adminProtocolRunning = false;
 
   const getMusicTracks = () => musicLibrary[currentMusicMode] || musicLibrary.guest;
+  const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
 
   const setPlayerState = (isPlaying) => {
     if (!player || !playButton) return;
@@ -111,6 +113,79 @@
 
     currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
     loadCurrentTrack({ keepPlaying: wasPlaying });
+  };
+
+  const cutSiteAudio = async () => {
+    if (!audio) return;
+
+    audio.pause();
+    audio.volume = 0;
+    localStorage.setItem(MUSIC_PLAYING_KEY, "false");
+    await wait(500);
+  };
+
+  const buildAdminTerminal = () => {
+    const overlay = document.createElement("div");
+    overlay.className = "admin-terminal-overlay";
+    overlay.setAttribute("role", "alert");
+    overlay.setAttribute("aria-live", "assertive");
+
+    const terminal = document.createElement("div");
+    terminal.className = "admin-terminal";
+
+    const key = document.createElement("span");
+    key.className = "admin-terminal__key";
+    key.textContent = "◆";
+    key.setAttribute("aria-hidden", "true");
+
+    terminal.append(key);
+    overlay.append(terminal);
+    body.append(overlay);
+
+    return { overlay, terminal, key };
+  };
+
+  const startAdminProtocol = async () => {
+    if (adminProtocolRunning) return;
+    adminProtocolRunning = true;
+
+    body.classList.add("protocol-denied", "admin-blackout");
+    await cutSiteAudio();
+
+    const { overlay, terminal } = buildAdminTerminal();
+    await wait(120);
+    body.classList.remove("admin-blackout");
+
+    const lines = [
+      "соединение установлено",
+      "проверка уровня допуска…",
+      "проверка уровня допуска…",
+      "ERROR 312: ACCESS DENIED",
+      "возврат в гостевой режим",
+    ];
+
+    for (const line of lines) {
+      const node = document.createElement("p");
+      node.className = "admin-terminal__line";
+      node.textContent = line;
+      terminal.insertBefore(node, terminal.querySelector(".admin-terminal__key"));
+
+      if (line.startsWith("ERROR")) {
+        overlay.classList.add("is-mask-frame");
+        await wait(90);
+        overlay.classList.remove("is-mask-frame");
+        overlay.classList.add("is-key-frame");
+        await wait(70);
+        overlay.classList.remove("is-key-frame");
+      }
+
+      await wait(line === "возврат в гостевой режим" ? 850 : line.startsWith("ERROR") ? 620 : 470);
+    }
+
+    overlay.classList.add("is-failing");
+    await wait(620);
+    applyMode(false);
+    window.location.assign(new URL("index.html", window.location.href).href);
   };
 
   const initImageFallbacks = () => {
@@ -318,6 +393,17 @@
             button.removeAttribute("aria-label");
           }
         }, 1800);
+      });
+    });
+
+    document.querySelectorAll("[data-admin-protocol]").forEach((button) => {
+      if (button.dataset.adminProtocolReady === "true") return;
+
+      button.dataset.adminProtocolReady = "true";
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        startAdminProtocol();
       });
     });
 
