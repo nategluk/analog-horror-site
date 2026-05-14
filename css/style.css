@@ -2361,6 +2361,26 @@ body.staff-mode .document-card--red:focus-visible {
   color: #ffd6d6;
 }
 
+body.staff-mode .document-card--pink {
+  border-color: color-mix(in srgb, var(--border) 46%, #ff9fc8);
+  background:
+    linear-gradient(145deg, rgba(30, 0, 16, 0.92), rgba(0, 0, 0, 0.98)),
+    repeating-linear-gradient(0deg, rgba(255, 159, 200, 0.08) 0 1px, transparent 1px 5px);
+  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.76), 0 0 18px rgba(255, 159, 200, 0.14);
+}
+
+body.staff-mode .document-card--pink::before {
+  content: "PILGRIMAGE COPY";
+  border-color: rgba(255, 159, 200, 0.78);
+  color: rgba(255, 184, 214, 0.9);
+}
+
+body.staff-mode .document-card--pink:hover,
+body.staff-mode .document-card--pink:focus-visible {
+  border-color: rgba(255, 159, 200, 0.96);
+  color: #ffe0ee;
+}
+
 body.staff-mode .document-card__status {
   width: max-content;
   max-width: 100%;
@@ -2374,6 +2394,11 @@ body.staff-mode .document-card__status {
 body.staff-mode .document-card--red .document-card__status {
   border-color: rgba(255, 77, 77, 0.72);
   color: #ff8f8f;
+}
+
+body.staff-mode .document-card--pink .document-card__status {
+  border-color: rgba(255, 159, 200, 0.72);
+  color: #ffb8d6;
 }
 
 body.staff-mode .document-card strong {
@@ -2430,6 +2455,11 @@ body.staff-mode .protocol-access {
 body.staff-mode .protocol-access--red {
   border-color: rgba(255, 77, 77, 0.72);
   color: #ff8f8f;
+}
+
+body.staff-mode .protocol-access--pink {
+  border-color: rgba(255, 159, 200, 0.72);
+  color: #ffb8d6;
 }
 
 body.staff-mode .protocol-infographic {
@@ -2501,6 +2531,25 @@ body.staff-mode .protocol-footage figcaption {
 
 body.staff-mode .protocol-footage--red {
   box-shadow: 0 0 26px rgba(255, 0, 0, 0.16);
+}
+
+body.staff-mode .protocol-footage--pink,
+body.staff-mode .protocol-schema--pink {
+  border-color: color-mix(in srgb, var(--border) 48%, #ff9fc8);
+  box-shadow: 0 0 26px rgba(255, 159, 200, 0.14);
+}
+
+body.staff-mode .protocol-footage--pink::after,
+body.staff-mode .protocol-schema--pink::after {
+  background:
+    linear-gradient(90deg, rgba(255, 159, 200, 0.08), transparent 28%, rgba(119, 255, 136, 0.04)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px);
+}
+
+body.staff-mode .protocol-footage--pink figcaption,
+body.staff-mode .protocol-schema--pink figcaption {
+  border-top-color: rgba(255, 159, 200, 0.34);
+  color: #ffb8d6;
 }
 
 body.staff-mode .protocol-schema {
@@ -2594,6 +2643,10 @@ body.staff-mode .protocol-emphasis--red {
   color: #ff8f8f;
 }
 
+body.staff-mode .protocol-emphasis--pink {
+  color: #ffb8d6;
+}
+
 body.staff-mode .protocol-note,
 body.staff-mode .protocol-remember {
   padding: 1rem;
@@ -2619,6 +2672,23 @@ body.staff-mode .protocol-note h4 {
   font-family: var(--font-display);
   font-size: 0.94rem;
   letter-spacing: 0.05em;
+}
+
+body.staff-mode .protocol-note--pink,
+body.staff-mode .protocol-remember--pink {
+  border-color: rgba(255, 159, 200, 0.52);
+  background:
+    linear-gradient(180deg, rgba(30, 0, 16, 0.72), rgba(0, 0, 0, 0.82)),
+    repeating-linear-gradient(0deg, rgba(255, 159, 200, 0.06) 0 1px, transparent 1px 5px);
+}
+
+body.staff-mode .protocol-note--pink h3,
+body.staff-mode .protocol-remember--pink h3 {
+  color: #ffb8d6;
+}
+
+body.staff-mode .protocol-note--pink h4 {
+  color: #ffd9e9;
 }
 
 /* ==================== PROMO BANNER ==================== */
