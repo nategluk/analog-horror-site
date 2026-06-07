@@ -2381,6 +2381,26 @@ body.staff-mode .document-card--pink:focus-visible {
   color: #ffe0ee;
 }
 
+body.staff-mode .document-card--yellow {
+  border-color: color-mix(in srgb, var(--border) 50%, #f0c66f);
+  background:
+    linear-gradient(145deg, rgba(26, 17, 0, 0.92), rgba(0, 0, 0, 0.98)),
+    repeating-linear-gradient(0deg, rgba(240, 198, 111, 0.08) 0 1px, transparent 1px 5px);
+  box-shadow: inset 0 0 32px rgba(0, 0, 0, 0.76), 0 0 18px rgba(240, 198, 111, 0.13);
+}
+
+body.staff-mode .document-card--yellow::before {
+  content: "BROADCAST COPY";
+  border-color: rgba(240, 198, 111, 0.76);
+  color: rgba(255, 219, 146, 0.9);
+}
+
+body.staff-mode .document-card--yellow:hover,
+body.staff-mode .document-card--yellow:focus-visible {
+  border-color: rgba(240, 198, 111, 0.96);
+  color: #fff1bf;
+}
+
 body.staff-mode .document-card__status {
   width: max-content;
   max-width: 100%;
@@ -2399,6 +2419,11 @@ body.staff-mode .document-card--red .document-card__status {
 body.staff-mode .document-card--pink .document-card__status {
   border-color: rgba(255, 159, 200, 0.72);
   color: #ffb8d6;
+}
+
+body.staff-mode .document-card--yellow .document-card__status {
+  border-color: rgba(240, 198, 111, 0.72);
+  color: #f0d58f;
 }
 
 body.staff-mode .document-card strong {
@@ -2460,6 +2485,11 @@ body.staff-mode .protocol-access--red {
 body.staff-mode .protocol-access--pink {
   border-color: rgba(255, 159, 200, 0.72);
   color: #ffb8d6;
+}
+
+body.staff-mode .protocol-access--yellow {
+  border-color: rgba(240, 198, 111, 0.72);
+  color: #f0d58f;
 }
 
 body.staff-mode .protocol-infographic {
@@ -2550,6 +2580,25 @@ body.staff-mode .protocol-footage--pink figcaption,
 body.staff-mode .protocol-schema--pink figcaption {
   border-top-color: rgba(255, 159, 200, 0.34);
   color: #ffb8d6;
+}
+
+body.staff-mode .protocol-footage--yellow,
+body.staff-mode .protocol-schema--yellow {
+  border-color: color-mix(in srgb, var(--border) 50%, #f0c66f);
+  box-shadow: 0 0 26px rgba(240, 198, 111, 0.13);
+}
+
+body.staff-mode .protocol-footage--yellow::after,
+body.staff-mode .protocol-schema--yellow::after {
+  background:
+    linear-gradient(90deg, rgba(240, 198, 111, 0.08), transparent 30%, rgba(119, 255, 136, 0.04)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px);
+}
+
+body.staff-mode .protocol-footage--yellow figcaption,
+body.staff-mode .protocol-schema--yellow figcaption {
+  border-top-color: rgba(240, 198, 111, 0.34);
+  color: #f0d58f;
 }
 
 body.staff-mode .protocol-schema {
@@ -2647,6 +2696,10 @@ body.staff-mode .protocol-emphasis--pink {
   color: #ffb8d6;
 }
 
+body.staff-mode .protocol-emphasis--yellow {
+  color: #f0d58f;
+}
+
 body.staff-mode .protocol-note,
 body.staff-mode .protocol-remember {
   padding: 1rem;
@@ -2689,6 +2742,23 @@ body.staff-mode .protocol-remember--pink h3 {
 
 body.staff-mode .protocol-note--pink h4 {
   color: #ffd9e9;
+}
+
+body.staff-mode .protocol-note--yellow,
+body.staff-mode .protocol-remember--yellow {
+  border-color: rgba(240, 198, 111, 0.5);
+  background:
+    linear-gradient(180deg, rgba(26, 17, 0, 0.72), rgba(0, 0, 0, 0.82)),
+    repeating-linear-gradient(0deg, rgba(240, 198, 111, 0.06) 0 1px, transparent 1px 5px);
+}
+
+body.staff-mode .protocol-note--yellow h3,
+body.staff-mode .protocol-remember--yellow h3 {
+  color: #f0d58f;
+}
+
+body.staff-mode .protocol-note--yellow h4 {
+  color: #ffe9ae;
 }
 
 /* ==================== PROMO BANNER ==================== */
