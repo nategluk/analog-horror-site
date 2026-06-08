@@ -65,6 +65,23 @@
             <a class="donate-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
               Поддержать парк
             </a>
+            <div class="donate-routes" aria-label="Способы поддержки">
+              <h3>Способы поддержки</h3>
+              <div class="donate-route-list">
+                <a class="donate-route-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">Boosty</a>
+                <a class="donate-route-link" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PayPal</a>
+              </div>
+              <div class="crypto-route">
+                <span class="crypto-route__label">USDT — сеть TON</span>
+                <code class="crypto-route__address">UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2</code>
+                <button class="crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="Скопировать адрес" data-copy-success="Адрес скопирован" data-copy-error="Скопируйте вручную">
+                  Скопировать адрес
+                </button>
+                <p class="donate-warning">
+                  Отправляйте только USDT в сети TON. Не отправляйте USDT TRC-20, ERC-20 или BEP-20 на этот адрес. Переводы в другой сети могут быть потеряны.
+                </p>
+              </div>
+            </div>
             <p class="donate-note">Ваш вклад помогает нам сохранять свет, музыку и улыбки в залах комплекса.</p>
           </form>
         </section>
@@ -92,7 +109,24 @@
             <a class="donate-link staff-donate-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
               EXPORT TO BOOSTY_FINANCE_NODE
             </a>
-            <p class="finance-route">FINANCE ROUTE: boosty.to/aivisions_lab/donate</p>
+            <div class="donate-routes staff-routes" aria-label="Финансовые маршруты">
+              <h3>FINANCE ROUTES</h3>
+              <div class="donate-route-list">
+                <a class="donate-route-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">BOOSTY_FINANCE_NODE</a>
+                <a class="donate-route-link" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PAYPAL_EXTERNAL_GATEWAY</a>
+              </div>
+              <div class="crypto-route">
+                <span class="crypto-route__label">USDT_TON_LEDGER</span>
+                <code class="crypto-route__address">UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2</code>
+                <button class="crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="COPY ADDRESS" data-copy-success="BUFFER UPDATED" data-copy-error="COPY MANUALLY">
+                  COPY ADDRESS
+                </button>
+                <p class="donate-warning">
+                  NETWORK: TON ONLY. REJECT: TRC-20 / ERC-20 / BEP-20. WRONG NETWORK TRANSFER MAY BE LOST.
+                </p>
+              </div>
+            </div>
+            <p class="finance-route">FINANCE ROUTES: boosty.to/aivisions_lab/donate // paypal.me/NateGlukhov // USDT_TON_LEDGER</p>
           </form>
         </section>
       </main>
@@ -107,11 +141,13 @@
           <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
           <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
           <a class="guest-content" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">Boosty</a>
+          <a class="guest-content" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PayPal</a>
           <a class="staff-content" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">BOOSTY_FINANCE</a>
+          <a class="staff-content" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PAYPAL_GATEWAY</a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
     </div>
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=donate-routes"></script>
   </body>
 </html>

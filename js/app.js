@@ -47,6 +47,49 @@
   const getMusicTracks = () => musicLibrary[currentMusicMode] || musicLibrary.guest;
   const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
 
+  const copyText = async (value) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return;
+      } catch {
+        // Fall back for browsers that expose Clipboard API but deny write access.
+      }
+    }
+
+    const helper = document.createElement("textarea");
+    helper.value = value;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.inset = "0 auto auto 0";
+    helper.style.opacity = "0";
+    body.append(helper);
+    helper.select();
+    document.execCommand("copy");
+    helper.remove();
+  };
+
+  const initCopyButtons = () => {
+    document.querySelectorAll("[data-copy-value]").forEach((button) => {
+      const defaultText = button.dataset.copyDefault || button.textContent;
+      const successText = button.dataset.copySuccess || "Copied";
+      const errorText = button.dataset.copyError || defaultText;
+
+      button.addEventListener("click", async () => {
+        try {
+          await copyText(button.dataset.copyValue || "");
+          button.textContent = successText;
+        } catch {
+          button.textContent = errorText;
+        }
+
+        window.setTimeout(() => {
+          button.textContent = defaultText;
+        }, 1800);
+      });
+    });
+  };
+
   const setPlayerState = (isPlaying) => {
     if (!player || !playButton) return;
 
@@ -369,6 +412,7 @@
     const statusLabel = document.querySelector("[data-mode-label]");
 
     initImageFallbacks();
+    initCopyButtons();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
