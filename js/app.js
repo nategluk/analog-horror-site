@@ -71,20 +71,21 @@
 
   const initCopyButtons = () => {
     document.querySelectorAll("[data-copy-value]").forEach((button) => {
-      const defaultText = button.dataset.copyDefault || button.textContent;
+      const label = button.querySelector("[data-copy-label]") || button;
+      const defaultText = button.dataset.copyDefault || label.textContent;
       const successText = button.dataset.copySuccess || "Copied";
       const errorText = button.dataset.copyError || defaultText;
 
       button.addEventListener("click", async () => {
         try {
           await copyText(button.dataset.copyValue || "");
-          button.textContent = successText;
+          label.textContent = successText;
         } catch {
-          button.textContent = errorText;
+          label.textContent = errorText;
         }
 
         window.setTimeout(() => {
-          button.textContent = defaultText;
+          label.textContent = defaultText;
         }, 1800);
       });
     });

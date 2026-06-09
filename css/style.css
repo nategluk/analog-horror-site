@@ -1487,103 +1487,85 @@ body.staff-mode button {
   color: #050505;
 }
 
-.donate-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.75rem;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  background: linear-gradient(140deg, var(--accent), var(--accent-2));
-  border: none;
-  border-radius: 8px;
-  padding: 0.7rem 0.9rem;
-  font-weight: 700;
-  transition:
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
-}
-
-.donate-link:hover,
-.donate-link:focus-visible {
-  box-shadow: 0 8px 22px var(--shadow);
-  transform: translateY(-1px);
-}
-
-.donate-routes {
+.donate-panel {
   display: grid;
-  gap: 0.8rem;
-  min-width: 0;
-  padding: 0.85rem;
-  background: color-mix(in srgb, var(--surface-alt) 82%, transparent);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  gap: 1rem;
+  max-width: 760px;
 }
 
-.donate-routes h3 {
+.donate-copy {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 640px;
+}
+
+.donate-copy p {
   margin: 0;
-  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.65;
 }
 
-.donate-route-list {
+.donate-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 0.55rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-width: 0;
 }
 
-.donate-route-link,
-.crypto-copy-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.4rem;
+.donate-action {
+  display: grid;
+  align-content: center;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: 5.25rem;
   color: var(--text);
-  text-align: center;
+  text-align: left;
   text-decoration: none;
-  background: var(--surface-alt);
+  background: color-mix(in srgb, var(--surface-alt) 88%, transparent);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0.55rem 0.75rem;
-  font-weight: 700;
+  padding: 1rem;
   cursor: pointer;
   transition:
     border-color 0.2s ease,
+    box-shadow 0.2s ease,
     color 0.2s ease,
     transform 0.2s ease;
 }
 
-.donate-route-link:hover,
-.donate-route-link:focus-visible,
-.crypto-copy-button:hover,
-.crypto-copy-button:focus-visible {
+.donate-action span {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.donate-action small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.donate-action--primary {
+  color: #fff;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+}
+
+.donate-action--primary small {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.donate-action:hover,
+.donate-action:focus-visible {
   color: var(--accent);
   border-color: var(--accent);
+  box-shadow: 0 8px 22px var(--shadow);
   transform: translateY(-1px);
 }
 
-.crypto-route {
-  display: grid;
-  gap: 0.55rem;
-  min-width: 0;
-}
-
-.crypto-route__label {
-  font-weight: 700;
-}
-
-.crypto-route__address {
-  display: block;
-  min-width: 0;
-  color: var(--text);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  border: 1px dashed var(--border);
-  border-radius: 8px;
-  padding: 0.6rem;
-  font-size: 0.78rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+.donate-action--primary:hover,
+.donate-action--primary:focus-visible {
+  color: #fff;
 }
 
 .donate-warning {
@@ -1601,31 +1583,29 @@ body.staff-mode button {
   line-height: 1.45;
 }
 
-body.staff-mode .staff-donate-link {
-  color: #050505;
+body.staff-mode .staff-donate-panel {
   text-transform: uppercase;
 }
 
-body.staff-mode .staff-routes {
-  background: rgba(6, 10, 6, 0.9);
-  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-  text-transform: uppercase;
+body.staff-mode .staff-donate-panel .donate-copy p {
+  color: var(--accent);
+  letter-spacing: 0.04em;
 }
 
-body.staff-mode .staff-routes h3,
-body.staff-mode .staff-routes .crypto-route__label {
-  color: var(--accent-2);
-}
-
-body.staff-mode .staff-routes .donate-route-link,
-body.staff-mode .staff-routes .crypto-copy-button,
-body.staff-mode .staff-routes .crypto-route__address {
+body.staff-mode .staff-routes .donate-action {
   color: var(--accent);
   background: #0b160d;
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
 }
 
-body.staff-mode .staff-routes .donate-warning {
-  color: var(--accent);
+body.staff-mode .staff-routes .donate-action--primary {
+  color: #050505;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+}
+
+body.staff-mode .staff-routes .donate-action small {
+  color: var(--accent-2);
   letter-spacing: 0.04em;
 }
 
@@ -2174,6 +2154,14 @@ body.staff-mode .hero {
 @media (max-width: 768px) {
   .hero {
     min-height: 340px;
+  }
+
+  .donate-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .donate-action {
+    min-height: 4.6rem;
   }
 
   .location-intro {

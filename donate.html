@@ -46,86 +46,54 @@
       </nav>
 
       <main class="panel">
-        <section class="guest-content">
-          <h2>Поддержите развитие парка</h2>
+        <section class="guest-content donate-panel">
+          <h2>Поддержать проект</h2>
           <img class="promo-banner" src="assets/guest/good-dream.jpg" alt="Сладкий сон" />
-          <form class="form-grid">
-            <label>
-              Ваше имя
-              <input type="text" placeholder="Например, Марина" />
-            </label>
-            <label>
-              Сумма помощи
-              <input type="number" min="1" placeholder="500" />
-            </label>
-            <label>
-              Сообщение
-              <textarea rows="4" placeholder="Пусть парк сияет дальше..."></textarea>
-            </label>
-            <a class="donate-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
-              Поддержать парк
+          <div class="donate-copy">
+            <p>Если вам нравится «Детский Жир», вы можете поддержать дальнейшую работу над проектом.</p>
+            <p>Администрация благодарит посетителей за добровольную финансовую помощь.</p>
+          </div>
+          <div class="donate-actions" aria-label="Способы поддержки">
+            <a class="donate-action donate-action--primary" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
+              <span>Boosty</span>
+              <small>карты РФ</small>
             </a>
-            <div class="donate-routes" aria-label="Способы поддержки">
-              <h3>Способы поддержки</h3>
-              <div class="donate-route-list">
-                <a class="donate-route-link" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PayPal</a>
-              </div>
-              <div class="crypto-route">
-                <span class="crypto-route__label">USDT — сеть TON</span>
-                <code class="crypto-route__address">UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2</code>
-                <button class="crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="Скопировать адрес" data-copy-success="Адрес скопирован" data-copy-error="Скопируйте вручную">
-                  Скопировать адрес
-                </button>
-                <p class="donate-warning">
-                  Отправляйте только USDT в сети TON. Не отправляйте USDT TRC-20, ERC-20 или BEP-20 на этот адрес. Переводы в другой сети могут быть потеряны.
-                </p>
-              </div>
-            </div>
-            <p class="donate-note">Ваш вклад помогает нам сохранять свет, музыку и улыбки в залах комплекса.</p>
-          </form>
+            <a class="donate-action" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">
+              <span>PayPal</span>
+              <small>международные платежи</small>
+            </a>
+            <button class="donate-action crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="USDT TON" data-copy-success="Адрес скопирован" data-copy-error="Скопируйте вручную">
+              <span data-copy-label>USDT TON</span>
+              <small>скопировать адрес</small>
+            </button>
+          </div>
+          <p class="donate-warning">
+            Отправляйте только USDT в сети TON. Переводы в другой сети могут быть потеряны.
+          </p>
         </section>
 
-        <section class="staff-content">
-          <h2>Терминал штрафов и удержаний</h2>
+        <section class="staff-content donate-panel staff-donate-panel">
+          <h2>VOLUNTARY FINANCE NODE</h2>
           <img class="promo-banner" src="assets/staff/bad-dream.jpg" alt="Плохой сон" />
-          <form class="form-grid">
-            <label>
-              ID сотрудника
-              <input type="text" placeholder="EMP-0000" />
-            </label>
-            <label>
-              Тип взыскания
-              <select>
-                <option>Опоздание</option>
-                <option>Нарушение протокола</option>
-                <option>Несанкционированная эмпатия</option>
-              </select>
-            </label>
-            <label>
-              Комментарий инспектора
-              <textarea rows="4" placeholder="Причина внесения в реестр..."></textarea>
-            </label>
-            <a class="donate-link staff-donate-link" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
-              EXPORT TO BOOSTY_FINANCE_NODE
+          <div class="donate-copy">
+            <p>STATUS: PROJECT SUPPORT CHANNELS ARE OPEN.</p>
+            <p>ADMINISTRATION ACKNOWLEDGES VOLUNTARY FINANCIAL ASSISTANCE FROM VERIFIED VISITORS.</p>
+          </div>
+          <div class="donate-actions staff-routes" aria-label="Финансовые маршруты">
+            <a class="donate-action donate-action--primary" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">
+              <span>BOOSTY</span>
+              <small>RF CARD ROUTE</small>
             </a>
-            <div class="donate-routes staff-routes" aria-label="Финансовые маршруты">
-              <h3>FINANCE ROUTES</h3>
-              <div class="donate-route-list">
-                <a class="donate-route-link" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PAYPAL_GATEWAY</a>
-              </div>
-              <div class="crypto-route">
-                <span class="crypto-route__label">USDT_TON_LEDGER</span>
-                <code class="crypto-route__address">UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2</code>
-                <button class="crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="COPY ADDRESS" data-copy-success="BUFFER UPDATED" data-copy-error="COPY MANUALLY">
-                  COPY ADDRESS
-                </button>
-                <p class="donate-warning">
-                  NETWORK: TON ONLY. REJECT: TRC-20 / ERC-20 / BEP-20. WRONG NETWORK TRANSFER MAY BE LOST.
-                </p>
-              </div>
-            </div>
-            <p class="finance-route">FINANCE ROUTES: BOOSTY_NODE // PAYPAL_GATEWAY // USDT_TON_LEDGER</p>
-          </form>
+            <a class="donate-action" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">
+              <span>PAYPAL</span>
+              <small>INTERNATIONAL GATEWAY</small>
+            </a>
+            <button class="donate-action crypto-copy-button" type="button" data-copy-value="UQAhzYSpmorYAKBRXJD9nKZyS2Yk9Zz8es0I04hUs1sX2UX2" data-copy-default="USDT TON" data-copy-success="BUFFER UPDATED" data-copy-error="COPY MANUALLY">
+              <span data-copy-label>USDT TON</span>
+              <small>COPY LEDGER ADDRESS</small>
+            </button>
+          </div>
+          <p class="donate-warning finance-route">NETWORK: TON ONLY. WRONG NETWORK TRANSFER MAY BE LOST.</p>
         </section>
       </main>
 
@@ -146,6 +114,6 @@
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
     </div>
-    <script src="js/app.js?v=donate-routes"></script>
+    <script src="js/app.js?v=donate-actions"></script>
   </body>
 </html>
