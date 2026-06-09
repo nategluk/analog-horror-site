@@ -255,7 +255,7 @@
     overlay.classList.add("is-failing");
     await wait(620);
     applyMode(false);
-    window.location.assign(new URL("index.html", window.location.href).href);
+    window.location.assign(new URL("/", window.location.href).href);
   };
 
   const initImageFallbacks = () => {
