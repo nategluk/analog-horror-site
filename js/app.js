@@ -36,6 +36,7 @@
   let playButton;
   let trackLabel;
   let nextButton;
+  let progressRange;
   let modeSwitchAudio;
   let currentMusicMode = "guest";
   let currentTrackIndex = 0;
@@ -100,6 +101,26 @@
     localStorage.setItem(MUSIC_PLAYING_KEY, isPlaying ? "true" : "false");
   };
 
+  const updatePlayerProgress = () => {
+    if (!audio || !progressRange) return;
+
+    const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+    const currentTime = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+    const progress = duration > 0 ? Math.min((currentTime / duration) * 1000, 1000) : 0;
+
+    progressRange.disabled = duration <= 0;
+    progressRange.value = Math.round(progress);
+    progressRange.style.setProperty("--progress", `${progress / 10}%`);
+    progressRange.setAttribute("aria-valuetext", duration > 0 ? `${Math.round(currentTime)} из ${Math.round(duration)} секунд` : "Трек загружается");
+  };
+
+  const seekCurrentTrack = () => {
+    if (!audio || !progressRange || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+
+    audio.currentTime = (Number(progressRange.value) / 1000) * audio.duration;
+    updatePlayerProgress();
+  };
+
   const loadCurrentTrack = ({ keepPlaying = false } = {}) => {
     if (!audio) return;
 
@@ -108,6 +129,7 @@
 
     audio.src = track.src;
     audio.loop = tracks.length === 1;
+    updatePlayerProgress();
 
     if (trackLabel) {
       trackLabel.textContent = track.title;
@@ -336,6 +358,9 @@
     audio.addEventListener("ended", playNextTrack);
     audio.addEventListener("play", () => setPlayerState(true));
     audio.addEventListener("pause", () => setPlayerState(false));
+    audio.addEventListener("loadedmetadata", updatePlayerProgress);
+    audio.addEventListener("durationchange", updatePlayerProgress);
+    audio.addEventListener("timeupdate", updatePlayerProgress);
 
     player = document.createElement("aside");
     player.className = "music-player";
@@ -354,7 +379,17 @@
     nextButton.textContent = "NEXT";
     nextButton.setAttribute("aria-label", "Следующий трек");
 
-    player.append(playButton, trackLabel, nextButton);
+    progressRange = document.createElement("input");
+    progressRange.className = "music-player__progress";
+    progressRange.type = "range";
+    progressRange.min = "0";
+    progressRange.max = "1000";
+    progressRange.step = "1";
+    progressRange.value = "0";
+    progressRange.disabled = true;
+    progressRange.setAttribute("aria-label", "Перемотка трека");
+
+    player.append(playButton, trackLabel, nextButton, progressRange);
     (document.querySelector(".logo-area") || body).append(player);
 
     playButton.addEventListener("click", () => {
@@ -367,6 +402,7 @@
     });
 
     nextButton.addEventListener("click", playNextTrack);
+    progressRange.addEventListener("input", seekCurrentTrack);
     loadCurrentTrack();
 
     if (localStorage.getItem(MUSIC_PLAYING_KEY) === "true") {
