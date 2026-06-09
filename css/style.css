@@ -1955,6 +1955,11 @@ body.staff-mode .vhs-noise {
   background-position: center;
 }
 
+.hero--video-archives {
+  background-image: url("../assets/guest/ads/video-archives-hero.png");
+  background-position: center;
+}
+
 .location-hero {
   margin-bottom: 1.25rem;
 }
