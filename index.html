@@ -237,9 +237,19 @@
             
             <article class="card cctv-feed">
               <div class="cctv-status">
-                <span class="cctv-dot blink"></span> CAM 02 - КАРУСЕЛЬ
+                <span class="cctv-dot blink"></span> CAM 02 - ГОРКА
               </div>
-              <img src="assets/staff/locations/cctv-carousel.png" alt="CCTV Карусель" style="width: 100%; aspect-ratio: 1; object-fit: cover; filter: contrast(1.2); margin-top: 0.5rem; margin-bottom: 0.5rem; border-radius: 4px;" />
+              <video
+                class="cctv-media"
+                data-cctv-video
+                data-video-pool="assets/staff/cctv/slide-01.mp4"
+                poster="assets/staff/cctv/slide-poster.jpg"
+                aria-label="CCTV Горка"
+                muted
+                loop
+                playsinline
+                preload="none"
+              ></video>
               <p class="muted">Статус: Механизм запущен (Автономно).</p>
             </article>
 
