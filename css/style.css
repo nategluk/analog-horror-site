@@ -1493,6 +1493,14 @@ body.staff-mode button {
   max-width: 760px;
 }
 
+.staff-content.donate-panel {
+  display: none;
+}
+
+body.staff-mode .staff-content.donate-panel {
+  display: grid;
+}
+
 .donate-copy {
   display: grid;
   gap: 0.5rem;
