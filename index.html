@@ -257,7 +257,17 @@
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span> CAM 04 - БАССЕЙН
               </div>
-              <img src="assets/staff/locations/cctv-ballpit.png" alt="CCTV Бассейн" style="width: 100%; aspect-ratio: 1; object-fit: cover; filter: contrast(1.2); margin-top: 0.5rem; margin-bottom: 0.5rem; border-radius: 4px;" />
+              <video
+                class="cctv-media"
+                data-cctv-video
+                data-video-pool="assets/staff/cctv/pool-01.mp4"
+                poster="assets/staff/cctv/pool-poster.jpg"
+                aria-label="CCTV Бассейн"
+                muted
+                loop
+                playsinline
+                preload="none"
+              ></video>
               <p class="muted">Статус: Изменение объема биомассы.</p>
             </article>
           </div>
