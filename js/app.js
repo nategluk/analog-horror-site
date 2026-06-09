@@ -139,6 +139,33 @@
     loadCurrentTrack({ keepPlaying: wasPlaying });
   };
 
+  const updateCctvVideos = (isStaff) => {
+    document.querySelectorAll("[data-cctv-video]").forEach((video) => {
+      if (video.tagName !== "VIDEO") return;
+
+      if (!isStaff) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+        return;
+      }
+
+      const pool = (video.dataset.videoPool || "")
+        .split("|")
+        .map((src) => src.trim())
+        .filter(Boolean);
+
+      if (!pool.length) return;
+
+      if (!video.src) {
+        const selectedSrc = pool[Math.floor(Math.random() * pool.length)];
+        video.src = selectedSrc;
+      }
+
+      video.play().catch(() => {});
+    });
+  };
+
   const playModeSwitchSound = () => {
     if (!modeSwitchAudio) {
       modeSwitchAudio = new Audio(audioAsset("assets/audio/glitch-transition.wav"));
@@ -353,6 +380,7 @@
       statusLabel.textContent = isStaff ? "Режим: Терминал персонала" : "Режим: Гостевая версия";
     }
     setMusicMode(isStaff);
+    updateCctvVideos(isStaff);
     localStorage.setItem(MODE_KEY, isStaff ? "staff" : "guest");
   };
 

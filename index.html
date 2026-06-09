@@ -211,7 +211,17 @@
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span> CAM 01 - ЗООПАРК
               </div>
-              <img src="assets/staff/locations/cctv-losiny.png" alt="CCTV Зоопарк" style="width: 100%; aspect-ratio: 1; object-fit: cover; filter: contrast(1.2) grayscale(0.2); margin-top: 0.5rem; margin-bottom: 0.5rem; border-radius: 4px;" />
+              <video
+                class="cctv-media"
+                data-cctv-video
+                data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
+                poster="assets/staff/locations/cctv-losiny.png"
+                aria-label="CCTV Зоопарк"
+                muted
+                loop
+                playsinline
+                preload="none"
+              ></video>
               <p class="muted">Статус: Обнаружено движение в вольере 4.</p>
             </article>
             
@@ -322,6 +332,6 @@
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
     </div>
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=cctv-video-1"></script>
   </body>
 </html>
