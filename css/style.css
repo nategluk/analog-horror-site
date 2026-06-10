@@ -2079,6 +2079,32 @@ body.staff-mode .vhs-noise {
     padding: 0.5rem 0.75rem;
     white-space: nowrap;
   }
+
+  body.staff-mode .site-nav {
+    overflow-x: visible;
+  }
+
+  body.staff-mode .site-nav ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+  }
+
+  body.staff-mode .site-nav li {
+    min-width: 0;
+  }
+
+  body.staff-mode .site-nav a {
+    justify-content: center;
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.35rem;
+    font-size: 0.74rem;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+  }
 }
 
 /* ==================== HERO SECTION ==================== */
