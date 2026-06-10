@@ -162,30 +162,81 @@
     loadCurrentTrack({ keepPlaying: wasPlaying });
   };
 
-  const updateCctvVideos = (isStaff) => {
-    document.querySelectorAll("[data-cctv-video]").forEach((video) => {
-      if (video.tagName !== "VIDEO") return;
+  const getCctvPool = (video) => (video.dataset.videoPool || "")
+    .split("|")
+    .map((src) => src.trim())
+    .filter(Boolean);
 
-      if (!isStaff) {
+  const getCctvPlayButton = (video) => video.closest(".cctv-screen")?.querySelector("[data-cctv-play]");
+
+  const setCctvButtonState = (video, state) => {
+    const button = getCctvPlayButton(video);
+    if (!button) return;
+
+    button.classList.toggle("is-playing", state === "playing");
+    button.classList.toggle("is-loading", state === "loading");
+    button.disabled = state === "loading";
+
+    if (state === "playing") {
+      button.innerHTML = '<span aria-hidden="true">Ⅱ</span> PAUSE';
+    } else if (state === "loading") {
+      button.innerHTML = '<span aria-hidden="true">...</span> SYNC';
+    } else {
+      button.innerHTML = '<span aria-hidden="true">▶</span> PLAY';
+    }
+  };
+
+  const resetCctvVideo = (video) => {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+    delete video.dataset.cctvSelected;
+    setCctvButtonState(video, "ready");
+  };
+
+  const ensureCctvControls = (video) => {
+    if (video.dataset.cctvControlsReady === "true") return;
+
+    const button = getCctvPlayButton(video);
+    if (!button) return;
+
+    video.dataset.cctvControlsReady = "true";
+    button.addEventListener("click", () => {
+      if (!video.paused) {
         video.pause();
-        video.removeAttribute("src");
-        video.load();
         return;
       }
 
-      const pool = (video.dataset.videoPool || "")
-        .split("|")
-        .map((src) => src.trim())
-        .filter(Boolean);
-
+      const pool = getCctvPool(video);
       if (!pool.length) return;
 
-      if (!video.src) {
-        const selectedSrc = pool[Math.floor(Math.random() * pool.length)];
-        video.src = selectedSrc;
+      if (!video.dataset.cctvSelected) {
+        video.dataset.cctvSelected = pool[Math.floor(Math.random() * pool.length)];
       }
 
-      video.play().catch(() => {});
+      if (!video.src) {
+        video.src = video.dataset.cctvSelected;
+      }
+
+      setCctvButtonState(video, "loading");
+      video.play()
+        .then(() => setCctvButtonState(video, "playing"))
+        .catch(() => setCctvButtonState(video, "ready"));
+    });
+
+    video.addEventListener("play", () => setCctvButtonState(video, "playing"));
+    video.addEventListener("pause", () => setCctvButtonState(video, "ready"));
+  };
+
+  const updateCctvVideos = (isStaff) => {
+    document.querySelectorAll("[data-cctv-video]").forEach((video) => {
+      if (video.tagName !== "VIDEO") return;
+      ensureCctvControls(video);
+
+      if (!isStaff) {
+        resetCctvVideo(video);
+        return;
+      }
     });
   };
 

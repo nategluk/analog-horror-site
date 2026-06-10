@@ -241,17 +241,23 @@
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span> CAM 01 - ЗООПАРК
               </div>
-              <video
-                class="cctv-media"
-                data-cctv-video
-                data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
-                poster="assets/staff/cctv/zoo-poster.jpg"
-                aria-label="CCTV Зоопарк"
-                muted
-                loop
-                playsinline
-                preload="none"
-              ></video>
+              <div class="cctv-screen">
+                <video
+                  class="cctv-media"
+                  data-cctv-video
+                  data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
+                  poster="assets/staff/cctv/zoo-poster.jpg"
+                  aria-label="CCTV Зоопарк"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                ></video>
+                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Зоопарк">
+                  <span aria-hidden="true">▶</span>
+                  PLAY
+                </button>
+              </div>
               <p class="muted">Статус: Обнаружено движение в вольере 4.</p>
             </article>
             
@@ -259,17 +265,23 @@
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span> CAM 02 - ГОРКА
               </div>
-              <video
-                class="cctv-media"
-                data-cctv-video
-                data-video-pool="assets/staff/cctv/slide-01.mp4"
-                poster="assets/staff/cctv/slide-poster.jpg"
-                aria-label="CCTV Горка"
-                muted
-                loop
-                playsinline
-                preload="none"
-              ></video>
+              <div class="cctv-screen">
+                <video
+                  class="cctv-media"
+                  data-cctv-video
+                  data-video-pool="assets/staff/cctv/slide-01.mp4"
+                  poster="assets/staff/cctv/slide-poster.jpg"
+                  aria-label="CCTV Горка"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                ></video>
+                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Горка">
+                  <span aria-hidden="true">▶</span>
+                  PLAY
+                </button>
+              </div>
               <p class="muted">Статус: Механизм запущен (Автономно).</p>
             </article>
 
@@ -277,17 +289,23 @@
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span> CAM 04 - БАССЕЙН
               </div>
-              <video
-                class="cctv-media"
-                data-cctv-video
-                data-video-pool="assets/staff/cctv/pool-01.mp4"
-                poster="assets/staff/cctv/pool-poster.jpg"
-                aria-label="CCTV Бассейн"
-                muted
-                loop
-                playsinline
-                preload="none"
-              ></video>
+              <div class="cctv-screen">
+                <video
+                  class="cctv-media"
+                  data-cctv-video
+                  data-video-pool="assets/staff/cctv/pool-01.mp4"
+                  poster="assets/staff/cctv/pool-poster.jpg"
+                  aria-label="CCTV Бассейн"
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                ></video>
+                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Бассейн">
+                  <span aria-hidden="true">▶</span>
+                  PLAY
+                </button>
+              </div>
               <p class="muted">Статус: Изменение объема биомассы.</p>
             </article>
           </div>
@@ -382,6 +400,6 @@
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
     </div>
-    <script src="js/app.js?v=cctv-video-1"></script>
+    <script src="js/app.js?v=cctv-play-1"></script>
   </body>
 </html>
