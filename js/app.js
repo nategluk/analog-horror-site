@@ -488,7 +488,7 @@
     if (homeHeroes.length > 1) {
       const requestedHero = new URLSearchParams(window.location.search).get("hero");
       const rotatingHeroes = homeHeroes.filter((hero) =>
-        ["wonder", "video-archives"].includes(hero.dataset.homeHero)
+        ["wonder", "video-archives", "losiny", "aquapark", "solnyshko-park"].includes(hero.dataset.homeHero)
       );
       const randomHero = rotatingHeroes[Math.floor(Math.random() * rotatingHeroes.length)] || homeHeroes[0];
       const selectedHero =

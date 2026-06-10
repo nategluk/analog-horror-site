@@ -2023,6 +2023,16 @@ body.staff-mode .vhs-noise {
   background-position: center;
 }
 
+.hero--aquapark {
+  background-image: url("../assets/guest/ads/aquapark-hero.webp");
+  background-position: center;
+}
+
+.hero--solnyshko-park-home {
+  background-image: url("../assets/guest/ads/solnyshko-park-hero.webp");
+  background-position: center;
+}
+
 .location-hero {
   margin-bottom: 1.25rem;
 }
