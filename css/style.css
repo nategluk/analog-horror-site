@@ -1634,14 +1634,6 @@ body.staff-mode .staff-content.donate-panel {
   line-height: 1.2;
 }
 
-.email-label {
-  overflow-wrap: anywhere;
-}
-
-.email-at::before {
-  content: "@";
-}
-
 .donate-action small {
   color: var(--muted);
   font-size: 0.78rem;
@@ -1694,7 +1686,7 @@ body.staff-mode .staff-content.donate-panel {
 
 .contact-actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
   min-width: 0;
 }
