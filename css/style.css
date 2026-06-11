@@ -2688,6 +2688,29 @@ body.staff-mode .cctv-play-button:focus-visible {
   }
 }
 
+@media (hover: none), (max-width: 700px) {
+  body.staff-mode .cctv-play-button.is-playing {
+    left: auto;
+    top: auto;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    transform: none;
+    min-width: 2.75rem;
+    width: 2.75rem;
+    padding: 0;
+    font-size: 0;
+    opacity: 0.72;
+  }
+
+  body.staff-mode .cctv-play-button.is-playing span {
+    font-size: 0.95rem;
+  }
+
+  body.staff-mode .cctv-play-button.is-playing:focus-visible {
+    opacity: 1;
+  }
+}
+
 body.staff-mode .cctv-play-button:disabled {
   cursor: wait;
   opacity: 0.82;
