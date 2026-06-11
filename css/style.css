@@ -1670,6 +1670,27 @@ body.staff-mode .staff-content.donate-panel {
   line-height: 1.45;
 }
 
+.collaboration-card {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--surface-alt) 82%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.collaboration-card h3 {
+  margin: 0;
+}
+
+.contact-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-width: 0;
+}
+
 .donate-note,
 .finance-route {
   margin: 0;
@@ -1702,6 +1723,11 @@ body.staff-mode .staff-routes .donate-action--primary {
 body.staff-mode .staff-routes .donate-action small {
   color: var(--accent-2);
   letter-spacing: 0.04em;
+}
+
+body.staff-mode .staff-collaboration-card {
+  background: #071108;
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
 }
 
 body.staff-mode .finance-route {
@@ -2562,7 +2588,8 @@ body.staff-mode .hero {
     min-height: 340px;
   }
 
-  .donate-actions {
+  .donate-actions,
+  .contact-actions {
     grid-template-columns: 1fr;
   }
 
