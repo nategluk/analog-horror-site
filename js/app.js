@@ -45,9 +45,48 @@
   let switching = false;
   let isNavigating = false;
   let adminProtocolRunning = false;
+  let navigationAnnouncer;
 
   const getMusicTracks = () => musicLibrary[currentMusicMode] || musicLibrary.guest;
   const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+
+  const getNavigationAnnouncer = () => {
+    if (navigationAnnouncer && document.body.contains(navigationAnnouncer)) {
+      return navigationAnnouncer;
+    }
+
+    navigationAnnouncer = document.createElement("div");
+    navigationAnnouncer.className = "visually-hidden";
+    navigationAnnouncer.setAttribute("aria-live", "polite");
+    navigationAnnouncer.setAttribute("aria-atomic", "true");
+    navigationAnnouncer.setAttribute("role", "status");
+    body.append(navigationAnnouncer);
+    return navigationAnnouncer;
+  };
+
+  const getCurrentPageLabel = () => {
+    const titleLabel = document.title.replace(/^Развлекательный Комплекс «Детский ЖИР» —\s*/, "").trim();
+    const heading = document.querySelector("main h1, main h2");
+    const currentPage = document.querySelector("[aria-current='page']");
+    const label = heading?.textContent?.replace(/\s+/g, " ").trim();
+    const currentPageLabel = currentPage?.textContent?.replace(/\s+/g, " ").trim();
+
+    if (titleLabel) return titleLabel;
+    if (label) return label;
+    if (currentPageLabel) return currentPageLabel;
+
+    return "";
+  };
+
+  const announceNavigationChange = () => {
+    const announcer = getNavigationAnnouncer();
+    const label = getCurrentPageLabel();
+
+    announcer.textContent = "";
+    window.setTimeout(() => {
+      announcer.textContent = label ? `Страница загружена: ${label}` : "Страница загружена";
+    }, 0);
+  };
 
   const copyText = async (value) => {
     if (navigator.clipboard && window.isSecureContext) {
@@ -685,6 +724,8 @@
     const archiveThumbnails = document.querySelectorAll(".archive-thumbnail");
 
     const archiveBtn = document.getElementById("archive-submit-btn");
+    const archiveRequest = document.querySelector("[data-archive-request]");
+    const archiveRequestResponse = document.querySelector("[data-archive-request-response]");
 
     const handleArchiveAuth = () => {
       if (archivePassword.value === "312") {
@@ -707,6 +748,18 @@
         }
       });
     }
+
+    if (archiveRequest && archiveRequestResponse) {
+      archiveRequest.addEventListener("click", () => {
+        archiveRequestResponse.textContent =
+          "ЗАПРОС ОТКЛОНЕН // BLUE ACCESS ONLY // ОСТАВШИЕСЯ ФАЙЛЫ НЕ ПРЕДНАЗНАЧЕНЫ ДЛЯ ГОСТЕЙ";
+        archiveRequestResponse.hidden = false;
+        archiveRequest.textContent = "ПОВТОРИТЬ ЗАПРОС";
+        archiveRequest.classList.add("is-denied");
+        playModeSwitchSound();
+      });
+    }
+
     if (lightbox && lightboxClose) {
       archiveThumbnails.forEach(img => {
         img.addEventListener("click", () => {
@@ -772,6 +825,7 @@
         }
         
         initDOMListeners();
+        announceNavigationChange();
         return true;
       }
     } catch (err) {
@@ -814,6 +868,7 @@
 
   const init = () => {
     initMusicPlayer();
+    getNavigationAnnouncer();
     
     const savedMode = localStorage.getItem(MODE_KEY);
     applyMode(savedMode === "staff");
