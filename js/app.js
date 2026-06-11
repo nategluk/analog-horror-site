@@ -1,6 +1,7 @@
 (() => {
   const MODE_KEY = "tyndex_mode";
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
+  const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
   const scriptUrl = document.currentScript?.src || window.location.href;
   const audioAsset = (path) => new URL(`../${path}`, scriptUrl).href;
   const musicLibrary = {
@@ -89,6 +90,63 @@
           label.textContent = defaultText;
         }, 1800);
       });
+    });
+  };
+
+  const initCinemaTicket = () => {
+    const wrapper = document.querySelector(".site-wrapper");
+    const trigger = wrapper?.querySelector("[data-cinema-ticket-trigger]");
+    const modal = wrapper?.querySelector("[data-cinema-ticket-modal]");
+
+    document.querySelectorAll("body > [data-cinema-ticket-modal]").forEach((staleModal) => {
+      staleModal.remove();
+    });
+
+    if (!trigger || !modal || trigger.dataset.ticketReady === "true") return;
+
+    body.append(modal);
+
+    const closeControls = modal.querySelectorAll("[data-cinema-ticket-close]");
+    const closeButton = modal.querySelector(".cinema-ticket-modal__close");
+    let previousFocus = null;
+
+    const updateTriggerLabel = () => {
+      const hasTicket = localStorage.getItem(CINEMA_TICKET_KEY) === "true";
+      trigger.classList.toggle("is-ticket-issued", hasTicket);
+      trigger.textContent = hasTicket ? "ПОКАЗАТЬ БИЛЕТ" : "ЗАНЯТЬ МЕСТО В ЗАЛЕ";
+    };
+
+    const closeTicket = () => {
+      modal.hidden = true;
+
+      if (previousFocus && typeof previousFocus.focus === "function") {
+        previousFocus.focus();
+      }
+    };
+
+    const openTicket = () => {
+      previousFocus = document.activeElement;
+      localStorage.setItem(CINEMA_TICKET_KEY, "true");
+      updateTriggerLabel();
+      modal.hidden = false;
+      playModeSwitchSound();
+
+      window.setTimeout(() => {
+        closeButton?.focus();
+      }, 0);
+    };
+
+    trigger.dataset.ticketReady = "true";
+    updateTriggerLabel();
+
+    trigger.addEventListener("click", openTicket);
+    closeControls.forEach((control) => {
+      control.addEventListener("click", closeTicket);
+    });
+    modal.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeTicket();
+      }
     });
   };
 
@@ -529,6 +587,7 @@
 
     initImageFallbacks();
     initCopyButtons();
+    initCinemaTicket();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     

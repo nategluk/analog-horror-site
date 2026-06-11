@@ -2275,6 +2275,197 @@ body.staff-mode .location-cta.is-denied {
   background: linear-gradient(140deg, var(--accent), #ff2f4f);
 }
 
+.cinema-ticket-trigger {
+  border: 0;
+  cursor: pointer;
+}
+
+.cinema-ticket-trigger.is-ticket-issued {
+  background: linear-gradient(140deg, #141414, #4c1f24);
+}
+
+.cinema-ticket-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.cinema-ticket-modal[hidden] {
+  display: none !important;
+}
+
+.cinema-ticket-modal__shade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.08), transparent 34rem),
+    rgba(0, 0, 0, 0.84);
+}
+
+.cinema-ticket-modal__panel {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: min(92vh, 760px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  background: #111;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.58),
+    0 0 28px rgba(255, 47, 79, 0.16);
+}
+
+.cinema-ticket-modal__close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 2;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.62);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.cinema-ticket {
+  position: relative;
+  display: grid;
+  gap: 0.95rem;
+  margin: 1rem;
+  padding: 1.35rem;
+  overflow: hidden;
+  color: #1b1714;
+  background:
+    linear-gradient(90deg, transparent 0 0.55rem, rgba(0, 0, 0, 0.1) 0.55rem 0.6rem, transparent 0.6rem calc(100% - 0.6rem), rgba(0, 0, 0, 0.1) calc(100% - 0.6rem) calc(100% - 0.55rem), transparent calc(100% - 0.55rem)),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.035) 0 1px, transparent 1px 5px),
+    #f7efd7;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(58, 47, 43, 0.22);
+  animation: ticket-thermal-print 520ms steps(8, end) both;
+}
+
+.cinema-ticket::before,
+.cinema-ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #111;
+  transform: translateY(-50%);
+}
+
+.cinema-ticket::before {
+  left: -1rem;
+}
+
+.cinema-ticket::after {
+  right: -1rem;
+}
+
+.cinema-ticket__eyebrow,
+.cinema-ticket__venue,
+.cinema-ticket__note,
+.cinema-ticket__serial,
+.cinema-ticket__screening span,
+.cinema-ticket__seat span {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cinema-ticket h2 {
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px dashed rgba(27, 23, 20, 0.38);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 11vw, 4.6rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.cinema-ticket__venue {
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.cinema-ticket__screening {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid rgba(27, 23, 20, 0.16);
+  border-bottom: 1px solid rgba(27, 23, 20, 0.16);
+}
+
+.cinema-ticket__screening strong {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.cinema-ticket__seat {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.cinema-ticket__seat div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 2px solid rgba(27, 23, 20, 0.48);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.cinema-ticket__seat strong {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 16vw, 5.6rem);
+  line-height: 0.9;
+}
+
+.cinema-ticket__note {
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.cinema-ticket__serial {
+  justify-self: start;
+  padding: 0.35rem 0.5rem;
+  color: #7a0d16;
+  border: 1px solid rgba(122, 13, 22, 0.42);
+  transform: rotate(-1deg);
+}
+
+@keyframes ticket-thermal-print {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    filter: contrast(1.8) brightness(1.25);
+  }
+
+  80% {
+    clip-path: inset(0 0 0 0);
+    filter: contrast(1.12) brightness(1.06);
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    filter: none;
+  }
+}
+
 .staff-dossier {
   gap: 1rem;
 }

@@ -119,7 +119,35 @@
             </div>
           </section>
 
-          <a class="location-cta" href="../donate" data-denied-cta data-original-text="ЗАНЯТЬ МЕСТО В ЗАЛЕ" data-denied-text="ОТКАЗАНО">ЗАНЯТЬ МЕСТО В ЗАЛЕ</a>
+          <button class="location-cta cinema-ticket-trigger" type="button" data-cinema-ticket-trigger>ЗАНЯТЬ МЕСТО В ЗАЛЕ</button>
+
+          <div class="cinema-ticket-modal" data-cinema-ticket-modal hidden>
+            <div class="cinema-ticket-modal__shade" data-cinema-ticket-close></div>
+            <section class="cinema-ticket-modal__panel" role="dialog" aria-modal="true" aria-labelledby="cinema-ticket-title">
+              <button class="cinema-ticket-modal__close" type="button" data-cinema-ticket-close aria-label="Закрыть билет">&times;</button>
+              <div class="cinema-ticket" aria-label="Билет в кинотеатр Иллюзион">
+                <p class="cinema-ticket__eyebrow">КАССА 03 // ПЕЧАТЬ ЗАВЕРШЕНА</p>
+                <h2 id="cinema-ticket-title">БИЛЕТ В КИНО</h2>
+                <p class="cinema-ticket__venue">Ретро-кинотеатр «Иллюзион»</p>
+                <div class="cinema-ticket__screening">
+                  <span>Сеанс</span>
+                  <strong>ПОСЛЕ ТИТРОВ</strong>
+                </div>
+                <div class="cinema-ticket__seat">
+                  <div>
+                    <span>РЯД</span>
+                    <strong>3</strong>
+                  </div>
+                  <div>
+                    <span>МЕСТО</span>
+                    <strong>12</strong>
+                  </div>
+                </div>
+                <p class="cinema-ticket__note">Не отрывайте взгляд от экрана. Номер места не является кодом авторизации.</p>
+                <p class="cinema-ticket__serial">ILLUSION-VOID-SEAT</p>
+              </div>
+            </section>
+          </div>
         </section>
 
         <section class="staff-content staff-dossier">
