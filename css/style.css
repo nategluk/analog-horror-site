@@ -1634,6 +1634,14 @@ body.staff-mode .staff-content.donate-panel {
   line-height: 1.2;
 }
 
+.email-label {
+  overflow-wrap: anywhere;
+}
+
+.email-at::before {
+  content: "@";
+}
+
 .donate-action small {
   color: var(--muted);
   font-size: 0.78rem;

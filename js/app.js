@@ -110,8 +110,21 @@
     helper.remove();
   };
 
+  const getCopyValue = (button) => {
+    if (button.dataset.copyValue) return button.dataset.copyValue;
+    if (button.dataset.copyUser && button.dataset.copyDomain) {
+      return `${button.dataset.copyUser}@${button.dataset.copyDomain}`;
+    }
+
+    return "";
+  };
+
   const initCopyButtons = () => {
-    document.querySelectorAll("[data-copy-value]").forEach((button) => {
+    document.querySelectorAll("[data-copy-value], [data-copy-user][data-copy-domain]").forEach((button) => {
+      button.querySelectorAll(".email-at").forEach((separator) => {
+        separator.textContent = "@";
+      });
+
       const label = button.querySelector("[data-copy-label]") || button;
       const defaultText = button.dataset.copyDefault || label.textContent;
       const successText = button.dataset.copySuccess || "Copied";
@@ -119,7 +132,7 @@
 
       button.addEventListener("click", async () => {
         try {
-          await copyText(button.dataset.copyValue || "");
+          await copyText(getCopyValue(button));
           label.textContent = successText;
         } catch {
           label.textContent = errorText;
