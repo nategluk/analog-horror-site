@@ -522,6 +522,7 @@ body:not(.staff-mode) .site-footer {
 
 .logo {
   margin: 0;
+  position: relative;
   font-family: var(--font-display);
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -532,6 +533,75 @@ body:not(.staff-mode) .site-footer {
   display: flex;
   align-items: center;
   min-width: 0;
+}
+
+@keyframes logo-knock-one {
+  0%, 100% {
+    opacity: 1;
+    filter: none;
+  }
+  42% {
+    opacity: 0.38;
+    filter: brightness(1.35);
+  }
+}
+
+@keyframes logo-knock-two {
+  0%, 100% {
+    transform: translate(0);
+    filter: none;
+  }
+  22% {
+    transform: translate(-2px, 1px);
+    filter: saturate(0) contrast(1.7);
+  }
+  48% {
+    transform: translate(2px, -1px);
+    filter: hue-rotate(35deg) contrast(1.35);
+  }
+  72% {
+    transform: translate(-1px, 0);
+    filter: none;
+  }
+}
+
+@keyframes logo-knock-count {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.92);
+  }
+  18%, 72% {
+    opacity: 0.9;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logo.logo-knock-one {
+  animation: logo-knock-one 180ms steps(2, end);
+}
+
+.logo.logo-knock-two {
+  animation: logo-knock-two 300ms steps(2, end);
+}
+
+.logo.logo-knock-two::after {
+  content: "2/3";
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: clamp(42px, 16%, 58px);
+  padding: 0.08rem 0.28rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  color: #fff7d1;
+  background: rgba(42, 18, 26, 0.84);
+  box-shadow: 2px 0 #d98ca8, -2px 0 #75d5d0;
+  font: 700 0.68rem/1.1 "Courier New", monospace;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px) scale(0.92);
+  animation: logo-knock-count 420ms steps(2, end);
 }
 
 .logo-image {
@@ -2006,6 +2076,22 @@ body.staff-mode .vhs-noise {
   body:not(.staff-mode) .vhs-noise {
     animation: none;
     opacity: 0.055;
+  }
+
+  .logo.logo-knock-one {
+    animation: none;
+    opacity: 0.65;
+  }
+
+  .logo.logo-knock-two {
+    animation: none;
+    filter: contrast(1.35);
+  }
+
+  .logo.logo-knock-two::after {
+    animation: none;
+    opacity: 0.9;
+    transform: translateY(0) scale(1);
   }
 }
 

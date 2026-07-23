@@ -2,6 +2,7 @@
   const MODE_KEY = "tyndex_mode";
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
+  const LOGO_KNOCK_WINDOW = 1500;
   const scriptUrl = document.currentScript?.src || window.location.href;
   const audioAsset = (path) => new URL(`../${path}`, scriptUrl).href;
   const musicLibrary = {
@@ -589,6 +590,8 @@
   const runGlitchAndToggle = () => {
     if (switching) return;
     switching = true;
+    const logo = document.querySelector(".logo");
+    logo?.classList.remove("logo-knock-one", "logo-knock-two");
     const nextIsStaff = !body.classList.contains("staff-mode");
     if (nextIsStaff) {
       playModeSwitchSound();
@@ -602,15 +605,33 @@
     }, 1600);
   };
 
+  const showLogoKnockFeedback = (knockCount) => {
+    const logo = document.querySelector(".logo");
+    if (!logo) return;
+
+    logo.classList.remove("logo-knock-one", "logo-knock-two");
+    // Restart the short animation when a new knock follows immediately.
+    void logo.offsetWidth;
+    const feedbackClass = knockCount === 1 ? "logo-knock-one" : "logo-knock-two";
+    logo.classList.add(feedbackClass);
+
+    window.setTimeout(() => {
+      logo.classList.remove(feedbackClass);
+    }, 500);
+  };
+
   const tripleClickHandler = () => {
     const now = Date.now();
     clicks.push(now);
-    clicks = clicks.filter((time) => now - time < 900);
+    clicks = clicks.filter((time) => now - time < LOGO_KNOCK_WINDOW);
 
     if (clicks.length >= 3) {
       clicks = [];
       runGlitchAndToggle();
+      return;
     }
+
+    showLogoKnockFeedback(clicks.length);
   };
 
   let lastLogoTouch = 0;
