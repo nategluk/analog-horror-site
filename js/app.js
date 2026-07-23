@@ -37,6 +37,7 @@
   let playButton;
   let trackLabel;
   let nextButton;
+  let downloadLink;
   let progressRange;
   let modeSwitchAudio;
   let currentMusicMode = "guest";
@@ -234,6 +235,14 @@
 
     if (nextButton) {
       nextButton.hidden = tracks.length < 2;
+    }
+
+    if (downloadLink) {
+      const downloadName = new URL(track.src).pathname.split("/").pop() || "audio-track.mp3";
+      downloadLink.href = track.src;
+      downloadLink.download = decodeURIComponent(downloadName);
+      downloadLink.setAttribute("aria-label", `Скачать трек «${track.title}»`);
+      downloadLink.title = `Скачать «${track.title}»`;
     }
 
     if (!keepPlaying) {
@@ -527,6 +536,14 @@
     nextButton.textContent = "NEXT";
     nextButton.setAttribute("aria-label", "Следующий трек");
 
+    downloadLink = document.createElement("a");
+    downloadLink.className = "music-player__download";
+    downloadLink.innerHTML = `
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" />
+      </svg>
+    `;
+
     progressRange = document.createElement("input");
     progressRange.className = "music-player__progress";
     progressRange.type = "range";
@@ -537,7 +554,7 @@
     progressRange.disabled = true;
     progressRange.setAttribute("aria-label", "Перемотка трека");
 
-    player.append(playButton, trackLabel, nextButton, progressRange);
+    player.append(playButton, trackLabel, nextButton, downloadLink, progressRange);
     (document.querySelector(".logo-area") || body).append(player);
 
     playButton.addEventListener("click", () => {
