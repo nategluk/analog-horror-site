@@ -113,8 +113,17 @@
             </div>
             <form class="form-grid hiring-form" data-hiring-form="staff">
               <label>
-                ID оператора
-                <input type="text" placeholder="EMP-312-__" />
+                ID назначенного куратора
+                <input
+                  type="text"
+                  name="curator-id"
+                  placeholder="0000-X"
+                  maxlength="6"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  spellcheck="false"
+                  data-curator-id
+                />
               </label>
               <label>
                 Согласие на замещение речевых функций
@@ -126,6 +135,9 @@
               <button type="submit">ПОДТВЕРДИТЬ ПЕРЕДАЧУ ТЕЛА</button>
             </form>
             <p class="hiring-form__result" data-hiring-result="staff" aria-live="polite"></p>
+            <button class="curator-resume" type="button" data-curator-resume hidden>
+              ВОЗОБНОВИТЬ СЕАНС 0091-A
+            </button>
           </section>
         </section>
       </main>
@@ -142,6 +154,130 @@
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
+
+      <section
+        class="curator-call"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="curator-call-title"
+        aria-describedby="curator-call-text"
+        data-curator-call
+        hidden
+      >
+        <div class="curator-call__shell">
+          <header class="curator-call__header">
+            <div>
+              <p class="curator-call__eyebrow">TYNDEX // КАНАЛ КУРАЦИИ</p>
+              <h2 id="curator-call-title">КУРАТОР 0091-A</h2>
+            </div>
+            <div class="curator-call__telemetry" aria-label="Состояние соединения">
+              <span class="curator-call__live"><i aria-hidden="true"></i> СЕАНС 01</span>
+              <span data-curator-signal>СИГНАЛ 63%</span>
+            </div>
+          </header>
+
+          <div class="curator-call__body">
+            <div class="curator-call__visual">
+              <div class="curator-call__feed" data-curator-feed>
+                <video
+                  muted
+                  playsinline
+                  preload="metadata"
+                  data-curator-video
+                ></video>
+                <img
+                  src="assets/staff/curators/irina/room-empty.webp"
+                  alt="Пустая служебная комната Ирины"
+                  data-curator-room
+                  hidden
+                />
+                <img alt="" data-curator-still hidden />
+                <div class="curator-call__flash" data-curator-flash aria-hidden="true"></div>
+                <div class="curator-call__scan" aria-hidden="true"></div>
+                <div class="curator-call__feed-meta" aria-hidden="true">
+                  <span>CAM 0091-A</span>
+                  <span data-curator-feed-state>ПРЯМОЙ КАНАЛ</span>
+                </div>
+                <div class="curator-call__connecting" data-curator-connecting>
+                  <span>УСТАНОВКА СОЕДИНЕНИЯ</span>
+                  <i aria-hidden="true"></i>
+                </div>
+              </div>
+              <p class="curator-call__identity">
+                <strong>ИРИНА В.</strong>
+                <span>КУРАТОР ДЕТСКИХ МАРШРУТОВ</span>
+              </p>
+            </div>
+
+            <div class="curator-call__conversation">
+              <div class="curator-call__progress">
+                <span data-curator-step>ПРОВЕРКА КАНАЛА</span>
+                <span data-curator-save>НЕ СОХРАНЕНО</span>
+              </div>
+              <div class="curator-call__transcript" aria-live="polite" aria-atomic="true">
+                <p class="curator-call__speaker" data-curator-speaker>СИСТЕМА</p>
+                <p class="curator-call__text" id="curator-call-text" data-curator-text>
+                  Выполняется подключение к назначенному куратору.
+                </p>
+              </div>
+              <div class="curator-call__choices" data-curator-choices></div>
+            </div>
+          </div>
+
+          <footer class="curator-call__controls" aria-label="Управление звонком">
+            <button type="button" data-curator-sound aria-pressed="false">ЗВУК: ВЫКЛ</button>
+            <button type="button" data-curator-files disabled>ФАЙЛЫ: 0</button>
+            <button class="curator-call__end" type="button" data-curator-end>ЗАВЕРШИТЬ</button>
+          </footer>
+
+          <div
+            class="curator-call__file-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Полученный файл"
+            data-curator-file-viewer
+            hidden
+          >
+            <div class="curator-call__file-panel">
+              <header>
+                <div>
+                  <strong data-curator-file-name>IRINA_PRIVATE_01.JPG</strong>
+                  <span>ВЛОЖЕНИЕ КАНАЛА 0091-A</span>
+                </div>
+                <button type="button" data-curator-file-close aria-label="Закрыть файл">
+                  ЗАКРЫТЬ
+                </button>
+              </header>
+              <div class="curator-call__file-canvas">
+                <img data-curator-file-image alt="Фотополоска Ирины из торгового центра" />
+              </div>
+              <footer>
+                <span>Личная копия не учитывается при классификации.</span>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  download
+                  data-curator-file-download
+                >
+                  СКАЧАТЬ / ОТКРЫТЬ
+                </a>
+              </footer>
+            </div>
+          </div>
+
+          <div class="curator-call__exit-confirm" data-curator-exit-confirm hidden>
+            <div>
+              <p>ЗАВЕРШИТЬ ОБЯЗАТЕЛЬНЫЙ ИНСТРУКТАЖ?</p>
+              <span>Текущий этап сохранится на этом устройстве.</span>
+            </div>
+            <div class="curator-call__exit-actions">
+              <button type="button" data-curator-exit-cancel>ПРОДОЛЖИТЬ</button>
+              <button type="button" data-curator-exit-accept>ЗАВЕРШИТЬ СЕАНС</button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
     <script src="js/app.js"></script>
   </body>

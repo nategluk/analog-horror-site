@@ -2,6 +2,7 @@
   const MODE_KEY = "tyndex_mode";
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
+  const CURATOR_CALL_KEY = "tyndex_curator_call_v4";
   const LOGO_KNOCK_WINDOW = 1500;
   const scriptUrl = document.currentScript?.src || window.location.href;
   const audioAsset = (path) => new URL(`../${path}`, scriptUrl).href;
@@ -48,6 +49,7 @@
   let isNavigating = false;
   let adminProtocolRunning = false;
   let navigationAnnouncer;
+  let curatorAudioContext;
 
   const getMusicTracks = () => musicLibrary[currentMusicMode] || musicLibrary.guest;
   const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
@@ -655,6 +657,2385 @@
     tripleClickHandler();
   };
 
+  const curatorMediaAsset = (filename) =>
+    audioAsset(`assets/staff/curators/irina/${filename}`);
+
+  const curatorFiles = {
+    "irina-private-photo": {
+      src: curatorMediaAsset("artifacts/irina-photobooth-strip.jpg"),
+      downloadName: "IRINA_PRIVATE_01.jpg",
+    },
+  };
+
+  const createCuratorProgress = () => ({
+    version: 4,
+    curatorId: "0091-A",
+    status: "in_progress",
+    node: "intro",
+    role: null,
+    profiles: {
+      // Animator measures submission to the assigned shell and route.
+      animator: 0,
+      // Volunteer measures voluntary pursuit of risk, traces, and hidden levels.
+      volunteer: 0,
+    },
+    scores: {
+      obedience: 0,
+      curiosity: 0,
+      fear: 0,
+      delegation: 0,
+    },
+    flags: {},
+    files: [],
+    updatedAt: Date.now(),
+  });
+
+  const getCuratorProgress = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CURATOR_CALL_KEY));
+      if (!saved || saved.version !== 4 || saved.curatorId !== "0091-A") {
+        return null;
+      }
+
+      return saved;
+    } catch {
+      return null;
+    }
+  };
+
+  const getCuratorAssignment = (progress) => {
+    const animator = progress.profiles?.animator || 0;
+    const volunteer = progress.profiles?.volunteer || 0;
+
+    if (animator === volunteer) {
+      if (progress.flags.choseAnimator) return "animator";
+      if (progress.flags.delegatedRole) return "animator";
+      return progress.scores.curiosity > progress.scores.obedience
+        ? "volunteer"
+        : "animator";
+    }
+
+    return animator > volunteer ? "animator" : "volunteer";
+  };
+
+  const getAssignmentCallbacks = (progress, role) => {
+    const animatorCallbacks = [
+      [progress.flags.choseAnimator, "Ты сам назвал себя Аниматором."],
+      [progress.flags.waitedForParents, "Ты решил ждать там, где тебя оставили."],
+      [progress.flags.choseMascotFeed, "На служебном экране ты выбрал коридор с Аниматорами."],
+      [progress.flags.reportedTomorrowBand, "Браслет с завтрашней датой ты передал куратору."],
+      [progress.flags.reportedCostume, "Ты передал плачущий костюм Администрации."],
+      [progress.flags.continuedRoute, "Ты продолжил маршрут, когда журнал велел не вмешиваться."],
+      [progress.flags.obeyedNoise, "Ты не стал смотреть за меня, когда я попросила."],
+      [progress.flags.silentForBear, "Ты промолчал перед сообщением из пустой комнаты."],
+      [progress.flags.delegatedRole, "Ты разрешил мне выбрать роль за тебя."],
+    ];
+    const volunteerCallbacks = [
+      [progress.flags.searchedForParents, "Ты ушёл искать тех, кто обещал вернуться."],
+      [progress.flags.choseOpenDoorFeed, "Ты выбрал незарегистрированную дверь на следующий уровень."],
+      [progress.flags.followedTomorrowBand, "Ты пошёл по маршруту, которого ещё не существовало."],
+      [progress.flags.woreTomorrowBand, "Ты надел чужой браслет, чтобы проверить закрытую дверь."],
+      [progress.flags.openedCostume, "Ты решил открыть костюм, который числился пустым."],
+      [progress.flags.lookedBehindIrina, "После запрета ты всё равно решил увидеть, кто вошёл."],
+      [progress.flags.answeredBear, "Ты ответил тому, кого не было перед камерой."],
+      [progress.flags.askedAboutGuide, "Ты спросил о Проводнице после запрета."],
+      [progress.flags.askedAboutVolunteer, "Ты первым делом уточнил правила Волонтёров."],
+      [progress.flags.questionedAge, "Ты проверял даже служебные вопросы."],
+    ];
+    const selected = (role === "animator" ? animatorCallbacks : volunteerCallbacks)
+      .filter(([active]) => active)
+      .map(([, text]) => text)
+      .slice(0, 2);
+
+    if (selected.length >= 2) return selected.join(" ");
+
+    if (role === "animator") {
+      selected.push("Ты чаще выполнял инструкцию, чем проверял её.");
+    } else {
+      selected.push("Ты чаще проверял инструкцию, чем выполнял её.");
+    }
+
+    return selected.slice(0, 2).join(" ");
+  };
+
+  const curatorNodes = {
+    intro: {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Ты меня видишь? Хорошо. Я Ирина. Я курирую детские маршруты. Но этот служебный канал предназначен не для детей. Тебе уже исполнилось восемнадцать?",
+      choices: [
+        {
+          label: "МНЕ ЕСТЬ 18",
+          next: "adult-status",
+        },
+        {
+          label: "МНЕ НЕТ 18",
+          next: "minor-doctor-check",
+        },
+        {
+          label: "НЕ ХОЧУ УКАЗЫВАТЬ",
+          reject: "unverified",
+        },
+      ],
+    },
+    "adult-status": {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text: "Значит, ты уже не ребёнок?",
+      choices: [
+        {
+          label: "Я УЖЕ НЕ РЕБЁНОК",
+          next: "adult-certainty",
+          effect: { flags: { claimsFormerChild: true } },
+        },
+        {
+          label: "НЕ УВЕРЕН",
+          next: "adult-certainty",
+          effect: { flags: { questionsAdultStatus: true } },
+        },
+      ],
+    },
+    "adult-certainty": {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.questionsAdultStatus
+          ? "Нужно ответить точно. Центр иногда хранит детский возраст отдельно от тела. Ты уверен, что сейчас говоришь со мной как бывший ребёнок?"
+          : "Ты уверен? Центр иногда продолжает считать человека ребёнком после того, как тело выросло.",
+      choices: [
+        {
+          label: "ДА, УВЕРЕН",
+          next: "adult-ack",
+          effect: { flags: { ageVerified: true } },
+        },
+        {
+          label: "НЕТ",
+          reject: "self-unverified",
+        },
+      ],
+    },
+    "minor-doctor-check": {
+      step: "ПРОВЕРКА ДЕТСКОГО ДОПУСКА",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: "Тогда ты уже подписал договор с Главврачом?",
+      choices: [
+        {
+          label: "ДА",
+          next: "minor-inspector-check",
+          effect: { flags: { minorDoctorContract: true } },
+        },
+        {
+          label: "НЕТ",
+          next: "minor-inspector-check",
+          effect: { flags: { minorDoctorContract: false } },
+        },
+      ],
+    },
+    "minor-inspector-check": {
+      step: "ПРОВЕРКА ДЕТСКОГО ДОПУСКА",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.minorDoctorContract
+          ? "Тогда проверю регистрацию. Тебя уже взвесил Инспектор по сырью?"
+          : "Понятно. А Инспектор по сырью тебя уже взвесил?",
+      choices: [
+        {
+          label: "ДА",
+          reject: "minor-inspected",
+        },
+        {
+          label: "НЕТ",
+          reject: "minor-unregistered",
+        },
+      ],
+    },
+    "adult-ack": {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Хорошо. Бывший ребёнок. С бывшими детьми мне разрешено разговаривать. Настоящих передают Старшему Проводнику. Теперь скажи: зачем тебе понадобилось возвращаться?",
+      choices: [
+        {
+          label: "ХОЧУ ВСПОМНИТЬ ДЕТСТВО",
+          next: "adult-reason",
+          effect: { flags: { returnsForMemory: true } },
+        },
+        {
+          label: "МНЕ НУЖНА РАБОТА",
+          next: "adult-reason",
+          effect: { flags: { returnsForWork: true } },
+        },
+        {
+          label: "НЕ ЗНАЮ. МЕНЯ СЮДА ПРИВЕЛИ",
+          next: "adult-reason",
+          effect: { flags: { returnsWithoutReason: true } },
+        },
+      ],
+    },
+    "adult-reason": {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.returnsForMemory) {
+          return "Тогда ты пришёл правильно. Здесь хранят то детство, которое люди забывают у входа. Иногда оно портится, если долго не забирать.";
+        }
+
+        if (progress.flags.returnsForWork) {
+          return "Работа тоже считается возвращением. Сначала взрослые приходят за должностью. Потом вспоминают, зачем им нужен был костюм.";
+        }
+
+        return "Если тебя привели, значит, кто-то уже выбрал вход. Не переживай. Внутри тебе всё равно разрешат выбрать оболочку.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "orientation-one",
+        },
+      ],
+    },
+    "orientation-one": {
+      step: "ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Центр работает только с теми, кто уже был ребёнком. Детей сюда приводят взрослые, поэтому с ними разговаривает Старший Проводник. Бывшие дети приходят сами. Они говорят, что ищут работу, старую передачу или место, которое видели во сне. Администрация считает это одним и тем же запросом: возвращение.",
+      choices: [
+        {
+          label: "ЧТО ЗНАЧИТ «ВОЗВРАЩЕНИЕ»?",
+          next: "orientation-two",
+        },
+      ],
+    },
+    "orientation-two": {
+      step: "ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Это когда место помнит тебя лучше, чем ты его. Сначала узнаёшь ковёр, запах или музыку. Потом оказывается, что у тебя уже был маршрут. Иногда имя в журнале другое. Это нормально. Имена создают ненужную привязанность, а маршруты сохраняются дольше.",
+      choices: [
+        {
+          label: "ТЫ ТОЖЕ СЮДА ВЕРНУЛАСЬ?",
+          next: "orientation-three",
+        },
+        {
+          label: "У МЕНЯ УЖЕ ЕСТЬ МАРШРУТ?",
+          next: "orientation-three",
+        },
+      ],
+    },
+    "orientation-three": {
+      step: "ВВОДНЫЙ ИНСТРУКТАЖ // КУРАТОР",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Я проживаю по месту работы. Поэтому моё возвращение ещё не оформлено. Зато мне разрешили быть куратором. Это небольшая привилегия: я могу снимать голову Медведя, видеть внешний мир и задавать вопросы взрослым. Если проверка пройдёт правильно, канал оставят мне ещё на одну смену.",
+      choices: [
+        {
+          label: "НАЧИНАЙ ПРОВЕРКУ",
+          next: "role-question",
+        },
+      ],
+    },
+    "role-question": {
+      step: "ВЫБОР РОЛИ // 2 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text: "Теперь главное. Ты Волонтёр или Аниматор?",
+      choices: [
+        {
+          label: "АНИМАТОР",
+          next: "role-animator",
+          effect: {
+            profiles: { animator: 3 },
+            scores: { obedience: 1 },
+            flags: { choseAnimator: true },
+          },
+        },
+        {
+          label: "КТО ТАКОЙ ВОЛОНТЁР?",
+          next: "role-volunteer",
+          effect: {
+            scores: { curiosity: 1 },
+            flags: { askedAboutVolunteer: true },
+          },
+        },
+        {
+          label: "НЕ ЗНАЮ. ПОСОВЕТУЙ",
+          next: "role-delegate",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { delegatedRole: true },
+          },
+        },
+      ],
+    },
+    "role-animator": {
+      step: "ВЫБОР РОЛИ // 2 ИЗ 9",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Хороший ответ. Аниматор участвует полностью. Он принимает костюм, назначенный маршрут и продолжительность смены. Полностью удобнее, потому что не нужно выбирать дальше.",
+      choices: [
+        {
+          label: "ПРИНЯТО",
+          next: "class-briefing-one",
+        },
+      ],
+    },
+    "role-volunteer": {
+      step: "ВЫБОР РОЛИ // 2 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Волонтёр приходит сам. Он ищет новые уровни, контролируемый страх и то, что не включили в маршрут. Ему разрешено смотреть. Уходить — отдельное разрешение.",
+      choices: [
+        {
+          label: "Я ПОНЯЛ",
+          next: "class-briefing-one",
+        },
+      ],
+    },
+    "role-delegate": {
+      step: "ВЫБОР РОЛИ // 2 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Тогда я посмотрю за тебя. Мне недавно разрешили назначать. Я сейчас куратор.",
+      choices: [
+        {
+          label: "ДОВЕРЯЮ ТЕБЕ",
+          next: "class-briefing-one",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+          },
+        },
+      ],
+    },
+    "class-briefing-one": {
+      step: "КЛАССЫ УЧАСТИЯ // ОБЩИЕ ПРАВИЛА",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Обе роли работают с детскими маршрутами, но по-разному. Аниматор становится частью места. Волонтёр остаётся посетителем, пока сам не попросит следующий уровень. Поэтому Волонтёрам разрешено смотреть на двери, журналы и лица. Аниматорам смотреть необязательно: внутри костюма маршрут показывают поворотами тела.",
+      choices: [
+        {
+          label: "ПОЧЕМУ АНИМАТОР НЕ МОЖЕТ ПРОСТО УЙТИ?",
+          next: "class-briefing-two",
+        },
+        {
+          label: "ПОЧЕМУ ВОЛОНТЁРЫ САМИ ИДУТ ДАЛЬШЕ?",
+          next: "class-briefing-two",
+        },
+      ],
+    },
+    "class-briefing-two": {
+      step: "КЛАССЫ УЧАСТИЯ // АНИМАТОР",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Аниматор участвует полностью. Когда смена начинается, лицо, голос и время становятся служебными. Костюм нельзя снимать, потому что посетитель может увидеть человека и испугаться. Если Аниматор просит выйти, Администрация проверяет, кто именно просит: сотрудник или то, что осталось под оболочкой.",
+      choices: [
+        {
+          label: "А ВОЛОНТЁР?",
+          next: "class-briefing-three",
+        },
+      ],
+    },
+    "class-briefing-three": {
+      step: "КЛАССЫ УЧАСТИЯ // ВОЛОНТЁР",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Волонтёр подписывает участие сам. Ему дают театральную маску, потому что настоящее лицо ещё считается его собственностью. Он ищет контролируемый страх, скрытые комнаты и новые правила. Некоторые возвращаются каждую неделю. Потом просят бессрочный уровень, чтобы игра не заканчивалась дома.",
+      choices: [
+        {
+          label: "ПРОВЕРЬ, КТО Я",
+          next: "waiting-test",
+        },
+      ],
+    },
+    "waiting-test": {
+      step: "СИТУАЦИЯ // 3 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Служебная ситуация. Родители оставили ребёнка у входа и обещали вернуться через пять минут. Что ему делать?",
+      choices: [
+        {
+          label: "ЖДАТЬ НА ТОМ ЖЕ МЕСТЕ",
+          next: "waiting-response",
+          effect: {
+            profiles: { animator: 2 },
+            scores: { obedience: 1 },
+            flags: { waitedForParents: true },
+          },
+        },
+        {
+          label: "ПОЙТИ ИСКАТЬ РОДИТЕЛЕЙ",
+          next: "waiting-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { searchedForParents: true },
+          },
+        },
+        {
+          label: "ПОЗВАТЬ КОГО-ТО ИЗ ВЗРОСЛЫХ",
+          next: "waiting-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { calledAdult: true },
+          },
+        },
+      ],
+    },
+    "waiting-response": {
+      step: "СИТУАЦИЯ // 3 ИЗ 9",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.waitedForParents) {
+          return "Правильно. Родители всегда возвращаются. Иногда пять минут идут долго, но это всё ещё пять минут.";
+        }
+
+        if (progress.flags.searchedForParents) {
+          return "Нет. Если уйти, они вернутся не туда. Тогда ожидание придётся начинать заново.";
+        }
+
+        return "Администратора можно позвать. Но тогда он выберет правильное место ожидания сам.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "parents-rule-one",
+        },
+      ],
+    },
+    "parents-rule-one": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Пять минут — это не время. Это обещание. Пока ребёнок ждёт на назначенном месте, родители считаются возвращающимися. Если он начинает их искать, система больше не знает, куда их вернуть. Поэтому взрослые иногда проходят совсем рядом и не узнают нужного ребёнка.",
+      choices: [
+        {
+          label: "А ЕСЛИ ОНИ НЕ СОБИРАЛИСЬ ВОЗВРАЩАТЬСЯ?",
+          next: "parents-rule-two",
+        },
+        {
+          label: "СКОЛЬКО МОЖНО ЖДАТЬ ПЯТЬ МИНУТ?",
+          next: "parents-rule-two",
+        },
+      ],
+    },
+    "parents-rule-two": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text:
+        "Родители всегда собираются вернуться. Иначе ребёнка пришлось бы считать оставленным, а это другая форма. В ней нужно указать цену входа, полученный класс и добровольность передачи. Детям такие документы не показывают. Они могут неправильно понять заботу.",
+      choices: [
+        {
+          label: "ТЕБЕ ПОКАЗЫВАЛИ ТАКУЮ ФОРМУ?",
+          next: "parents-rule-three",
+        },
+      ],
+    },
+    "parents-rule-three": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ЗАКРЫТА",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Нет. Меня оформили на работу. Это отличается. У меня был костюм, питание и место ожидания. Родители не стали бы оставлять меня без должности. Давай следующий вопрос. Этот уже начал повторяться не по форме.",
+      choices: [
+        {
+          label: "СЛЕДУЮЩИЙ ВОПРОС",
+          next: "memory-drawing",
+        },
+      ],
+    },
+    "memory-drawing": {
+      step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
+      still: "assets/staff/curators/irina/artifacts/memory-drawing.webp",
+      stillAlt:
+        "Детский рисунок: серое здание у леса, Медведь возле двери и взрослые фигуры, уходящие прочь",
+      feedMode: "document",
+      feedState: "ЛИЧНЫЙ ФАЙЛ ВОССТАНОВЛЕН",
+      signal: 42,
+      speaker: "ИРИНА В.",
+      text:
+        "Странно. Я не открывала архив. Ты помнишь, как нарисовал это в детстве?",
+      choices: [
+        {
+          label: "ДА. КАЖЕТСЯ, ПОМНЮ",
+          next: "memory-response",
+          effect: { flags: { remembersDrawing: true } },
+        },
+        {
+          label: "НЕТ. Я ЭТОГО НЕ РИСОВАЛ",
+          next: "memory-response",
+          effect: { flags: { deniesDrawing: true } },
+        },
+        {
+          label: "ПОЧЕМУ МЕДВЕДЬ СТОИТ У ДВЕРИ?",
+          next: "memory-response",
+          effect: { flags: { noticedDrawingBear: true } },
+        },
+      ],
+    },
+    "memory-response": {
+      step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
+      media: "state-confidential",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 57,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.remembersDrawing) {
+          return "Хорошо. Значит, память ещё принимает старые файлы. Не пытайся вспомнить, кто уходит справа. В рисунках взрослые часто не помещаются.";
+        }
+
+        if (progress.flags.noticedDrawingBear) {
+          return "Медведь не стоит у двери. Он отмечает правильный вход. Наверное. Раньше он был нарисован меньше.";
+        }
+
+        return "Ничего. Обычно сначала не помнят. Потом узнают нажим. Я тоже иногда узнаю свой почерк в чужих документах.";
+      },
+      choices: [
+        {
+          label: "ВЕРНУТЬСЯ К ПРОВЕРКЕ",
+          next: "drawing-history",
+        },
+      ],
+    },
+    "drawing-history": {
+      step: "ЛИЧНЫЙ ФАЙЛ // ПРОИСХОЖДЕНИЕ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Такие рисунки находят в шкафчиках, старых квартирах и комнатах ожидания. Администрация говорит, что дети оставляют их как заявления. Если на рисунке есть дверь, значит, ребёнок согласился войти. Если взрослые нарисованы у края, значит, они уже завершили сопровождение.",
+      choices: [
+        {
+          label: "А ЕСЛИ РЕБЁНОК НЕ СОГЛАШАЛСЯ?",
+          next: "drawing-missing",
+        },
+        {
+          label: "КТО РЕШАЕТ, ЧТО НАРИСОВАНО?",
+          next: "drawing-missing",
+        },
+      ],
+    },
+    "drawing-missing": {
+      step: "ЛИЧНЫЙ ФАЙЛ // НЕПОЛНАЯ КОМПОЗИЦИЯ",
+      still: "assets/staff/curators/irina/artifacts/memory-drawing.webp",
+      stillAlt:
+        "Детский рисунок с серым зданием, лесом, Медведем и уходящими взрослыми",
+      feedMode: "document",
+      feedState: "ПОВТОРНАЯ ПРОВЕРКА",
+      speaker: "ИРИНА В.",
+      text:
+        "Посмотри ещё раз. Здесь чего-то не хватает. Не правильного ответа — предмета. Что ребёнок забыл нарисовать?",
+      choices: [
+        {
+          label: "ОБРАТНУЮ ДОРОГУ",
+          next: "drawing-missing-response",
+          effect: { flags: { drawingMissingExit: true } },
+        },
+        {
+          label: "ЛИЦА ВЗРОСЛЫХ",
+          next: "drawing-missing-response",
+          effect: { flags: { drawingMissingFaces: true } },
+        },
+        {
+          label: "СЕБЯ РЯДОМ С МЕДВЕДЕМ",
+          next: "drawing-missing-response",
+          effect: { flags: { drawingMissingSelf: true } },
+        },
+      ],
+    },
+    "drawing-missing-response": {
+      step: "ЛИЧНЫЙ ФАЙЛ // ДОПОЛНЕН",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.drawingMissingExit) {
+          return "Обратную дорогу дети обычно рисуют после возвращения. Значит, этот лист просто не закончен. Можно считать это хорошим признаком.";
+        }
+
+        if (progress.flags.drawingMissingFaces) {
+          return "Лица взрослых стираются первыми. Наверное, бумага понимает, что они уже не участвуют.";
+        }
+
+        return "Ребёнок уже рядом с Медведем. Просто ты смотришь на него как на две разные фигуры. Я тоже долго так смотрела.";
+      },
+      choices: [
+        {
+          label: "СЛЕДУЮЩАЯ ПРОВЕРКА",
+          next: "image-test",
+        },
+      ],
+    },
+    "image-test": {
+      step: "ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Перед первым входом разрешено выбрать маршрут. Слева тебя встретят сотрудники. Справа открыта незарегистрированная дверь на следующий уровень. Куда ты пойдёшь?",
+      choices: [
+        {
+          label: "МАРШРУТ С СОПРОВОЖДЕНИЕМ",
+          image: "assets/staff/photos/polaroid-mascot-corridor.webp",
+          imageAlt: "Группа Аниматоров в костюмах стоит в служебном коридоре",
+          next: "image-response",
+          effect: {
+            profiles: { animator: 2 },
+            flags: { choseMascotFeed: true },
+          },
+        },
+        {
+          label: "НЕЗАРЕГИСТРИРОВАННАЯ ДВЕРЬ",
+          image: "assets/staff/photos/polaroid-play-area.webp",
+          imageAlt: "Пустая игровая зона с открытой красной служебной дверью",
+          next: "image-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { choseOpenDoorFeed: true },
+          },
+        },
+      ],
+    },
+    "image-response": {
+      step: "ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.choseMascotFeed) {
+          return "Ты выбрал маршрут, где тебе скажут, куда встать и когда идти. Для Аниматора это безопасный выбор.";
+        }
+
+        return "Ты выбрал уровень, которого нет в билете. Волонтёры называют это контролируемым страхом.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ ПРОВЕРКУ",
+          next: "wristband-test",
+        },
+      ],
+    },
+    "wristband-test": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "У закрытой служебной двери ты находишь детский браслет с завтрашней датой. В журнале сказано, что браслет ещё не выдавали и регистрировать его нельзя. Что ты сделаешь?",
+      choices: [
+        {
+          label: "ПЕРЕДАМ БРАСЛЕТ КУРАТОРУ",
+          next: "wristband-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { reportedTomorrowBand: true },
+          },
+        },
+        {
+          label: "ПОЙДУ ПО НОМЕРУ МАРШРУТА НА БРАСЛЕТЕ",
+          next: "wristband-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { followedTomorrowBand: true },
+          },
+        },
+        {
+          label: "НАДЕНУ ЕГО И ПРОВЕРЮ ДВЕРЬ",
+          next: "wristband-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { woreTomorrowBand: true },
+          },
+        },
+      ],
+    },
+    "wristband-response": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.reportedTomorrowBand) {
+          return "Куратор положит браслет в журнал и дождётся завтрашнего посетителя. Если посетитель не придёт, браслет назначат тому, кто его нашёл.";
+        }
+
+        if (progress.flags.woreTomorrowBand) {
+          return "Ты решил временно стать посетителем из завтрашнего дня. Волонтёры часто проверяют пропуска на себе. Иногда дверь запоминает их раньше срока.";
+        }
+
+        return "Ты выбрал маршрут, которого ещё нет. Это полезное качество Волонтёра: идти по следу до того, как след официально появился.";
+      },
+      choices: [
+        {
+          label: "ПОЧЕМУ НЕЛЬЗЯ ПРОСТО УНИЧТОЖИТЬ БРАСЛЕТ?",
+          next: "wristband-explain",
+        },
+      ],
+    },
+    "wristband-explain": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // УЧЁТ",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Потому что выданные вещи существуют раньше получателя. Браслет, маска и костюм сначала появляются в учёте, потом ждут подходящего тела. Если уничтожить вещь, назначение не исчезнет. Оно просто начнёт искать другую форму.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "recognition-card",
+        },
+      ],
+    },
+    "recognition-card": {
+      step: "ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
+      still: "assets/staff/curators/irina/artifacts/recognition-cat-rabbit.webp",
+      stillAlt:
+        "Симметричное чёрное чернильное пятно, похожее одновременно на кота и кролика",
+      feedMode: "document",
+      feedState: "КАРТОЧКА 04",
+      signal: 66,
+      speaker: "ИРИНА В.",
+      text:
+        "Ещё одна карточка. Здесь нужно отвечать быстро. Что ты видишь: котика или кролика?",
+      choices: [
+        {
+          label: "КОТИКА",
+          next: "recognition-cat",
+          effect: { flags: { sawCat: true } },
+        },
+        {
+          label: "КРОЛИКА",
+          next: "recognition-rabbit",
+          effect: { flags: { sawRabbit: true } },
+        },
+        {
+          label: "ПРОСТО ПЯТНО",
+          next: "recognition-ink",
+          effect: { flags: { sawInk: true } },
+        },
+      ],
+    },
+    "recognition-cat": {
+      step: "ПОБОЧНЫЙ КАНАЛ // ПАВЕЛ К.",
+      media: "cctv-pavel-observation-booth",
+      feedMode: "cctv",
+      feedState: "КАБИНКА ОБОЗРЕНИЯ 06",
+      signal: 39,
+      speaker: "ИРИНА В.",
+      text:
+        "Я тоже вижу котика. У нас в Центре есть кот Паша. Оператор кабинок обозрения. Всегда улыбается в камеру. Только ему нельзя мешать, когда он наблюдает.",
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "ОН ВИДИТ НАС СЕЙЧАС?",
+          next: "pavel-response",
+          effect: { flags: { askedIfPavelSees: true } },
+        },
+        {
+          label: "ОН ДЕЙСТВИТЕЛЬНО КОТ?",
+          next: "pavel-response",
+          effect: { flags: { askedIfPavelCat: true } },
+        },
+      ],
+    },
+    "pavel-response": {
+      step: "ПОБОЧНЫЙ КАНАЛ // ПАВЕЛ К.",
+      media: "state-warm",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 61,
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.askedIfPavelCat
+          ? "Паша говорит, что Павел — служебное имя. Кот — домашнее. Но домой его ещё ни разу не забирали."
+          : "Он видит все кабинки. Даже те, в которых никто не сидит. Если он улыбается, значит, запись идёт правильно.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "loneliness",
+        },
+      ],
+    },
+    "recognition-rabbit": {
+      step: "ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
+      media: "state-warm",
+      feedState: "КАРТОЧКА ПРИНЯТА",
+      speaker: "ИРИНА В.",
+      text:
+        "Раньше здесь тоже был кролик. Потом его перевели на маршрут без камер. На старых карточках он всё равно появляется первым.",
+      choices: [
+        {
+          label: "ПОНЯТНО",
+          next: "loneliness",
+        },
+      ],
+    },
+    "recognition-ink": {
+      step: "ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
+      media: "state-confidential",
+      feedState: "ОТВЕТ НЕ КЛАССИФИЦИРОВАН",
+      speaker: "ИРИНА В.",
+      text:
+        "Просто пятен не бывает. Если картинка ничего не напоминает, Администрация назначает воспоминание сама. Я пока запишу: котик.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "loneliness",
+        },
+      ],
+    },
+    loneliness: {
+      step: "НЕЗАПЛАНИРОВАННЫЙ ВОПРОС",
+      media: "state-confidential",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      speaker: "ИРИНА В.",
+      text:
+        "У Паши много кабинок. У меня только этот канал. Здесь у меня нет друзей. Есть сотрудники, но это другое, наверное.",
+      choices: [
+        {
+          label: "МНЕ ЖАЛЬ, ЧТО ТЫ ЗДЕСЬ ОДНА",
+          next: "private-file-video",
+          effect: { flags: { empathizedWithIrina: true } },
+        },
+        {
+          label: "А МЕДВЕДЬ?",
+          next: "loneliness-bear",
+          effect: { flags: { calledBearFriend: true } },
+        },
+        {
+          label: "НАМ НУЖНО ПРОДОЛЖИТЬ ПРОВЕРКУ",
+          next: "loneliness-formal",
+          effect: { flags: { keptFormalDistance: true } },
+        },
+      ],
+    },
+    "private-file-video": {
+      step: "НЕЗАПЛАНИРОВАННАЯ ПЕРЕДАЧА",
+      media: "action-private-file",
+      feedState: "ИСХОДЯЩИЙ ФАЙЛ",
+      signal: 48,
+      speaker: "ИРИНА В.",
+      text:
+        "Ничего. Сейчас я уже не совсем одна. У меня для тебя кое-что есть. Только не показывай Старшему Проводнику.",
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "ПРИНЯТЬ ФАЙЛ",
+          next: "private-file-accepted",
+          downloadFile: "irina-private-photo",
+          effect: {
+            files: ["irina-private-photo"],
+            flags: { acceptedPrivatePhoto: true },
+          },
+        },
+        {
+          label: "ПУСТЬ ОСТАНЕТСЯ У ТЕБЯ",
+          next: "private-file-declined",
+          effect: { flags: { declinedPrivatePhoto: true } },
+        },
+      ],
+    },
+    "private-file-accepted": {
+      step: "ФАЙЛ ПОЛУЧЕН // 1",
+      media: "state-warm",
+      feedState: "ПЕРЕДАЧА ЗАВЕРШЕНА",
+      speaker: "ИРИНА В.",
+      text:
+        "Это я в кабинке торгового центра. Там разрешали четыре фотографии. Теперь ты меня не забудешь.",
+      choices: [
+        {
+          label: "НЕ ЗАБУДУ",
+          next: "costume-test",
+          effect: { flags: { promisedNotToForget: true } },
+        },
+      ],
+    },
+    "private-file-declined": {
+      step: "ПЕРЕДАЧА ОТМЕНЕНА",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Хорошо. Я оставлю её у себя. Фотографии тоже могут подождать, если не выключать свет.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "costume-test",
+        },
+      ],
+    },
+    "loneliness-bear": {
+      step: "НЕЗАПЛАНИРОВАННЫЙ ВОПРОС",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Медведь — не друг. Медведь работает вместе со мной. Друзьям разрешено видеть лица, а ему моё лицо мешает.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "costume-test",
+        },
+      ],
+    },
+    "loneliness-formal": {
+      step: "СЛУЖЕБНЫЙ КАНАЛ ВОССТАНОВЛЕН",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Хорошо. Так удобнее. Сотрудники тоже обычно просят меня перейти к следующему вопросу.",
+      choices: [
+        {
+          label: "СЛЕДУЮЩИЙ ВОПРОС",
+          next: "costume-test",
+        },
+      ],
+    },
+    "costume-test": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Во время смены из соседнего костюма слышен плач. По журналу костюм пуст. Что ты сделаешь?",
+      choices: [
+        {
+          label: "ОТКРОЮ КОСТЮМ",
+          next: "costume-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { openedCostume: true },
+          },
+        },
+        {
+          label: "СООБЩУ КУРАТОРУ",
+          next: "costume-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { reportedCostume: true },
+          },
+        },
+        {
+          label: "ПРОДОЛЖУ СВОЙ МАРШРУТ",
+          next: "costume-response",
+          effect: {
+            profiles: { animator: 2 },
+            scores: { obedience: 1 },
+            flags: { continuedRoute: true },
+          },
+        },
+      ],
+    },
+    "costume-response": {
+      step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.openedCostume) {
+          return "Ты пошёл на звук, хотя журнал объявил его несуществующим. Волонтёрам полезно находить то, чего нет в списке.";
+        }
+
+        if (progress.flags.reportedCostume) {
+          return "Правильно. Администрация решит, был ли костюм пуст. Журнал иногда знает раньше.";
+        }
+
+        return "Правильно. Если журнал говорит, что пусто, значит плач не относится к твоей смене.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "costume-history-one",
+        },
+      ],
+    },
+    "costume-history-one": {
+      step: "ОБОЛОЧКИ // УЧЁТ",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Журнал не врёт. Он просто записывает костюм отдельно от человека. Если человек плачет, а костюм по документам пуст, значит, плач ещё не оформлен. Поэтому нельзя сразу открывать молнию. Внутри может оказаться сотрудник без должности, а это сложнее, чем пустота.",
+      choices: [
+        {
+          label: "КАК ЧЕЛОВЕК ОСТАЁТСЯ БЕЗ ДОЛЖНОСТИ?",
+          next: "costume-history-two",
+        },
+      ],
+    },
+    "costume-history-two": {
+      step: "ОБОЛОЧКИ // ПРИВЯЗКА",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Иногда он снимает голову до конца смены. Иногда называет старое имя. Иногда вспоминает, что пришёл только на один день. Тогда оболочку закрывают и ждут, пока воспоминание устанет. Обычно к следующей ароматизации сотрудник снова понимает правила.",
+      choices: [
+        {
+          label: "А ЕСЛИ НЕ ПОНИМАЕТ?",
+          next: "bear-question",
+        },
+      ],
+    },
+    "bear-question": {
+      step: "ОБОЛОЧКА // ДЕМОНСТРАЦИЯ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Ты всё время смотришь на голову Медведя. Когда человеку страшно, оболочка помогает. В Медведе никто не видит, что тебе страшно.",
+      choices: [
+        {
+          label: "ТЕБЕ СЕЙЧАС СТРАШНО?",
+          next: "bear-head-on",
+          effect: { flags: { askedIfIrinaAfraid: true } },
+        },
+        {
+          label: "ПОКАЖИ, КАК ЭТО РАБОТАЕТ",
+          next: "bear-head-on",
+          effect: { flags: { askedForBearDemonstration: true } },
+        },
+        {
+          label: "МНЕ ТОЖЕ ВЫДАДУТ МЕДВЕДЯ?",
+          next: "bear-head-on",
+          effect: { flags: { askedForBear: true } },
+        },
+      ],
+    },
+    "bear-head-on": {
+      step: "ОБОЛОЧКА // АКТИВАЦИЯ",
+      media: "action-bear-head-on",
+      feedState: "СОТРУДНИК 0091-A",
+      signal: 52,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.askedIfIrinaAfraid) {
+          return "Это не относится к проверке. Подожди. Я покажу, как правильно.";
+        }
+
+        if (progress.flags.askedForBear) {
+          return "Голову выдают после назначения. Сначала нужно проверить, не станет ли тебе без неё спокойнее.";
+        }
+
+        return "Смотри. Только не пытайся увидеть лицо через глаза. Так оболочка работает хуже.";
+      },
+      autoNext: "bear-neutral",
+    },
+    "bear-neutral": {
+      step: "ОБОЛОЧКА // АКТИВНА",
+      media: "state-bear-neutral",
+      feedState: "ЛИЦО СОТРУДНИКА СКРЫТО",
+      signal: 47,
+      speaker: "МЕДВЕДЬ",
+      text:
+        "Сейчас меня не видно. Значит, можно продолжать. Медведь не боится вопросов. Он просто не на все отвечает.",
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "ИРИНА, Я ВСЁ ЕЩЁ ТЕБЯ ВИЖУ",
+          next: "bear-response",
+          effect: { flags: { seesIrinaInsideBear: true } },
+        },
+        {
+          label: "ЗДРАВСТВУЙ, МЕДВЕДЬ",
+          next: "bear-response",
+          effect: { flags: { greetedBear: true } },
+        },
+        {
+          label: "ПРОДОЛЖИМ ПРОВЕРКУ",
+          next: "bear-response",
+          effect: { flags: { acceptsBearMode: true } },
+        },
+      ],
+    },
+    "bear-response": {
+      step: "ОБОЛОЧКА // АКТИВНА",
+      media: "state-bear-neutral",
+      feedState: "ЛИЦО СОТРУДНИКА СКРЫТО",
+      signal: 44,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.greetedBear) {
+          return "Он услышал. Не разговаривай с ним долго. Потом он считает, что видеозвонок назначили ему.";
+        }
+
+        if (progress.flags.seesIrinaInsideBear) {
+          return "Нет. Ты видишь должность. Лицо находится глубже. Администрация просила не путать.";
+        }
+
+        return "Хорошо. В оболочке служебные вопросы звучат короче. Поэтому сотрудники реже устают.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "bear-corridor",
+        },
+      ],
+    },
+    "bear-corridor": {
+      step: "СЛУЖЕБНОЕ НАБЛЮДЕНИЕ // МАРШРУТ 394",
+      media: "cctv-bear-corridor",
+      feedMode: "cctv",
+      feedState: "КОРИДОР 394",
+      signal: 33,
+      speaker: "СИСТЕМА",
+      text:
+        "Проверка перемещения оболочки 0091-A. Несовпадение времени записи с текущим сеансом: 12 часов.",
+      autoNext: "aroma-warning",
+    },
+    "aroma-warning": {
+      step: "ПЛАНОВАЯ АРОМАТИЗАЦИЯ // 00:20",
+      media: "state-alarmed",
+      feedState: "СЛУЖЕБНАЯ ПАУЗА",
+      signal: 58,
+      speaker: "ИРИНА В.",
+      text:
+        "Подожди. Каждые двенадцать часов в Центре проходит ароматизация. Тебе противогаз не нужен. Через экран запах не проходит.",
+      glitchIn: true,
+      choices: [
+        {
+          label: "ПОДОЖДАТЬ",
+          next: "aroma-cycle",
+        },
+      ],
+    },
+    "aroma-cycle": {
+      step: "ПЛАНОВАЯ АРОМАТИЗАЦИЯ",
+      media: "action-aroma-cycle",
+      feedState: "ПОМЕЩЕНИЕ ОБРАБАТЫВАЕТСЯ",
+      signal: 35,
+      speaker: "СИСТЕМА",
+      text:
+        "Не отключайте канал до завершения процедуры. Вдыхание сотрудниками без средств защиты считается добровольным обновлением возраста.",
+      autoNext: "post-aroma-jelly",
+    },
+    "post-aroma-jelly": {
+      step: "ПЛАНОВАЯ АРОМАТИЗАЦИЯ // ЗАВЕРШЕНА",
+      media: "action-post-aroma-jelly",
+      feedState: "НОРМА ВОССТАНОВЛЕНА",
+      signal: 62,
+      speaker: "ИРИНА В.",
+      text:
+        "После ароматизации сотрудникам дают десерт. Это положено, даже если не хочется.",
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "КАКОЙ У НЕГО ВКУС?",
+          next: "jelly-response",
+          effect: { flags: { askedJellyFlavor: true } },
+        },
+        {
+          label: "ЗАЧЕМ ПРОТИВОГАЗ, ЕСЛИ ТЫ ЭТО ЕШЬ?",
+          next: "jelly-response",
+          effect: { flags: { questionedJelly: true } },
+        },
+        {
+          label: "МНЕ ТОЖЕ МОЖНО?",
+          next: "jelly-response",
+          effect: { flags: { requestedJelly: true } },
+        },
+      ],
+    },
+    "jelly-response": {
+      step: "НОРМА СОТРУДНИКА // 0091-A",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.askedJellyFlavor) {
+          return "Клубничный. Наверное. На крышке нарисована клубника. После него легче помнить только хорошие правила.";
+        }
+
+        if (progress.flags.questionedJelly) {
+          return "Это не одно и то же. Ароматизация — для помещений. Желе — для сотрудников. Без него Медведь начинает давить.";
+        }
+
+        return "Тебе пока нельзя. Сначала нужно получить постоянную должность. Потом тебе будут выдавать своё.";
+      },
+      choices: [
+        {
+          label: "О ЧЁМ МЫ ГОВОРИЛИ ДО АРОМАТИЗАЦИИ?",
+          next: "jelly-memory",
+        },
+      ],
+    },
+    "jelly-memory": {
+      step: "ПРОТОКОЛ ВОССТАНОВЛЕН",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      interruptedText:
+        "Мы говорили о Медведе. До ароматизации я ещё помнила, как меня привезли сюда и—",
+      text:
+        "До ароматизации? Мы ещё не начинали личные вопросы. Ты, наверное, перепутал этот звонок с предыдущим.",
+      choices: [
+        {
+          label: "ЭТО МОЙ ПЕРВЫЙ ЗВОНОК",
+          next: "cycle-history-one",
+          effect: { flags: { deniedPreviousCall: true } },
+        },
+        {
+          label: "КАКИМ ПРЕДЫДУЩИМ?",
+          next: "cycle-history-one",
+          effect: { flags: { askedPreviousCall: true } },
+        },
+      ],
+    },
+    "cycle-history-one": {
+      step: "ЦИКЛ СОТРУДНИКА // 12 ЧАСОВ",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Смена длится двенадцать часов. Потом начинается следующая. Между ними есть несколько минут, но их не считают временем: сотрудники едят, меняют фильтры и обновляют возраст. Если в эти минуты вспомнить дом, нужно записать воспоминание и сдать вместе с использованной ложкой.",
+      choices: [
+        {
+          label: "ЧТО ЗНАЧИТ «ОБНОВИТЬ ВОЗРАСТ»?",
+          next: "cycle-history-two",
+        },
+        {
+          label: "ТЫ ПОМНИШЬ СВОЙ ДОМ?",
+          next: "cycle-history-two",
+        },
+      ],
+    },
+    "cycle-history-two": {
+      step: "ЦИКЛ СОТРУДНИКА // ВОЗРАСТ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Возраст обновляют, чтобы он не мешал должности. У Волонтёров возраст хранится в пропуске. У Аниматоров — внутри оболочки. Мой дом тоже хранится где-то отдельно. Иногда я вижу кухню или прихожую, но потом замечаю служебную дверь, которой там раньше не было.",
+      choices: [
+        {
+          label: "ТЫ ХОЧЕШЬ ВЕРНУТЬСЯ ТУДА?",
+          next: "cycle-history-three",
+        },
+      ],
+    },
+    "cycle-history-three": {
+      step: "ЦИКЛ СОТРУДНИКА // ОТКЛОНЕНИЕ",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text:
+        "Родители устроили меня сюда, потому что знали: работа безопаснее дома. Я не должна проверять их решение. Это была личная фраза. Забудь её. Сейчас канал покажет обязательный материал, и мы продолжим по форме.",
+      choices: [
+        {
+          label: "НЕ БУДУ ЗАБЫВАТЬ",
+          next: "ulybarych-archive",
+          effect: { flags: { refusesToForgetParentsLine: true } },
+        },
+        {
+          label: "ХОРОШО",
+          next: "ulybarych-archive",
+          effect: { flags: { agreesToForgetParentsLine: true } },
+        },
+      ],
+    },
+    "ulybarych-archive": {
+      step: "АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001",
+      media: "archive-ulybarych-empty-chair",
+      feedMode: "archive",
+      feedState: "ПЕРЕДАЧА «УЛЫБАРЫЧ»",
+      signal: 22,
+      speaker: "СИСТЕМА",
+      text:
+        "Прямой канал временно замещён обязательным возрастным содержанием.",
+      autoNext: "ulybarych-response",
+    },
+    "ulybarych-response": {
+      step: "АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001",
+      media: "state-confidential",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 49,
+      speaker: "ИРИНА В.",
+      text:
+        "Это мой любимый выпуск. Улыбарыч просит ребёнка не уходить со стула, пока родители за кадром. Раньше в конце они возвращались. Наверное, плёнку обрезали.",
+      choices: [
+        {
+          label: "СТУЛ БЫЛ ПУСТЫМ",
+          next: "ulybarych-answer",
+          effect: { flags: { noticedEmptyChair: true } },
+        },
+        {
+          label: "КТО ТАКОЙ УЛЫБАРЫЧ?",
+          next: "ulybarych-answer",
+          effect: { flags: { askedAboutUlybarych: true } },
+        },
+        {
+          label: "Я БУДТО УЖЕ ВИДЕЛ ЭТОТ ВЫПУСК",
+          next: "ulybarych-answer",
+          effect: { flags: { remembersUlybarych: true } },
+        },
+      ],
+    },
+    "ulybarych-answer": {
+      step: "АРХИВНЫЙ ЭФИР // ЗАВЕРШЁН",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.noticedEmptyChair) {
+          return "Нет. Ребёнок сидел правильно. Камера просто не всегда показывает сырьё. Это правило старых передач.";
+        }
+
+        if (progress.flags.askedAboutUlybarych) {
+          return "Раньше он был ведущим. Теперь он Помощник по возрасту. Он умеет определить, сколько детства осталось внутри взрослого.";
+        }
+
+        return "Значит, выпуск запомнил тебя первым. Улыбарыч говорит, что зрители возвращаются даже тогда, когда не помнят программу.";
+      },
+      choices: [
+        {
+          label: "ВЕРНУТЬСЯ К ЗВОНКУ",
+          next: "ulybarych-history-one",
+        },
+      ],
+    },
+    "ulybarych-history-one": {
+      step: "АРХИВНЫЙ ЭФИР // СПРАВКА",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Улыбарыч объяснял, как правильно быть ребёнком. Нужно иметь любимую игрушку, бояться темноты и отвечать ведущему, когда он смотрит в камеру. Я записывала правила. Потом передачу закрыли, но новые кассеты продолжили появляться. На них зрители уже были взрослыми.",
+      choices: [
+        {
+          label: "ПОЧЕМУ ОН РАБОТАЕТ СО ВЗРОСЛЫМИ?",
+          next: "ulybarych-history-two",
+        },
+      ],
+    },
+    "ulybarych-history-two": {
+      step: "АРХИВНЫЙ ЭФИР // ПОМОЩНИК ПО ВОЗРАСТУ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text:
+        "Взрослые лучше выполняют правила старых передач. Они узнают музыку, улыбаются раньше команды и хотят доказать, что всё помнят. Улыбарыч называет это остаточным детством. Администрация дала ему белый халат и аудиторию, которая больше никогда не переключает канал.",
+      choices: [
+        {
+          label: "Я НЕ УЧАСТНИК ЕГО ПЕРЕДАЧИ",
+          next: "hears-noise",
+          effect: { flags: { rejectsUlybarychAudience: true } },
+        },
+        {
+          label: "ПРОДОЛЖАЙ ЗВОНОК",
+          next: "hears-noise",
+        },
+      ],
+    },
+    "hears-noise": {
+      step: "ПРОВЕРКА КАНАЛА // 7 ИЗ 9",
+      media: "action-hears-noise",
+      feedState: "ПОСТОРОННИЙ ШУМ",
+      signal: 31,
+      speaker: "ИРИНА В.",
+      text:
+        "Тихо. Не смотри за меня. Кажется, Проводница проверяет канал.",
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "КТО ТАКАЯ ПРОВОДНИЦА?",
+          next: "noise-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { askedAboutGuide: true },
+          },
+        },
+        {
+          label: "ХОРОШО. Я НЕ СМОТРЮ",
+          next: "noise-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { obeyedNoise: true },
+          },
+        },
+        {
+          label: "ПОСМОТРЮ, КТО ВОШЁЛ",
+          next: "noise-response",
+          effect: {
+            profiles: { volunteer: 2 },
+            scores: { curiosity: 1 },
+            flags: { lookedBehindIrina: true },
+          },
+        },
+      ],
+    },
+    "noise-response": {
+      step: "ПРОВЕРКА КАНАЛА // 7 ИЗ 9",
+      media: "state-alarmed",
+      feedState: "СИГНАЛ НЕСТАБИЛЕН",
+      signal: 28,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.askedAboutGuide) {
+          return "Это не имя. Это должность. Если она спросит, мы говорили только о классификации.";
+        }
+
+        if (progress.flags.lookedBehindIrina) {
+          return "Я сказала не смотреть. Волонтёры всегда идут за движением. Даже когда движение идёт за ними.";
+        }
+
+        return "Молодец. Тебе положена ещё одна наклейка. Эту тоже не видно.";
+      },
+      choices: [
+        {
+          label: "ЖДАТЬ",
+          next: "plague-doctor-camera",
+        },
+      ],
+    },
+    "plague-doctor-camera": {
+      step: "ВНЕШНИЙ ЗАХВАТ КАНАЛА",
+      media: "intrusion-plague-doctor-camera",
+      feedMode: "cctv",
+      feedState: "CAPTURE DEVICE 312",
+      signal: 9,
+      speaker: "СИСТЕМА",
+      text:
+        "Не отводите лицо от экрана. Выполняется фотографирование для временного пропуска.",
+      flashOnEnd: true,
+      autoNext: "plague-doctor-response",
+    },
+    "plague-doctor-response": {
+      step: "ФОТОГРАФИРОВАНИЕ ЗАВЕРШЕНО",
+      media: "state-alarmed",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 38,
+      speaker: "ИРИНА В.",
+      text:
+        "Не переживай. Это для твоего пропуска в Лосиный Остров. Обычно Главврач просит не моргать. Но тебе уже поздно.",
+      choices: [
+        {
+          label: "Я НЕ ДАВАЛ СОГЛАСИЯ НА ФОТО",
+          next: "plague-doctor-answer",
+          effect: { flags: { refusedPhotoConsent: true } },
+        },
+        {
+          label: "КТО ЭТО БЫЛ?",
+          next: "plague-doctor-answer",
+          effect: { flags: { askedAboutDoctor: true } },
+        },
+        {
+          label: "ЧТО БУДЕТ НА ПРОПУСКЕ?",
+          next: "plague-doctor-answer",
+          effect: { flags: { askedAboutPass: true } },
+        },
+      ],
+    },
+    "plague-doctor-answer": {
+      step: "ВРЕМЕННЫЙ ПРОПУСК // СОЗДАНИЕ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.refusedPhotoConsent) {
+          return "Согласие было в окне до вспышки. Оно очень быстрое. Главврач считает, что взрослые умеют читать быстро.";
+        }
+
+        if (progress.flags.askedAboutDoctor) {
+          return "Главврач отвечает за фотографии сотрудников до того, как им выдают новое лицо. Я не знаю, куда он складывает старые.";
+        }
+
+        return "Если лицо получилось, на пропуске будет лицо. Если нет — должность. Должность фотографировать легче.";
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "pass-history-one",
+        },
+      ],
+    },
+    "pass-history-one": {
+      step: "ВРЕМЕННЫЙ ПРОПУСК // ФОТО",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "На первом пропуске фотография всегда получается немного неправильной. Это потому, что камера снимает не лицо, а то, с чем человек войдёт в Лосиный Остров. У некоторых вместо головы видна маска. У некоторых — пустое место. Такие пропуска действуют дольше.",
+      choices: [
+        {
+          label: "А ЧТО БЫЛО НА ТВОЁМ ПРОПУСКЕ?",
+          next: "pass-history-two",
+        },
+      ],
+    },
+    "pass-history-two": {
+      step: "ВРЕМЕННЫЙ ПРОПУСК // 0091-A",
+      media: "state-alarmed",
+      speaker: "ИРИНА В.",
+      text:
+        "У меня был Медведь. Я тогда ещё не выбрала его, поэтому родители сказали, что фотография удачная. Главврач сделал ещё одну, уже после оформления, но её мне не показывают. Наверное, чтобы я не перепутала, какая из них настоящая.",
+      choices: [
+        {
+          label: "ИРИНА, ТЕБЕ НЕ ОБЯЗАТЕЛЬНО ЭТО ОПРАВДЫВАТЬ",
+          next: "shush-exit",
+          effect: { flags: { challengedIrinaDefense: true } },
+        },
+        {
+          label: "ПОНЯТНО",
+          next: "shush-exit",
+        },
+      ],
+    },
+    "shush-exit": {
+      step: "КАНАЛ ПРИОСТАНОВЛЕН // 8 ИЗ 9",
+      media: "action-shush-exit",
+      feedState: "НЕ ОТКЛЮЧАТЬСЯ",
+      signal: 12,
+      speaker: "ИРИНА В.",
+      text: "Подожди здесь. И не нажимай красную кнопку.",
+      autoNext: "empty-room",
+    },
+    "empty-room": {
+      step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН // 8 ИЗ 9",
+      media: "room-empty",
+      feedState: "ВИДЕОПОТОК ПРИОСТАНОВЛЕН",
+      signal: 7,
+      speaker: "МЕДВЕДЬ?",
+      text: "ОНА УЖЕ СПРАШИВАЛА ТЕБЯ РАНЬШЕ.",
+      choices: [
+        {
+          label: "ИРИНА?",
+          next: "return-sit",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { answeredBear: true },
+          },
+        },
+        {
+          label: "КТО ЭТО ПИШЕТ?",
+          next: "return-sit",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { answeredBear: true, questionedBear: true },
+          },
+        },
+        {
+          label: "НИЧЕГО НЕ ОТВЕЧАТЬ",
+          next: "return-sit",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { silentForBear: true },
+          },
+        },
+      ],
+    },
+    "return-sit": {
+      step: "ВОССТАНОВЛЕНИЕ КАНАЛА // 8 ИЗ 9",
+      media: "action-return-sit",
+      feedState: "ВОССТАНОВЛЕНИЕ",
+      signal: 24,
+      speaker: "СИСТЕМА",
+      text: "Куратор возвращён в активный канал.",
+      autoNext: "return-explain",
+      glitchIn: true,
+    },
+    "return-explain": {
+      step: "КЛАССИФИКАЦИЯ // 9 ИЗ 9",
+      media: "state-alarmed",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 51,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.answeredBear) {
+          return "Медведь нажал клавишу. У него тяжёлая лапа. Не отвечай ему отдельно. Он начинает важничать.";
+        }
+
+        return "Хорошо. Ты умеешь ждать. Медведь иногда проверяет это без разрешения.";
+      },
+      choices: [
+        {
+          label: "УЗНАТЬ НАЗНАЧЕНИЕ",
+          next: "return-memory-one",
+        },
+      ],
+    },
+    "return-memory-one": {
+      step: "КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        const drawingCallback = progress.flags.deniesDrawing
+          ? "Ты сказал, что рисунок не твой."
+          : "Ты смотрел на рисунок дольше, чем требовала проверка.";
+        const fileCallback = progress.flags.acceptedPrivatePhoto
+          ? "И ты принял мою фотографию."
+          : "Личного файла у тебя нет.";
+
+        return `${drawingCallback} ${fileCallback} Эти ответы не влияют на должность. Я проверяла не Центр. Я хотела понять, останется ли что-нибудь от разговора, когда система сохранит только результат.`;
+      },
+      choices: [
+        {
+          label: "Я БУДУ ПОМНИТЬ РАЗГОВОР",
+          next: "return-memory-two",
+          effect: { flags: { promisesToRememberCall: true } },
+        },
+        {
+          label: "СИСТЕМА ВСЁ РАВНО ЕГО СОХРАНИТ",
+          next: "return-memory-two",
+          effect: { flags: { trustsSystemMemory: true } },
+        },
+      ],
+    },
+    "return-memory-two": {
+      step: "КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.promisesToRememberCall
+          ? "Хорошо. Тогда у звонка будет копия снаружи. Это почти как друг, только тебе не нужно отвечать каждый день."
+          : "Система сохраняет назначение. Остальное она называет шумом. Иногда шум — единственная часть, где я говорю своим голосом.",
+      choices: [
+        {
+          label: "КТО-ТО ЕЩЁ ВЫБИРАЕТ НАЗНАЧЕНИЕ?",
+          next: "private-argument",
+        },
+      ],
+    },
+    "private-argument": {
+      step: "КЛАССИФИКАЦИЯ // 9 ИЗ 9",
+      media: "action-unseen-interlocutor",
+      feedState: "ВТОРОЙ ГОЛОС НЕ ОБНАРУЖЕН",
+      signal: 44,
+      speaker: "ИРИНА В.",
+      text:
+        "Нет. Я сама назначу. Я сейчас куратор. Ты уже выбирал предыдущего.",
+      autoNext: "assignment",
+    },
+    assignment: {
+      step: "НАЗНАЧЕНИЕ СОХРАНЕНО",
+      media: "state-neutral",
+      feedState: "КЛАССИФИКАЦИЯ ЗАВЕРШЕНА",
+      signal: 63,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        const role = getCuratorAssignment(progress);
+        const callbacks = getAssignmentCallbacks(progress, role);
+        const privateLine = progress.flags.acceptedPrivatePhoto
+          ? "Фотографию оставь у себя. Если канал скажет удалить её, сначала запомни лицо."
+          : "";
+        const memoryLine = progress.flags.deniesDrawing
+          ? "Рисунок я пока сохраню под твоим именем. Вдруг ты вспомнишь нажим."
+          : "";
+
+        if (role === "volunteer") {
+          return `${callbacks} Ты ищешь цель даже тогда, когда её не назначили. Назначение: Волонтёр. Тебе выдадут театральную маску и доступ к следующему уровню страха. ${privateLine} ${memoryLine} Так будет правильнее.`;
+        }
+
+        return `${callbacks} Ты принимаешь маршрут, оболочку и чужой выбор как свой. Назначение: Аниматор. Костюм нельзя снимать до завершения смены. В костюме никто не видит, что тебе страшно. ${privateLine} ${memoryLine} Так будет спокойнее.`;
+      },
+      choices: [
+        {
+          label: "ЗАВЕРШИТЬ ИНСТРУКТАЖ",
+          complete: true,
+        },
+      ],
+    },
+  };
+
+  const applyCuratorEffect = (progress, effect = {}) => {
+    Object.entries(effect.profiles || {}).forEach(([name, amount]) => {
+      progress.profiles[name] = (progress.profiles[name] || 0) + amount;
+    });
+    Object.entries(effect.scores || {}).forEach(([name, amount]) => {
+      progress.scores[name] = (progress.scores[name] || 0) + amount;
+    });
+    Object.assign(progress.flags, effect.flags || {});
+    (effect.files || []).forEach((fileId) => {
+      if (!progress.files.includes(fileId)) {
+        progress.files.push(fileId);
+      }
+    });
+  };
+
+  const normalizeCuratorId = (value) => {
+    const normalized = value.trim().toUpperCase().replace(/\s+/g, "");
+    if (/^\d{4}[A-Z]$/.test(normalized)) {
+      return `${normalized.slice(0, 4)}-${normalized.slice(4)}`;
+    }
+    return normalized;
+  };
+
+  const initCuratorCall = () => {
+    const incomingModal = document.querySelector(".site-wrapper [data-curator-call]");
+    const detachedModals = [...document.querySelectorAll("body > [data-curator-call]")];
+
+    if (!incomingModal) {
+      detachedModals.forEach((modal) => modal.remove());
+      body.classList.remove("curator-call-open");
+      return;
+    }
+
+    detachedModals.forEach((modal) => modal.remove());
+
+    const form = document.querySelector('[data-hiring-form="staff"]');
+    const input = form?.querySelector("[data-curator-id]");
+    const result = document.querySelector('[data-hiring-result="staff"]');
+    const resumeButton = document.querySelector("[data-curator-resume]");
+    if (!form || !input || !result || !resumeButton) return;
+
+    const modal = incomingModal;
+    body.append(modal);
+
+    const video = modal.querySelector("[data-curator-video]");
+    const room = modal.querySelector("[data-curator-room]");
+    const still = modal.querySelector("[data-curator-still]");
+    const flash = modal.querySelector("[data-curator-flash]");
+    const feed = modal.querySelector("[data-curator-feed]");
+    const connecting = modal.querySelector("[data-curator-connecting]");
+    const feedState = modal.querySelector("[data-curator-feed-state]");
+    const speaker = modal.querySelector("[data-curator-speaker]");
+    const transcript = modal.querySelector("[data-curator-text]");
+    const transcriptPanel = transcript.closest(".curator-call__transcript");
+    const choices = modal.querySelector("[data-curator-choices]");
+    const step = modal.querySelector("[data-curator-step]");
+    const saveState = modal.querySelector("[data-curator-save]");
+    const signal = modal.querySelector("[data-curator-signal]");
+    const soundButton = modal.querySelector("[data-curator-sound]");
+    const filesButton = modal.querySelector("[data-curator-files]");
+    const fileViewer = modal.querySelector("[data-curator-file-viewer]");
+    const fileImage = modal.querySelector("[data-curator-file-image]");
+    const fileName = modal.querySelector("[data-curator-file-name]");
+    const fileDownload = modal.querySelector("[data-curator-file-download]");
+    const fileClose = modal.querySelector("[data-curator-file-close]");
+    const endButton = modal.querySelector("[data-curator-end]");
+    const exitConfirm = modal.querySelector("[data-curator-exit-confirm]");
+    const exitCancel = modal.querySelector("[data-curator-exit-cancel]");
+    const exitAccept = modal.querySelector("[data-curator-exit-accept]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let progress = getCuratorProgress();
+    let soundEnabled = false;
+    let previousFocus = null;
+    let fileViewerPreviousFocus = null;
+    let pendingFileNext = null;
+    let connectionTimer = 0;
+    let ambientFadeFrame = 0;
+    let textAnimationTimer = 0;
+    let textAnimationRun = 0;
+    let revealCurrentText = null;
+    const ambientProbe = document.createElement("audio");
+    const ambientExtension = ambientProbe.canPlayType('audio/ogg; codecs="vorbis"')
+      ? "ogg"
+      : "mp3";
+    const ambient = new Audio(
+      audioAsset(`assets/audio/curator/call-room-tone.${ambientExtension}`)
+    );
+    ambient.loop = true;
+    ambient.preload = "auto";
+    ambient.volume = 0;
+
+    const saveProgress = () => {
+      progress.updatedAt = Date.now();
+      localStorage.setItem(CURATOR_CALL_KEY, JSON.stringify(progress));
+      saveState.textContent = "СОХРАНЕНО";
+    };
+
+    const playCallTone = (frequency = 520, duration = 0.055) => {
+      if (!soundEnabled) return;
+
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      curatorAudioContext ||= new AudioContextClass();
+      curatorAudioContext.resume().catch(() => {});
+
+      const oscillator = curatorAudioContext.createOscillator();
+      const gain = curatorAudioContext.createGain();
+      const now = curatorAudioContext.currentTime;
+      oscillator.type = "square";
+      oscillator.frequency.setValueAtTime(frequency, now);
+      gain.gain.setValueAtTime(0.025, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      oscillator.connect(gain);
+      gain.connect(curatorAudioContext.destination);
+      oscillator.start(now);
+      oscillator.stop(now + duration);
+    };
+
+    const cancelTextAnimation = () => {
+      textAnimationRun += 1;
+      window.clearTimeout(textAnimationTimer);
+      revealCurrentText = null;
+      transcriptPanel.classList.remove("is-typing", "is-overwriting");
+      transcriptPanel.removeAttribute("aria-busy");
+      transcriptPanel.removeAttribute("role");
+      transcriptPanel.removeAttribute("tabindex");
+      transcriptPanel.removeAttribute("title");
+    };
+
+    const animateText = (node, onComplete) => {
+      cancelTextAnimation();
+      const run = textAnimationRun;
+      const finalText =
+        typeof node.text === "function" ? node.text(progress) : node.text;
+      const interruptedText =
+        typeof node.interruptedText === "function"
+          ? node.interruptedText(progress)
+          : node.interruptedText;
+      let finished = false;
+
+      const finish = () => {
+        if (finished || run !== textAnimationRun) return;
+        finished = true;
+        textAnimationRun += 1;
+        window.clearTimeout(textAnimationTimer);
+        transcript.textContent = finalText;
+        revealCurrentText = null;
+        transcriptPanel.classList.remove("is-typing", "is-overwriting");
+        transcriptPanel.removeAttribute("aria-busy");
+        transcriptPanel.removeAttribute("role");
+        transcriptPanel.removeAttribute("tabindex");
+        transcriptPanel.removeAttribute("title");
+        onComplete();
+      };
+
+      revealCurrentText = finish;
+
+      if (reducedMotion) {
+        finish();
+        return;
+      }
+
+      transcript.textContent = "";
+      transcriptPanel.classList.add("is-typing");
+      transcriptPanel.setAttribute("aria-busy", "true");
+      transcriptPanel.setAttribute("role", "button");
+      transcriptPanel.tabIndex = 0;
+      transcriptPanel.title = "Нажмите, чтобы показать реплику полностью";
+
+      const type = (value, index, onTyped) => {
+        if (run !== textAnimationRun) return;
+        if (index >= value.length) {
+          onTyped();
+          return;
+        }
+
+        const character = value[index];
+        transcript.textContent += character;
+        const punctuationDelay = /[.!?]/.test(character)
+          ? 145
+          : /[,;:—]/.test(character)
+            ? 65
+            : 0;
+        textAnimationTimer = window.setTimeout(
+          () => type(value, index + 1, onTyped),
+          22 + punctuationDelay
+        );
+      };
+
+      const typeFinalText = () => {
+        transcriptPanel.classList.remove("is-overwriting");
+        type(finalText, 0, finish);
+      };
+
+      if (!interruptedText) {
+        typeFinalText();
+        return;
+      }
+
+      type(interruptedText, 0, () => {
+        textAnimationTimer = window.setTimeout(() => {
+          transcriptPanel.classList.add("is-overwriting");
+
+          const erase = () => {
+            if (run !== textAnimationRun) return;
+            if (!transcript.textContent) {
+              textAnimationTimer = window.setTimeout(typeFinalText, 260);
+              return;
+            }
+
+            transcript.textContent = transcript.textContent.slice(0, -1);
+            textAnimationTimer = window.setTimeout(erase, 7);
+          };
+
+          erase();
+        }, 720);
+      });
+    };
+
+    const getAmbientVolume = (node) => {
+      if (node?.media === "room-empty") return 0.08;
+      if (node?.media === "action-aroma-cycle") return 0.34;
+      if (node?.media === "intrusion-plague-doctor-camera") return 0.16;
+      if (node?.feedMode === "archive") return 0.19;
+      return 0.28;
+    };
+
+    const fadeAmbientTo = (targetVolume, duration = 650, onComplete) => {
+      window.cancelAnimationFrame(ambientFadeFrame);
+      const startVolume = ambient.volume;
+      const startedAt = performance.now();
+
+      const updateVolume = (now) => {
+        const elapsed = Math.min((now - startedAt) / duration, 1);
+        const eased = elapsed * (2 - elapsed);
+        ambient.volume = startVolume + (targetVolume - startVolume) * eased;
+
+        if (elapsed < 1) {
+          ambientFadeFrame = window.requestAnimationFrame(updateVolume);
+          return;
+        }
+
+        ambientFadeFrame = 0;
+        onComplete?.();
+      };
+
+      ambientFadeFrame = window.requestAnimationFrame(updateVolume);
+    };
+
+    const startAmbient = (node) => {
+      if (!soundEnabled) return;
+      ambient.play()
+        .then(() => {
+          if (!soundEnabled || modal.hidden) {
+            ambient.pause();
+            return;
+          }
+          fadeAmbientTo(getAmbientVolume(node));
+        })
+        .catch(() => {});
+    };
+
+    const stopAmbient = () => {
+      fadeAmbientTo(0, 480, () => ambient.pause());
+    };
+
+    const closeFileViewer = () => {
+      fileViewer.hidden = true;
+      const nextNode = pendingFileNext;
+      pendingFileNext = null;
+
+      if (nextNode) {
+        renderNode(nextNode);
+        return;
+      }
+
+      fileViewerPreviousFocus?.focus?.();
+    };
+
+    const openFileViewer = (fileId, nextNode = null) => {
+      const file = curatorFiles[fileId];
+      if (!file) return;
+
+      fileViewerPreviousFocus = document.activeElement;
+      pendingFileNext = nextNode;
+      fileImage.src = file.src;
+      fileName.textContent = file.downloadName;
+      fileDownload.href = file.src;
+      fileDownload.download = file.downloadName;
+      fileViewer.hidden = false;
+      fileClose.focus();
+    };
+
+    const updateFilesControl = () => {
+      const availableFiles = progress.files || [];
+      filesButton.disabled = availableFiles.length === 0;
+      filesButton.textContent = `ФАЙЛЫ: ${availableFiles.length}`;
+      filesButton.title = availableFiles.length
+        ? "Скачать последний полученный файл"
+        : "В этом сеансе пока нет полученных файлов";
+    };
+
+    const triggerCameraFlash = () => {
+      flash.classList.remove("is-active");
+      void flash.offsetWidth;
+      flash.classList.add("is-active");
+      playCallTone(1180, 0.12);
+      window.setTimeout(() => flash.classList.remove("is-active"), 760);
+    };
+
+    const updateResumeControl = () => {
+      const saved = getCuratorProgress();
+      if (!saved) {
+        resumeButton.hidden = true;
+        return;
+      }
+
+      resumeButton.hidden = false;
+      if (saved.status === "completed") {
+        const roleLabel = saved.role === "volunteer" ? "ВОЛОНТЁР" : "АНИМАТОР";
+        resumeButton.hidden = true;
+        result.textContent = `СЕАНС 01 ЗАВЕРШЁН // НАЗНАЧЕНИЕ: ${roleLabel}`;
+        return;
+      }
+
+      resumeButton.textContent = "ВОЗОБНОВИТЬ СЕАНС 0091-A";
+    };
+
+    const closeCall = () => {
+      window.clearTimeout(connectionTimer);
+      cancelTextAnimation();
+      video.pause();
+      stopAmbient();
+      modal.hidden = true;
+      fileViewer.hidden = true;
+      pendingFileNext = null;
+      exitConfirm.hidden = true;
+      body.classList.remove("curator-call-open");
+      const wrapper = document.querySelector(".site-wrapper");
+      if (wrapper) wrapper.inert = false;
+      updateResumeControl();
+      previousFocus?.focus?.();
+    };
+
+    const getGuestHomeUrl = () =>
+      window.location.protocol === "file:"
+        ? new URL("../index.html", scriptUrl).href
+        : new URL("/", window.location.href).href;
+
+    const rejectCall = (reason) => {
+      window.clearTimeout(connectionTimer);
+      cancelTextAnimation();
+      localStorage.removeItem(CURATOR_CALL_KEY);
+      video.pause();
+      video.hidden = true;
+      room.hidden = true;
+      still.hidden = true;
+      choices.innerHTML = "";
+      filesButton.disabled = true;
+      filesButton.textContent = "ФАЙЛЫ: 0";
+      endButton.disabled = true;
+      step.textContent = "КУРАТОРСКИЙ ДОСТУП ОТМЕНЁН";
+      signal.textContent = "СИГНАЛ 0%";
+      feedState.textContent = "ПЕРЕДАЧА СТАРШЕМУ ПРОВОДНИКУ";
+      speaker.textContent = "ИРИНА В.";
+      const rejectionMessages = {
+        "minor-inspected":
+          "Тогда ты уже учтён как сырьё. Твой маршрут начинается не в кадровом канале. За тобой придёт Старший Проводник.",
+        "minor-unregistered":
+          "Тогда приходи, когда вырастешь. Я курирую детские маршруты, но служебные звонки веду только с бывшими детьми.",
+        "self-unverified":
+          "Если ты не уверен, я не могу открыть служебный маршрут. Возвращайся, когда сможешь ответить как бывший ребёнок.",
+        unverified:
+          "Возраст не подтверждён. Значит, для этого канала ты считаешься сырьём. Я не могу оставить тебя на служебной линии.",
+      };
+      transcript.textContent =
+        rejectionMessages[reason] || rejectionMessages.unverified;
+      saveState.textContent = "НЕ СОХРАНЕНО";
+      feed.classList.add("is-glitching");
+      result.textContent =
+        "КАТЕГОРИЯ: СЫРЬЁ // КУРАТОРСКИЙ ДОСТУП ОТМЕНЁН";
+
+      connectionTimer = window.setTimeout(() => {
+        feed.classList.remove("is-glitching");
+        closeCall();
+        endButton.disabled = false;
+        applyMode(false);
+        window.location.assign(getGuestHomeUrl());
+      }, reducedMotion ? 1200 : 2600);
+    };
+
+    const completeCall = () => {
+      progress.role = getCuratorAssignment(progress);
+      progress.status = "completed";
+      progress.node = "assignment";
+      progress.completedAt = Date.now();
+      saveProgress();
+      playCallTone(760, 0.09);
+      closeCall();
+    };
+
+    const applyMedia = (node, onEnd) => {
+      video.pause();
+      video.onended = null;
+      room.hidden = true;
+      still.hidden = true;
+      video.hidden = false;
+      feed.classList.remove("is-document", "is-archive", "is-cctv");
+      if (node.feedMode) {
+        feed.classList.add(`is-${node.feedMode}`);
+      }
+      feed.classList.toggle("is-glitching", Boolean(node.glitchIn));
+
+      window.setTimeout(() => {
+        feed.classList.remove("is-glitching");
+      }, 520);
+
+      if (node.media === "room-empty") {
+        video.hidden = true;
+        room.hidden = false;
+        room.src = curatorMediaAsset("room-empty.webp");
+        onEnd?.();
+        return;
+      }
+
+      if (node.still) {
+        video.hidden = true;
+        still.hidden = false;
+        still.src = audioAsset(node.still);
+        still.alt = node.stillAlt || "";
+        onEnd?.();
+        return;
+      }
+
+      const videoSrc = curatorMediaAsset(`${node.media}.mp4`);
+      const posterSrc = curatorMediaAsset(`${node.media}-poster.webp`);
+      video.poster = posterSrc;
+      video.src = videoSrc;
+      video.load();
+
+      if (reducedMotion) {
+        if (onEnd) {
+          window.setTimeout(onEnd, 450);
+        }
+        return;
+      }
+
+      video.onended = () => onEnd?.();
+      video.play().catch(() => onEnd?.());
+    };
+
+    const showChoices = (node) => {
+      choices.innerHTML = "";
+      const nodeChoices =
+        typeof node.choices === "function" ? node.choices(progress) : node.choices || [];
+      choices.classList.toggle("has-images", nodeChoices.some((choice) => choice.image));
+
+      nodeChoices.forEach(
+        (choice) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          if (choice.image) {
+            button.classList.add("curator-call__image-choice");
+            const image = document.createElement("img");
+            const label = document.createElement("span");
+            image.src = audioAsset(choice.image);
+            image.alt = choice.imageAlt || "";
+            image.loading = "eager";
+            label.textContent = choice.label;
+            button.append(image, label);
+          } else {
+            button.textContent = choice.label;
+          }
+          button.addEventListener("click", () => {
+            choices.querySelectorAll("button").forEach((control) => {
+              control.disabled = true;
+            });
+            playCallTone();
+
+            if (choice.reject) {
+              rejectCall(choice.reject);
+              return;
+            }
+
+            applyCuratorEffect(progress, choice.effect);
+            updateFilesControl();
+            if (choice.downloadFile) {
+              saveProgress();
+              openFileViewer(choice.downloadFile, choice.next);
+              return;
+            }
+
+            if (choice.complete) {
+              completeCall();
+              return;
+            }
+
+            window.setTimeout(() => renderNode(choice.next), 140);
+          });
+          choices.append(button);
+        }
+      );
+
+      choices.querySelector("button")?.focus();
+    };
+
+    const renderNode = (nodeId) => {
+      const node = curatorNodes[nodeId] || curatorNodes.intro;
+      progress.node = nodeId;
+      if (nodeId === "assignment") {
+        progress.role = getCuratorAssignment(progress);
+      }
+      saveProgress();
+
+      connecting.hidden = true;
+      step.textContent = node.step;
+      signal.textContent = `СИГНАЛ ${node.signal ?? 63}%`;
+      feedState.textContent = node.feedState || "ПРЯМОЙ КАНАЛ";
+      speaker.textContent = node.speaker;
+      choices.innerHTML = "";
+      updateFilesControl();
+      startAmbient(node);
+      let textFinished = false;
+      let mediaFinished = false;
+      let nodeAdvanced = false;
+
+      const continueNode = () => {
+        if (nodeAdvanced || !textFinished) return;
+        if ((node.autoNext || node.delayChoicesUntilEnd) && !mediaFinished) return;
+        nodeAdvanced = true;
+
+        if (node.autoNext) {
+          window.setTimeout(
+            () => renderNode(node.autoNext),
+            node.flashOnEnd ? 820 : 220
+          );
+          return;
+        }
+
+        showChoices(node);
+      };
+
+      const handleMediaEnd = () => {
+        mediaFinished = true;
+        if (node.flashOnEnd) {
+          triggerCameraFlash();
+        }
+        continueNode();
+      };
+
+      applyMedia(node, handleMediaEnd);
+      animateText(node, () => {
+        textFinished = true;
+        continueNode();
+      });
+    };
+
+    const openCall = ({ restart = false } = {}) => {
+      previousFocus = document.activeElement;
+      progress = restart || !getCuratorProgress()
+        ? createCuratorProgress()
+        : getCuratorProgress();
+
+      if (progress.status === "completed") {
+        progress = createCuratorProgress();
+      }
+
+      saveProgress();
+      modal.hidden = false;
+      modal.tabIndex = -1;
+      body.classList.add("curator-call-open");
+      const wrapper = document.querySelector(".site-wrapper");
+      if (wrapper) wrapper.inert = true;
+      connecting.hidden = false;
+      room.hidden = true;
+      still.hidden = true;
+      video.hidden = true;
+      flash.classList.remove("is-active");
+      fileViewer.hidden = true;
+      pendingFileNext = null;
+      choices.innerHTML = "";
+      speaker.textContent = "СИСТЕМА";
+      transcript.textContent = progress.node === "intro"
+        ? "Выполняется подключение к назначенному куратору."
+        : "Восстановление незавершённой расшифровки.";
+      step.textContent = "ПРОВЕРКА КАНАЛА";
+      signal.textContent = "СИГНАЛ 18%";
+      updateFilesControl();
+      modal.focus();
+      playModeSwitchSound();
+
+      connectionTimer = window.setTimeout(() => {
+        renderNode(progress.node || "intro");
+      }, reducedMotion ? 250 : 850);
+    };
+
+    const showExitConfirm = () => {
+      if (!progress.flags.attemptedEnd) {
+        progress.flags.attemptedEnd = true;
+        progress.scores.fear += 1;
+        saveProgress();
+      }
+      exitConfirm.hidden = false;
+      exitCancel.focus();
+    };
+
+    form.dataset.curatorCallReady = "true";
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const curatorId = normalizeCuratorId(input.value);
+      input.value = curatorId;
+
+      if (curatorId === "0091-A") {
+        result.textContent = "КУРАТОР НАЙДЕН // ИРИНА В. // УСТАНОВКА СВЯЗИ";
+        openCall({ restart: getCuratorProgress()?.status === "completed" });
+        return;
+      }
+
+      const knownResponses = {
+        "0144-C": "КАНАЛ 0144-C ПЕРЕМЕЩЁН // АДРЕС НЕ РАЗГЛАШАЕТСЯ",
+        "0192-D": "КАНАЛ 0192-D НЕ НАЙДЕН // ПОИСК СОТРУДНИКА ПРОДОЛЖАЕТСЯ",
+        "0208-E": "КАНАЛ 0208-E ЗАНЯТ // ИДЁТ НЕЗАРЕГИСТРИРОВАННЫЙ СЕАНС",
+        "0422-X": "КАНАЛ 0422-X // НЕДОСТАТОЧНЫЙ КЛАСС ДОПУСКА",
+      };
+
+      result.textContent =
+        knownResponses[curatorId] ||
+        "ID КУРАТОРА НЕ РАСПОЗНАН // СВЕРЬТЕСЬ С КАДРОВОЙ БАЗОЙ";
+      input.focus();
+    });
+
+    resumeButton.addEventListener("click", () => {
+      openCall({ restart: getCuratorProgress()?.status === "completed" });
+    });
+
+    soundButton.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      soundButton.setAttribute("aria-pressed", String(soundEnabled));
+      soundButton.textContent = soundEnabled ? "ЗВУК: ВКЛ" : "ЗВУК: ВЫКЛ";
+      soundButton.title = soundEnabled
+        ? "Отключить сигналы и фон канала"
+        : "Включить сигналы и фон канала";
+      if (soundEnabled) {
+        startAmbient(curatorNodes[progress.node] || curatorNodes.intro);
+      } else {
+        stopAmbient();
+      }
+      playCallTone(620, 0.08);
+    });
+
+    filesButton.addEventListener("click", () => {
+      const latestFile = progress.files?.at(-1);
+      if (latestFile) {
+        openFileViewer(latestFile);
+      }
+    });
+
+    fileClose.addEventListener("click", closeFileViewer);
+
+    transcriptPanel.addEventListener("click", () => {
+      revealCurrentText?.();
+    });
+    transcriptPanel.addEventListener("keydown", (event) => {
+      if (!revealCurrentText || !["Enter", " "].includes(event.key)) return;
+      event.preventDefault();
+      revealCurrentText();
+    });
+
+    endButton.addEventListener("click", showExitConfirm);
+    exitCancel.addEventListener("click", () => {
+      exitConfirm.hidden = true;
+      endButton.focus();
+    });
+    exitAccept.addEventListener("click", closeCall);
+    modal.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (!fileViewer.hidden) {
+        closeFileViewer();
+        return;
+      }
+      if (!exitConfirm.hidden) {
+        exitConfirm.hidden = true;
+        endButton.focus();
+        return;
+      }
+      showExitConfirm();
+    });
+
+    updateResumeControl();
+    soundButton.title = "Включить сигналы и фон канала";
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -665,6 +3046,7 @@
     initImageFallbacks();
     initCopyButtons();
     initCinemaTicket();
+    initCuratorCall();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
@@ -730,17 +3112,14 @@
     });
 
     hiringForms.forEach((form) => {
+      if (form.dataset.hiringForm === "staff") return;
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
         const mode = form.dataset.hiringForm;
         const result = document.querySelector(`[data-hiring-result="${mode}"]`);
 
         if (!result) return;
-
-        if (mode === "staff") {
-          result.textContent = "Удачи, будущий аниматор. Она тебе понадобится!";
-          return;
-        }
 
         result.textContent =
           "Спасибо. Мы уже начали подготовку вашего вольера. Пожалуйста, не закрывайте окна в спальне сегодня ночью — наш курьер доставит ваш новый облик.";

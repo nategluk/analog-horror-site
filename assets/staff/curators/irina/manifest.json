@@ -1,0 +1,127 @@
+{
+  "curator": "irina",
+  "curatorId": "0091-A",
+  "format": {
+    "width": 544,
+    "height": 544,
+    "frameRate": 24,
+    "videoCodec": "h264",
+    "audio": false
+  },
+  "states": {
+    "neutral": {
+      "video": "state-neutral.mp4",
+      "poster": "state-neutral-poster.webp",
+      "playback": "once-hold"
+    },
+    "warm": {
+      "video": "state-warm.mp4",
+      "poster": "state-warm-poster.webp",
+      "playback": "once-hold"
+    },
+    "alarmed": {
+      "video": "state-alarmed.mp4",
+      "poster": "state-alarmed-poster.webp",
+      "playback": "once-hold"
+    },
+    "confidential": {
+      "video": "state-confidential.mp4",
+      "poster": "state-confidential-poster.webp",
+      "playback": "once-hold"
+    },
+    "bear-neutral": {
+      "video": "state-bear-neutral.mp4",
+      "poster": "state-bear-neutral-poster.webp",
+      "playback": "once-hold"
+    }
+  },
+  "actions": {
+    "hears-noise": {
+      "video": "action-hears-noise.mp4",
+      "poster": "action-hears-noise-poster.webp",
+      "playback": "once"
+    },
+    "shush-exit": {
+      "video": "action-shush-exit.mp4",
+      "poster": "action-shush-exit-poster.webp",
+      "playback": "once",
+      "next": "room-empty"
+    },
+    "return-sit": {
+      "video": "action-return-sit.mp4",
+      "poster": "action-return-sit-poster.webp",
+      "playback": "once",
+      "next": "neutral"
+    },
+    "unseen-interlocutor": {
+      "video": "action-unseen-interlocutor.mp4",
+      "poster": "action-unseen-interlocutor-poster.webp",
+      "playback": "once"
+    },
+    "bear-head-on": {
+      "video": "action-bear-head-on.mp4",
+      "poster": "action-bear-head-on-poster.webp",
+      "playback": "once",
+      "next": "bear-neutral"
+    },
+    "aroma-cycle": {
+      "video": "action-aroma-cycle.mp4",
+      "poster": "action-aroma-cycle-poster.webp",
+      "playback": "once",
+      "durationSeconds": 20
+    },
+    "post-aroma-jelly": {
+      "video": "action-post-aroma-jelly.mp4",
+      "poster": "action-post-aroma-jelly-poster.webp",
+      "playback": "once-hold"
+    },
+    "private-file": {
+      "video": "action-private-file.mp4",
+      "poster": "action-private-file-poster.webp",
+      "playback": "once-hold"
+    }
+  },
+  "interruptions": {
+    "plague-doctor-camera": {
+      "video": "intrusion-plague-doctor-camera.mp4",
+      "poster": "intrusion-plague-doctor-camera-poster.webp",
+      "playback": "once",
+      "uiEffect": "flash"
+    },
+    "ulybarych-empty-chair": {
+      "video": "archive-ulybarych-empty-chair.mp4",
+      "poster": "archive-ulybarych-empty-chair-poster.webp",
+      "playback": "once"
+    },
+    "bear-corridor": {
+      "video": "cctv-bear-corridor.mp4",
+      "poster": "cctv-bear-corridor-poster.webp",
+      "playback": "once"
+    },
+    "pavel-observation-booth": {
+      "video": "cctv-pavel-observation-booth.mp4",
+      "poster": "cctv-pavel-observation-booth-poster.webp",
+      "playback": "once"
+    }
+  },
+  "rooms": {
+    "empty": {
+      "image": "room-empty.webp",
+      "playback": "still-filtered"
+    }
+  },
+  "artifacts": {
+    "private-photo": {
+      "image": "artifacts/irina-photobooth-strip.jpg",
+      "downloadName": "IRINA_PRIVATE_01.jpg"
+    },
+    "memory-drawing": {
+      "image": "artifacts/memory-drawing.webp",
+      "playback": "still-filtered"
+    },
+    "recognition-cat-rabbit": {
+      "image": "artifacts/recognition-cat-rabbit.webp",
+      "playback": "still-filtered"
+    }
+  }
+}
