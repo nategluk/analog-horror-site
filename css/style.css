@@ -905,8 +905,7 @@ body.staff-mode .personnel-artifact button,
   align-items: start;
 }
 
-.personnel-dossier__identity img,
-.personnel-dossier__identity > .personnel-avatar {
+.personnel-dossier__identity img {
   width: 100%;
   aspect-ratio: 4 / 3;
   border: 1px solid #397a49;

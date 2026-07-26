@@ -3330,7 +3330,6 @@
     const dossierStatus = dossier.querySelector("[data-personnel-status]");
     const dossierNote = dossier.querySelector("[data-personnel-note]");
     const dossierImage = dossier.querySelector("[data-personnel-image]");
-    const dossierPlayerAvatar = dossier.querySelector("[data-personnel-player-avatar]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
     const documentLink = dossier.querySelector("[data-personnel-document]");
@@ -3434,8 +3433,6 @@
             ? "Собеседование не завершено. Последний подтверждённый этап доступен для возобновления."
             : "Личное дело создано автоматически при установке связи с назначенным куратором.";
       dossierImage.hidden = true;
-      dossierPlayerAvatar.hidden = false;
-      setAvatarAppearance(dossierPlayerAvatar, profile.avatarId);
       employeeActions.hidden = true;
       profilePanel.hidden = false;
       const progress = getCuratorProgress();
@@ -3510,7 +3507,6 @@
         dossierImage.src = record.image;
         dossierImage.alt = `Служебный портрет: ${record.name}`;
         dossierImage.hidden = false;
-        dossierPlayerAvatar.hidden = true;
         employeeActions.hidden = false;
         profilePanel.hidden = true;
         documentLink.hidden = !record.dossier;
