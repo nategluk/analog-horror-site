@@ -1052,7 +1052,7 @@
       [progress.flags.choseOpenDoorFeed, "Ты выбрал незарегистрированную дверь."],
       [progress.flags.followedTomorrowBand, "Ты пошёл по завтрашнему маршруту."],
       [progress.flags.woreTomorrowBand, "Ты надел чужой браслет."],
-      [progress.flags.openedCostume, "Ты открыл костюм, который считался пустым."],
+      [progress.flags.openedCostume, "Ты проверил внутренности костюма, который считался незанятым."],
       [progress.flags.lookedBehindIrina, "После запрета ты всё равно посмотрел."],
       [progress.flags.answeredBear, "Ты ответил пустой комнате."],
       [progress.flags.askedAboutGuide, "Ты спросил о Проводнице после запрета."],
@@ -1993,10 +1993,10 @@
       media: "state-neutral",
       speaker: "ИРИНА В.",
       text:
-        "Во время смены из соседнего костюма слышен плач. По журналу костюм пуст. Что ты сделаешь?",
+        "Во время смены из соседнего костюма слышен плач. Согласно записям, костюм не занят. Что ты сделаешь?",
       choices: [
         {
-          label: "ОТКРОЮ КОСТЮМ",
+          label: "ПРОВЕРЮ ВНУТРЕННОСТИ КОСТЮМА",
           next: "costume-response",
           effect: {
             profiles: { volunteer: 2 },
