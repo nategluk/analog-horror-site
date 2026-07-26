@@ -3,6 +3,8 @@
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
   const CURATOR_CALL_KEY = "tyndex_curator_call_v4";
+  const STAFF_PROFILE_KEY = "tyndex_staff_profile_v1";
+  const STAFF_INTRUSION_KEY = "tyndex_staff_intrusion_v1";
   const LOGO_KNOCK_WINDOW = 1500;
   const scriptUrl = document.currentScript?.src || window.location.href;
   const audioAsset = (path) => new URL(`../${path}`, scriptUrl).href;
@@ -667,6 +669,97 @@
     },
   };
 
+  const staffDirectory = {
+    irina: {
+      name: "ИРИНА В.",
+      role: "КУРАТОР ДЕТСКИХ МАРШРУТОВ",
+      status: "АКТИВЕН",
+      note: "Склонна к импровизации. Рекомендовано наблюдение за служебным каналом.",
+      image: audioAsset("assets/staff/staff/irina_sad.jpg"),
+      curatorId: "0091-A",
+    },
+    pavel: {
+      name: "ПАВЕЛ К.",
+      role: "ОПЕРАТОР КАБИНОК ОБОЗРЕНИЯ",
+      status: "ПЕРЕМЕЩЁН",
+      note: "Запросил увольнение трижды. Текущее место регистрации не раскрывается.",
+      image: audioAsset("assets/staff/staff/pavel_sad.jpg"),
+    },
+    oleg: {
+      name: "ОЛЕГ Ж.",
+      role: "АНИМАТОР МЛАДШЕЙ ГРУППЫ",
+      status: "РАЗЫСКИВАЕТСЯ",
+      note: "Самовольно покинул территорию комплекса.",
+      image: audioAsset("assets/staff/staff/oleg_sad.webp"),
+    },
+    lora: {
+      name: "ЛОРА П.",
+      role: "ОФИЦИАНТКА КРАСНОЙ КОМНАТЫ",
+      status: "АКТИВНА",
+      note: "Укрывает Аниматоров в подсобном помещении.",
+      image: audioAsset("assets/staff/staff/lora_sad.jpg"),
+      dossier: "documents/dossier-laura.html",
+    },
+    kirill: {
+      name: "КИРИЛЛ З.",
+      role: "ТЕСТИРОВЩИК МАРШРУТОВ",
+      status: "ПОВЫШЕН В ДОЛЖНОСТИ",
+      note: "Отдыхает в комнате №312. Знает, где выход.",
+      image: audioAsset("assets/staff/staff/kirill_sad.jpg"),
+      dossier: "documents/dossier-kirill-zaytsev.html",
+    },
+  };
+
+  const staffArtifacts = {
+    "memory-drawing": {
+      code: "IR-0091-01",
+      title: "ВОССТАНОВЛЕННЫЙ ДЕТСКИЙ РИСУНОК",
+      type: "МАТЕРИАЛ ДЕТСКОГО ПРОИСХОЖДЕНИЯ",
+      source: "КУРАТОР 0091-A // ЛИЧНЫЙ ФАЙЛ",
+      description: "Источник изображения не подтверждён. Материал прикреплён к личному делу оператора.",
+      src: curatorMediaAsset("artifacts/memory-drawing.webp"),
+      alt: "Детский рисунок серого здания у леса, Медведя у двери и уходящих взрослых фигур",
+    },
+    "recognition-card": {
+      code: "IR-0091-02",
+      title: "КАРТОЧКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
+      type: "РЕЗУЛЬТАТ РАСПОЗНАВАНИЯ",
+      source: "КУРАТОР 0091-A // КАРТОЧКА 04",
+      description: "Ответ оператора зарегистрирован. Официальная интерпретация изображения может быть назначена позднее.",
+      src: curatorMediaAsset("artifacts/recognition-cat-rabbit.webp"),
+      alt: "Симметричное чернильное пятно, похожее одновременно на кота и кролика",
+    },
+    "irina-private-photo": {
+      code: "IR-0091-03",
+      title: "ЛИЧНЫЙ ФАЙЛ ИРИНЫ В.",
+      type: "НЕСАНКЦИОНИРОВАННАЯ ПЕРЕДАЧА",
+      source: "КУРАТОР 0091-A // ИСХОДЯЩИЙ ФАЙЛ",
+      description: "Файл передан вне утверждённой процедуры кадровой проверки.",
+      src: curatorMediaAsset("artifacts/irina-photobooth-strip.jpg"),
+      alt: "Фотополоса с несколькими кадрами Ирины В.",
+    },
+    "biometric-record": {
+      code: "IR-0091-04",
+      title: "БИОМЕТРИЧЕСКАЯ ЗАГОТОВКА",
+      type: "ВРЕМЕННЫЙ ПРОПУСК",
+      source: "CAPTURE DEVICE 312 // ГЛАВВРАЧ",
+      description: "Изображение оператора повреждено при передаче. Допустимая реконструкция выбирается после назначения.",
+    },
+    assignment: {
+      code: "IR-0091-05",
+      title: "КАДРОВОЕ РЕШЕНИЕ",
+      type: "ИТОГОВОЕ НАЗНАЧЕНИЕ",
+      source: "КУРАТОР 0091-A // СЕАНС 01",
+      description: "Роль оператора внесена в кадровую базу.",
+    },
+  };
+
+  const curatorNodeArtifacts = {
+    "memory-drawing": "memory-drawing",
+    "recognition-card": "recognition-card",
+    "plague-doctor-response": "biometric-record",
+  };
+
   const createCuratorProgress = () => ({
     version: 4,
     curatorId: "0091-A",
@@ -687,6 +780,7 @@
     },
     flags: {},
     files: [],
+    artifacts: [],
     updatedAt: Date.now(),
   });
 
@@ -697,9 +791,140 @@
         return null;
       }
 
+      saved.flags ||= {};
+      saved.files = Array.isArray(saved.files) ? saved.files : [];
+      saved.artifacts = Array.isArray(saved.artifacts) ? saved.artifacts : [];
       return saved;
     } catch {
       return null;
+    }
+  };
+
+  const createStaffProfile = () => ({
+    version: 1,
+    status: "screening",
+    curatorId: "0091-A",
+    role: null,
+    avatarId: null,
+    artifacts: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  });
+
+  const readStaffProfile = () => {
+    try {
+      const profile = JSON.parse(localStorage.getItem(STAFF_PROFILE_KEY));
+      if (!profile || profile.version !== 1 || profile.curatorId !== "0091-A") {
+        return null;
+      }
+
+      profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
+      return profile;
+    } catch {
+      return null;
+    }
+  };
+
+  const saveStaffProfile = (profile) => {
+    profile.updatedAt = Date.now();
+    localStorage.setItem(STAFF_PROFILE_KEY, JSON.stringify(profile));
+    return profile;
+  };
+
+  const getProgressArtifactIds = (progress) => {
+    const artifactIds = new Set(progress?.artifacts || []);
+    const flags = progress?.flags || {};
+
+    if (
+      flags.remembersDrawing ||
+      flags.deniesDrawing ||
+      flags.noticedDrawingBear ||
+      progress?.node === "memory-drawing"
+    ) {
+      artifactIds.add("memory-drawing");
+    }
+
+    if (flags.sawCat || flags.sawRabbit || flags.sawInk || progress?.node === "recognition-card") {
+      artifactIds.add("recognition-card");
+    }
+
+    if (progress?.files?.includes("irina-private-photo")) {
+      artifactIds.add("irina-private-photo");
+    }
+
+    if (
+      flags.refusedPhotoConsent ||
+      flags.askedAboutDoctor ||
+      flags.askedAboutPass ||
+      progress?.node === "plague-doctor-response"
+    ) {
+      artifactIds.add("biometric-record");
+    }
+
+    if (progress?.status === "completed") {
+      artifactIds.add("memory-drawing");
+      artifactIds.add("recognition-card");
+      artifactIds.add("biometric-record");
+      artifactIds.add("assignment");
+    }
+
+    return [...artifactIds].filter((artifactId) => staffArtifacts[artifactId]);
+  };
+
+  const syncStaffProfileFromProgress = (progress) => {
+    if (!progress) return readStaffProfile();
+
+    const profile = readStaffProfile() || createStaffProfile();
+    const wasCompleted = profile.status === "completed";
+
+    if (progress.status === "completed") {
+      profile.status = "completed";
+      profile.role = progress.role || getCuratorAssignment(progress);
+      profile.completedAt ||= progress.completedAt || Date.now();
+    } else if (!wasCompleted) {
+      profile.status = progress.flags?.ageVerified ? "in_progress" : "screening";
+    } else {
+      profile.reclassificationActive = true;
+    }
+
+    const knownArtifacts = new Map(
+      profile.artifacts.map((artifact) => [artifact.id, artifact])
+    );
+    getProgressArtifactIds(progress).forEach((artifactId) => {
+      if (!knownArtifacts.has(artifactId)) {
+        knownArtifacts.set(artifactId, {
+          id: artifactId,
+          obtainedAt: Date.now(),
+        });
+      }
+    });
+    profile.artifacts = [...knownArtifacts.values()];
+
+    return saveStaffProfile(profile);
+  };
+
+  const getStaffProfile = () => {
+    const progress = getCuratorProgress();
+    return progress
+      ? syncStaffProfileFromProgress(progress)
+      : readStaffProfile();
+  };
+
+  const removeTemporaryStaffProfile = () => {
+    const profile = readStaffProfile();
+    if (profile?.status !== "completed") {
+      localStorage.removeItem(STAFF_PROFILE_KEY);
+    } else if (profile.reclassificationActive) {
+      delete profile.reclassificationActive;
+      saveStaffProfile(profile);
+    }
+  };
+
+  const unlockCuratorArtifact = (progress, artifactId) => {
+    if (!staffArtifacts[artifactId]) return;
+    progress.artifacts ||= [];
+    if (!progress.artifacts.includes(artifactId)) {
+      progress.artifacts.push(artifactId);
     }
   };
 
@@ -2440,6 +2665,7 @@
     const saveProgress = () => {
       progress.updatedAt = Date.now();
       localStorage.setItem(CURATOR_CALL_KEY, JSON.stringify(progress));
+      syncStaffProfileFromProgress(progress);
       saveState.textContent = "СОХРАНЕНО";
     };
 
@@ -2722,6 +2948,7 @@
       window.clearTimeout(connectionTimer);
       cancelTextAnimation();
       localStorage.removeItem(CURATOR_CALL_KEY);
+      removeTemporaryStaffProfile();
       video.pause();
       video.hidden = true;
       room.hidden = true;
@@ -2771,6 +2998,7 @@
       progress.status = "completed";
       progress.node = "assignment";
       progress.completedAt = Date.now();
+      unlockCuratorArtifact(progress, "assignment");
       saveProgress();
       playCallTone(760, 0.09);
       closeCall();
@@ -2884,6 +3112,9 @@
     const renderNode = (nodeId) => {
       const node = curatorNodes[nodeId] || curatorNodes.intro;
       progress.node = nodeId;
+      if (curatorNodeArtifacts[nodeId]) {
+        unlockCuratorArtifact(progress, curatorNodeArtifacts[nodeId]);
+      }
       if (nodeId === "assignment") {
         progress.role = getCuratorAssignment(progress);
       }
@@ -3072,6 +3303,335 @@
 
     updateResumeControl();
     soundButton.title = "Включить сигналы и фон канала";
+
+    const resumeRequest = new URLSearchParams(window.location.search).get("resume");
+    if (resumeRequest === "0091-A" && getCuratorProgress()?.status === "in_progress") {
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete("resume");
+      window.history.replaceState({}, "", cleanUrl);
+      window.setTimeout(() => openCall(), 0);
+    }
+  };
+
+  const initStaffRegistry = () => {
+    const grid = document.querySelector("[data-personnel-grid]");
+    const dossier = document.querySelector("[data-personnel-dossier]");
+    const artifactDialog = document.querySelector("[data-personnel-artifact]");
+    if (!grid || !dossier || !artifactDialog || grid.dataset.personnelReady === "true") {
+      return;
+    }
+
+    grid.dataset.personnelReady = "true";
+    const playerCard = grid.querySelector("[data-player-card]");
+    const playerCardStatus = grid.querySelector("[data-player-card-status]");
+    const playerCardAvatar = grid.querySelector("[data-player-card-avatar]");
+    const dossierName = dossier.querySelector("[data-personnel-name]");
+    const dossierRole = dossier.querySelector("[data-personnel-role]");
+    const dossierStatus = dossier.querySelector("[data-personnel-status]");
+    const dossierNote = dossier.querySelector("[data-personnel-note]");
+    const dossierImage = dossier.querySelector("[data-personnel-image]");
+    const dossierPlayerAvatar = dossier.querySelector("[data-personnel-player-avatar]");
+    const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
+    const profilePanel = dossier.querySelector("[data-personnel-profile]");
+    const documentLink = dossier.querySelector("[data-personnel-document]");
+    const documentUnavailable = dossier.querySelector("[data-personnel-document-unavailable]");
+    const requestIdButton = dossier.querySelector("[data-personnel-request-id]");
+    const idResponse = dossier.querySelector("[data-personnel-id-response]");
+    const useIdLink = dossier.querySelector("[data-personnel-use-id]");
+    const resumeLink = dossier.querySelector("[data-player-resume]");
+    const materials = dossier.querySelector("[data-player-materials]");
+    const materialsEmpty = dossier.querySelector("[data-player-materials-empty]");
+    const identification = dossier.querySelector("[data-player-identification]");
+    const identificationCopy = dossier.querySelector("[data-player-identification-copy]");
+    const avatarResponse = dossier.querySelector("[data-player-avatar-response]");
+    const intrusion = dossier.querySelector("[data-personnel-intrusion]");
+    const closeButton = dossier.querySelector("[data-personnel-close]");
+    const intrusionClose = dossier.querySelector("[data-personnel-intrusion-close]");
+    const artifactClose = artifactDialog.querySelector("[data-artifact-close]");
+    const avatarClasses = [
+      "personnel-avatar--pending",
+      "personnel-avatar--overexposed",
+      "personnel-avatar--drawing",
+      "personnel-avatar--mask",
+      "personnel-avatar--empty-chair",
+    ];
+    let activePersonnelKey = null;
+    let activeTrigger = null;
+
+    const setAvatarAppearance = (element, avatarId) => {
+      if (!element) return;
+      element.classList.remove(...avatarClasses);
+      element.classList.add(`personnel-avatar--${avatarId || "pending"}`);
+    };
+
+    const getProfileStatus = (profile) => {
+      if (profile.status === "completed") {
+        return profile.reclassificationActive
+          ? "ДОПУЩЕН // ПОВТОРНАЯ ПРОВЕРКА"
+          : "ДОПУЩЕН";
+      }
+      return profile.status === "in_progress"
+        ? "КУРАТОРСКАЯ ПРОВЕРКА"
+        : "ПРОВЕРКА ДОПУСКА";
+    };
+
+    const getProfileRole = (profile) => {
+      if (profile.role === "volunteer") return "ВОЛОНТЁР";
+      if (profile.role === "animator") return "АНИМАТОР";
+      return "НЕ НАЗНАЧЕНА";
+    };
+
+    const renderPlayerCard = () => {
+      const profile = getStaffProfile();
+      if (!profile) {
+        playerCard.hidden = true;
+        return null;
+      }
+
+      playerCard.hidden = false;
+      playerCardStatus.textContent =
+        profile.status === "completed"
+          ? `${getProfileRole(profile)} // ${getProfileStatus(profile)}`
+          : getProfileStatus(profile);
+      setAvatarAppearance(playerCardAvatar, profile.avatarId);
+      return profile;
+    };
+
+    const renderMaterials = (profile) => {
+      materials.innerHTML = "";
+      const registered = profile.artifacts
+        .map((storedArtifact) => ({
+          stored: storedArtifact,
+          definition: staffArtifacts[storedArtifact.id],
+        }))
+        .filter(({ definition }) => definition);
+
+      materialsEmpty.hidden = registered.length > 0;
+      registered.forEach(({ stored, definition }) => {
+        const button = document.createElement("button");
+        const code = document.createElement("span");
+        const title = document.createElement("strong");
+        const type = document.createElement("small");
+        button.type = "button";
+        button.className = "personnel-material";
+        button.dataset.artifactOpen = stored.id;
+        code.textContent = `ФАЙЛ: ${definition.code}`;
+        title.textContent = definition.title;
+        type.textContent = definition.type;
+        button.append(code, title, type);
+        materials.append(button);
+      });
+    };
+
+    const renderPlayerDossier = (profile) => {
+      dossierName.textContent = "ТЕКУЩИЙ ОПЕРАТОР";
+      dossierRole.textContent = getProfileRole(profile);
+      dossierStatus.textContent = getProfileStatus(profile);
+      dossierNote.textContent =
+        profile.status === "completed"
+          ? "Личное дело сформировано. Назначение и полученные материалы сохранены кадровой системой."
+          : profile.status === "in_progress"
+            ? "Собеседование не завершено. Последний подтверждённый этап доступен для возобновления."
+            : "Личное дело создано автоматически при установке связи с назначенным куратором.";
+      dossierImage.hidden = true;
+      dossierPlayerAvatar.hidden = false;
+      setAvatarAppearance(dossierPlayerAvatar, profile.avatarId);
+      employeeActions.hidden = true;
+      profilePanel.hidden = false;
+      const progress = getCuratorProgress();
+      resumeLink.hidden = progress?.status !== "in_progress";
+      renderMaterials(profile);
+
+      identification.hidden = profile.status !== "completed";
+      identificationCopy.textContent = profile.avatarId
+        ? "ЛИЦО ЗАРЕГИСТРИРОВАНО. ПОВТОРНАЯ ИДЕНТИФИКАЦИЯ ЗАМЕНИТ ТЕКУЩУЮ ЗАПИСЬ."
+        : "ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.";
+      avatarResponse.textContent = "";
+      dossier.querySelectorAll("[data-avatar-choice]").forEach((button) => {
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.avatarChoice === profile.avatarId)
+        );
+      });
+    };
+
+    const readIntrusionState = () => {
+      try {
+        return JSON.parse(sessionStorage.getItem(STAFF_INTRUSION_KEY)) || {
+          key: null,
+          count: 0,
+          alertShown: false,
+        };
+      } catch {
+        return { key: null, count: 0, alertShown: false };
+      }
+    };
+
+    const saveIntrusionState = (state) => {
+      sessionStorage.setItem(STAFF_INTRUSION_KEY, JSON.stringify(state));
+    };
+
+    const prepareIdRequest = (personnelKey) => {
+      const record = staffDirectory[personnelKey];
+      const state = readIntrusionState();
+      if (state.key !== personnelKey) {
+        state.key = personnelKey;
+        state.count = 0;
+        saveIntrusionState(state);
+      }
+
+      requestIdButton.disabled = Boolean(!record.curatorId && state.alertShown);
+      requestIdButton.textContent = requestIdButton.disabled
+        ? "ЗАПРОС ВРЕМЕННО ЗАБЛОКИРОВАН"
+        : "ЗАПРОСИТЬ СЛУЖЕБНЫЙ ID";
+      idResponse.textContent = requestIdButton.disabled
+        ? "ПОВТОРНЫЕ ЗАПРОСЫ ОТКЛОНЕНЫ СИСТЕМОЙ"
+        : "";
+    };
+
+    const openPersonnelDossier = (personnelKey, trigger) => {
+      const profile = personnelKey === "player" ? renderPlayerCard() : null;
+      const record = staffDirectory[personnelKey];
+      if (!profile && !record) return;
+
+      activePersonnelKey = personnelKey;
+      activeTrigger = trigger;
+      intrusion.hidden = true;
+      useIdLink.hidden = true;
+      idResponse.textContent = "";
+
+      if (profile) {
+        renderPlayerDossier(profile);
+      } else {
+        dossierName.textContent = record.name;
+        dossierRole.textContent = record.role;
+        dossierStatus.textContent = record.status;
+        dossierNote.textContent = record.note;
+        dossierImage.src = record.image;
+        dossierImage.alt = `Служебный портрет: ${record.name}`;
+        dossierImage.hidden = false;
+        dossierPlayerAvatar.hidden = true;
+        employeeActions.hidden = false;
+        profilePanel.hidden = true;
+        documentLink.hidden = !record.dossier;
+        documentUnavailable.hidden = Boolean(record.dossier);
+        if (record.dossier) {
+          documentLink.setAttribute("href", record.dossier);
+        } else {
+          documentLink.removeAttribute("href");
+        }
+        prepareIdRequest(personnelKey);
+      }
+
+      if (!dossier.open) {
+        dossier.showModal();
+      }
+      closeButton.focus();
+    };
+
+    const openArtifact = (artifactId) => {
+      const definition = staffArtifacts[artifactId];
+      if (!definition) return;
+
+      artifactDialog.querySelector("[data-artifact-code]").textContent =
+        `ФАЙЛ: ${definition.code}`;
+      artifactDialog.querySelector("[data-artifact-title]").textContent =
+        definition.title;
+      artifactDialog.querySelector("[data-artifact-type]").textContent =
+        definition.type;
+      artifactDialog.querySelector("[data-artifact-source]").textContent =
+        definition.source;
+      artifactDialog.querySelector("[data-artifact-description]").textContent =
+        artifactId === "assignment"
+          ? `${definition.description} Текущая должность: ${getProfileRole(readStaffProfile() || {})}.`
+          : definition.description;
+
+      const image = artifactDialog.querySelector("[data-artifact-image]");
+      image.hidden = !definition.src;
+      if (definition.src) {
+        image.src = definition.src;
+        image.alt = definition.alt || "";
+      } else {
+        image.removeAttribute("src");
+        image.alt = "";
+      }
+
+      artifactDialog.showModal();
+      artifactClose.focus();
+    };
+
+    grid.querySelectorAll("[data-personnel-open]").forEach((button) => {
+      button.addEventListener("click", () => {
+        openPersonnelDossier(button.dataset.personnelOpen, button);
+      });
+    });
+
+    closeButton.addEventListener("click", () => dossier.close());
+    dossier.addEventListener("close", () => {
+      intrusion.hidden = true;
+      activeTrigger?.focus?.();
+    });
+
+    requestIdButton.addEventListener("click", () => {
+      const record = staffDirectory[activePersonnelKey];
+      if (!record || requestIdButton.disabled) return;
+
+      if (record.curatorId) {
+        idResponse.textContent =
+          `СЛУЖЕБНЫЙ ID: ${record.curatorId} // КАНАЛ ДОСТУПЕН`;
+        useIdLink.hidden = false;
+        return;
+      }
+
+      const state = readIntrusionState();
+      if (state.key !== activePersonnelKey) {
+        state.key = activePersonnelKey;
+        state.count = 0;
+      }
+      state.count += 1;
+
+      if (state.count === 1) {
+        idResponse.textContent = "ИДЕНТИФИКАТОР СКРЫТ АДМИНИСТРАЦИЕЙ";
+      } else if (state.count === 2) {
+        idResponse.textContent = "ПОВТОРНЫЙ ЗАПРОС ЗАРЕГИСТРИРОВАН";
+      } else {
+        state.alertShown = true;
+        intrusion.hidden = false;
+        requestIdButton.disabled = true;
+        requestIdButton.textContent = "ЗАПРОС ВРЕМЕННО ЗАБЛОКИРОВАН";
+        playModeSwitchSound();
+        intrusionClose.focus();
+      }
+      saveIntrusionState(state);
+    });
+
+    intrusionClose.addEventListener("click", () => {
+      intrusion.hidden = true;
+      idResponse.textContent = "ЗАПРОС ВРЕМЕННО ЗАБЛОКИРОВАН";
+      requestIdButton.focus();
+    });
+
+    materials.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-artifact-open]");
+      if (button) openArtifact(button.dataset.artifactOpen);
+    });
+
+    artifactClose.addEventListener("click", () => artifactDialog.close());
+
+    dossier.querySelectorAll("[data-avatar-choice]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const profile = readStaffProfile();
+        if (!profile || profile.status !== "completed") return;
+        profile.avatarId = button.dataset.avatarChoice;
+        saveStaffProfile(profile);
+        renderPlayerCard();
+        renderPlayerDossier(profile);
+        avatarResponse.textContent =
+          "ЛИЦО ЗАРЕГИСТРИРОВАНО. ПРЕДЫДУЩЕЕ ИЗОБРАЖЕНИЕ БОЛЬШЕ НЕ СЧИТАЕТСЯ ВАШИМ.";
+      });
+    });
+
+    renderPlayerCard();
   };
 
   const initDOMListeners = () => {
@@ -3085,6 +3645,7 @@
     initCopyButtons();
     initCinemaTicket();
     initCuratorCall();
+    initStaffRegistry();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
@@ -3303,7 +3864,13 @@
     if (!link) return;
     
     const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("http") || link.getAttribute("target") === "_blank") {
+    if (
+      !href ||
+      href.startsWith("#") ||
+      href.startsWith("http") ||
+      link.getAttribute("target") === "_blank" ||
+      link.hasAttribute("data-full-navigation")
+    ) {
       return;
     }
 

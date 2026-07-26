@@ -77,35 +77,163 @@
           </div>
         </section>
 
-        <section class="staff-content">
-          <h2>Кадровая база: внутренний доступ</h2>
-          <div class="grid">
-            <article class="card">
-              <img src="assets/staff/staff/irina_sad.jpg" alt="ID: 0091-A" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;" />
-              <h3>ID: 0091-A</h3>
-              <p>Статус: активен. Замечания: склонен к импровизации, наблюдать.</p>
+        <section class="staff-content personnel-registry" aria-labelledby="personnel-registry-heading">
+          <p class="personnel-registry__kicker">TYNDEX HR // PERSONNEL INDEX</p>
+          <h2 id="personnel-registry-heading">Кадровая база: внутренний доступ</h2>
+          <p class="personnel-registry__instruction">Выберите портрет для доступа к краткой кадровой карточке.</p>
+          <div class="personnel-registry__grid" data-personnel-grid>
+            <article class="personnel-card personnel-card--operator" data-player-card hidden>
+              <button class="personnel-card__button" type="button" data-personnel-open="player">
+                <span class="personnel-card__portrait personnel-avatar personnel-avatar--pending" data-player-card-avatar aria-hidden="true"></span>
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">ТЕКУЩИЙ ОПЕРАТОР</span>
+                  <strong data-player-card-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
+                  <span data-player-card-status>ЛИЧНОЕ ДЕЛО ФОРМИРУЕТСЯ</span>
+                  <small>ОТКРЫТЬ ЛИЧНОЕ ДЕЛО</small>
+                </span>
+              </button>
             </article>
-            <article class="card">
-              <img src="assets/staff/staff/pavel_sad.jpg" alt="ID: 0144-C" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;" />
-              <h3>ID: 0144-C</h3>
-              <p>Статус: перемещен. Замечания: запросил увольнение трижды.</p>
+
+            <article class="personnel-card">
+              <button class="personnel-card__button" type="button" data-personnel-open="irina">
+                <img class="personnel-card__portrait" src="assets/staff/staff/irina_sad.jpg" alt="Ирина В. в служебной оболочке Медведя" />
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">КАДРОВАЯ ЗАПИСЬ</span>
+                  <strong>ИРИНА В.</strong>
+                  <span>Куратор детских маршрутов</span>
+                  <small>ОТКРЫТЬ ДОСЬЕ</small>
+                </span>
+              </button>
             </article>
-            <article class="card">
-              <img src="assets/staff/staff/oleg_sad.webp" alt="ID: 0192-D" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;" />
-              <h3>ID: 0192-D</h3>
-              <p>Статус: разыскивается. Замечания: Самовольно покинул территорию комплекса</p>
+
+            <article class="personnel-card">
+              <button class="personnel-card__button" type="button" data-personnel-open="pavel">
+                <img class="personnel-card__portrait" src="assets/staff/staff/pavel_sad.jpg" alt="Павел К. в служебной оболочке Кота" />
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">КАДРОВАЯ ЗАПИСЬ</span>
+                  <strong>ПАВЕЛ К.</strong>
+                  <span>Оператор кабинок обозрения</span>
+                  <small>ОТКРЫТЬ ДОСЬЕ</small>
+                </span>
+              </button>
             </article>
-            <article class="card">
-              <img src="assets/staff/staff/lora_sad.jpg" alt="ID: 0208-E" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;" />
-              <h3>ID: 0208-E</h3>
-              <p>Статус: активен. Замечания: укрывает аниматоров в подсобке.</p>
+
+            <article class="personnel-card">
+              <button class="personnel-card__button" type="button" data-personnel-open="oleg">
+                <img class="personnel-card__portrait" src="assets/staff/staff/oleg_sad.webp" alt="Олег Ж. в тёмной служебной оболочке" />
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">КАДРОВАЯ ЗАПИСЬ</span>
+                  <strong>ОЛЕГ Ж.</strong>
+                  <span>Аниматор младшей группы</span>
+                  <small>ОТКРЫТЬ ДОСЬЕ</small>
+                </span>
+              </button>
             </article>
-            <article class="card">
-              <img src="assets/staff/staff/kirill_sad.jpg" alt="ID: 0422-X" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;" />
-              <h3>ID: 0422-X</h3>
-              <p>Статус: повышен в должности, отдыхает в комнате №312. Замечания: Прыгает высоко, бегает далеко. Знает, где выход.</p>
+
+            <article class="personnel-card">
+              <button class="personnel-card__button" type="button" data-personnel-open="lora">
+                <img class="personnel-card__portrait" src="assets/staff/staff/lora_sad.jpg" alt="Лора П. в форме кафе Красная Комната" />
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">КАДРОВАЯ ЗАПИСЬ</span>
+                  <strong>ЛОРА П.</strong>
+                  <span>Официантка Красной Комнаты</span>
+                  <small>ОТКРЫТЬ ДОСЬЕ</small>
+                </span>
+              </button>
+            </article>
+
+            <article class="personnel-card">
+              <button class="personnel-card__button" type="button" data-personnel-open="kirill">
+                <img class="personnel-card__portrait" src="assets/staff/staff/kirill_sad.jpg" alt="Кирилл З. в служебной оболочке Зайца" />
+                <span class="personnel-card__body">
+                  <span class="personnel-card__label">КАДРОВАЯ ЗАПИСЬ</span>
+                  <strong>КИРИЛЛ З.</strong>
+                  <span>Тестировщик маршрутов</span>
+                  <small>ОТКРЫТЬ ДОСЬЕ</small>
+                </span>
+              </button>
             </article>
           </div>
+
+          <dialog class="personnel-dossier" data-personnel-dossier aria-labelledby="personnel-dossier-title">
+            <div class="personnel-dossier__panel">
+              <header class="personnel-dossier__header">
+                <div>
+                  <p>TYNDEX HR // КАДРОВАЯ КАРТОЧКА</p>
+                  <h2 id="personnel-dossier-title" data-personnel-name>СОТРУДНИК</h2>
+                </div>
+                <button class="personnel-dossier__close" type="button" data-personnel-close>ЗАКРЫТЬ</button>
+              </header>
+
+              <div class="personnel-dossier__identity">
+                <img data-personnel-image alt="" />
+                <span class="personnel-avatar personnel-avatar--pending" data-personnel-player-avatar hidden aria-hidden="true"></span>
+                <div>
+                  <p><span>ДОЛЖНОСТЬ:</span> <strong data-personnel-role>НЕ НАЗНАЧЕНА</strong></p>
+                  <p><span>СТАТУС:</span> <strong data-personnel-status>НЕ ОПРЕДЕЛЁН</strong></p>
+                </div>
+              </div>
+
+              <p class="personnel-dossier__note" data-personnel-note></p>
+
+              <section class="personnel-dossier__employee-actions" data-personnel-employee-actions>
+                <a class="personnel-dossier__action" data-personnel-document rel="nofollow">ОТКРЫТЬ ПОЛНОЕ ДОСЬЕ</a>
+                <p class="personnel-dossier__unavailable" data-personnel-document-unavailable>ПОЛНОЕ ДОСЬЕ НЕ ОЦИФРОВАНО<br /><small>ДОСТУПНА ТОЛЬКО КРАТКАЯ КАДРОВАЯ КАРТОЧКА</small></p>
+                <button class="personnel-dossier__action" type="button" data-personnel-request-id>ЗАПРОСИТЬ СЛУЖЕБНЫЙ ID</button>
+                <p class="personnel-dossier__response" data-personnel-id-response role="status" aria-live="polite"></p>
+                <a class="personnel-dossier__action" href="hiring.html" data-personnel-use-id hidden>ПЕРЕЙТИ К КАНАЛУ НАЙМА</a>
+              </section>
+
+              <section class="personnel-profile" data-personnel-profile hidden>
+                <div class="personnel-profile__actions">
+                  <a class="personnel-dossier__action" href="hiring.html?resume=0091-A" data-player-resume data-full-navigation hidden>ВОЗОБНОВИТЬ СЕАНС</a>
+                </div>
+                <section aria-labelledby="personnel-materials-title">
+                  <h3 id="personnel-materials-title">МАТЕРИАЛЫ ЛИЧНОГО ДЕЛА</h3>
+                  <p data-player-materials-empty>МАТЕРИАЛЫ НЕ ЗАРЕГИСТРИРОВАНЫ</p>
+                  <div class="personnel-materials" data-player-materials></div>
+                </section>
+                <section data-player-identification hidden aria-labelledby="personnel-identification-title">
+                  <h3 id="personnel-identification-title">ИДЕНТИФИКАЦИЯ</h3>
+                  <p data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
+                  <div class="personnel-avatar-options">
+                    <button type="button" data-avatar-choice="overexposed"><span class="personnel-avatar personnel-avatar--overexposed" aria-hidden="true"></span>ЗАСВЕЧЕННОЕ ЛИЦО</button>
+                    <button type="button" data-avatar-choice="drawing"><span class="personnel-avatar personnel-avatar--drawing" aria-hidden="true"></span>ДЕТСКИЙ РИСУНОК</button>
+                    <button type="button" data-avatar-choice="mask"><span class="personnel-avatar personnel-avatar--mask" aria-hidden="true"></span>СЛУЖЕБНАЯ МАСКА</button>
+                    <button type="button" data-avatar-choice="empty-chair"><span class="personnel-avatar personnel-avatar--empty-chair" aria-hidden="true"></span>ПУСТОЕ КРЕСЛО</button>
+                  </div>
+                  <p class="personnel-dossier__response" data-player-avatar-response role="status" aria-live="polite"></p>
+                </section>
+              </section>
+
+              <div class="personnel-intrusion" data-personnel-intrusion hidden role="alert">
+                <p>СИСТЕМНОЕ ПРЕДУПРЕЖДЕНИЕ</p>
+                <strong>ОБНАРУЖЕНА ПОПЫТКА ВЗЛОМА РЕЕСТРА</strong>
+                <span>ЛИЧНОСТЬ ОПЕРАТОРА СОХРАНЕНА.<br />НЕ ПОКИДАЙТЕ РАБОЧЕЕ МЕСТО.</span>
+                <button type="button" data-personnel-intrusion-close>ПОДТВЕРДИТЬ</button>
+              </div>
+            </div>
+          </dialog>
+
+          <dialog class="personnel-artifact" data-personnel-artifact aria-labelledby="personnel-artifact-title">
+            <div class="personnel-artifact__panel">
+              <header>
+                <div>
+                  <p data-artifact-code>ФАЙЛ</p>
+                  <h2 id="personnel-artifact-title" data-artifact-title>МАТЕРИАЛ</h2>
+                </div>
+                <button type="button" data-artifact-close>ЗАКРЫТЬ</button>
+              </header>
+              <img data-artifact-image alt="" hidden />
+              <dl>
+                <div><dt>ТИП</dt><dd data-artifact-type></dd></div>
+                <div><dt>ИСТОЧНИК</dt><dd data-artifact-source></dd></div>
+                <div><dt>ПОЛУЧЕН</dt><dd>СЕАНС 01</dd></div>
+                <div><dt>ДОСТУП</dt><dd>ЛИЧНОЕ ДЕЛО ОПЕРАТОРА</dd></div>
+              </dl>
+              <p data-artifact-description></p>
+            </div>
+          </dialog>
         </section>
       </main>
 
