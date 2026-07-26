@@ -850,6 +850,10 @@ body.staff-mode .personnel-card__button {
     repeating-linear-gradient(0deg, rgba(77, 255, 105, 0.025) 0 1px, transparent 1px 5px);
 }
 
+.personnel-dossier__panel {
+  align-content: start;
+}
+
 .personnel-dossier__header,
 .personnel-artifact__panel > header {
   display: flex;
@@ -900,18 +904,25 @@ body.staff-mode .personnel-artifact button,
 
 .personnel-dossier__identity {
   display: grid;
-  grid-template-columns: minmax(8rem, 11rem) 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   align-items: start;
 }
 
-.personnel-dossier__identity img {
+.personnel-dossier__recording {
+  display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 12 / 5;
   border: 1px solid #397a49;
   border-radius: 4px;
   object-fit: cover;
-  object-position: center 24%;
+  object-position: center;
+  background: #010502;
+  filter: saturate(0.88) contrast(1.04);
+}
+
+.personnel-dossier__recording[hidden] {
+  display: none;
 }
 
 .personnel-dossier__identity p {
@@ -1197,6 +1208,19 @@ body.staff-mode .personnel-intrusion button {
   margin: 0;
 }
 
+@media (min-width: 761px) {
+  .personnel-dossier {
+    inset: 50% auto auto 50%;
+    height: auto;
+    max-height: calc(100dvh - 3rem);
+    margin: 0;
+    border: 1px solid #397a49;
+    border-radius: 7px;
+    box-shadow: 0 18px 54px rgba(0, 0, 0, 0.76);
+    transform: translate(-50%, -50%);
+  }
+}
+
 @keyframes personnel-intrusion-in {
   0% {
     clip-path: inset(0 0 82% 0);
@@ -1250,7 +1274,8 @@ body.staff-mode .personnel-intrusion button {
   }
 
   .personnel-dossier__identity {
-    grid-template-columns: 7rem 1fr;
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
   }
 
   .personnel-materials,

@@ -676,6 +676,7 @@
       status: "АКТИВЕН",
       note: "Склонна к импровизации. Рекомендовано наблюдение за служебным каналом.",
       image: audioAsset("assets/staff/staff/irina_sad.jpg"),
+      headerImage: audioAsset("assets/staff/personnel/irina-record.webp"),
       curatorId: "0091-A",
     },
     pavel: {
@@ -684,6 +685,7 @@
       status: "ПЕРЕМЕЩЁН",
       note: "Запросил увольнение трижды. Текущее место регистрации не раскрывается.",
       image: audioAsset("assets/staff/staff/pavel_sad.jpg"),
+      headerImage: audioAsset("assets/staff/personnel/pavel-record.webp"),
     },
     oleg: {
       name: "ОЛЕГ Ж.",
@@ -691,6 +693,7 @@
       status: "РАЗЫСКИВАЕТСЯ",
       note: "Самовольно покинул территорию комплекса.",
       image: audioAsset("assets/staff/staff/oleg_sad.webp"),
+      headerImage: audioAsset("assets/staff/personnel/oleg-record.webp"),
     },
     lora: {
       name: "ЛОРА П.",
@@ -698,6 +701,7 @@
       status: "АКТИВНА",
       note: "Укрывает Аниматоров в подсобном помещении.",
       image: audioAsset("assets/staff/staff/lora_sad.jpg"),
+      headerImage: audioAsset("assets/staff/personnel/laura-record.webp"),
       dossier: "documents/dossier-laura.html",
     },
     kirill: {
@@ -706,6 +710,7 @@
       status: "ПОВЫШЕН В ДОЛЖНОСТИ",
       note: "Отдыхает в комнате №312. Знает, где выход.",
       image: audioAsset("assets/staff/staff/kirill_sad.jpg"),
+      headerImage: audioAsset("assets/staff/personnel/kirill-record.webp"),
       dossier: "documents/dossier-kirill-zaytsev.html",
     },
   };
@@ -3502,7 +3507,7 @@
     const dossierRole = dossier.querySelector("[data-personnel-role]");
     const dossierStatus = dossier.querySelector("[data-personnel-status]");
     const dossierNote = dossier.querySelector("[data-personnel-note]");
-    const dossierImage = dossier.querySelector("[data-personnel-image]");
+    const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
     const documentLink = dossier.querySelector("[data-personnel-document]");
@@ -3605,7 +3610,9 @@
           : profile.status === "in_progress"
             ? "Собеседование не завершено. Последний подтверждённый этап доступен для возобновления."
             : "Личное дело создано автоматически при установке связи с назначенным куратором.";
-      dossierImage.hidden = true;
+      dossierHeaderImage.hidden = true;
+      dossierHeaderImage.removeAttribute("src");
+      dossierHeaderImage.alt = "";
       employeeActions.hidden = true;
       profilePanel.hidden = false;
       const progress = getCuratorProgress();
@@ -3677,9 +3684,9 @@
         dossierRole.textContent = record.role;
         dossierStatus.textContent = record.status;
         dossierNote.textContent = record.note;
-        dossierImage.src = record.image;
-        dossierImage.alt = `Служебный портрет: ${record.name}`;
-        dossierImage.hidden = false;
+        dossierHeaderImage.src = record.headerImage;
+        dossierHeaderImage.alt = `Регистрационная фотополоса сотрудника ${record.name}: анфас и профиль`;
+        dossierHeaderImage.hidden = false;
         employeeActions.hidden = false;
         profilePanel.hidden = true;
         documentLink.hidden = !record.dossier;
