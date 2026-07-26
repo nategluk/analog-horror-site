@@ -662,10 +662,69 @@
   const curatorMediaAsset = (filename) =>
     audioAsset(`assets/staff/curators/irina/${filename}`);
 
+  const curatorRewardCopy = {
+    "animator-postcard": {
+      title: "ОБОРОТНАЯ СТОРОНА",
+      lines: [
+        "Мне почему-то кажется, что мы ещё увидимся.",
+        "12 августа у меня день рождения.",
+        "Приходи в парк «Солнышко».",
+        "Мне опять не с кем праздновать.",
+      ],
+      stamp: "ПАРК «СОЛНЫШКО» // 12.08.26",
+    },
+    "volunteer-leaflet": {
+      title: "ВЕРНИ СЕБЕ ДЕТСТВО",
+      lines: [
+        "Волонтёрская программа младшей группы.",
+        "Помогая детям, вы снова сможете стать частью праздника.",
+        "Маска выдаётся при предъявлении этой листовки.",
+      ],
+      stamp: "НЕ ТЕРЯТЬ // ПОВТОРНАЯ ВЫДАЧА НЕ ПРЕДУСМОТРЕНА",
+    },
+  };
+
+  const renderArtifactCopy = (container, copy) => {
+    if (!container) return;
+
+    container.replaceChildren();
+    container.hidden = !copy;
+    if (!copy) return;
+
+    const title = document.createElement("h3");
+    title.textContent = copy.title;
+    container.append(title);
+
+    copy.lines.forEach((line) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = line;
+      container.append(paragraph);
+    });
+
+    if (copy.stamp) {
+      const stamp = document.createElement("footer");
+      stamp.textContent = copy.stamp;
+      container.append(stamp);
+    }
+  };
+
   const curatorFiles = {
     "irina-private-photo": {
       src: curatorMediaAsset("artifacts/irina-photobooth-strip.jpg"),
       downloadName: "IRINA_PRIVATE_01.jpg",
+      alt: "Фотополоска Ирины из торгового центра",
+    },
+    "animator-postcard": {
+      src: curatorMediaAsset("artifacts/zhmuriki-postcard.webp"),
+      downloadName: "IRINA_POSTCARD_01.webp",
+      alt: "Печатная открытка с тремя Жмуриками в пустом цветочном парке под солнцем-глазом",
+      copy: curatorRewardCopy["animator-postcard"],
+    },
+    "volunteer-leaflet": {
+      src: curatorMediaAsset("artifacts/return-your-childhood-leaflet.webp"),
+      downloadName: "VOLUNTEER_PROGRAM_01.webp",
+      alt: "Потёртая листовка программы «Верни себе детство» с пластиковой маской младенца",
+      copy: curatorRewardCopy["volunteer-leaflet"],
     },
   };
 
@@ -796,6 +855,28 @@
       description: "Файл передан вне утверждённой процедуры кадровой проверки.",
       src: curatorMediaAsset("artifacts/irina-photobooth-strip.jpg"),
       alt: "Фотополоса с несколькими кадрами Ирины В.",
+    },
+    "animator-postcard": {
+      code: "IR-0091-12",
+      title: "ОТКРЫТКА БЕЗ ОБРАТНОГО АДРЕСА",
+      type: "ЛИЧНАЯ КОРРЕСПОНДЕНЦИЯ",
+      source: "КУРАТОР 0091-A // ПРИЛОЖЕНИЕ К НАЗНАЧЕНИЮ",
+      description: "Открытка прикреплена к назначению Аниматора. Обратный адрес отсутствует.",
+      src: curatorMediaAsset("artifacts/zhmuriki-postcard.webp"),
+      alt: "Печатная открытка с тремя Жмуриками в пустом цветочном парке под солнцем-глазом",
+      downloadName: "IRINA_POSTCARD_01.webp",
+      copy: curatorRewardCopy["animator-postcard"],
+    },
+    "volunteer-leaflet": {
+      code: "IR-0091-13",
+      title: "ЛИСТОВКА «ВЕРНИ СЕБЕ ДЕТСТВО»",
+      type: "ПРЕДМЕТ СЛЕДУЮЩЕГО МАРШРУТА",
+      source: "ВОЛОНТЁРСКАЯ ПРОГРАММА // МЛАДШАЯ ГРУППА",
+      description: "Листовка признана действующей. Предъявить при повторном назначении.",
+      src: curatorMediaAsset("artifacts/return-your-childhood-leaflet.webp"),
+      alt: "Потёртая листовка программы «Верни себе детство» с пластиковой маской младенца",
+      downloadName: "VOLUNTEER_PROGRAM_01.webp",
+      copy: curatorRewardCopy["volunteer-leaflet"],
     },
     "biometric-record": {
       code: "IR-0091-04",
@@ -2767,6 +2848,80 @@
       },
       choices: [
         {
+          label: "ПРОВЕРИТЬ ЛИЧНОЕ ВЛОЖЕНИЕ",
+          next: "reward-offer",
+        },
+      ],
+    },
+    "reward-offer": {
+      step: "ПЕРСОНАЛЬНЫЙ МАТЕРИАЛ",
+      media: "state-confidential",
+      feedState: "ОЖИДАЕТ ПОЛУЧЕНИЯ",
+      signal: 58,
+      speaker: "СИСТЕМА",
+      text: (progress) =>
+        getCuratorAssignment(progress) === "volunteer"
+          ? "К назначению прикреплена листовка программы «Верни себе детство». Получение материала считается добровольным."
+          : "К назначению прикреплена личная открытка от куратора 0091-A. Получение материала считается добровольным.",
+      choices: (progress) => {
+        const isVolunteer = getCuratorAssignment(progress) === "volunteer";
+        const artifactId = isVolunteer
+          ? "volunteer-leaflet"
+          : "animator-postcard";
+        return [
+          {
+            label: isVolunteer
+              ? "ПРИНЯТЬ ЛИСТОВКУ"
+              : "ПРИНЯТЬ ОТКРЫТКУ",
+            effect: {
+              flags: {
+                acceptedRoleReward: true,
+                declinedRoleReward: false,
+              },
+              artifacts: [artifactId],
+            },
+            downloadFile: artifactId,
+            next: "reward-accepted",
+          },
+          {
+            label: "НЕ ПРИНИМАТЬ",
+            effect: {
+              flags: {
+                acceptedRoleReward: false,
+                declinedRoleReward: true,
+              },
+              artifacts: [artifactId],
+            },
+            next: "reward-declined",
+          },
+        ];
+      },
+    },
+    "reward-accepted": {
+      step: "МАТЕРИАЛ ПОЛУЧЕН",
+      media: "state-confidential",
+      feedState: "КОПИЯ СОХРАНЕНА",
+      signal: 63,
+      speaker: "СИСТЕМА",
+      text:
+        "Материал сохранён. Открой STAFF → ТЕКУЩИЙ ОПЕРАТОР → МАТЕРИАЛЫ ЛИЧНОГО ДЕЛА.",
+      choices: [
+        {
+          label: "ЗАВЕРШИТЬ ИНСТРУКТАЖ",
+          complete: true,
+        },
+      ],
+    },
+    "reward-declined": {
+      step: "ОТКАЗ ЗАРЕГИСТРИРОВАН",
+      media: "state-confidential",
+      feedState: "РЕЗЕРВНАЯ КОПИЯ СОХРАНЕНА",
+      signal: 63,
+      speaker: "СИСТЕМА",
+      text:
+        "Отказ зарегистрирован. Резервная копия оставлена в STAFF → ТЕКУЩИЙ ОПЕРАТОР → МАТЕРИАЛЫ ЛИЧНОГО ДЕЛА.",
+      choices: [
+        {
           label: "ЗАВЕРШИТЬ ИНСТРУКТАЖ",
           complete: true,
         },
@@ -2786,6 +2941,9 @@
       if (!progress.files.includes(fileId)) {
         progress.files.push(fileId);
       }
+    });
+    (effect.artifacts || []).forEach((artifactId) => {
+      unlockCuratorArtifact(progress, artifactId);
     });
   };
 
@@ -2835,6 +2993,7 @@
     const soundButton = modal.querySelector("[data-curator-sound]");
     const fileViewer = modal.querySelector("[data-curator-file-viewer]");
     const fileImage = modal.querySelector("[data-curator-file-image]");
+    const fileCopy = modal.querySelector("[data-curator-file-copy]");
     const fileName = modal.querySelector("[data-curator-file-name]");
     const fileDownload = modal.querySelector("[data-curator-file-download]");
     const fileClose = modal.querySelector("[data-curator-file-close]");
@@ -3143,6 +3302,8 @@
       fileViewerPreviousFocus = document.activeElement;
       pendingFileNext = nextNode;
       fileImage.src = file.src;
+      fileImage.alt = file.alt || "";
+      renderArtifactCopy(fileCopy, file.copy);
       fileName.textContent = file.downloadName;
       fileDownload.href = file.src;
       fileDownload.download = file.downloadName;
@@ -3633,6 +3794,8 @@
     const closeButton = dossier.querySelector("[data-personnel-close]");
     const intrusionClose = dossier.querySelector("[data-personnel-intrusion-close]");
     const artifactClose = artifactDialog.querySelector("[data-artifact-close]");
+    const artifactCopy = artifactDialog.querySelector("[data-artifact-copy]");
+    const artifactDownload = artifactDialog.querySelector("[data-artifact-download]");
     const avatarClasses = [
       "personnel-avatar--pending",
       "personnel-avatar--overexposed",
@@ -3838,6 +4001,16 @@
       } else {
         image.removeAttribute("src");
         image.alt = "";
+      }
+
+      renderArtifactCopy(artifactCopy, definition.copy);
+      artifactDownload.hidden = !definition.downloadName || !definition.src;
+      if (definition.downloadName && definition.src) {
+        artifactDownload.href = definition.src;
+        artifactDownload.download = definition.downloadName;
+      } else {
+        artifactDownload.removeAttribute("href");
+        artifactDownload.removeAttribute("download");
       }
 
       artifactDialog.showModal();
