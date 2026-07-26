@@ -1495,6 +1495,7 @@
     "rapport-response": {
       step: "КАНАЛ 0091-A // КОНТАКТ",
       media: "intrusion-disco-room",
+      sound: "disco-room-music",
       feedState: "НЕЗАПЛАНИРОВАННОЕ ОСВЕЩЕНИЕ",
       signal: 31,
       speaker: "ИРИНА В.",
@@ -2091,6 +2092,7 @@
     "costume-test": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9",
       media: "state-neutral",
+      sound: "baby-cry-costume",
       speaker: "ИРИНА В.",
       text:
         "Во время смены из соседнего костюма слышен плач. Согласно записям, костюм не занят. Что ты сделаешь?",
@@ -2414,6 +2416,7 @@
     "cycle-history-three": {
       step: "ЦИКЛ СОТРУДНИКА // ОТКЛОНЕНИЕ",
       media: "intrusion-help-sign",
+      sound: "muffled-help",
       feedState: "НЕУЧТЁННЫЙ СОТРУДНИК",
       signal: 27,
       speaker: "ИРИНА В.",
@@ -3063,6 +3066,18 @@
       "aroma-airflow": {
         src: "assets/audio/curator/sfx/aroma-airflow.mp3",
         volume: 0.52,
+      },
+      "baby-cry-costume": {
+        src: "assets/audio/curator/sfx/baby-cry-costume.mp3",
+        volume: 0.82,
+      },
+      "disco-room-music": {
+        src: "assets/audio/curator/sfx/disco-room-music.mp3",
+        volume: 0.9,
+      },
+      "muffled-help": {
+        src: "assets/audio/curator/sfx/muffled-help.mp3",
+        volume: 0.88,
       },
       "plague-doctor-string-sting": {
         src: "assets/audio/curator/sfx/plague-doctor-string-sting.mp3",

@@ -22,10 +22,13 @@ Web-ready media for curator `0091-A`.
   the interface effect.
 - `intrusion-disco-room.mp4` interrupts the early rapport sequence. Hold choices
   until the normal lighting returns, then let the player ask what happened.
+  Its opt-in foreground audio is `assets/audio/curator/sfx/disco-room-music.mp3`.
 - `intrusion-help-sign.mp4` replaces the static Irina state during the line
   about accepting her parents' decision. Do not add a separate explanation:
   the existing `НЕ БУДУ ЗАБЫВАТЬ` and `ХОРОШО` choices answer both Irina and
-  the figure behind her.
+  the figure behind her. Its opt-in foreground audio is the two-second
+  murmur in `assets/audio/curator/sfx/muffled-help.mp3`; the file includes a
+  1.5-second pre-roll matching the figure's delayed appearance.
 - The `artifacts/` directory contains still channel interruptions, materials
   saved to the player's personnel file, and Irina's optional downloadable
   private photograph. WebP assets retain their generated square resolution
