@@ -1494,12 +1494,30 @@
     },
     "rapport-response": {
       step: "КАНАЛ 0091-A // КОНТАКТ",
-      media: "state-warm",
+      media: "intrusion-disco-room",
+      feedState: "НЕЗАПЛАНИРОВАННОЕ ОСВЕЩЕНИЕ",
+      signal: 31,
       speaker: "ИРИНА В.",
       text: (progress) =>
         progress.flags.reassuredIrina
           ? "Хорошо. Я иногда проверяю. Здесь легко не заметить, что собеседник уже ушёл."
           : "Привыкать тоже считается. В Центре это почти дружба.",
+      glitchIn: true,
+      delayChoicesUntilEnd: true,
+      choices: [
+        {
+          label: "ЧТО ЭТО БЫЛО?",
+          next: "disco-response",
+        },
+      ],
+    },
+    "disco-response": {
+      step: "КАНАЛ 0091-A // КОНТАКТ",
+      media: "state-warm",
+      feedState: "ПРЯМОЙ КАНАЛ",
+      signal: 64,
+      speaker: "ИРИНА В.",
+      text: "Не знаю. В «Детском жире» всегда так.",
       choices: [
         {
           label: "ПРОВЕРЬ, КТО Я",
@@ -2322,7 +2340,7 @@
       speaker: "ИРИНА В.",
       text: (progress) => {
         if (progress.flags.askedJellyFlavor) {
-          return "Клубничный. Наверное. На крышке нарисована клубника. После него легче помнить только хорошие правила.";
+          return "Как детство. Сложно объяснить. Только не моё, наверное. На крышке другой ребёнок.";
         }
 
         if (progress.flags.questionedJelly) {
@@ -2395,10 +2413,14 @@
     },
     "cycle-history-three": {
       step: "ЦИКЛ СОТРУДНИКА // ОТКЛОНЕНИЕ",
-      media: "state-alarmed",
+      media: "intrusion-help-sign",
+      feedState: "НЕУЧТЁННЫЙ СОТРУДНИК",
+      signal: 27,
       speaker: "ИРИНА В.",
       text:
         "Родители устроили меня на работу. Здесь безопаснее, чем дома. Я не должна сомневаться в их решении. Забудь.",
+      glitchIn: true,
+      delayChoicesUntilEnd: true,
       choices: [
         {
           label: "НЕ БУДУ ЗАБЫВАТЬ",

@@ -82,6 +82,18 @@
     }
   },
   "interruptions": {
+    "disco-room": {
+      "video": "intrusion-disco-room.mp4",
+      "poster": "intrusion-disco-room-poster.webp",
+      "playback": "once-hold",
+      "durationSeconds": 10
+    },
+    "help-sign": {
+      "video": "intrusion-help-sign.mp4",
+      "poster": "intrusion-help-sign-poster.webp",
+      "playback": "once-hold",
+      "durationSeconds": 10
+    },
     "plague-doctor-camera": {
       "video": "intrusion-plague-doctor-camera.mp4",
       "poster": "intrusion-plague-doctor-camera-poster.webp",
