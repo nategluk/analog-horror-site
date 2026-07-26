@@ -3133,6 +3133,12 @@ body.curator-call-open {
   text-align: center;
 }
 
+.curator-call__controls button.is-tutorial-cue {
+  border-color: #92ffa1;
+  color: #e9ffec;
+  animation: curator-sound-cue 1.4s ease-in-out infinite;
+}
+
 .curator-call__controls button:disabled {
   cursor: not-allowed;
   opacity: 0.38;
@@ -3294,6 +3300,18 @@ body.curator-call-open {
 
 @keyframes curator-live-pulse {
   50% { opacity: 0.32; }
+}
+
+@keyframes curator-sound-cue {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(113, 255, 137, 0);
+    background: #07170b;
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(113, 255, 137, 0.3);
+    background: #102916;
+  }
 }
 
 @keyframes curator-signal-noise {

@@ -1127,6 +1127,7 @@
       [progress.flags.obeyedNoise, "Ты не стал смотреть, когда я попросила."],
       [progress.flags.silentForBear, "Ты промолчал перед пустой комнатой."],
       [progress.flags.delegatedRole, "Ты разрешил мне выбрать роль за тебя."],
+      [progress.flags.favoriteShowZhmuriki, "Ты назвал «Жмурики» любимой передачей."],
     ];
     const volunteerCallbacks = [
       [progress.flags.searchedForParents, "Ты ушёл искать тех, кто обещал вернуться."],
@@ -1139,6 +1140,8 @@
       [progress.flags.askedAboutGuide, "Ты спросил о Проводнице после запрета."],
       [progress.flags.askedAboutVolunteer, "Ты первым делом уточнил правила Волонтёров."],
       [progress.flags.questionedAge, "Ты проверял даже служебные вопросы."],
+      [progress.flags.favoriteShowUlybarych, "Ты выбрал «Дядю Улыбарыча» до включения архива."],
+      [progress.flags.outgrewChildrensShows, "Ты решил, что детские передачи больше не для тебя."],
     ];
     const selected = (role === "animator" ? animatorCallbacks : volunteerCallbacks)
       .filter(([active]) => active)
@@ -1162,7 +1165,68 @@
       media: "state-neutral",
       speaker: "ИРИНА В.",
       text:
-        "Ты меня видишь? Хорошо. Я Ирина, куратор детских маршрутов. Этот канал — только для бывших детей. Тебе уже восемнадцать?",
+        "Ты меня слышишь? Нет. Правильно. Я здесь буквами. Но комнату можно включить.",
+      choices: [
+        {
+          label: "КОМНАТУ?",
+          next: "sound-prompt",
+        },
+      ],
+    },
+    "sound-prompt": {
+      step: "ПРОВЕРКА КАНАЛА // ЗВУК",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.enabledSoundAtIntro
+          ? "Уже нашёл. Вот. Теперь ты слышишь не меня. Это комната."
+          : "Внизу написано «ЗВУК». Можешь нажать. Не включай, если боишься услышать комнату. Ха-ха.",
+      choices: (progress) =>
+        progress.flags.enabledSoundAtIntro
+          ? [
+              {
+                label: "ПРОДОЛЖИТЬ",
+                next: "age-check",
+              },
+            ]
+          : [
+              {
+                label: "ОСТАВИТЬ ТИШИНУ",
+                next: "sound-silent-response",
+                effect: { flags: { keptIntroSilent: true } },
+              },
+            ],
+    },
+    "sound-on-response": {
+      step: "ПРОВЕРКА КАНАЛА // ЗВУК ВКЛЮЧЁН",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: "Вот. Теперь ты слышишь не меня. Это комната.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "age-check",
+        },
+      ],
+    },
+    "sound-silent-response": {
+      step: "ПРОВЕРКА КАНАЛА // ТИХИЙ РЕЖИМ",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: "Хорошо. В тишине я выгляжу добрее.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "age-check",
+        },
+      ],
+    },
+    "age-check": {
+      step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
+      media: "state-neutral",
+      speaker: "ИРИНА В.",
+      text:
+        "Я Ирина, куратор детских маршрутов. Этот канал — только для бывших детей. Тебе уже восемнадцать?",
       choices: [
         {
           label: "МНЕ УЖЕ 18",
@@ -2427,13 +2491,72 @@
       choices: [
         {
           label: "НЕ БУДУ ЗАБЫВАТЬ",
-          next: "ulybarych-archive",
+          next: "favorite-childrens-show",
           effect: { flags: { refusesToForgetParentsLine: true } },
         },
         {
           label: "ХОРОШО",
-          next: "ulybarych-archive",
+          next: "favorite-childrens-show",
           effect: { flags: { agreesToForgetParentsLine: true } },
+        },
+      ],
+    },
+    "favorite-childrens-show": {
+      step: "ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text:
+        "Давай лучше о другом. Я люблю детские шоу. Не по работе — по-настоящему. А у тебя какое любимое?",
+      choices: [
+        {
+          label: "«ДЯДЯ УЛЫБАРЫЧ»",
+          next: "favorite-childrens-show-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { favoriteShowUlybarych: true },
+          },
+        },
+        {
+          label: "«ЖМУРИКИ»",
+          next: "favorite-childrens-show-response",
+          effect: {
+            profiles: { animator: 1 },
+            flags: { favoriteShowZhmuriki: true },
+          },
+        },
+        {
+          label: "Я УЖЕ НЕ РЕБЁНОК. НЕ СМОТРЮ ДЕТСКИЕ ШОУ",
+          next: "favorite-childrens-show-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { outgrewChildrensShows: true },
+          },
+        },
+      ],
+    },
+    "favorite-childrens-show-response": {
+      step: "ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР",
+      media: "state-confidential",
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.favoriteShowUlybarych) {
+          return "Правда? Я тоже. Я не пропускала ни одного выпуска. Улыбарыч умел улыбаться так, будто уже знает твой ответ. Подожди...";
+        }
+
+        if (progress.flags.favoriteShowZhmuriki) {
+          return "«Жмурики»! Я их до сих пор люблю. Там закрываешь глаза, и тебя обязательно находят. У меня даже открытка осталась. Потом покажу.";
+        }
+
+        return "Я тоже уже не ребёнок. Но детские передачи не обязательно смотреть как ребёнок. Иногда они помнят тебя лучше взрослых. Подожди...";
+      },
+      choices: (progress) => [
+        {
+          label: progress.flags.favoriteShowUlybarych
+            ? "КАКОЙ ВЫПУСК?"
+            : progress.flags.favoriteShowZhmuriki
+              ? "ПОКАЖЕШЬ?"
+              : "ЧТО ЗНАЧИТ «ПОМНЯТ»?",
+          next: "ulybarych-archive",
         },
       ],
     },
@@ -2884,10 +3007,15 @@
       feedState: "ОЖИДАЕТ ПОЛУЧЕНИЯ",
       signal: 58,
       speaker: "СИСТЕМА",
-      text: (progress) =>
-        getCuratorAssignment(progress) === "volunteer"
-          ? "К назначению прикреплена листовка программы «Верни себе детство». Получение материала считается добровольным."
-          : "К назначению прикреплена личная открытка от куратора 0091-A. Получение материала считается добровольным.",
+      text: (progress) => {
+        if (getCuratorAssignment(progress) === "volunteer") {
+          return "К назначению прикреплена листовка программы «Верни себе детство». Получение материала считается добровольным.";
+        }
+
+        return progress.flags.favoriteShowZhmuriki
+          ? "К назначению прикреплена обещанная открытка Ирины с «Жмуриками». Получение материала считается добровольным."
+          : "К назначению прикреплена личная открытка от куратора 0091-A. Получение материала считается добровольным.";
+      },
       choices: (progress) => {
         const isVolunteer = getCuratorAssignment(progress) === "volunteer";
         const artifactId = isVolunteer
@@ -3587,6 +3715,10 @@
       activeNode = node;
       stopSceneSound();
       progress.node = nodeId;
+      soundButton.classList.toggle(
+        "is-tutorial-cue",
+        nodeId === "sound-prompt" && !soundEnabled
+      );
       if (curatorNodeArtifacts[nodeId]) {
         unlockCuratorArtifact(progress, curatorNodeArtifacts[nodeId]);
       }
@@ -3655,6 +3787,12 @@
 
       if (progress.status === "completed") {
         progress = createCuratorProgress();
+      }
+      if (["sound-on-response", "sound-silent-response"].includes(progress.node)) {
+        progress.node = "age-check";
+      }
+      if (["intro", "sound-prompt"].includes(progress.node)) {
+        delete progress.flags.enabledSoundAtIntro;
       }
 
       saveProgress();
@@ -3732,6 +3870,18 @@
       soundEnabled = !soundEnabled;
       soundButton.setAttribute("aria-pressed", String(soundEnabled));
       soundButton.textContent = soundEnabled ? "ЗВУК: ВКЛ" : "ЗВУК: ВЫКЛ";
+      const isIntroSoundMoment = ["intro", "sound-prompt"].includes(progress.node);
+      if (isIntroSoundMoment) {
+        progress.flags.enabledSoundAtIntro = soundEnabled;
+        if (soundEnabled) {
+          delete progress.flags.keptIntroSilent;
+        }
+        saveProgress();
+      }
+      soundButton.classList.toggle(
+        "is-tutorial-cue",
+        progress.node === "sound-prompt" && !soundEnabled
+      );
       soundButton.title = soundEnabled
         ? "Отключить сигналы и фон канала"
         : "Включить сигналы и фон канала";
@@ -3749,6 +3899,12 @@
         stopTypingSound();
       }
       playCallTone(620, 0.08);
+      if (progress.node === "sound-prompt") {
+        window.setTimeout(
+          () => renderNode(soundEnabled ? "sound-on-response" : "sound-prompt"),
+          140
+        );
+      }
     });
 
     fileClose.addEventListener("click", closeFileViewer);
