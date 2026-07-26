@@ -122,6 +122,30 @@
     "recognition-cat-rabbit": {
       "image": "artifacts/recognition-cat-rabbit.webp",
       "playback": "still-filtered"
+    },
+    "service-route-map": {
+      "image": "artifacts/service-route-map.webp",
+      "playback": "still-filtered"
+    },
+    "blue-key-evidence": {
+      "image": "artifacts/blue-key-evidence.webp",
+      "playback": "still-filtered"
+    },
+    "assigned-toy-polaroid": {
+      "image": "artifacts/assigned-toy-polaroid.webp",
+      "playback": "still-filtered"
+    },
+    "post-aroma-dessert": {
+      "image": "artifacts/post-aroma-dessert.webp",
+      "playback": "still-filtered"
+    },
+    "ulybarych-broadcast": {
+      "image": "artifacts/ulybarych-broadcast.webp",
+      "playback": "still-filtered"
+    },
+    "operator-empty-chair": {
+      "image": "artifacts/operator-empty-chair.webp",
+      "playback": "still-filtered"
     }
   }
 }

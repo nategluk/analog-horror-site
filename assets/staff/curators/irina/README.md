@@ -7,8 +7,8 @@ Web-ready media for curator `0091-A`.
 - State clips are short performances, not seamless loops. Play them once and
   leave the video on its final frame while the player reads or chooses.
 - Action clips play once. `action-shush-exit.mp4` hands off to
-  `room-empty.webp`.
-- Show `room-empty.webp` as a still image with shared CSS signal noise,
+  `artifacts/operator-empty-chair.webp`.
+- Show document and observation stills with shared CSS signal noise,
   flicker, scanlines, and subtle digital drift. Do not bake those effects into
   the asset.
 - Insert a brief signal glitch before `action-return-sit.mp4`: its source
@@ -20,8 +20,10 @@ Web-ready media for curator `0091-A`.
 - Trigger the Plague Doctor flash in HTML/CSS after
   `intrusion-plague-doctor-camera.mp4`; the video intentionally hands off to
   the interface effect.
-- The `artifacts/` directory contains still channel interruptions and Irina's
-  optional downloadable private photograph.
+- The `artifacts/` directory contains still channel interruptions, materials
+  saved to the player's personnel file, and Irina's optional downloadable
+  private photograph. WebP assets retain their generated square resolution
+  and are stripped of source metadata.
 - Keep captions, call controls, IDs, timestamps, and signal indicators in
   HTML/CSS rather than in the video.
 

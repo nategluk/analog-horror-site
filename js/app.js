@@ -729,6 +729,60 @@
       src: curatorMediaAsset("artifacts/recognition-cat-rabbit.webp"),
       alt: "Симметричное чернильное пятно, похожее одновременно на кота и кролика",
     },
+    "service-route-map": {
+      code: "IR-0091-06",
+      title: "КАРТА СЛУЖЕБНЫХ МАРШРУТОВ",
+      type: "ВОССТАНОВЛЕННАЯ СХЕМА",
+      source: "МАРШРУТНЫЙ ОТДЕЛ // КОПИЯ БЕЗ ДАТЫ",
+      description: "Часть помещений скрыта вручную. Синий маршрут возвращается в исходную точку без зарегистрированного разворота.",
+      src: curatorMediaAsset("artifacts/service-route-map.webp"),
+      alt: "Старая служебная карта комплекса с цветными маршрутами, заклеенным сектором и зачёркнутыми помещениями",
+    },
+    "blue-key-evidence": {
+      code: "IR-0091-07",
+      title: "СИНИЙ КЛЮЧ БЕЗ БИРКИ",
+      type: "СОПУТСТВУЮЩИЙ ПРЕДМЕТ",
+      source: "МАРШРУТНЫЙ ОТДЕЛ // СТОЛ ВЫДАЧИ",
+      description: "Ключ найден рядом с карточкой маршрута. Получатель и доступная дверь в журнале не указаны.",
+      src: curatorMediaAsset("artifacts/blue-key-evidence.webp"),
+      alt: "Потёртый синий служебный ключ без бирки на мокром зелёном столе",
+    },
+    "assigned-toy-polaroid": {
+      code: "IR-0091-08",
+      title: "ИГРУШКА, ОЖИДАЮЩАЯ НАЗНАЧЕНИЯ",
+      type: "УЧЁТНАЯ ФОТОГРАФИЯ",
+      source: "КОМНАТА ОЖИДАНИЯ // ЯЧЕЙКА НЕ УКАЗАНА",
+      description: "Пустая бирка зарегистрирована раньше имени владельца. Дата фотографии отсутствует.",
+      src: curatorMediaAsset("artifacts/assigned-toy-polaroid.webp"),
+      alt: "Плюшевый кролик с пустой служебной биркой сидит на детском стуле перед тёмной дверью",
+    },
+    "post-aroma-dessert": {
+      code: "IR-0091-09",
+      title: "НОРМА ПОСЛЕ АРОМАТИЗАЦИИ",
+      type: "ФОТОФИКСАЦИЯ ВЫДАЧИ",
+      source: "ПИЩЕВОЙ БЛОК // СМЕНА 12",
+      description: "Десерт выдан сотруднику после завершения обработки. Отказ от получения не зарегистрирован.",
+      src: curatorMediaAsset("artifacts/post-aroma-dessert.webp"),
+      alt: "Десерт, ложка и мокрый противогаз на металлическом подносе",
+    },
+    "ulybarych-broadcast": {
+      code: "IR-0091-10",
+      title: "АРХИВНЫЙ ЭФИР «УЛЫБАРЫЧ»",
+      type: "СТОП-КАДР ОБЯЗАТЕЛЬНОЙ ПЕРЕДАЧИ",
+      source: "АРХИВ ВОЗРАСТНОГО КОНТРОЛЯ // ИСТОЧНИК 001",
+      description: "Детское место в кадре свободно. Присутствующие взрослые системой зрителями не считаются.",
+      src: curatorMediaAsset("artifacts/ulybarych-broadcast.webp"),
+      alt: "Улыбающийся ведущий в белом халате стоит рядом с пустым детским стулом перед взрослой аудиторией",
+    },
+    "operator-empty-chair": {
+      code: "IR-0091-11",
+      title: "РАБОЧЕЕ МЕСТО БЕЗ ОПЕРАТОРА",
+      type: "КАДР ВНУТРЕННЕГО НАБЛЮДЕНИЯ",
+      source: "КАНАЛ 0091-A // ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
+      description: "Монитор показывает то же рабочее место с другой точки. Второй источник камеры не зарегистрирован.",
+      src: curatorMediaAsset("artifacts/operator-empty-chair.webp"),
+      alt: "Пустое кресло оператора с наушниками перед старым монитором",
+    },
     "irina-private-photo": {
       code: "IR-0091-03",
       title: "ЛИЧНЫЙ ФАЙЛ ИРИНЫ В.",
@@ -756,7 +810,13 @@
 
   const curatorNodeArtifacts = {
     "memory-drawing": "memory-drawing",
+    "image-response": "service-route-map",
+    "wristband-response": "blue-key-evidence",
+    "wristband-explain": "assigned-toy-polaroid",
     "recognition-card": "recognition-card",
+    "post-aroma-jelly": "post-aroma-dessert",
+    "ulybarych-archive": "ulybarych-broadcast",
+    "empty-room": "operator-empty-chair",
     "plague-doctor-response": "biometric-record",
   };
 
@@ -848,6 +908,27 @@
       artifactIds.add("recognition-card");
     }
 
+    if (flags.choseMascotFeed || flags.choseOpenDoorFeed) {
+      artifactIds.add("service-route-map");
+    }
+
+    if (flags.reportedTomorrowBand || flags.followedTomorrowBand || flags.woreTomorrowBand) {
+      artifactIds.add("blue-key-evidence");
+      artifactIds.add("assigned-toy-polaroid");
+    }
+
+    if (flags.askedJellyFlavor || flags.questionedJelly || flags.requestedJelly) {
+      artifactIds.add("post-aroma-dessert");
+    }
+
+    if (flags.noticedEmptyChair || flags.askedAboutUlybarych || flags.remembersUlybarych) {
+      artifactIds.add("ulybarych-broadcast");
+    }
+
+    if (flags.answeredBear || flags.silentForBear) {
+      artifactIds.add("operator-empty-chair");
+    }
+
     if (progress?.files?.includes("irina-private-photo")) {
       artifactIds.add("irina-private-photo");
     }
@@ -864,6 +945,12 @@
     if (progress?.status === "completed") {
       artifactIds.add("memory-drawing");
       artifactIds.add("recognition-card");
+      artifactIds.add("service-route-map");
+      artifactIds.add("blue-key-evidence");
+      artifactIds.add("assigned-toy-polaroid");
+      artifactIds.add("post-aroma-dessert");
+      artifactIds.add("ulybarych-broadcast");
+      artifactIds.add("operator-empty-chair");
       artifactIds.add("biometric-record");
       artifactIds.add("assignment");
     }
@@ -1542,7 +1629,11 @@
     },
     "image-response": {
       step: "ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9",
-      media: "state-confidential",
+      still: "assets/staff/curators/irina/artifacts/service-route-map.webp",
+      stillAlt:
+        "Старая служебная карта комплекса с цветными маршрутами, заклеенным сектором и зачёркнутыми помещениями",
+      feedMode: "document",
+      feedState: "КАРТА МАРШРУТА ВОССТАНОВЛЕНА",
       speaker: "ИРИНА В.",
       text: (progress) => {
         if (progress.flags.choseMascotFeed) {
@@ -1596,7 +1687,11 @@
     },
     "wristband-response": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9",
-      media: "state-confidential",
+      still: "assets/staff/curators/irina/artifacts/blue-key-evidence.webp",
+      stillAlt:
+        "Потёртый синий служебный ключ без бирки лежит на мокром зелёном столе рядом с документами",
+      feedMode: "document",
+      feedState: "СОПУТСТВУЮЩИЙ ПРЕДМЕТ НЕ УЧТЁН",
       speaker: "ИРИНА В.",
       text: (progress) => {
         if (progress.flags.reportedTomorrowBand) {
@@ -1618,10 +1713,14 @@
     },
     "wristband-explain": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // УЧЁТ",
-      media: "state-warm",
+      still: "assets/staff/curators/irina/artifacts/assigned-toy-polaroid.webp",
+      stillAlt:
+        "Старая фотография: плюшевый кролик с пустой служебной биркой сидит на детском стуле перед тёмной дверью",
+      feedMode: "document",
+      feedState: "ПРЕДМЕТ ОЖИДАЕТ НАЗНАЧЕНИЯ",
       speaker: "ИРИНА В.",
       text:
-        "Потому что выданные вещи существуют раньше получателя. Браслет, маска и костюм сначала появляются в учёте, потом ждут подходящего тела. Если уничтожить вещь, назначение не исчезнет. Оно просто начнёт искать другую форму.",
+        "Потому что выданные вещи существуют раньше получателя. Браслет, ключ, маска, костюм и любимая игрушка сначала появляются в учёте, потом ждут подходящего тела. Если уничтожить вещь, назначение не исчезнет. Оно просто начнёт искать другую форму.",
       choices: [
         {
           label: "ПРОДОЛЖИТЬ",
@@ -2048,7 +2147,10 @@
     },
     "post-aroma-jelly": {
       step: "ПЛАНОВАЯ АРОМАТИЗАЦИЯ // ЗАВЕРШЕНА",
-      media: "action-post-aroma-jelly",
+      still: "assets/staff/curators/irina/artifacts/post-aroma-dessert.webp",
+      stillAlt:
+        "Десерт в прозрачном стаканчике, ложка и мокрый противогаз лежат на металлическом подносе после обработки помещения",
+      feedMode: "document",
       feedState: "НОРМА ВОССТАНОВЛЕНА",
       signal: 62,
       speaker: "ИРИНА В.",
@@ -2167,7 +2269,9 @@
     },
     "ulybarych-archive": {
       step: "АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001",
-      media: "archive-ulybarych-empty-chair",
+      still: "assets/staff/curators/irina/artifacts/ulybarych-broadcast.webp",
+      stillAlt:
+        "Кадр старой детской передачи: улыбающийся ведущий в белом халате стоит рядом с пустым детским стулом перед взрослой аудиторией",
       feedMode: "archive",
       feedState: "ПЕРЕДАЧА «УЛЫБАРЫЧ»",
       signal: 22,
@@ -2420,7 +2524,10 @@
     },
     "empty-room": {
       step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН // 8 ИЗ 9",
-      media: "room-empty",
+      still: "assets/staff/curators/irina/artifacts/operator-empty-chair.webp",
+      stillAlt:
+        "Пустое кресло оператора с наушниками перед старым монитором, показывающим то же рабочее место",
+      feedMode: "cctv",
       feedState: "ВИДЕОПОТОК ПРИОСТАНОВЛЕН",
       signal: 7,
       speaker: "МЕДВЕДЬ?",
