@@ -2269,9 +2269,7 @@
     },
     "ulybarych-archive": {
       step: "АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001",
-      still: "assets/staff/curators/irina/artifacts/ulybarych-broadcast.webp",
-      stillAlt:
-        "Кадр старой детской передачи: улыбающийся ведущий в белом халате стоит рядом с пустым детским стулом перед взрослой аудиторией",
+      media: "archive-ulybarych-empty-chair",
       feedMode: "archive",
       feedState: "ПЕРЕДАЧА «УЛЫБАРЫЧ»",
       signal: 22,
@@ -2734,7 +2732,6 @@
     const saveState = modal.querySelector("[data-curator-save]");
     const signal = modal.querySelector("[data-curator-signal]");
     const soundButton = modal.querySelector("[data-curator-sound]");
-    const filesButton = modal.querySelector("[data-curator-files]");
     const fileViewer = modal.querySelector("[data-curator-file-viewer]");
     const fileImage = modal.querySelector("[data-curator-file-image]");
     const fileName = modal.querySelector("[data-curator-file-name]");
@@ -2973,15 +2970,6 @@
       fileClose.focus();
     };
 
-    const updateFilesControl = () => {
-      const availableFiles = progress.files || [];
-      filesButton.disabled = availableFiles.length === 0;
-      filesButton.textContent = `ФАЙЛЫ: ${availableFiles.length}`;
-      filesButton.title = availableFiles.length
-        ? "Скачать последний полученный файл"
-        : "В этом сеансе пока нет полученных файлов";
-    };
-
     const triggerCameraFlash = () => {
       flash.classList.remove("is-active");
       void flash.offsetWidth;
@@ -3061,8 +3049,6 @@
       room.hidden = true;
       still.hidden = true;
       choices.innerHTML = "";
-      filesButton.disabled = true;
-      filesButton.textContent = "ФАЙЛЫ: 0";
       endButton.disabled = true;
       step.textContent = "КУРАТОРСКИЙ ДОСТУП ОТМЕНЁН";
       signal.textContent = "СИГНАЛ 0%";
@@ -3195,7 +3181,6 @@
             }
 
             applyCuratorEffect(progress, choice.effect);
-            updateFilesControl();
             if (choice.downloadFile) {
               saveProgress();
               openFileViewer(choice.downloadFile, choice.next);
@@ -3233,7 +3218,6 @@
       feedState.textContent = node.feedState || "ПРЯМОЙ КАНАЛ";
       speaker.textContent = node.speaker;
       choices.innerHTML = "";
-      updateFilesControl();
       startAmbient(node);
       let textFinished = false;
       let mediaFinished = false;
@@ -3301,7 +3285,6 @@
         : "Восстановление незавершённой расшифровки.";
       step.textContent = "ПРОВЕРКА КАНАЛА";
       signal.textContent = "СИГНАЛ 18%";
-      updateFilesControl();
       modal.focus();
       playModeSwitchSound();
 
@@ -3365,13 +3348,6 @@
         stopAmbient();
       }
       playCallTone(620, 0.08);
-    });
-
-    filesButton.addEventListener("click", () => {
-      const latestFile = progress.files?.at(-1);
-      if (latestFile) {
-        openFileViewer(latestFile);
-      }
     });
 
     fileClose.addEventListener("click", closeFileViewer);
