@@ -1617,17 +1617,17 @@
           : "Администрация решает. Иногда спрашивает Медведя. Посмотри ещё раз: какого предмета здесь не хватает?",
       choices: [
         {
-          label: "ОБРАТНУЮ ДОРОГУ",
+          label: "ОБРАТНОЙ ДОРОГИ",
           next: "drawing-missing-response",
           effect: { flags: { drawingMissingExit: true } },
         },
         {
-          label: "ЛИЦА ВЗРОСЛЫХ",
+          label: "ЛИЦ ВЗРОСЛЫХ",
           next: "drawing-missing-response",
           effect: { flags: { drawingMissingFaces: true } },
         },
         {
-          label: "СЕБЯ РЯДОМ С МЕДВЕДЕМ",
+          label: "ТЕБЯ РЯДОМ С МЕДВЕДЕМ",
           next: "drawing-missing-response",
           effect: { flags: { drawingMissingSelf: true } },
         },
