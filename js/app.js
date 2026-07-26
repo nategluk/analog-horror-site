@@ -1534,6 +1534,7 @@
     "memory-drawing": {
       step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
       still: "assets/staff/curators/irina/artifacts/memory-drawing.webp",
+      sound: "child-laugh-distant",
       stillAlt:
         "Детский рисунок: серое здание у леса, Медведь возле двери и взрослые фигуры, уходящие прочь",
       feedMode: "document",
@@ -2196,6 +2197,7 @@
     "aroma-cycle": {
       step: "ПЛАНОВАЯ АРОМАТИЗАЦИЯ",
       media: "action-aroma-cycle",
+      sound: "aroma-airflow",
       feedState: "ПОМЕЩЕНИЕ ОБРАБАТЫВАЕТСЯ",
       signal: 35,
       speaker: "СИСТЕМА",
@@ -2332,6 +2334,7 @@
     "ulybarych-archive": {
       step: "АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001",
       media: "archive-ulybarych-empty-chair",
+      sound: "child-laugh-archive",
       feedMode: "archive",
       feedState: "ПЕРЕДАЧА «УЛЫБАРЫЧ»",
       signal: 22,
@@ -2485,6 +2488,7 @@
     "plague-doctor-camera": {
       step: "ВНЕШНИЙ ЗАХВАТ КАНАЛА",
       media: "intrusion-plague-doctor-camera",
+      sound: "plague-doctor-string-sting",
       feedMode: "cctv",
       feedState: "CAPTURE DEVICE 312",
       signal: 9,
@@ -2585,6 +2589,7 @@
     "empty-room": {
       step: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН // 8 ИЗ 9",
       still: "assets/staff/curators/irina/artifacts/operator-empty-chair.webp",
+      sound: "unknown-female-voice",
       stillAlt:
         "Пустое кресло оператора с наушниками перед старым монитором, показывающим то же рабочее место",
       feedMode: "cctv",
@@ -2603,7 +2608,7 @@
           },
         },
         {
-          label: "КТО ЭТО ПИШЕТ?",
+          label: "КТО ЭТО СКАЗАЛ?",
           next: "return-sit",
           effect: {
             profiles: { volunteer: 1 },
@@ -2640,7 +2645,7 @@
       speaker: "ИРИНА В.",
       text: (progress) => {
         if (progress.flags.answeredBear) {
-          return "Медведь нажал клавишу. У него тяжёлая лапа. Не разговаривай с ним без меня. Он начинает важничать.";
+          return "Медведь не умеет говорить. Я просила тебя не отвечать, когда меня нет.";
         }
 
         return "Хорошо. Ты умеешь ждать. Медведь иногда проверяет это без разрешения.";
@@ -2707,6 +2712,8 @@
     assignment: {
       step: "НАЗНАЧЕНИЕ СОХРАНЕНО",
       media: "state-neutral",
+      sound: "child-laugh-close",
+      soundAfterText: true,
       feedState: "КЛАССИФИКАЦИЯ ЗАВЕРШЕНА",
       signal: 63,
       speaker: "ИРИНА В.",
@@ -2859,6 +2866,82 @@
     ambient.loop = true;
     ambient.preload = "auto";
     ambient.volume = 0;
+    const curatorSoundLibrary = {
+      "child-laugh-distant": {
+        src: "assets/audio/curator/sfx/child-laugh-distant.mp3",
+        volume: 1,
+      },
+      "child-laugh-archive": {
+        src: "assets/audio/curator/sfx/child-laugh-archive.mp3",
+        volume: 1,
+      },
+      "child-laugh-close": {
+        src: "assets/audio/curator/sfx/child-laugh-close.mp3",
+        volume: 0.72,
+      },
+      "aroma-airflow": {
+        src: "assets/audio/curator/sfx/aroma-airflow.mp3",
+        volume: 0.52,
+      },
+      "plague-doctor-string-sting": {
+        src: "assets/audio/curator/sfx/plague-doctor-string-sting.mp3",
+        volume: 0.92,
+      },
+      "unknown-female-voice": {
+        src: "assets/audio/curator/sfx/unknown-female-voice.mp3",
+        volume: 0.92,
+      },
+    };
+    Object.values(curatorSoundLibrary).forEach((sound) => {
+      sound.audio = new Audio(audioAsset(sound.src));
+      sound.audio.preload = "auto";
+      sound.audio.volume = sound.volume;
+    });
+    let sceneSound = null;
+    const typingSound = new Audio(
+      audioAsset("assets/audio/curator/sfx/irina-keyboard.mp3")
+    );
+    typingSound.loop = true;
+    typingSound.preload = "auto";
+    typingSound.volume = 0.48;
+    const playedNodeSounds = new Set();
+    let activeNodeId = progress?.node || "intro";
+    let activeNode = curatorNodes[activeNodeId] || curatorNodes.intro;
+
+    const stopSceneSound = () => {
+      if (!sceneSound) return;
+      sceneSound.pause();
+      sceneSound.currentTime = 0;
+      sceneSound = null;
+    };
+
+    const stopTypingSound = () => {
+      typingSound.pause();
+    };
+
+    const playNodeSound = (nodeId, node) => {
+      const sound = curatorSoundLibrary[node?.sound];
+      if (!soundEnabled || !sound || playedNodeSounds.has(nodeId)) return;
+
+      playedNodeSounds.add(nodeId);
+      stopSceneSound();
+      sceneSound = sound.audio;
+      sceneSound.currentTime = 0;
+      sceneSound.play().catch(() => {
+        playedNodeSounds.delete(nodeId);
+      });
+    };
+
+    const startTypingSound = (node) => {
+      if (!soundEnabled || reducedMotion || node?.speaker !== "ИРИНА В.") return;
+
+      if (Number.isFinite(typingSound.duration) && typingSound.duration > 4) {
+        typingSound.currentTime = Math.random() * (typingSound.duration - 4);
+      } else {
+        typingSound.currentTime = 0;
+      }
+      typingSound.play().catch(() => {});
+    };
 
     const saveProgress = () => {
       progress.updatedAt = Date.now();
@@ -2892,6 +2975,7 @@
     const cancelTextAnimation = () => {
       textAnimationRun += 1;
       window.clearTimeout(textAnimationTimer);
+      stopTypingSound();
       revealCurrentText = null;
       transcriptPanel.classList.remove("is-typing", "is-overwriting");
       transcriptPanel.removeAttribute("aria-busy");
@@ -2916,6 +3000,7 @@
         finished = true;
         textAnimationRun += 1;
         window.clearTimeout(textAnimationTimer);
+        stopTypingSound();
         transcript.textContent = finalText;
         revealCurrentText = null;
         transcriptPanel.classList.remove("is-typing", "is-overwriting");
@@ -2939,6 +3024,7 @@
       transcriptPanel.setAttribute("role", "button");
       transcriptPanel.tabIndex = 0;
       transcriptPanel.title = "Нажмите, чтобы показать реплику полностью";
+      startTypingSound(node);
 
       const type = (value, index, onTyped) => {
         if (run !== textAnimationRun) return;
@@ -2991,11 +3077,11 @@
     };
 
     const getAmbientVolume = (node) => {
-      if (node?.media === "room-empty") return 0.08;
-      if (node?.media === "action-aroma-cycle") return 0.34;
-      if (node?.media === "intrusion-plague-doctor-camera") return 0.16;
-      if (node?.feedMode === "archive") return 0.19;
-      return 0.28;
+      if (node?.media === "room-empty") return 0.03;
+      if (node?.media === "action-aroma-cycle") return 0.24;
+      if (node?.media === "intrusion-plague-doctor-camera") return 0.22;
+      if (node?.feedMode === "archive") return 0.42;
+      return 0.58;
     };
 
     const fadeAmbientTo = (targetVolume, duration = 650, onComplete) => {
@@ -3116,6 +3202,8 @@
       cancelTextAnimation();
       video.pause();
       stopAmbient();
+      stopSceneSound();
+      stopTypingSound();
       modal.hidden = true;
       fileViewer.hidden = true;
       pendingFileNext = null;
@@ -3297,6 +3385,9 @@
 
     const renderNode = (nodeId) => {
       const node = curatorNodes[nodeId] || curatorNodes.intro;
+      activeNodeId = nodeId;
+      activeNode = node;
+      stopSceneSound();
       progress.node = nodeId;
       if (curatorNodeArtifacts[nodeId]) {
         unlockCuratorArtifact(progress, curatorNodeArtifacts[nodeId]);
@@ -3314,6 +3405,9 @@
       choices.innerHTML = "";
       transcript.scrollTop = 0;
       startAmbient(node);
+      if (!node.soundAfterText) {
+        playNodeSound(nodeId, node);
+      }
       let textFinished = false;
       let mediaFinished = false;
       let nodeAdvanced = false;
@@ -3345,12 +3439,18 @@
       applyMedia(node, handleMediaEnd);
       animateText(node, () => {
         textFinished = true;
+        if (node.soundAfterText) {
+          playNodeSound(nodeId, node);
+        }
         continueNode();
       });
     };
 
     const openCall = ({ restart = false } = {}) => {
       previousFocus = document.activeElement;
+      playedNodeSounds.clear();
+      stopSceneSound();
+      stopTypingSound();
       progress = restart || !getCuratorProgress()
         ? createCuratorProgress()
         : getCuratorProgress();
@@ -3439,8 +3539,16 @@
         : "Включить сигналы и фон канала";
       if (soundEnabled) {
         startAmbient(curatorNodes[progress.node] || curatorNodes.intro);
+        if (connecting.hidden && (!activeNode.soundAfterText || !revealCurrentText)) {
+          playNodeSound(activeNodeId, activeNode);
+        }
+        if (revealCurrentText) {
+          startTypingSound(activeNode);
+        }
       } else {
         stopAmbient();
+        stopSceneSound();
+        stopTypingSound();
       }
       playCallTone(620, 0.08);
     });
