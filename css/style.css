@@ -1663,7 +1663,7 @@ button {
   cursor: pointer;
 }
 
-body.staff-mode button {
+body.staff-mode .site-wrapper :where(button) {
   color: #050505;
 }
 
@@ -2041,12 +2041,33 @@ body.curator-call-open {
 
 .curator-call__header {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.9rem 1rem;
   border-bottom: 1px solid #214d2a;
   background: rgba(7, 20, 10, 0.96);
+}
+
+.curator-call__music-slot {
+  flex: 1 1 100%;
+  min-width: 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(57, 122, 73, 0.55);
+}
+
+.curator-call__music-slot:empty {
+  display: none;
+}
+
+.curator-call__music-slot .music-player {
+  width: 100%;
+  min-height: 2.65rem;
+  margin: 0;
+  padding: 0.35rem 0.45rem;
+  border-radius: 4px;
+  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.42);
 }
 
 .curator-call__eyebrow,
@@ -2443,7 +2464,7 @@ body.curator-call-open {
 }
 
 .curator-call__controls button {
-  min-height: 2.4rem;
+  min-height: 2.75rem;
   padding: 0.55rem 0.8rem;
   text-align: center;
 }
@@ -2520,6 +2541,7 @@ body.curator-call-open {
 .curator-call__file-panel button,
 .curator-call__file-panel a {
   flex: 0 0 auto;
+  min-height: 2.75rem;
   border: 1px solid #397a49;
   border-radius: 3px;
   padding: 0.55rem 0.7rem;
@@ -2663,7 +2685,16 @@ body.curator-call-open {
     position: sticky;
     top: 0;
     z-index: 12;
+    gap: 0.6rem;
     padding: 0.7rem 0.75rem;
+  }
+
+  .curator-call__music-slot {
+    padding-top: 0.55rem;
+  }
+
+  .curator-call__music-slot .music-player {
+    min-height: 2.45rem;
   }
 
   .curator-call__eyebrow {
@@ -2713,17 +2744,16 @@ body.curator-call-open {
   }
 
   .curator-call__controls {
-    position: sticky;
-    bottom: 0;
-    z-index: 12;
+    position: static;
     justify-content: stretch;
-    padding: 0.55rem;
+    padding: 0.65rem;
+    padding-bottom: max(0.65rem, env(safe-area-inset-bottom));
   }
 
   .curator-call__controls button {
     flex: 1 1 0;
     padding-inline: 0.35rem;
-    font-size: 0.61rem;
+    font-size: 0.68rem;
   }
 
   .curator-call__exit-confirm {

@@ -2412,11 +2412,14 @@
     const exitConfirm = modal.querySelector("[data-curator-exit-confirm]");
     const exitCancel = modal.querySelector("[data-curator-exit-cancel]");
     const exitAccept = modal.querySelector("[data-curator-exit-accept]");
+    const musicSlot = modal.querySelector("[data-curator-music-slot]");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let progress = getCuratorProgress();
     let soundEnabled = false;
     let previousFocus = null;
     let fileViewerPreviousFocus = null;
+    let musicPlayerHome = null;
+    let musicPlayerNextSibling = null;
     let pendingFileNext = null;
     let connectionTimer = 0;
     let ambientFadeFrame = 0;
@@ -2672,6 +2675,27 @@
       resumeButton.textContent = "ВОЗОБНОВИТЬ СЕАНС 0091-A";
     };
 
+    const dockMusicPlayer = () => {
+      if (!player || !musicSlot || player.parentNode === musicSlot) return;
+
+      musicPlayerHome = player.parentNode;
+      musicPlayerNextSibling = player.nextSibling;
+      musicSlot.append(player);
+    };
+
+    const restoreMusicPlayer = () => {
+      if (!player || !musicPlayerHome) return;
+
+      if (musicPlayerNextSibling?.parentNode === musicPlayerHome) {
+        musicPlayerHome.insertBefore(player, musicPlayerNextSibling);
+      } else {
+        musicPlayerHome.append(player);
+      }
+
+      musicPlayerHome = null;
+      musicPlayerNextSibling = null;
+    };
+
     const closeCall = () => {
       window.clearTimeout(connectionTimer);
       cancelTextAnimation();
@@ -2684,6 +2708,7 @@
       body.classList.remove("curator-call-open");
       const wrapper = document.querySelector(".site-wrapper");
       if (wrapper) wrapper.inert = false;
+      restoreMusicPlayer();
       updateResumeControl();
       previousFocus?.focus?.();
     };
@@ -2726,13 +2751,19 @@
       result.textContent =
         "КАТЕГОРИЯ: СЫРЬЁ // КУРАТОРСКИЙ ДОСТУП ОТМЕНЁН";
 
-      connectionTimer = window.setTimeout(() => {
+      const returnButton = document.createElement("button");
+      returnButton.type = "button";
+      returnButton.textContent = "ВЕРНУТЬСЯ В ГОСТЕВУЮ ВЕРСИЮ";
+      returnButton.addEventListener("click", () => {
         feed.classList.remove("is-glitching");
         closeCall();
         endButton.disabled = false;
         applyMode(false);
         window.location.assign(getGuestHomeUrl());
-      }, reducedMotion ? 1200 : 2600);
+      });
+      choices.classList.remove("has-images");
+      choices.append(returnButton);
+      returnButton.focus();
     };
 
     const completeCall = () => {
@@ -2915,6 +2946,7 @@
       modal.hidden = false;
       modal.tabIndex = -1;
       body.classList.add("curator-call-open");
+      dockMusicPlayer();
       const wrapper = document.querySelector(".site-wrapper");
       if (wrapper) wrapper.inert = true;
       connecting.hidden = false;
@@ -2941,13 +2973,16 @@
     };
 
     const showExitConfirm = () => {
+      exitConfirm.hidden = false;
+      exitCancel.focus();
+    };
+
+    const recordConfirmedExit = () => {
       if (!progress.flags.attemptedEnd) {
         progress.flags.attemptedEnd = true;
         progress.scores.fear += 1;
         saveProgress();
       }
-      exitConfirm.hidden = false;
-      exitCancel.focus();
     };
 
     form.dataset.curatorCallReady = "true";
@@ -3017,7 +3052,10 @@
       exitConfirm.hidden = true;
       endButton.focus();
     });
-    exitAccept.addEventListener("click", closeCall);
+    exitAccept.addEventListener("click", () => {
+      recordConfirmedExit();
+      closeCall();
+    });
     modal.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
       if (!fileViewer.hidden) {
