@@ -178,7 +178,17 @@
                   <p>TYNDEX HR // КАДРОВАЯ КАРТОЧКА</p>
                   <h2 id="personnel-dossier-title" data-personnel-name>СОТРУДНИК</h2>
                 </div>
-                <button class="personnel-dossier__close" type="button" data-personnel-close>ЗАКРЫТЬ</button>
+                <div class="personnel-dossier__header-actions">
+                  <button
+                    class="personnel-dossier__settings"
+                    type="button"
+                    data-player-settings-toggle
+                    aria-controls="personnel-profile-settings"
+                    aria-expanded="false"
+                    hidden
+                  >НАСТРОЙКИ</button>
+                  <button class="personnel-dossier__close" type="button" data-personnel-close>ЗАКРЫТЬ</button>
+                </div>
               </header>
 
               <img class="personnel-dossier__recording" data-personnel-header-image alt="" hidden />
@@ -199,47 +209,67 @@
               </section>
 
               <section class="personnel-profile" data-personnel-profile hidden>
-                <div class="personnel-profile__actions">
-                  <a class="personnel-dossier__action" href="hiring.html?resume=0091-A" data-player-resume data-full-navigation hidden>ВОЗОБНОВИТЬ СЕАНС</a>
-                  <a class="personnel-dossier__action" href="hiring.html?reclassify=0091-A" data-player-reclassify data-full-navigation hidden>ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ</a>
-                  <button class="personnel-dossier__action" type="button" data-player-claim hidden>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
-                </div>
-
-                <section class="personnel-name" aria-labelledby="personnel-name-title">
-                  <div class="personnel-section-heading">
-                    <h3 id="personnel-name-title">ИМЯ ОПЕРАТОРА</h3>
-                    <span data-player-name-state>НЕ УСТАНОВЛЕНО</span>
+                <section
+                  class="personnel-profile__settings"
+                  id="personnel-profile-settings"
+                  data-player-settings-panel
+                  aria-label="Настройки личного дела"
+                  hidden
+                >
+                  <div class="personnel-profile__actions">
+                    <a class="personnel-dossier__action" href="hiring.html?resume=0091-A" data-player-resume data-full-navigation hidden>ВОЗОБНОВИТЬ СЕАНС</a>
+                    <a class="personnel-dossier__action" href="hiring.html?reclassify=0091-A" data-player-reclassify data-full-navigation hidden>ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ</a>
+                    <button class="personnel-dossier__action" type="button" data-player-claim hidden>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
                   </div>
-                  <form data-player-name-form>
-                    <label>
-                      ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ
-                      <input
-                        type="text"
-                        name="displayName"
-                        maxlength="32"
-                        autocomplete="nickname"
-                        placeholder="ВВЕДИТЕ ИМЯ"
-                        required
-                      />
-                    </label>
-                    <button type="submit">СОХРАНИТЬ ИМЯ</button>
-                  </form>
-                  <p class="personnel-dossier__response" data-player-name-response role="status" aria-live="polite"></p>
+
+                  <section class="personnel-name" aria-labelledby="personnel-name-title">
+                    <div class="personnel-section-heading">
+                      <h3 id="personnel-name-title">ИМЯ ОПЕРАТОРА</h3>
+                      <span data-player-name-state>НЕ УСТАНОВЛЕНО</span>
+                    </div>
+                    <form data-player-name-form>
+                      <label>
+                        ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ
+                        <input
+                          type="text"
+                          name="displayName"
+                          maxlength="32"
+                          autocomplete="nickname"
+                          placeholder="ВВЕДИТЕ ИМЯ"
+                          required
+                        />
+                      </label>
+                      <button type="submit">СОХРАНИТЬ ИМЯ</button>
+                    </form>
+                    <p class="personnel-dossier__response" data-player-name-response role="status" aria-live="polite"></p>
+                  </section>
+
+                  <section data-player-identification aria-labelledby="personnel-identification-title">
+                    <h3 id="personnel-identification-title">ИЗОБРАЖЕНИЕ СОТРУДНИКА</h3>
+                    <p data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
+                    <div class="personnel-avatar-options">
+                      <button type="button" data-avatar-choice="avatar-01" aria-label="Выбрать изображение 1"><span class="personnel-avatar personnel-avatar--avatar-01" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 01</span></button>
+                      <button type="button" data-avatar-choice="avatar-02" aria-label="Выбрать изображение 2"><span class="personnel-avatar personnel-avatar--avatar-02" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 02</span></button>
+                      <button type="button" data-avatar-choice="avatar-03" aria-label="Выбрать изображение 3"><span class="personnel-avatar personnel-avatar--avatar-03" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 03</span></button>
+                      <button type="button" data-avatar-choice="avatar-04" aria-label="Выбрать изображение 4"><span class="personnel-avatar personnel-avatar--avatar-04" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 04</span></button>
+                    </div>
+                    <p class="personnel-dossier__response" data-player-avatar-response role="status" aria-live="polite"></p>
+                  </section>
                 </section>
 
-                <nav class="personnel-profile__tabs" aria-label="Разделы личного дела">
-                  <button type="button" data-player-tab="inbox" aria-pressed="true">
-                    ВХОДЯЩИЕ <span data-player-unread-count></span>
-                  </button>
-                  <button type="button" data-player-tab="materials" aria-pressed="false">МАТЕРИАЛЫ</button>
-                  <button type="button" data-player-tab="sessions" aria-pressed="false">СЕАНСЫ</button>
-                  <button type="button" data-player-tab="identity" aria-pressed="false">ИЗОБРАЖЕНИЕ</button>
-                  <button type="button" data-player-tab="trash" aria-pressed="false">
-                    КОРЗИНА <span data-player-trash-count></span>
-                  </button>
-                </nav>
+                <div class="personnel-profile__main" data-player-profile-main>
+                  <nav class="personnel-profile__tabs" aria-label="Разделы личного дела">
+                    <button type="button" data-player-tab="inbox" aria-pressed="true">
+                      ВХОДЯЩИЕ <span data-player-unread-count></span>
+                    </button>
+                    <button type="button" data-player-tab="materials" aria-pressed="false">МАТЕРИАЛЫ</button>
+                    <button type="button" data-player-tab="sessions" aria-pressed="false">СЕАНСЫ</button>
+                    <button type="button" data-player-tab="trash" aria-pressed="false">
+                      КОРЗИНА <span data-player-trash-count></span>
+                    </button>
+                  </nav>
 
-                <section data-player-view="inbox" aria-labelledby="personnel-inbox-title">
+                  <section data-player-view="inbox" aria-labelledby="personnel-inbox-title">
                   <div class="personnel-section-heading">
                     <h3 id="personnel-inbox-title">ЛИЧНЫЕ ВХОДЯЩИЕ</h3>
                     <span>ВНУТРЕННИЙ КАНАЛ</span>
@@ -261,40 +291,29 @@
                       <button type="button" data-player-message-delete>УДАЛИТЬ СООБЩЕНИЕ</button>
                     </div>
                   </article>
-                </section>
+                  </section>
 
-                <section data-player-view="sessions" hidden aria-labelledby="personnel-sessions-title">
+                  <section data-player-view="sessions" hidden aria-labelledby="personnel-sessions-title">
                   <h3 id="personnel-sessions-title">ИСТОРИЯ СЕАНСОВ</h3>
                   <p data-player-sessions-empty>ЗАВЕРШЁННЫЕ СЕАНСЫ НЕ ЗАРЕГИСТРИРОВАНЫ</p>
                   <div class="personnel-sessions" data-player-session-list></div>
-                </section>
+                  </section>
 
-                <section data-player-view="materials" hidden aria-labelledby="personnel-materials-title">
+                  <section data-player-view="materials" hidden aria-labelledby="personnel-materials-title">
                   <h3 id="personnel-materials-title">МАТЕРИАЛЫ ЛИЧНОГО ДЕЛА</h3>
                   <p data-player-materials-empty>МАТЕРИАЛЫ НЕ ЗАРЕГИСТРИРОВАНЫ</p>
                   <div class="personnel-materials" data-player-materials></div>
-                </section>
+                  </section>
 
-                <section data-player-view="identity" data-player-identification hidden aria-labelledby="personnel-identification-title">
-                  <h3 id="personnel-identification-title">ИДЕНТИФИКАЦИЯ</h3>
-                  <p data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
-                  <div class="personnel-avatar-options">
-                    <button type="button" data-avatar-choice="avatar-01" aria-label="Выбрать изображение 1"><span class="personnel-avatar personnel-avatar--avatar-01" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 01</span></button>
-                    <button type="button" data-avatar-choice="avatar-02" aria-label="Выбрать изображение 2"><span class="personnel-avatar personnel-avatar--avatar-02" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 02</span></button>
-                    <button type="button" data-avatar-choice="avatar-03" aria-label="Выбрать изображение 3"><span class="personnel-avatar personnel-avatar--avatar-03" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 03</span></button>
-                    <button type="button" data-avatar-choice="avatar-04" aria-label="Выбрать изображение 4"><span class="personnel-avatar personnel-avatar--avatar-04" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 04</span></button>
-                  </div>
-                  <p class="personnel-dossier__response" data-player-avatar-response role="status" aria-live="polite"></p>
-                </section>
-
-                <section data-player-view="trash" hidden aria-labelledby="personnel-trash-title">
+                  <section data-player-view="trash" hidden aria-labelledby="personnel-trash-title">
                   <div class="personnel-section-heading">
                     <h3 id="personnel-trash-title">КОРЗИНА</h3>
                     <button type="button" data-player-trash-empty hidden>ОЧИСТИТЬ</button>
                   </div>
                   <p data-player-trash-empty-copy>КОРЗИНА ПУСТА</p>
                   <div class="personnel-trash" data-player-trash></div>
-                </section>
+                  </section>
+                </div>
               </section>
 
               <div class="personnel-intrusion" data-personnel-intrusion hidden role="alert">

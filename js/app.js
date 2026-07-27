@@ -5341,6 +5341,9 @@
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
+    const settingsToggle = dossier.querySelector("[data-player-settings-toggle]");
+    const settingsPanel = dossier.querySelector("[data-player-settings-panel]");
+    const profileMain = dossier.querySelector("[data-player-profile-main]");
     const documentLink = dossier.querySelector("[data-personnel-document]");
     const documentUnavailable = dossier.querySelector("[data-personnel-document-unavailable]");
     const requestIdButton = dossier.querySelector("[data-personnel-request-id]");
@@ -5391,6 +5394,16 @@
     let activeTrigger = null;
     let activeProfileTab = "inbox";
     let activeMessageId = null;
+    let settingsOpen = false;
+
+    const setSettingsOpen = (open) => {
+      settingsOpen = Boolean(open && activePersonnelKey === "player");
+      settingsPanel.hidden = !settingsOpen;
+      profileMain.hidden = settingsOpen;
+      dossierNote.hidden = !settingsOpen && activePersonnelKey === "player";
+      settingsToggle.setAttribute("aria-expanded", String(settingsOpen));
+      settingsToggle.textContent = settingsOpen ? "НАЗАД" : "НАСТРОЙКИ";
+    };
 
     const setAvatarAppearance = (element, avatarId) => {
       if (!element) return;
@@ -5626,14 +5639,13 @@
     };
 
     const setActiveProfileTab = (tab, profile) => {
-      const availableTab =
-        tab === "identity" && profile.status !== "completed" ? "inbox" : tab;
+      const availableTab = profileTabs.some(
+        (button) => button.dataset.playerTab === tab
+      )
+        ? tab
+        : "inbox";
       activeProfileTab = availableTab;
       profileTabs.forEach((button) => {
-        const disabled =
-          button.dataset.playerTab === "identity" &&
-          profile.status !== "completed";
-        button.disabled = disabled;
         button.setAttribute(
           "aria-pressed",
           String(button.dataset.playerTab === availableTab)
@@ -5668,6 +5680,8 @@
       dossierHeaderImage.alt = "";
       employeeActions.hidden = true;
       profilePanel.hidden = false;
+      settingsToggle.hidden = false;
+      setSettingsOpen(settingsOpen);
       const progress = getCuratorProgress();
       resumeLink.hidden = progress?.status !== "in_progress";
       reclassifyLink.hidden =
@@ -5736,6 +5750,7 @@
 
       activePersonnelKey = personnelKey;
       activeTrigger = trigger;
+      settingsOpen = false;
       intrusion.hidden = true;
       useIdLink.hidden = true;
       idResponse.textContent = "";
@@ -5743,6 +5758,10 @@
       if (profile) {
         renderPlayerDossier(profile);
       } else {
+        settingsToggle.hidden = true;
+        settingsPanel.hidden = true;
+        profileMain.hidden = false;
+        dossierNote.hidden = false;
         dossierName.textContent = record.name;
         dossierRole.textContent = record.role;
         dossierStatus.textContent = record.status;
@@ -5870,6 +5889,16 @@
     });
 
     closeButton.addEventListener("click", () => dossier.close());
+    settingsToggle.addEventListener("click", () => {
+      setSettingsOpen(!settingsOpen);
+      if (settingsOpen) {
+        nameInput.focus();
+      } else {
+        profileTabs.find((button) =>
+          button.dataset.playerTab === activeProfileTab
+        )?.focus();
+      }
+    });
     dossier.addEventListener("close", () => {
       intrusion.hidden = true;
       activeTrigger?.focus?.();
