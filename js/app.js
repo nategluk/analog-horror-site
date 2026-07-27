@@ -6,6 +6,7 @@
   const DOSSIER_CLAIM_OFFER_KEY = "tyndex_dossier_claim_offer_v1";
   const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
+  const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
   const DOSSIER_ACCESS_ENDPOINT =
@@ -6319,6 +6320,81 @@
     renderRecord(currentIndex, false);
   };
 
+  const initArchiveCatalog = () => {
+    const catalog = document.querySelector("[data-archive-catalog]");
+    if (!catalog || catalog.dataset.archiveCatalogReady === "true") return;
+
+    const tabs = [...catalog.querySelectorAll("[data-archive-tab]")];
+    const panels = [...catalog.querySelectorAll("[data-archive-panel]")];
+    const announcer = catalog.querySelector("[data-archive-announcer]");
+    const validSections = tabs.map((tab) => tab.dataset.archiveTab);
+    if (tabs.length === 0 || panels.length === 0) return;
+
+    catalog.dataset.archiveCatalogReady = "true";
+
+    const requestedSection = window.location.hash.replace(/^#/, "");
+    const savedSection = localStorage.getItem(ARCHIVE_SECTION_KEY);
+    let currentSection = validSections.includes(requestedSection)
+      ? requestedSection
+      : validSections.includes(savedSection)
+        ? savedSection
+        : validSections[0];
+
+    const renderSection = (section, options = {}) => {
+      if (!validSections.includes(section)) return;
+      currentSection = section;
+
+      tabs.forEach((tab) => {
+        const isActive = tab.dataset.archiveTab === currentSection;
+        tab.setAttribute("aria-selected", String(isActive));
+        tab.tabIndex = isActive ? 0 : -1;
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.archivePanel !== currentSection;
+      });
+
+      localStorage.setItem(ARCHIVE_SECTION_KEY, currentSection);
+      if (options.updateHash !== false) {
+        window.history.replaceState(
+          window.history.state,
+          "",
+          `${window.location.pathname}${window.location.search}#${currentSection}`
+        );
+      }
+
+      if (options.announce !== false && announcer) {
+        const activeTab = tabs.find((tab) => tab.dataset.archiveTab === currentSection);
+        const label = activeTab?.querySelector("strong")?.textContent?.trim() || currentSection;
+        announcer.textContent = `Открыта папка архива: ${label}`;
+      }
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        renderSection(tab.dataset.archiveTab);
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        const currentIndex = tabs.indexOf(tab);
+        let nextIndex = null;
+
+        if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabs.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = tabs.length - 1;
+        if (nextIndex === null) return;
+
+        event.preventDefault();
+        const nextTab = tabs[nextIndex];
+        renderSection(nextTab.dataset.archiveTab);
+        nextTab.focus();
+      });
+    });
+
+    renderSection(currentSection, { announce: false, updateHash: false });
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -6333,6 +6409,7 @@
     initStaffRegistry();
     initDossierAccess();
     initAssetClassifier();
+    initArchiveCatalog();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     

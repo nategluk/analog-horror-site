@@ -6707,3 +6707,356 @@ body.staff-mode .staff-archive-terminal h2 {
   margin-top: 1rem;
   font-family: var(--font-display);
 }
+
+/* ==================== CENTRAL ARCHIVE ==================== */
+
+.archive-panel {
+  overflow: visible;
+}
+
+body:not(.staff-mode) .guest-archive {
+  display: grid;
+  gap: 1.2rem;
+}
+
+body:not(.staff-mode) .guest-archive__header {
+  display: grid;
+  gap: 0.55rem;
+  padding: clamp(1.1rem, 4vw, 1.7rem);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.94), rgba(245, 226, 230, 0.88)),
+    repeating-linear-gradient(0deg, rgba(127, 71, 88, 0.035) 0 1px, transparent 1px 7px);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+body:not(.staff-mode) .guest-archive__header h2,
+body:not(.staff-mode) .guest-archive__header p {
+  margin: 0;
+}
+
+body:not(.staff-mode) .guest-archive__header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 5vw, 2.35rem);
+}
+
+body:not(.staff-mode) .guest-archive__header > p:last-child {
+  max-width: 46rem;
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+body:not(.staff-mode) .guest-archive__kicker {
+  color: #8a2f47;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+body:not(.staff-mode) .guest-archive__folders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+body:not(.staff-mode) .guest-archive__folder {
+  position: relative;
+  display: grid;
+  align-content: end;
+  gap: 0.55rem;
+  min-width: 0;
+  min-height: 15rem;
+  overflow: hidden;
+  padding: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--border) 62%, #8a2f47);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 240, 0.65), rgba(239, 218, 222, 0.92)),
+    repeating-linear-gradient(0deg, rgba(138, 47, 71, 0.045) 0 1px, transparent 1px 6px);
+}
+
+body:not(.staff-mode) .guest-archive__folder::before {
+  content: "RESTRICTED";
+  position: absolute;
+  top: 1rem;
+  right: -2.3rem;
+  width: 10rem;
+  padding: 0.2rem 0;
+  transform: rotate(34deg);
+  border-block: 1px solid rgba(138, 47, 71, 0.38);
+  color: rgba(138, 47, 71, 0.56);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+body:not(.staff-mode) .guest-archive__folder > span {
+  color: #8a2f47;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+body:not(.staff-mode) .guest-archive__folder h3,
+body:not(.staff-mode) .guest-archive__folder p {
+  margin: 0;
+}
+
+body:not(.staff-mode) .guest-archive__folder h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+body:not(.staff-mode) .guest-archive__folder p {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+body:not(.staff-mode) .guest-archive__folder button {
+  width: 100%;
+  margin-top: 0.25rem;
+  border: 1px solid rgba(138, 47, 71, 0.45);
+  background: rgba(255, 248, 244, 0.56);
+  color: #7d3145;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+body:not(.staff-mode) .guest-archive__folder button:hover,
+body:not(.staff-mode) .guest-archive__folder button:focus-visible,
+body:not(.staff-mode) .guest-archive__folder button.is-denied {
+  border-color: #8a2f47;
+  background: rgba(138, 47, 71, 0.1);
+  color: #6f1f35;
+}
+
+body:not(.staff-mode) .guest-archive__signal {
+  margin: 0;
+  padding: 0.75rem;
+  border-block: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  color: #7d3145;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  text-align: center;
+}
+
+body.staff-mode .staff-archive {
+  overflow: hidden;
+}
+
+body.staff-mode .staff-archive__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--border));
+}
+
+body.staff-mode .staff-archive__header h2,
+body.staff-mode .staff-archive__header p {
+  margin: 0;
+}
+
+body.staff-mode .staff-archive__header h2 {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 5vw, 2.4rem);
+  text-transform: uppercase;
+}
+
+body.staff-mode .staff-archive__kicker,
+body.staff-mode .staff-archive__summary {
+  color: var(--muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+}
+
+body.staff-mode .staff-archive__kicker {
+  margin-bottom: 0.3rem;
+}
+
+body.staff-mode .staff-archive__summary {
+  text-align: right;
+}
+
+body.staff-mode .archive-folders {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+body.staff-mode .site-wrapper .archive-folders button {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: 6.5rem;
+  padding: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(5, 20, 8, 0.92), rgba(1, 8, 3, 0.98)),
+    repeating-linear-gradient(0deg, rgba(113, 255, 137, 0.04) 0 1px, transparent 1px 5px);
+  color: var(--accent);
+  text-align: left;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+body.staff-mode .site-wrapper .archive-folders button:hover,
+body.staff-mode .site-wrapper .archive-folders button:focus-visible,
+body.staff-mode .site-wrapper .archive-folders button[aria-selected="true"] {
+  border-color: var(--accent);
+  background:
+    linear-gradient(180deg, rgba(12, 43, 18, 0.96), rgba(2, 14, 5, 0.99)),
+    repeating-linear-gradient(0deg, rgba(113, 255, 137, 0.07) 0 1px, transparent 1px 5px);
+  color: #d1ffd8;
+  box-shadow: inset 0 0 18px rgba(113, 255, 137, 0.07);
+}
+
+body.staff-mode .archive-folders button span,
+body.staff-mode .archive-folders button small {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.staff-mode .archive-folders button strong {
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: clamp(0.82rem, 2.2vw, 1.05rem);
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body.staff-mode .archive-section {
+  padding: clamp(0.75rem, 2.5vw, 1rem);
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, var(--border));
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(4, 13, 6, 0.92), rgba(0, 5, 1, 0.98)),
+    repeating-linear-gradient(0deg, rgba(113, 255, 137, 0.025) 0 1px, transparent 1px 6px);
+}
+
+body.staff-mode .archive-section[hidden] {
+  display: none;
+}
+
+body.staff-mode .archive-section[hidden] .document-card::before {
+  content: none;
+}
+
+body.staff-mode .archive-section__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+body.staff-mode .archive-section__header h3,
+body.staff-mode .archive-section__header p {
+  margin: 0;
+}
+
+body.staff-mode .archive-section__header p,
+body.staff-mode .archive-section__header > span {
+  color: var(--muted);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+}
+
+body.staff-mode .archive-section__header h3 {
+  margin-top: 0.2rem;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  text-transform: uppercase;
+}
+
+body.staff-mode .archive-record-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+body.staff-mode .archive-record-list .archive-record {
+  min-height: 10rem;
+  gap: 0.35rem;
+  padding: 0.8rem;
+}
+
+body.staff-mode .archive-record-list .archive-record::before {
+  top: 0.75rem;
+  font-size: 0.58rem;
+}
+
+body.staff-mode .archive-record-list .archive-record strong {
+  font-size: 0.94rem;
+}
+
+body.staff-mode .archive-record-list .archive-record p,
+body.staff-mode .archive-record-list .archive-record > span:not(.document-card__status) {
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+body.staff-mode .archive-photo-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 700px) {
+  body:not(.staff-mode) .guest-archive__folders {
+    grid-template-columns: 1fr;
+  }
+
+  body:not(.staff-mode) .guest-archive__folder {
+    min-height: 11.5rem;
+  }
+
+  body.staff-mode .staff-archive__header,
+  body.staff-mode .archive-section__header {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  body.staff-mode .staff-archive__summary {
+    text-align: left;
+  }
+
+  body.staff-mode .archive-folders {
+    gap: 0.4rem;
+  }
+
+  body.staff-mode .site-wrapper .archive-folders button {
+    min-height: 5.6rem;
+    padding: 0.55rem;
+  }
+
+  body.staff-mode .archive-folders button strong {
+    font-size: 0.72rem;
+  }
+
+  body.staff-mode .archive-folders button span,
+  body.staff-mode .archive-folders button small {
+    font-size: 0.52rem;
+    letter-spacing: 0.035em;
+  }
+
+  body.staff-mode .archive-record-list,
+  body.staff-mode .archive-photo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.staff-mode .archive-record-list .archive-record {
+    min-height: 9rem;
+  }
+}
