@@ -72,3 +72,12 @@ entrypoint = "./functions/begin-dossier-claim/index.ts"
 enabled = true
 verify_jwt = false
 entrypoint = "./functions/consume-dossier-claim/index.ts"
+
+[functions.begin-dossier-access]
+enabled = true
+verify_jwt = false
+entrypoint = "./functions/begin-dossier-access/index.ts"
+
+[functions.restore-dossier]
+enabled = true
+entrypoint = "./functions/restore-dossier/index.ts"

@@ -717,6 +717,62 @@ body.staff-mode .staff-content.personnel-registry {
   font-size: 0.82rem;
 }
 
+.personnel-access {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  padding: 0.9rem;
+  color: #b8e9c0;
+  border: 1px dashed #397a49;
+  background: rgba(4, 12, 6, 0.86);
+}
+
+.personnel-access[hidden] {
+  display: none;
+}
+
+.personnel-access div {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.personnel-access strong {
+  color: #71ff89;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.personnel-access span {
+  color: #8ec497;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.personnel-access button {
+  flex: 0 0 auto;
+  min-height: 2.8rem;
+  padding: 0.65rem 0.85rem;
+  color: #c7ffcf;
+  border: 1px solid #397a49;
+  border-radius: 0;
+  background: #07140a;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  cursor: pointer;
+}
+
+.personnel-access button:hover,
+.personnel-access button:focus-visible {
+  color: #061007;
+  outline: 2px solid #baffc4;
+  outline-offset: 2px;
+  background: #71ff89;
+}
+
 .personnel-registry__grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1496,6 +1552,15 @@ body.staff-mode .personnel-intrusion button {
 }
 
 @media (max-width: 760px) {
+  .personnel-access {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .personnel-access button {
+    width: 100%;
+  }
+
   .personnel-registry__grid {
     grid-template-columns: 1fr;
     gap: 0.7rem;

@@ -5,9 +5,10 @@
 Этот документ описывает серверное основание личного кабинета. Репозиторий
 связан с удалённым Supabase-проектом, а миграции применены 27 июля 2026 года.
 Публичный адрес определён как `https://detskiyzhir.org/`. Браузерная игра
-продолжает хранить основное состояние локально, но начало закрепления уже
-подключено к серверу: Auth URL, секреты, миграции и обе Edge Function
-развёрнуты, а экран подтверждения опубликован на публичном домене.
+продолжает хранить рабочее состояние локально, а сервер уже принимает первичное
+закрепление и восстанавливает закреплённое дело на новом устройстве: Auth URL,
+секреты, миграции и четыре Edge Function развёрнуты. Экран подтверждения
+опубликован на публичном домене.
 
 Канонический продуктовый и логический контракт находится в
 `docs/IRINA_CALL_GAME.md`.
@@ -18,15 +19,22 @@
 - `supabase/migrations/` — дела, сеансы, артефакты и временные передачи;
 - `supabase/functions/begin-dossier-claim/` — начало закрепления и magic link;
 - `supabase/functions/consume-dossier-claim/` — подтверждённое закрепление;
+- `supabase/functions/begin-dossier-access/` — новое письмо для уже
+  закреплённого дела;
+- `supabase/functions/restore-dossier/` — чтение собственного дела по
+  подтверждённой сессии;
 - `supabase/functions/_shared/curator-0091-contract.ts` — серверные allowlist;
 - `supabase/templates/magic-link.html` — подготовленный фирменный шаблон письма;
 - `supabase/functions/.env.example` — только несекретные примеры переменных;
 - `auth/confirm.html`, `js/auth-confirm.js`, `css/auth.css` — безопасный callback;
 - `js/app.js`, `staff.html`, `css/style.css` — предложение закрепления после
-  первого назначения и повторный вход из карточки оператора.
+  первого назначения и восстановление из обычного экрана STAFF без повторной
+  игры.
 
-`js/dossier-store.js` по-прежнему работает в режиме `local`. Это намеренно:
-привязка браузерного адаптера относится к следующему этапу.
+`js/dossier-store.js` по-прежнему работает в режиме `local`: серверная копия
+загружается при подтверждённом входе, объединяется с безопасной локальной
+копией и затем используется игрой. Непрерывная двусторонняя синхронизация
+относится к следующему этапу.
 
 ## Таблицы и доступ
 
@@ -101,11 +109,15 @@ supabase secrets set \
   ALLOWED_SITE_ORIGINS=https://detskiyzhir.org,http://127.0.0.1:4173
 ```
 
-Секреты установлены, а `begin-dossier-claim` и `consume-dossier-claim`
-развёрнуты в связанный проект и имеют статус `ACTIVE` (версия 1).
+Секреты установлены, а `begin-dossier-claim`, `consume-dossier-claim`,
+`begin-dossier-access` и `restore-dossier` развёрнуты в связанный проект и
+имеют статус `ACTIVE` (версия 1).
 `begin-dossier-claim` требует publishable credentials даже при
-`verify_jwt = false`. `consume-dossier-claim` требует подтверждённый пользовательский
-JWT, разрешённый origin и одноразовый transfer secret.
+`verify_jwt = false`. `consume-dossier-claim` требует подтверждённый
+пользовательский JWT, разрешённый origin и одноразовый transfer secret.
+`begin-dossier-access` возвращает одинаковый успешный ответ независимо от
+существования адреса, а `restore-dossier` читает только дело владельца
+подтверждённого JWT через RLS.
 
 Если сайт размещён под путём, он обязан заканчиваться `/`:
 
@@ -118,6 +130,8 @@ https://example.github.io/analog-horror-site/
 ```sh
 supabase functions deploy begin-dossier-claim
 supabase functions deploy consume-dossier-claim
+supabase functions deploy begin-dossier-access
+supabase functions deploy restore-dossier
 ```
 
 В Auth URL Configuration проверить:
@@ -127,9 +141,10 @@ supabase functions deploy consume-dossier-claim
 - локальный redirect — `http://127.0.0.1:4173/auth/confirm.html` только для
   разработки.
 
-Custom SMTP настроен через подтверждённый домен Resend. Перед публичным запуском
-осталось проверить доставляемость письма в обычных и мобильных почтовых
-клиентах.
+Custom SMTP настроен через подтверждённый домен Resend. Реальное письмо
+первичного закрепления доставлено и открыто на iPhone 27 июля 2026 года.
+Отдельно после публикации нового frontend нужно проверить новое письмо
+восстановления на втором устройстве.
 
 ## Переменные Edge Function
 
@@ -198,6 +213,25 @@ Edge Function. Функция:
 `tyndex_pending_claim_v1`, чтобы сетевую ошибку можно было повторить без нового
 письма.
 
+## Восстановление на новом устройстве
+
+Повторное прохождение не требуется. На устройстве без локального сохранения
+игрок:
+
+1. открывает обычный `staff.html`;
+2. выбирает `ВОССТАНОВИТЬ ЛИЧНОЕ ДЕЛО`;
+3. вводит тот же адрес восстановления;
+4. открывает новое одноразовое письмо на этом устройстве;
+5. возвращается из callback в STAFF с восстановленными ролью, аватаром,
+   сеансами и материалами.
+
+`begin-dossier-access` инициирует magic link с `mode=access`, не принимает
+игровые данные и не сообщает, существует ли адрес. Callback получает
+подтверждённую Auth-сессию и вызывает `restore-dossier`. Функция читает
+пользовательские таблицы через RLS, а callback объединяет ответ с локальной
+копией через `mergeDossiers()`, сохраняет текущий сеанс и включает режим
+сотрудника.
+
 ## Локальная проверка
 
 Для полного `supabase start`, применения миграций и локальной почты нужен
@@ -218,18 +252,20 @@ supabase functions serve begin-dossier-claim \
 ```sh
 npx deno check supabase/functions/begin-dossier-claim/index.ts
 npx deno check supabase/functions/consume-dossier-claim/index.ts
+npx deno check supabase/functions/begin-dossier-access/index.ts
+npx deno check supabase/functions/restore-dossier/index.ts
 npx deno run --allow-read scripts/check-server-contract.ts
 supabase start
 ```
 
-Третья команда в такой среде должна дойти до проверки Docker и остановиться с
+Пятая команда в такой среде должна дойти до проверки Docker и остановиться с
 сообщением о недоступном daemon. Это подтверждает разбор `config.toml`, но не
 подтверждает применение SQL.
 
 ## Что ещё не реализовано
 
-- полный тест реального magic link и доставляемости в обычных и мобильных
-  почтовых клиентах;
-- серверный режим `js/dossier-store.js`;
-- загрузка закреплённого дела на новом устройстве;
-- синхронизация и разрешение конфликтов.
+- публичный тест нового письма восстановления на втором устройстве после
+  публикации frontend;
+- автоматическое обновление истёкшей Auth-сессии и явный выход;
+- непрерывная двусторонняя синхронизация изменений;
+- полное разрешение конфликтов между одновременно изменёнными копиями.

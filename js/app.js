@@ -7,6 +7,8 @@
   const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
+  const DOSSIER_ACCESS_ENDPOINT =
+    "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-access";
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_zIWow9PlLu6B63FKWLiBrA_jllbCKhI";
   const LOGO_KNOCK_WINDOW = 1500;
@@ -1231,6 +1233,8 @@
 
   let dossierClaimDialog;
   let dossierClaimPreviousFocus;
+  let dossierAccessDialog;
+  let dossierAccessPreviousFocus;
 
   const getDossierClaimDialog = () => {
     if (dossierClaimDialog?.isConnected) return dossierClaimDialog;
@@ -1431,6 +1435,160 @@
     dialog.showModal();
     dialog.querySelector("[data-claim-start]").focus();
     return true;
+  };
+
+  const getDossierAccessDialog = () => {
+    if (dossierAccessDialog?.isConnected) return dossierAccessDialog;
+
+    dossierAccessDialog = document.createElement("dialog");
+    dossierAccessDialog.className = "dossier-claim";
+    dossierAccessDialog.setAttribute("aria-labelledby", "dossier-access-title");
+    dossierAccessDialog.innerHTML = `
+      <div class="dossier-claim__panel">
+        <header>
+          <div>
+            <p>TYNDEX HR // КАНАЛ ВОССТАНОВЛЕНИЯ</p>
+            <h2 id="dossier-access-title">ВОССТАНОВЛЕНИЕ ЛИЧНОГО ДЕЛА</h2>
+          </div>
+          <button type="button" data-access-close aria-label="Закрыть">ЗАКРЫТЬ</button>
+        </header>
+        <form class="dossier-claim__form" data-access-form>
+          <p>
+            Повторное прохождение не требуется. Система отправит новую
+            одноразовую ссылку для этого устройства.
+          </p>
+          <label>
+            АДРЕС ВОССТАНОВЛЕНИЯ
+            <input
+              type="email"
+              name="email"
+              inputmode="email"
+              autocomplete="email"
+              maxlength="254"
+              required
+              placeholder="operator@example.com"
+            />
+          </label>
+          <div class="dossier-claim__actions">
+            <button type="submit" data-access-submit>ОТПРАВИТЬ ССЫЛКУ ДОСТУПА</button>
+            <button type="button" data-access-cancel>ОТМЕНА</button>
+          </div>
+        </form>
+        <section class="dossier-claim__sent" data-access-sent hidden>
+          <strong>ССЫЛКА ДОСТУПА ОТПРАВЛЕНА</strong>
+          <p>
+            Откройте новое письмо на этом устройстве. Роль, история сеансов и
+            материалы будут загружены из серверной кадровой базы.
+          </p>
+          <button type="button" data-access-done>ПОНЯТНО</button>
+        </section>
+        <p
+          class="dossier-claim__status"
+          data-access-status
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+    `;
+    body.append(dossierAccessDialog);
+
+    const form = dossierAccessDialog.querySelector("[data-access-form]");
+    const sent = dossierAccessDialog.querySelector("[data-access-sent]");
+    const emailInput = form.querySelector('input[name="email"]');
+    const status = dossierAccessDialog.querySelector("[data-access-status]");
+    const submitButton = form.querySelector("[data-access-submit]");
+    const closeDialog = () => {
+      if (dossierAccessDialog.open) dossierAccessDialog.close();
+    };
+
+    dossierAccessDialog
+      .querySelector("[data-access-close]")
+      .addEventListener("click", closeDialog);
+    dossierAccessDialog
+      .querySelector("[data-access-cancel]")
+      .addEventListener("click", closeDialog);
+    dossierAccessDialog
+      .querySelector("[data-access-done]")
+      .addEventListener("click", closeDialog);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      submitButton.disabled = true;
+      emailInput.disabled = true;
+      status.textContent = "ФОРМИРОВАНИЕ ОДНОРАЗОВОЙ ССЫЛКИ…";
+
+      try {
+        const response = await window.fetch(DOSSIER_ACCESS_ENDPOINT, {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: emailInput.value.trim(),
+          }),
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.ok) {
+          form.hidden = true;
+          sent.hidden = false;
+          status.textContent = "";
+          emailInput.value = "";
+          dossierAccessDialog
+            .querySelector("[data-access-done]")
+            .focus();
+          return;
+        }
+
+        status.textContent =
+          response.status === 429
+            ? "СЛИШКОМ МНОГО ЗАПРОСОВ. ПОВТОРИТЕ ПОЗЖЕ."
+            : "ССЫЛКА НЕ СОЗДАНА. ПРОВЕРЬТЕ АДРЕС И ПОВТОРИТЕ.";
+      } catch {
+        status.textContent =
+          "КАНАЛ НЕДОСТУПЕН. ЛОКАЛЬНЫЕ ДАННЫЕ НЕ ИЗМЕНЕНЫ.";
+      } finally {
+        submitButton.disabled = false;
+        emailInput.disabled = false;
+      }
+    });
+
+    dossierAccessDialog.addEventListener("close", () => {
+      form.reset();
+      form.hidden = false;
+      sent.hidden = true;
+      status.textContent = "";
+      dossierAccessPreviousFocus?.focus?.();
+    });
+
+    return dossierAccessDialog;
+  };
+
+  const openDossierAccess = () => {
+    const dialog = getDossierAccessDialog();
+    const form = dialog.querySelector("[data-access-form]");
+    const sent = dialog.querySelector("[data-access-sent]");
+    const status = dialog.querySelector("[data-access-status]");
+    form.hidden = false;
+    sent.hidden = true;
+    status.textContent = "";
+    dossierAccessPreviousFocus = document.activeElement;
+    dialog.showModal();
+    form.querySelector('input[name="email"]').focus();
+  };
+
+  const initDossierAccess = () => {
+    const panel = document.querySelector("[data-dossier-access-panel]");
+    const button = panel?.querySelector("[data-dossier-access]");
+    if (!panel || !button || button.dataset.accessReady === "true") return;
+
+    button.dataset.accessReady = "true";
+    panel.hidden = hasActiveDossierAuthSession();
+    button.addEventListener("click", openDossierAccess);
   };
 
   const unlockCuratorArtifact = (progress, artifactId) => {
@@ -5343,6 +5501,7 @@
     initCinemaTicket();
     initCuratorCall();
     initStaffRegistry();
+    initDossierAccess();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
