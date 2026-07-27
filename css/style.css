@@ -1250,6 +1250,186 @@ body.staff-mode .personnel-intrusion button {
   display: none;
 }
 
+.dossier-claim {
+  width: min(40rem, calc(100vw - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  color: #c7ffcf;
+  border: 1px solid #397a49;
+  border-radius: 0;
+  background: #040a05;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.82),
+    inset 0 0 34px rgba(45, 136, 61, 0.12);
+  font-family: "Courier New", Courier, monospace;
+  text-shadow: 0 0 3px rgba(119, 255, 136, 0.46);
+}
+
+.dossier-claim:not([open]) {
+  display: none;
+}
+
+.dossier-claim::backdrop {
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(3px);
+}
+
+.dossier-claim__panel {
+  display: grid;
+  gap: 1.15rem;
+  padding: clamp(1.1rem, 4vw, 1.8rem);
+  background:
+    linear-gradient(180deg, rgba(5, 16, 8, 0.98), rgba(2, 7, 4, 0.99)),
+    repeating-linear-gradient(
+      0deg,
+      rgba(77, 255, 105, 0.025) 0 1px,
+      transparent 1px 5px
+    );
+}
+
+.dossier-claim__panel > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid #255a31;
+}
+
+.dossier-claim__panel header p,
+.dossier-claim__panel header h2 {
+  margin: 0;
+}
+
+.dossier-claim__panel header p {
+  color: #68b876;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+}
+
+.dossier-claim__panel header h2 {
+  margin-top: 0.35rem;
+  color: #71ff89;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 4vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.dossier-claim__intro,
+.dossier-claim__form,
+.dossier-claim__sent {
+  display: grid;
+  gap: 1rem;
+}
+
+.dossier-claim__intro[hidden],
+.dossier-claim__form[hidden],
+.dossier-claim__sent[hidden] {
+  display: none;
+}
+
+.dossier-claim__intro p,
+.dossier-claim__sent p,
+.dossier-claim__form p {
+  margin: 0;
+  color: #a1d4aa;
+  line-height: 1.55;
+}
+
+.dossier-claim__intro strong,
+.dossier-claim__sent strong {
+  color: #71ff89;
+  line-height: 1.45;
+}
+
+.dossier-claim__form label {
+  display: grid;
+  gap: 0.55rem;
+  color: #68b876;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.dossier-claim__form input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 0.8rem;
+  color: #d9ffde;
+  border: 1px solid #397a49;
+  border-radius: 0;
+  outline: 0;
+  background: #020703;
+  font: inherit;
+  font-size: 1rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.dossier-claim__form input:focus {
+  border-color: #71ff89;
+  box-shadow: 0 0 0 2px rgba(113, 255, 137, 0.16);
+}
+
+.dossier-claim__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.dossier-claim button {
+  min-height: 2.9rem;
+  padding: 0.7rem 0.8rem;
+  color: #c7ffcf;
+  border: 1px solid #397a49;
+  border-radius: 0;
+  background: #07140a;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  cursor: pointer;
+}
+
+.dossier-claim button:hover,
+.dossier-claim button:focus-visible {
+  color: #061007;
+  outline: 2px solid #baffc4;
+  outline-offset: 2px;
+  background: #71ff89;
+}
+
+.dossier-claim button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.dossier-claim__status {
+  min-height: 1.4em;
+  margin: 0;
+  color: #ffb86b;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .dossier-claim {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .dossier-claim__panel > header {
+    align-items: flex-start;
+  }
+
+  .dossier-claim__actions {
+    grid-template-columns: 1fr;
+  }
+}
+
 .artifact-copy {
   width: 100%;
   padding: clamp(1rem, 3vw, 1.5rem);

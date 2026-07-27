@@ -3,6 +3,12 @@
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
   const STAFF_INTRUSION_KEY = "tyndex_staff_intrusion_v1";
+  const DOSSIER_CLAIM_OFFER_KEY = "tyndex_dossier_claim_offer_v1";
+  const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
+  const DOSSIER_CLAIM_ENDPOINT =
+    "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_zIWow9PlLu6B63FKWLiBrA_jllbCKhI";
   const LOGO_KNOCK_WINDOW = 1500;
   const dossierStore = window.TyndexDossierStore;
   if (!dossierStore) {
@@ -1174,6 +1180,257 @@
       delete profile.reclassificationActive;
       saveStaffProfile(profile);
     }
+  };
+
+  const readDossierAuthSession = () => {
+    try {
+      const session = JSON.parse(
+        window.localStorage.getItem(DOSSIER_AUTH_SESSION_KEY)
+      );
+      if (
+        !session ||
+        session.version !== 1 ||
+        typeof session.accessToken !== "string" ||
+        !session.accessToken ||
+        !Number.isFinite(session.expiresAt)
+      ) {
+        return null;
+      }
+      return session;
+    } catch {
+      return null;
+    }
+  };
+
+  const hasActiveDossierAuthSession = () => {
+    const session = readDossierAuthSession();
+    return Boolean(session && session.expiresAt > Date.now() + 30_000);
+  };
+
+  const markDossierClaimOfferShown = (sessionId) => {
+    window.localStorage.setItem(
+      DOSSIER_CLAIM_OFFER_KEY,
+      JSON.stringify({
+        version: 1,
+        sessionId,
+        shownAt: Date.now(),
+      })
+    );
+  };
+
+  const wasDossierClaimOfferShown = (sessionId) => {
+    try {
+      const state = JSON.parse(
+        window.localStorage.getItem(DOSSIER_CLAIM_OFFER_KEY)
+      );
+      return Boolean(state?.version === 1 && state.sessionId === sessionId);
+    } catch {
+      return false;
+    }
+  };
+
+  let dossierClaimDialog;
+  let dossierClaimPreviousFocus;
+
+  const getDossierClaimDialog = () => {
+    if (dossierClaimDialog?.isConnected) return dossierClaimDialog;
+
+    dossierClaimDialog = document.createElement("dialog");
+    dossierClaimDialog.className = "dossier-claim";
+    dossierClaimDialog.setAttribute("aria-labelledby", "dossier-claim-title");
+    dossierClaimDialog.innerHTML = `
+      <div class="dossier-claim__panel">
+        <header>
+          <div>
+            <p>TYNDEX HR // СИСТЕМА</p>
+            <h2 id="dossier-claim-title">ЛИЧНОЕ ДЕЛО СФОРМИРОВАНО</h2>
+          </div>
+          <button type="button" data-claim-close aria-label="Закрыть">ЗАКРЫТЬ</button>
+        </header>
+        <section class="dossier-claim__intro" data-claim-intro>
+          <p>
+            Назначение и полученные материалы сохранены на этом устройстве.
+            Локальная копия может быть утрачена.
+          </p>
+          <strong>ЗАКРЕПИТЬ ДЕЛО ЗА АДРЕСОМ ВОССТАНОВЛЕНИЯ?</strong>
+          <div class="dossier-claim__actions">
+            <button type="button" data-claim-start>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
+            <button type="button" data-claim-local>ОСТАВИТЬ НА ЭТОМ УСТРОЙСТВЕ</button>
+          </div>
+        </section>
+        <form class="dossier-claim__form" data-claim-form hidden>
+          <label>
+            АДРЕС ВОССТАНОВЛЕНИЯ
+            <input
+              type="email"
+              name="email"
+              inputmode="email"
+              autocomplete="email"
+              maxlength="254"
+              required
+              placeholder="operator@example.com"
+            />
+          </label>
+          <p>
+            Пароль не требуется. На этот адрес придёт одноразовая ссылка
+            доступа. Ирина не увидит введённый адрес.
+          </p>
+          <div class="dossier-claim__actions">
+            <button type="submit" data-claim-submit>ОТПРАВИТЬ ССЫЛКУ ДОСТУПА</button>
+            <button type="button" data-claim-back>НАЗАД</button>
+          </div>
+        </form>
+        <section class="dossier-claim__sent" data-claim-sent hidden>
+          <strong>ССЫЛКА ДОСТУПА ОТПРАВЛЕНА</strong>
+          <p>
+            Откройте письмо на любом устройстве. Пока адрес не подтверждён,
+            локальная копия продолжает работать без изменений.
+          </p>
+          <button type="button" data-claim-done>ПОНЯТНО</button>
+        </section>
+        <p
+          class="dossier-claim__status"
+          data-claim-status
+          role="status"
+          aria-live="polite"
+        ></p>
+      </div>
+    `;
+    body.append(dossierClaimDialog);
+
+    const intro = dossierClaimDialog.querySelector("[data-claim-intro]");
+    const form = dossierClaimDialog.querySelector("[data-claim-form]");
+    const sent = dossierClaimDialog.querySelector("[data-claim-sent]");
+    const emailInput = form.querySelector('input[name="email"]');
+    const status = dossierClaimDialog.querySelector("[data-claim-status]");
+    const submitButton = form.querySelector("[data-claim-submit]");
+    const startButton = dossierClaimDialog.querySelector("[data-claim-start]");
+
+    const showIntro = () => {
+      intro.hidden = false;
+      form.hidden = true;
+      sent.hidden = true;
+      status.textContent = "";
+      startButton.focus();
+    };
+
+    const closeDialog = () => {
+      if (dossierClaimDialog.open) dossierClaimDialog.close();
+    };
+
+    dossierClaimDialog
+      .querySelector("[data-claim-close]")
+      .addEventListener("click", closeDialog);
+    dossierClaimDialog
+      .querySelector("[data-claim-local]")
+      .addEventListener("click", closeDialog);
+    dossierClaimDialog
+      .querySelector("[data-claim-done]")
+      .addEventListener("click", closeDialog);
+    dossierClaimDialog
+      .querySelector("[data-claim-back]")
+      .addEventListener("click", showIntro);
+    startButton.addEventListener("click", () => {
+      intro.hidden = true;
+      form.hidden = false;
+      sent.hidden = true;
+      status.textContent = "";
+      emailInput.focus();
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const dossier = readStaffProfile();
+      const currentSession = getCuratorProgress();
+      if (!dossier || dossier.status !== "completed") {
+        status.textContent =
+          "ЛИЧНОЕ ДЕЛО ЕЩЁ НЕ СФОРМИРОВАНО. ЗАВЕРШИТЕ НАЗНАЧЕНИЕ.";
+        return;
+      }
+
+      submitButton.disabled = true;
+      emailInput.disabled = true;
+      status.textContent = "ФОРМИРОВАНИЕ ОДНОРАЗОВОЙ ССЫЛКИ…";
+
+      try {
+        const response = await window.fetch(DOSSIER_CLAIM_ENDPOINT, {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: emailInput.value.trim(),
+            dossier,
+            currentSession,
+          }),
+        });
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && result.ok) {
+          form.hidden = true;
+          sent.hidden = false;
+          status.textContent = "";
+          emailInput.value = "";
+          dossierClaimDialog
+            .querySelector("[data-claim-done]")
+            .focus();
+          return;
+        }
+
+        status.textContent =
+          response.status === 429
+            ? "СЛИШКОМ МНОГО ЗАПРОСОВ. ПОВТОРИТЕ ПОЗЖЕ."
+            : "ССЫЛКА НЕ СОЗДАНА. ПРОВЕРЬТЕ АДРЕС И ПОВТОРИТЕ.";
+      } catch {
+        status.textContent =
+          "КАНАЛ НЕДОСТУПЕН. ЛОКАЛЬНАЯ КОПИЯ НЕ ИЗМЕНЕНА.";
+      } finally {
+        submitButton.disabled = false;
+        emailInput.disabled = false;
+      }
+    });
+
+    dossierClaimDialog.addEventListener("close", () => {
+      form.reset();
+      status.textContent = "";
+      dossierClaimPreviousFocus?.focus?.();
+    });
+
+    return dossierClaimDialog;
+  };
+
+  const openDossierClaim = ({ automatic = false } = {}) => {
+    const dossier = readStaffProfile();
+    const currentSession = getCuratorProgress();
+    if (!dossier || dossier.status !== "completed") return false;
+    if (automatic && hasActiveDossierAuthSession()) return false;
+
+    const sessionId =
+      currentSession?.sessionId ||
+      dossier.sessions?.at(-1)?.id ||
+      "completed-dossier";
+    if (automatic && wasDossierClaimOfferShown(sessionId)) return false;
+    if (automatic) markDossierClaimOfferShown(sessionId);
+
+    const dialog = getDossierClaimDialog();
+    const intro = dialog.querySelector("[data-claim-intro]");
+    const form = dialog.querySelector("[data-claim-form]");
+    const sent = dialog.querySelector("[data-claim-sent]");
+    const status = dialog.querySelector("[data-claim-status]");
+    intro.hidden = false;
+    form.hidden = true;
+    sent.hidden = true;
+    status.textContent = hasActiveDossierAuthSession()
+      ? "АДРЕС ВОССТАНОВЛЕНИЯ УЖЕ ПОДТВЕРЖДЁН НА ЭТОМ УСТРОЙСТВЕ."
+      : "";
+    dossierClaimPreviousFocus = document.activeElement;
+    dialog.showModal();
+    dialog.querySelector("[data-claim-start]").focus();
+    return true;
   };
 
   const unlockCuratorArtifact = (progress, artifactId) => {
@@ -4308,6 +4565,10 @@
       saveProgress();
       playCallTone(760, 0.09);
       closeCall();
+      window.setTimeout(
+        () => openDossierClaim({ automatic: true }),
+        reducedMotion ? 0 : 180
+      );
     };
 
     const applyMedia = (node, onEnd) => {
@@ -4729,6 +4990,7 @@
     const useIdLink = dossier.querySelector("[data-personnel-use-id]");
     const resumeLink = dossier.querySelector("[data-player-resume]");
     const reclassifyLink = dossier.querySelector("[data-player-reclassify]");
+    const claimButton = dossier.querySelector("[data-player-claim]");
     const sessionsPanel = dossier.querySelector("[data-player-sessions]");
     const sessionList = dossier.querySelector("[data-player-session-list]");
     const materials = dossier.querySelector("[data-player-materials]");
@@ -4857,6 +5119,10 @@
       resumeLink.hidden = progress?.status !== "in_progress";
       reclassifyLink.hidden =
         profile.status !== "completed" || progress?.status === "in_progress";
+      if (claimButton) {
+        claimButton.hidden =
+          profile.status !== "completed" || hasActiveDossierAuthSession();
+      }
       renderSessions(profile);
       renderMaterials(profile);
 
@@ -5044,6 +5310,10 @@
     });
 
     artifactClose.addEventListener("click", () => artifactDialog.close());
+
+    claimButton?.addEventListener("click", () => {
+      openDossierClaim();
+    });
 
     dossier.querySelectorAll("[data-avatar-choice]").forEach((button) => {
       button.addEventListener("click", () => {
