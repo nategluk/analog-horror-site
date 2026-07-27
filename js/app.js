@@ -2,10 +2,12 @@
   const MODE_KEY = "tyndex_mode";
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
-  const CURATOR_CALL_KEY = "tyndex_curator_call_v4";
-  const STAFF_PROFILE_KEY = "tyndex_staff_profile_v1";
   const STAFF_INTRUSION_KEY = "tyndex_staff_intrusion_v1";
   const LOGO_KNOCK_WINDOW = 1500;
+  const dossierStore = window.TyndexDossierStore;
+  if (!dossierStore) {
+    throw new Error("Tyndex dossier store is not loaded");
+  }
   const scriptUrl = document.currentScript?.src || window.location.href;
   const audioAsset = (path) => new URL(`../${path}`, scriptUrl).href;
   const musicLibrary = {
@@ -965,7 +967,7 @@
 
   const getCuratorProgress = () => {
     try {
-      const saved = JSON.parse(localStorage.getItem(CURATOR_CALL_KEY));
+      const saved = dossierStore.readCurrentSession();
       if (!saved || saved.version !== 4 || saved.curatorId !== "0091-A") {
         return null;
       }
@@ -999,7 +1001,7 @@
 
   const readStaffProfile = () => {
     try {
-      const profile = JSON.parse(localStorage.getItem(STAFF_PROFILE_KEY));
+      const profile = dossierStore.readDossier();
       if (!profile || profile.version !== 1 || profile.curatorId !== "0091-A") {
         return null;
       }
@@ -1014,7 +1016,7 @@
 
   const saveStaffProfile = (profile) => {
     profile.updatedAt = Date.now();
-    localStorage.setItem(STAFF_PROFILE_KEY, JSON.stringify(profile));
+    dossierStore.saveDossier(profile);
     return profile;
   };
 
@@ -1167,7 +1169,7 @@
   const removeTemporaryStaffProfile = () => {
     const profile = readStaffProfile();
     if (profile?.status !== "completed") {
-      localStorage.removeItem(STAFF_PROFILE_KEY);
+      dossierStore.removeDossier();
     } else if (profile.reclassificationActive) {
       delete profile.reclassificationActive;
       saveStaffProfile(profile);
@@ -3942,7 +3944,7 @@
 
     const saveProgress = () => {
       progress.updatedAt = Date.now();
-      localStorage.setItem(CURATOR_CALL_KEY, JSON.stringify(progress));
+      dossierStore.saveCurrentSession(progress);
       syncStaffProfileFromProgress(progress);
       saveState.textContent = "СОХРАНЕНО";
     };
@@ -4253,7 +4255,7 @@
     const rejectCall = (reason) => {
       window.clearTimeout(connectionTimer);
       cancelTextAnimation();
-      localStorage.removeItem(CURATOR_CALL_KEY);
+      dossierStore.removeCurrentSession();
       removeTemporaryStaffProfile();
       video.pause();
       video.hidden = true;
