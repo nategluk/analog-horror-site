@@ -139,9 +139,46 @@
             биологических единиц. Наша цель: бесперебойная поставка Формулы 312. 
             
           </p>
-          <h3>Структура активов:</h3>
-          <div class="grid">
-            <article class="card">
+          <section class="asset-classifier" data-asset-classifier aria-labelledby="asset-classifier-title">
+            <header class="asset-classifier__header">
+              <div>
+                <p class="asset-classifier__kicker">ВНУТРЕННИЙ РЕЕСТР // ДОПУСК ЗЕЛЁНЫЙ</p>
+                <h3 id="asset-classifier-title">Структура активов:</h3>
+              </div>
+              <p class="asset-classifier__status" data-asset-status hidden>
+                ЗАПИСЬ <output data-asset-position>01 / 11</output>
+              </p>
+            </header>
+            <div class="asset-classifier__toolbar" data-asset-toolbar hidden>
+              <button
+                class="asset-classifier__catalog-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="asset-classifier-catalog"
+                data-asset-catalog-toggle
+              >
+                [ КАТАЛОГ ]
+              </button>
+              <input
+                class="asset-classifier__progress"
+                type="range"
+                min="1"
+                max="11"
+                step="1"
+                value="1"
+                aria-label="Выбор записи реестра"
+                data-asset-progress
+              />
+            </div>
+            <nav
+              class="asset-classifier__catalog"
+              id="asset-classifier-catalog"
+              aria-label="Каталог записей реестра"
+              data-asset-catalog
+              hidden
+            ></nav>
+            <div class="grid asset-classifier__records" data-asset-records>
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/trap.png" alt="Ловушки" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Ловушки типа «Лиминальность»</h3>
               <p>
@@ -150,7 +187,7 @@
                 вызывают фазу «инфантильного доверия».
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/animators.png" alt="Аниматоры" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Аниматоры (Класс 1)</h3>
               <p>
@@ -159,56 +196,56 @@
                 утилизация в тире парка «Солнышко».
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/medics.webp" alt="Медперсонал" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Медперсонал (Класс 2)</h3>
               <p>
                 Контроль состояния аниматоров и калибровка сырья по стандарту 312. Вводит инъекции «Сладкого сна» и следит за уровнем ностальгии. Подчинаются только Главврачу ТЦ "Детский Жир".
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/guides.webp" alt="Проводники" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Проводники (Класс 3)</h3>
               <p>
                Отвечают за гостеприимство, селекцию потоков и строгое соблюдение правил Администрации. Всегда улыбаются сквозь Маску Солнца. Помогут найти выход через горку или процедурную.
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/elite.webp" alt="Элита" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Элита (Класс 4)</h3>
               <p>
                 Владельцы приватных островов и закрытых прибрежных участков, недоступных для гражданского посещения. Многие объекты комплекса построены на территориях, добровольно переданных Элитариями под нужды программы
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/inspectors.jpg" alt="Инспекторы по сырью" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Инспекторы по сырью (Класс 5)</h3>
               <p>
                 Жертвы терминальной стадии зависимости от Формулы 312. Ментально ослепшие оболочки, чей мозг деградировал до единственного базового скрипта — поиска малогабаритного сырья. Являются заложниками слепоты и наивности: их легко обезвредить простой фразой «я уже не ребенок».
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/class-6.webp" alt="Волонтеры в театральных масках" loading="lazy" decoding="async" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Волонтеры (Класс 6)</h3>
               <p>
                 Добровольные участники программы «Верни себе детство». Посещают объекты комплекса ради острых ощущений, контролируемого страха и доступа на новые уровни игры. Носят театральные маски. Многие добровольно подписывают бессрочные контракты после первого посещения Красной Комнаты.
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/class-7.webp" alt="Адепты Вечного Детства в розовых рясах" loading="lazy" decoding="async" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Адепты Вечного Детства (Класс 7)</h3>
               <p>
                 Религиозное движение, возникшее после Эпохи Терапии. Считают ностальгию последней настоящей эмоцией человечества, а Формулу 312 — священным таинством. Во время служб используют розовые рясы, детские колыбельные и неизвестные благовония. Курируют объекты паломничества и центры докорма.
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/class-8.webp" alt="Экспериментальный Контингент после процедур Формулы 312" loading="lazy" decoding="async" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Экспериментальный Контингент (Класс 8)</h3>
               <p>
                 Жертвы неудачных фармацевтических и нейрохимических процедур. Утратили стабильную человеческую форму после длительного воздействия концентрата Формулы 312 и промышленных препаратов Тындекса. Используются для тестирования фильтрационных систем, токсичных сред и новых процедур утилизации. Запрещено кормить и фотографировать.
               </p>
             </article>
-            <article class="card">
+            <article class="card" data-asset-record>
               <img src="assets/staff/classes/tyndex.webp" alt="Tyndex Robotics" style="width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; filter: contrast(1.1);" />
               <h3>Tyndex Robotics</h3>
               <p>
@@ -216,7 +253,7 @@
                 захват и транспортировку сырья в цеха обвалки.
               </p>
             </article>
-            <article class="card admin-class-card" data-admin-card>
+            <article class="card admin-class-card" data-admin-card data-asset-record>
               <div class="admin-class-card__screen" aria-hidden="true">
                 <span>CLASS 10</span>
                 <span>NO FACE</span>
@@ -230,7 +267,14 @@
                 [ ОТКРЫТЬ ПРОТОКОЛ ]
               </button>
             </article>
-          </div>
+            </div>
+            <div class="asset-classifier__actions" data-asset-actions hidden>
+              <button type="button" data-asset-previous>← НАЗАД</button>
+              <span aria-hidden="true">СВАЙП / КЛАВИШИ ← →</span>
+              <button type="button" data-asset-next>СЛЕДУЮЩАЯ ЗАПИСЬ →</button>
+            </div>
+            <p class="visually-hidden" role="status" aria-live="polite" data-asset-announcer></p>
+          </section>
           <p>
             <strong>Важное напоминание для персонала:</strong> Сырье категории А (до 312 граммов
             эссенции) требует бережного обращения до момента фильтрации. Помните: страх портит

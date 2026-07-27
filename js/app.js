@@ -5,6 +5,7 @@
   const STAFF_INTRUSION_KEY = "tyndex_staff_intrusion_v1";
   const DOSSIER_CLAIM_OFFER_KEY = "tyndex_dossier_claim_offer_v1";
   const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
+  const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
   const DOSSIER_ACCESS_ENDPOINT =
@@ -6157,6 +6158,167 @@
     renderPlayerCard();
   };
 
+  const initAssetClassifier = () => {
+    const classifier = document.querySelector("[data-asset-classifier]");
+    if (!classifier || classifier.dataset.assetClassifierReady === "true") return;
+
+    const recordsContainer = classifier.querySelector("[data-asset-records]");
+    const records = [...classifier.querySelectorAll("[data-asset-record]")];
+    const status = classifier.querySelector("[data-asset-status]");
+    const position = classifier.querySelector("[data-asset-position]");
+    const toolbar = classifier.querySelector("[data-asset-toolbar]");
+    const progress = classifier.querySelector("[data-asset-progress]");
+    const catalog = classifier.querySelector("[data-asset-catalog]");
+    const catalogToggle = classifier.querySelector("[data-asset-catalog-toggle]");
+    const actions = classifier.querySelector("[data-asset-actions]");
+    const previousButton = classifier.querySelector("[data-asset-previous]");
+    const nextButton = classifier.querySelector("[data-asset-next]");
+    const announcer = classifier.querySelector("[data-asset-announcer]");
+
+    if (
+      !recordsContainer ||
+      records.length === 0 ||
+      !status ||
+      !position ||
+      !toolbar ||
+      !progress ||
+      !catalog ||
+      !catalogToggle ||
+      !actions ||
+      !previousButton ||
+      !nextButton
+    ) {
+      return;
+    }
+
+    classifier.dataset.assetClassifierReady = "true";
+    recordsContainer.classList.add("is-enhanced");
+    recordsContainer.tabIndex = 0;
+    recordsContainer.setAttribute("aria-label", "Просмотр записей внутреннего реестра");
+    status.hidden = false;
+    toolbar.hidden = false;
+    actions.hidden = false;
+    progress.max = String(records.length);
+
+    const savedRecord = Number.parseInt(localStorage.getItem(ABOUT_ASSET_RECORD_KEY) || "1", 10);
+    let currentIndex = Number.isFinite(savedRecord)
+      ? Math.min(records.length - 1, Math.max(0, savedRecord - 1))
+      : 0;
+    let touchStart = null;
+
+    const closeCatalog = () => {
+      catalog.hidden = true;
+      catalogToggle.setAttribute("aria-expanded", "false");
+      catalogToggle.textContent = "[ КАТАЛОГ ]";
+    };
+
+    const catalogButtons = records.map((record, index) => {
+      const heading = record.querySelector("h3");
+      const label = heading?.textContent?.replace(/\s+/g, " ").trim() || `Запись ${index + 1}`;
+      const recordId = `asset-record-${index + 1}`;
+      const button = document.createElement("button");
+
+      record.id = recordId;
+      button.type = "button";
+      button.textContent = `${String(index + 1).padStart(2, "0")} // ${label}`;
+      button.setAttribute("aria-controls", recordId);
+      button.addEventListener("click", () => {
+        renderRecord(index);
+        closeCatalog();
+        catalogToggle.focus();
+      });
+      catalog.append(button);
+      return button;
+    });
+
+    const renderRecord = (nextIndex, announce = true) => {
+      currentIndex = Math.min(records.length - 1, Math.max(0, nextIndex));
+      const activeRecord = records[currentIndex];
+      const activeHeading =
+        activeRecord.querySelector("h3")?.textContent?.replace(/\s+/g, " ").trim() ||
+        `Запись ${currentIndex + 1}`;
+      const positionLabel = `${String(currentIndex + 1).padStart(2, "0")} / ${String(
+        records.length
+      ).padStart(2, "0")}`;
+
+      records.forEach((record, index) => {
+        record.hidden = index !== currentIndex;
+      });
+      catalogButtons.forEach((button, index) => {
+        if (index === currentIndex) {
+          button.setAttribute("aria-current", "true");
+        } else {
+          button.removeAttribute("aria-current");
+        }
+      });
+
+      position.textContent = positionLabel;
+      progress.value = String(currentIndex + 1);
+      progress.setAttribute("aria-valuetext", `${positionLabel}: ${activeHeading}`);
+      previousButton.disabled = currentIndex === 0;
+      nextButton.disabled = currentIndex === records.length - 1;
+      localStorage.setItem(ABOUT_ASSET_RECORD_KEY, String(currentIndex + 1));
+
+      if (announce && announcer) {
+        announcer.textContent = `Запись ${currentIndex + 1} из ${records.length}: ${activeHeading}`;
+      }
+    };
+
+    catalogToggle.addEventListener("click", () => {
+      const shouldOpen = catalog.hidden;
+      catalog.hidden = !shouldOpen;
+      catalogToggle.setAttribute("aria-expanded", String(shouldOpen));
+      catalogToggle.textContent = shouldOpen ? "[ ЗАКРЫТЬ КАТАЛОГ ]" : "[ КАТАЛОГ ]";
+      if (shouldOpen) {
+        catalogButtons[currentIndex]?.scrollIntoView({ block: "nearest" });
+      }
+    });
+
+    previousButton.addEventListener("click", () => renderRecord(currentIndex - 1));
+    nextButton.addEventListener("click", () => renderRecord(currentIndex + 1));
+    progress.addEventListener("input", () => renderRecord(Number(progress.value) - 1));
+
+    recordsContainer.addEventListener(
+      "touchstart",
+      (event) => {
+        if (event.touches.length !== 1) return;
+        touchStart = {
+          x: event.touches[0].clientX,
+          y: event.touches[0].clientY,
+        };
+      },
+      { passive: true }
+    );
+
+    recordsContainer.addEventListener(
+      "touchend",
+      (event) => {
+        if (!touchStart || event.changedTouches.length !== 1) return;
+        const deltaX = event.changedTouches[0].clientX - touchStart.x;
+        const deltaY = event.changedTouches[0].clientY - touchStart.y;
+        touchStart = null;
+
+        if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) return;
+        renderRecord(currentIndex + (deltaX < 0 ? 1 : -1));
+      },
+      { passive: true }
+    );
+
+    classifier.addEventListener("keydown", (event) => {
+      if (event.target === progress) return;
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        renderRecord(currentIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        renderRecord(currentIndex + 1);
+      }
+    });
+
+    renderRecord(currentIndex, false);
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -6170,6 +6332,7 @@
     initCuratorCall();
     initStaffRegistry();
     initDossierAccess();
+    initAssetClassifier();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
