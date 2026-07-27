@@ -6253,6 +6253,60 @@
       : 0;
     let touchStart = null;
 
+    const recordDisclosures = records.map((record, index) => {
+      const image = record.querySelector(":scope > img");
+      const heading = record.querySelector(":scope > h3");
+      const description = record.querySelector(":scope > p");
+      if (!image || !heading || !description) return null;
+
+      const title = heading.textContent?.replace(/\s+/g, " ").trim() || `Запись ${index + 1}`;
+      const detailsId = `asset-record-details-${index + 1}`;
+      const mediaButton = document.createElement("button");
+      const meta = document.createElement("span");
+      const visibleTitle = document.createElement("span");
+      const cue = document.createElement("span");
+      const details = document.createElement("div");
+
+      mediaButton.className = "asset-record__media";
+      mediaButton.type = "button";
+      mediaButton.setAttribute("aria-expanded", "false");
+      mediaButton.setAttribute("aria-controls", detailsId);
+      mediaButton.setAttribute("aria-label", `Открыть карточку: ${title}`);
+
+      meta.className = "asset-record__meta";
+      meta.textContent = `ЗАПИСЬ ${String(index + 1).padStart(2, "0")} // ДОПУСК ЗЕЛЁНЫЙ`;
+      visibleTitle.className = "asset-record__visible-title";
+      visibleTitle.textContent = title;
+      cue.className = "asset-record__cue";
+      cue.textContent = "[ ОТКРЫТЬ КАРТОЧКУ ]";
+
+      image.replaceWith(mediaButton);
+      mediaButton.append(image, meta, visibleTitle, cue);
+
+      details.className = "asset-record__details";
+      details.id = detailsId;
+      details.hidden = true;
+      details.append(heading, description);
+      mediaButton.after(details);
+
+      const setOpen = (isOpen) => {
+        details.hidden = !isOpen;
+        record.classList.toggle("is-details-open", isOpen);
+        mediaButton.setAttribute("aria-expanded", String(isOpen));
+        mediaButton.setAttribute(
+          "aria-label",
+          `${isOpen ? "Скрыть" : "Открыть"} карточку: ${title}`
+        );
+        cue.textContent = isOpen ? "[ СКРЫТЬ КАРТОЧКУ ]" : "[ ОТКРЫТЬ КАРТОЧКУ ]";
+      };
+
+      mediaButton.addEventListener("click", () => {
+        setOpen(mediaButton.getAttribute("aria-expanded") !== "true");
+      });
+
+      return { setOpen };
+    });
+
     const closeCatalog = () => {
       catalog.hidden = true;
       catalogToggle.setAttribute("aria-expanded", "false");
@@ -6288,6 +6342,7 @@
         records.length
       ).padStart(2, "0")}`;
 
+      recordDisclosures.forEach((disclosure) => disclosure?.setOpen(false));
       records.forEach((record, index) => {
         record.hidden = index !== currentIndex;
       });
@@ -6364,6 +6419,27 @@
     });
 
     renderRecord(currentIndex, false);
+  };
+
+  const initStaffProtocolWarning = () => {
+    const warning = document.querySelector("[data-staff-protocol-warning]");
+    if (!warning || warning.dataset.staffProtocolWarningReady === "true") return;
+
+    const toggle = warning.querySelector("[data-staff-protocol-warning-toggle]");
+    const body = warning.querySelector("[data-staff-protocol-warning-body]");
+    if (!toggle || !body) return;
+
+    warning.dataset.staffProtocolWarningReady = "true";
+    toggle.hidden = false;
+    body.hidden = true;
+
+    toggle.addEventListener("click", () => {
+      const isOpen = toggle.getAttribute("aria-expanded") !== "true";
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.textContent = isOpen ? "[ СКРЫТЬ ПРОТОКОЛ ]" : "[ ЧИТАТЬ ПОЛНОСТЬЮ ]";
+      body.hidden = !isOpen;
+      warning.classList.toggle("is-open", isOpen);
+    });
   };
 
   const initArchiveCatalog = () => {
@@ -6479,6 +6555,7 @@
     initStaffRegistry();
     initDossierAccess();
     initAssetClassifier();
+    initStaffProtocolWarning();
     initArchiveCatalog();
     initMobileNavigation();
     initStaffHomeNotice();

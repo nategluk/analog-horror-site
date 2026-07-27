@@ -18,7 +18,7 @@
     <meta property="og:image:alt" content="Фасад развлекательного комплекса «Детский ЖИР» в тумане, с теплым светом окон и улыбающимся знаком солнца." />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="about-page">
     <div class="vhs-noise" aria-hidden="true"></div>
     <div class="site-wrapper glitch-target">
       <header class="site-header">
@@ -273,19 +273,46 @@
             </div>
             <p class="visually-hidden" role="status" aria-live="polite" data-asset-announcer></p>
           </section>
-          <p>
-            <strong>Важное напоминание для персонала:</strong> Сырье категории А (до 312 граммов
-            эссенции) требует бережного обращения до момента фильтрации. Помните: страх портит
-            глазурь, но отчаяние делает продукт слаще. Следите за тем, чтобы гости не находили
-            выходы раньше времени. Выход только один — через горку.
-          </p>
-          <p>
-            Администрация благодарит вас за лояльность.
-          </p>
+          <section
+            class="staff-protocol-warning"
+            aria-labelledby="staff-protocol-warning-title"
+            data-staff-protocol-warning
+          >
+            <p class="staff-protocol-warning__kicker">ПРОТОКОЛ ОБРАЩЕНИЯ // ПРИОРИТЕТ КРАСНЫЙ</p>
+            <h3 id="staff-protocol-warning-title">Важное напоминание для персонала</h3>
+            <p class="staff-protocol-warning__preview">
+              Сырье категории А требует бережного обращения до момента фильтрации.
+            </p>
+            <button
+              class="staff-protocol-warning__toggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="staff-protocol-warning-body"
+              data-staff-protocol-warning-toggle
+              hidden
+            >
+              [ ЧИТАТЬ ПОЛНОСТЬЮ ]
+            </button>
+            <div
+              class="staff-protocol-warning__body"
+              id="staff-protocol-warning-body"
+              data-staff-protocol-warning-body
+            >
+              <p>
+                Сырье категории А (до 312 граммов эссенции) требует бережного обращения до
+                момента фильтрации. Помните: страх портит глазурь, но отчаяние делает продукт
+                слаще. Следите за тем, чтобы гости не находили выходы раньше времени. Выход только
+                один — через горку.
+              </p>
+              <p class="staff-protocol-warning__loyalty">
+                Администрация благодарит вас за лояльность.
+              </p>
+            </div>
+          </section>
         </section>
       </main>
 
-      <footer class="site-footer">
+      <footer class="site-footer site-footer--quiet">
         <p class="guest-content">Мы рядом — пока вы верите в добро.</p>
         <p class="staff-content">COMPLIANCE LOG: CORP_PROFILE VIEW — SESSION AUDITED</p>
         <nav class="social-links" aria-label="Социальные сети">
