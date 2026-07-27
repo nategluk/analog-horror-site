@@ -99,6 +99,12 @@
                   <span class="personnel-card__label">ТЕКУЩИЙ ОПЕРАТОР</span>
                   <strong data-player-card-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
                   <span data-player-card-status>ЛИЧНОЕ ДЕЛО ФОРМИРУЕТСЯ</span>
+                  <span class="personnel-card__biosignal" aria-label="Биосигнал оператора активен">
+                    <svg viewBox="0 0 120 20" aria-hidden="true" focusable="false">
+                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
+                    </svg>
+                    <span>БИОСИГНАЛ: АКТИВЕН</span>
+                  </span>
                   <small>ОТКРЫТЬ ЛИЧНОЕ ДЕЛО</small>
                 </span>
               </button>
@@ -198,25 +204,96 @@
                   <a class="personnel-dossier__action" href="hiring.html?reclassify=0091-A" data-player-reclassify data-full-navigation hidden>ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ</a>
                   <button class="personnel-dossier__action" type="button" data-player-claim hidden>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
                 </div>
-                <section data-player-sessions hidden aria-labelledby="personnel-sessions-title">
+
+                <section class="personnel-name" aria-labelledby="personnel-name-title">
+                  <div class="personnel-section-heading">
+                    <h3 id="personnel-name-title">ИМЯ ОПЕРАТОРА</h3>
+                    <span data-player-name-state>НЕ УСТАНОВЛЕНО</span>
+                  </div>
+                  <form data-player-name-form>
+                    <label>
+                      ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ
+                      <input
+                        type="text"
+                        name="displayName"
+                        maxlength="32"
+                        autocomplete="nickname"
+                        placeholder="ВВЕДИТЕ ИМЯ"
+                        required
+                      />
+                    </label>
+                    <button type="submit">СОХРАНИТЬ ИМЯ</button>
+                  </form>
+                  <p class="personnel-dossier__response" data-player-name-response role="status" aria-live="polite"></p>
+                </section>
+
+                <nav class="personnel-profile__tabs" aria-label="Разделы личного дела">
+                  <button type="button" data-player-tab="inbox" aria-pressed="true">
+                    ВХОДЯЩИЕ <span data-player-unread-count></span>
+                  </button>
+                  <button type="button" data-player-tab="materials" aria-pressed="false">МАТЕРИАЛЫ</button>
+                  <button type="button" data-player-tab="sessions" aria-pressed="false">СЕАНСЫ</button>
+                  <button type="button" data-player-tab="identity" aria-pressed="false">ИЗОБРАЖЕНИЕ</button>
+                  <button type="button" data-player-tab="trash" aria-pressed="false">
+                    КОРЗИНА <span data-player-trash-count></span>
+                  </button>
+                </nav>
+
+                <section data-player-view="inbox" aria-labelledby="personnel-inbox-title">
+                  <div class="personnel-section-heading">
+                    <h3 id="personnel-inbox-title">ЛИЧНЫЕ ВХОДЯЩИЕ</h3>
+                    <span>ВНУТРЕННИЙ КАНАЛ</span>
+                  </div>
+                  <p data-player-inbox-empty>НОВЫХ СООБЩЕНИЙ НЕТ</p>
+                  <div class="personnel-inbox" data-player-inbox></div>
+                  <article class="personnel-message" data-player-message-detail hidden>
+                    <header>
+                      <img data-player-message-avatar alt="" />
+                      <div>
+                        <span data-player-message-sender></span>
+                        <strong data-player-message-subject></strong>
+                      </div>
+                      <button type="button" data-player-message-close>ЗАКРЫТЬ</button>
+                    </header>
+                    <p data-player-message-body></p>
+                    <div class="personnel-message__actions">
+                      <button type="button" data-player-message-attachment hidden>ОТКРЫТЬ ВЛОЖЕНИЕ</button>
+                      <button type="button" data-player-message-delete>УДАЛИТЬ СООБЩЕНИЕ</button>
+                    </div>
+                  </article>
+                </section>
+
+                <section data-player-view="sessions" hidden aria-labelledby="personnel-sessions-title">
                   <h3 id="personnel-sessions-title">ИСТОРИЯ СЕАНСОВ</h3>
+                  <p data-player-sessions-empty>ЗАВЕРШЁННЫЕ СЕАНСЫ НЕ ЗАРЕГИСТРИРОВАНЫ</p>
                   <div class="personnel-sessions" data-player-session-list></div>
                 </section>
-                <section aria-labelledby="personnel-materials-title">
+
+                <section data-player-view="materials" hidden aria-labelledby="personnel-materials-title">
                   <h3 id="personnel-materials-title">МАТЕРИАЛЫ ЛИЧНОГО ДЕЛА</h3>
                   <p data-player-materials-empty>МАТЕРИАЛЫ НЕ ЗАРЕГИСТРИРОВАНЫ</p>
                   <div class="personnel-materials" data-player-materials></div>
                 </section>
-                <section data-player-identification hidden aria-labelledby="personnel-identification-title">
+
+                <section data-player-view="identity" data-player-identification hidden aria-labelledby="personnel-identification-title">
                   <h3 id="personnel-identification-title">ИДЕНТИФИКАЦИЯ</h3>
                   <p data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
                   <div class="personnel-avatar-options">
-                    <button type="button" data-avatar-choice="overexposed"><span class="personnel-avatar personnel-avatar--overexposed" aria-hidden="true"></span>ЗАСВЕЧЕННОЕ ЛИЦО</button>
-                    <button type="button" data-avatar-choice="drawing"><span class="personnel-avatar personnel-avatar--drawing" aria-hidden="true"></span>ДЕТСКИЙ РИСУНОК</button>
-                    <button type="button" data-avatar-choice="mask"><span class="personnel-avatar personnel-avatar--mask" aria-hidden="true"></span>СЛУЖЕБНАЯ МАСКА</button>
-                    <button type="button" data-avatar-choice="empty-chair"><span class="personnel-avatar personnel-avatar--empty-chair" aria-hidden="true"></span>ПУСТОЕ КРЕСЛО</button>
+                    <button type="button" data-avatar-choice="avatar-01" aria-label="Выбрать изображение 1"><span class="personnel-avatar personnel-avatar--avatar-01" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 01</span></button>
+                    <button type="button" data-avatar-choice="avatar-02" aria-label="Выбрать изображение 2"><span class="personnel-avatar personnel-avatar--avatar-02" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 02</span></button>
+                    <button type="button" data-avatar-choice="avatar-03" aria-label="Выбрать изображение 3"><span class="personnel-avatar personnel-avatar--avatar-03" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 03</span></button>
+                    <button type="button" data-avatar-choice="avatar-04" aria-label="Выбрать изображение 4"><span class="personnel-avatar personnel-avatar--avatar-04" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 04</span></button>
                   </div>
                   <p class="personnel-dossier__response" data-player-avatar-response role="status" aria-live="polite"></p>
+                </section>
+
+                <section data-player-view="trash" hidden aria-labelledby="personnel-trash-title">
+                  <div class="personnel-section-heading">
+                    <h3 id="personnel-trash-title">КОРЗИНА</h3>
+                    <button type="button" data-player-trash-empty hidden>ОЧИСТИТЬ</button>
+                  </div>
+                  <p data-player-trash-empty-copy>КОРЗИНА ПУСТА</p>
+                  <div class="personnel-trash" data-player-trash></div>
                 </section>
               </section>
 

@@ -118,6 +118,18 @@ const renderChoices = (choices) => {
   return lines;
 };
 
+const renderInput = (input) => {
+  if (!input) return null;
+  return [
+    "**Ввод игрока:**",
+    "",
+    `- Тип: ${inlineCode(input.kind || "—")}`,
+    `- Подпись: **${input.label || "—"}**`,
+    `- Кнопка: **${input.submitLabel || "—"}**`,
+    `- Переход: ${inlineCode(input.next || "—")}`,
+  ];
+};
+
 const renderNode = ([id, node], index) => {
   const lines = [
     `## ${String(index + 1).padStart(2, "0")}. ${id}`,
@@ -152,7 +164,8 @@ const renderNode = ([id, node], index) => {
         ].join("\n")
       : quote(node.text ?? "")
   );
-  lines.push("", ...renderChoices(node.choices), "");
+  const inputLines = renderInput(node.input);
+  lines.push("", ...(inputLines || renderChoices(node.choices)), "");
 
   return lines.join("\n");
 };

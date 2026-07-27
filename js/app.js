@@ -784,6 +784,51 @@
     },
   };
 
+  const staffAvatarIds = [
+    "avatar-01",
+    "avatar-02",
+    "avatar-03",
+    "avatar-04",
+  ];
+  const legacyStaffAvatarMap = {
+    overexposed: "avatar-02",
+    drawing: "avatar-04",
+    mask: "avatar-01",
+    "empty-chair": "avatar-03",
+  };
+  const getStaffAvatarId = (avatarId) =>
+    staffAvatarIds.includes(avatarId)
+      ? avatarId
+      : legacyStaffAvatarMap[avatarId] || null;
+
+  const staffMessages = {
+    "system-profile-created": {
+      sender: "СИСТЕМА",
+      avatar: audioAsset("assets/staff/logo.png"),
+      subject: "ЛИЧНОЕ ДЕЛО СОЗДАНО",
+      preview: "Укажите имя и выберите допустимое изображение.",
+      body: (profile) =>
+        `${profile.displayName || "Оператор"}, локальная кадровая запись активна.\n\nУкажите имя для служебных обращений и выберите изображение после завершения проверки.`,
+    },
+    "lora-red-room": {
+      sender: "ЛОРА П.",
+      avatar: staffDirectory.lora.image,
+      subject: "НЕ ОТКРЫВАЙТЕ ВСЁ СРАЗУ",
+      preview: "Некоторые материалы лучше оставлять внутри сообщения.",
+      body: (profile) =>
+        `${profile.displayName || "Привет"}. Если вам пришлют что-нибудь из Красной Комнаты, не сохраняйте все файлы подряд.\n\nЯ серьёзно. Иногда важнее помнить, кто прислал фотографию, чем саму фотографию.`,
+    },
+    "ulybarych-after-broadcast": {
+      sender: "УЛЫБАРЫЧ",
+      avatar: audioAsset("assets/staff/documents/media-ulybarych-playroom.webp"),
+      subject: "ТЫ ДОСМОТРЕЛ?",
+      preview: "На твоём месте в студии пока никого нет.",
+      body: (profile) =>
+        `${profile.displayName || "Оператор"}, передача дошла до самого конца?\n\nНа твоём месте в студии пока никого нет. Я попросил не убирать стул.`,
+      attachmentArtifactId: "ulybarych-broadcast",
+    },
+  };
+
   const staffArtifacts = {
     "memory-drawing": {
       code: "IR-0091-01",
@@ -1000,12 +1045,72 @@
     status: "screening",
     curatorId: "0091-A",
     role: null,
+    displayName: "",
+    nameHistory: [],
     avatarId: null,
     artifacts: [],
     sessions: [],
+    messages: [],
+    deletedItems: [],
+    removedArtifactIds: [],
+    removedMessageIds: [],
     createdAt: Date.now(),
     updatedAt: Date.now(),
   });
+
+  const normalizeStaffProfile = (profile) => {
+    profile.displayName =
+      typeof profile.displayName === "string" ? profile.displayName.slice(0, 32) : "";
+    profile.nameHistory = Array.isArray(profile.nameHistory)
+      ? profile.nameHistory.filter((name) => typeof name === "string").slice(-8)
+      : [];
+    profile.avatarId = getStaffAvatarId(profile.avatarId);
+    profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
+    profile.sessions = Array.isArray(profile.sessions) ? profile.sessions : [];
+    profile.messages = Array.isArray(profile.messages) ? profile.messages : [];
+    profile.deletedItems = Array.isArray(profile.deletedItems)
+      ? profile.deletedItems
+      : [];
+    profile.removedArtifactIds = Array.isArray(profile.removedArtifactIds)
+      ? profile.removedArtifactIds
+      : [];
+    profile.removedMessageIds = Array.isArray(profile.removedMessageIds)
+      ? profile.removedMessageIds
+      : [];
+    const removedArtifacts = new Set(profile.removedArtifactIds);
+    const removedMessages = new Set(profile.removedMessageIds);
+    profile.artifacts = profile.artifacts.filter(
+      (artifact) => !removedArtifacts.has(artifact.id)
+    );
+    profile.messages = profile.messages.filter(
+      (message) => !removedMessages.has(message.id)
+    );
+    return profile;
+  };
+
+  const seedStaffMessages = (profile) => {
+    normalizeStaffProfile(profile);
+    const known = new Set(profile.messages.map((message) => message.id));
+    const removed = new Set(profile.removedMessageIds);
+    const artifactIds = new Set(profile.artifacts.map((artifact) => artifact.id));
+    const requested = ["system-profile-created"];
+    if (profile.status === "completed") requested.push("lora-red-room");
+    if (artifactIds.has("ulybarych-broadcast")) {
+      requested.push("ulybarych-after-broadcast");
+    }
+
+    requested.forEach((messageId, index) => {
+      if (!staffMessages[messageId] || known.has(messageId) || removed.has(messageId)) {
+        return;
+      }
+      profile.messages.push({
+        id: messageId,
+        deliveredAt: Date.now() + index,
+        readAt: null,
+      });
+    });
+    return profile;
+  };
 
   const readStaffProfile = () => {
     try {
@@ -1014,9 +1119,7 @@
         return null;
       }
 
-      profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
-      profile.sessions = Array.isArray(profile.sessions) ? profile.sessions : [];
-      return profile;
+      return seedStaffMessages(profile);
     } catch {
       return null;
     }
@@ -1153,8 +1256,9 @@
     const knownArtifacts = new Map(
       profile.artifacts.map((artifact) => [artifact.id, artifact])
     );
+    const removedArtifactIds = new Set(profile.removedArtifactIds || []);
     getProgressArtifactIds(progress).forEach((artifactId) => {
-      if (!knownArtifacts.has(artifactId)) {
+      if (!knownArtifacts.has(artifactId) && !removedArtifactIds.has(artifactId)) {
         knownArtifacts.set(artifactId, {
           id: artifactId,
           sessionNumber: progress.sessionNumber || 1,
@@ -1164,7 +1268,7 @@
     });
     profile.artifacts = [...knownArtifacts.values()];
 
-    return saveStaffProfile(profile);
+    return saveStaffProfile(seedStaffMessages(profile));
   };
 
   const getStaffProfile = () => {
@@ -1831,12 +1935,41 @@
       choices: [
         {
           label: "ДА, УВЕРЕН",
-          next: "adult-ack",
+          next: "name-prompt",
           effect: { flags: { ageVerified: true } },
         },
         {
           label: "НЕТ",
           reject: "self-unverified",
+        },
+      ],
+    },
+    "name-prompt": {
+      step: "ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ",
+      media: "state-file-investigation",
+      speaker: "ИРИНА В.",
+      text:
+        "Подожди. В карточке вместо имени пустая строка. Как мне к тебе обращаться? Можно настоящее. Можно другое.",
+      input: {
+        kind: "displayName",
+        label: "ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ",
+        placeholder: "ВВЕДИТЕ ИМЯ",
+        submitLabel: "ПОДТВЕРДИТЬ ИМЯ",
+        next: "name-ack",
+      },
+    },
+    "name-ack": {
+      step: "ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ",
+      media: "state-warm",
+      speaker: "ИРИНА В.",
+      text: () => {
+        const displayName = readStaffProfile()?.displayName || "Так";
+        return `Хорошо, ${displayName}. Я запишу так. Если это не настоящее имя, система всё равно привыкнет.`;
+      },
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ",
+          next: "adult-ack",
         },
       ],
     },
@@ -4789,6 +4922,72 @@
 
     const showChoices = (node) => {
       choices.innerHTML = "";
+      if (node.input?.kind === "displayName") {
+        choices.classList.remove("has-images");
+        const form = document.createElement("form");
+        const label = document.createElement("label");
+        const labelText = document.createElement("span");
+        const input = document.createElement("input");
+        const submit = document.createElement("button");
+        const status = document.createElement("p");
+        const currentName = readStaffProfile()?.displayName || "";
+        form.className = "curator-call__name-form";
+        labelText.textContent = node.input.label;
+        input.type = "text";
+        input.name = "displayName";
+        input.maxLength = 32;
+        input.autocomplete = "nickname";
+        input.placeholder = node.input.placeholder;
+        input.required = true;
+        input.value = currentName;
+        submit.type = "submit";
+        submit.textContent = node.input.submitLabel;
+        status.className = "curator-call__name-status";
+        status.setAttribute("role", "status");
+        status.setAttribute("aria-live", "polite");
+        label.append(labelText, input);
+        form.append(label, submit, status);
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const displayName = input.value
+            .replace(/[\u0000-\u001f\u007f]/g, "")
+            .trim()
+            .replace(/\s+/g, " ")
+            .slice(0, 32);
+          if (!displayName) {
+            status.textContent = "ИМЯ НЕ ПРИНЯТО. ЗАПОЛНИТЕ СТРОКУ.";
+            input.focus();
+            return;
+          }
+
+          const profile = readStaffProfile() || createStaffProfile();
+          if (
+            profile.displayName &&
+            profile.displayName.toLocaleLowerCase("ru-RU") !==
+              displayName.toLocaleLowerCase("ru-RU")
+          ) {
+            profile.nameHistory.push(profile.displayName);
+            profile.nameHistory = profile.nameHistory.slice(-8);
+          }
+          profile.displayName = displayName;
+          saveStaffProfile(profile);
+          progress.flags.nameProvided = true;
+          saveProgress();
+          input.disabled = true;
+          submit.disabled = true;
+          status.textContent = "ИМЯ ПРИНЯТО К ИСПОЛЬЗОВАНИЮ.";
+          playCallTone();
+          window.setTimeout(
+            () => renderNode(node.input.next),
+            reducedMotion ? 0 : 240
+          );
+        });
+        choices.append(form);
+        input.focus();
+        input.select();
+        return;
+      }
+
       const nodeChoices =
         typeof node.choices === "function" ? node.choices(progress) : node.choices || [];
       choices.classList.toggle("has-images", nodeChoices.some((choice) => choice.image));
@@ -5132,6 +5331,7 @@
 
     grid.dataset.personnelReady = "true";
     const playerCard = grid.querySelector("[data-player-card]");
+    const playerCardName = grid.querySelector("[data-player-card-name]");
     const playerCardStatus = grid.querySelector("[data-player-card-status]");
     const playerCardAvatar = grid.querySelector("[data-player-card-avatar]");
     const dossierName = dossier.querySelector("[data-personnel-name]");
@@ -5149,13 +5349,34 @@
     const resumeLink = dossier.querySelector("[data-player-resume]");
     const reclassifyLink = dossier.querySelector("[data-player-reclassify]");
     const claimButton = dossier.querySelector("[data-player-claim]");
-    const sessionsPanel = dossier.querySelector("[data-player-sessions]");
+    const nameForm = dossier.querySelector("[data-player-name-form]");
+    const nameInput = nameForm?.elements.displayName;
+    const nameState = dossier.querySelector("[data-player-name-state]");
+    const nameResponse = dossier.querySelector("[data-player-name-response]");
+    const profileTabs = [...dossier.querySelectorAll("[data-player-tab]")];
+    const profileViews = [...dossier.querySelectorAll("[data-player-view]")];
+    const unreadCount = dossier.querySelector("[data-player-unread-count]");
+    const trashCount = dossier.querySelector("[data-player-trash-count]");
+    const inbox = dossier.querySelector("[data-player-inbox]");
+    const inboxEmpty = dossier.querySelector("[data-player-inbox-empty]");
+    const messageDetail = dossier.querySelector("[data-player-message-detail]");
+    const messageAvatar = dossier.querySelector("[data-player-message-avatar]");
+    const messageSender = dossier.querySelector("[data-player-message-sender]");
+    const messageSubject = dossier.querySelector("[data-player-message-subject]");
+    const messageBody = dossier.querySelector("[data-player-message-body]");
+    const messageClose = dossier.querySelector("[data-player-message-close]");
+    const messageAttachment = dossier.querySelector("[data-player-message-attachment]");
+    const messageDelete = dossier.querySelector("[data-player-message-delete]");
+    const sessionsEmpty = dossier.querySelector("[data-player-sessions-empty]");
     const sessionList = dossier.querySelector("[data-player-session-list]");
     const materials = dossier.querySelector("[data-player-materials]");
     const materialsEmpty = dossier.querySelector("[data-player-materials-empty]");
     const identification = dossier.querySelector("[data-player-identification]");
     const identificationCopy = dossier.querySelector("[data-player-identification-copy]");
     const avatarResponse = dossier.querySelector("[data-player-avatar-response]");
+    const trash = dossier.querySelector("[data-player-trash]");
+    const trashEmptyCopy = dossier.querySelector("[data-player-trash-empty-copy]");
+    const trashEmptyButton = dossier.querySelector("[data-player-trash-empty]");
     const intrusion = dossier.querySelector("[data-personnel-intrusion]");
     const closeButton = dossier.querySelector("[data-personnel-close]");
     const intrusionClose = dossier.querySelector("[data-personnel-intrusion-close]");
@@ -5164,18 +5385,19 @@
     const artifactDownload = artifactDialog.querySelector("[data-artifact-download]");
     const avatarClasses = [
       "personnel-avatar--pending",
-      "personnel-avatar--overexposed",
-      "personnel-avatar--drawing",
-      "personnel-avatar--mask",
-      "personnel-avatar--empty-chair",
+      ...staffAvatarIds.map((avatarId) => `personnel-avatar--${avatarId}`),
     ];
     let activePersonnelKey = null;
     let activeTrigger = null;
+    let activeProfileTab = "inbox";
+    let activeMessageId = null;
 
     const setAvatarAppearance = (element, avatarId) => {
       if (!element) return;
       element.classList.remove(...avatarClasses);
-      element.classList.add(`personnel-avatar--${avatarId || "pending"}`);
+      element.classList.add(
+        `personnel-avatar--${getStaffAvatarId(avatarId) || "pending"}`
+      );
     };
 
     const getProfileStatus = (profile) => {
@@ -5195,6 +5417,16 @@
       return "НЕ НАЗНАЧЕНА";
     };
 
+    const getProfileName = (profile) =>
+      profile.displayName?.trim()
+        ? profile.displayName.trim().toLocaleUpperCase("ru-RU")
+        : "ИМЯ НЕ УСТАНОВЛЕНО";
+
+    const isDeleted = (profile, kind, id) =>
+      profile.deletedItems.some(
+        (item) => item.kind === kind && item.id === id
+      );
+
     const renderPlayerCard = () => {
       const profile = getStaffProfile();
       if (!profile) {
@@ -5203,6 +5435,7 @@
       }
 
       playerCard.hidden = false;
+      playerCardName.textContent = getProfileName(profile);
       playerCardStatus.textContent =
         profile.status === "completed"
           ? `${getProfileRole(profile)} // ${getProfileStatus(profile)}`
@@ -5214,6 +5447,7 @@
     const renderMaterials = (profile) => {
       materials.innerHTML = "";
       const registered = profile.artifacts
+        .filter((storedArtifact) => !isDeleted(profile, "artifact", storedArtifact.id))
         .map((storedArtifact) => ({
           stored: storedArtifact,
           definition: staffArtifacts[storedArtifact.id],
@@ -5222,24 +5456,36 @@
 
       materialsEmpty.hidden = registered.length > 0;
       registered.forEach(({ stored, definition }) => {
+        const entry = document.createElement("article");
         const button = document.createElement("button");
+        const remove = document.createElement("button");
+        const image = document.createElement("img");
         const code = document.createElement("span");
         const title = document.createElement("strong");
         const type = document.createElement("small");
+        entry.className = "personnel-material-entry";
         button.type = "button";
         button.className = "personnel-material";
         button.dataset.artifactOpen = stored.id;
+        image.src =
+          definition.src || audioAsset("assets/staff/logo.png");
+        image.alt = "";
         code.textContent = `ФАЙЛ: ${definition.code}`;
         title.textContent = definition.title;
         type.textContent = definition.type;
-        button.append(code, title, type);
-        materials.append(button);
+        remove.type = "button";
+        remove.className = "personnel-material-entry__delete";
+        remove.dataset.artifactDelete = stored.id;
+        remove.textContent = "В КОРЗИНУ";
+        button.append(image, code, title, type);
+        entry.append(button, remove);
+        materials.append(entry);
       });
     };
 
     const renderSessions = (profile) => {
       sessionList.innerHTML = "";
-      sessionsPanel.hidden = profile.sessions.length === 0;
+      sessionsEmpty.hidden = profile.sessions.length > 0;
       profile.sessions
         .slice()
         .sort((a, b) => (a.number || 0) - (b.number || 0))
@@ -5258,8 +5504,157 @@
         });
     };
 
+    const renderInbox = (profile) => {
+      inbox.innerHTML = "";
+      const visibleMessages = profile.messages
+        .filter((message) => !isDeleted(profile, "message", message.id))
+        .filter((message) => staffMessages[message.id])
+        .sort((left, right) => right.deliveredAt - left.deliveredAt);
+      const unread = visibleMessages.filter((message) => !message.readAt).length;
+      inboxEmpty.hidden = visibleMessages.length > 0;
+      unreadCount.textContent = unread ? `●${unread}` : "";
+
+      visibleMessages.forEach((message) => {
+        const definition = staffMessages[message.id];
+        const button = document.createElement("button");
+        const avatar = document.createElement("img");
+        const copy = document.createElement("span");
+        const sender = document.createElement("strong");
+        const subject = document.createElement("span");
+        const preview = document.createElement("small");
+        const mark = document.createElement("span");
+        button.type = "button";
+        button.className = "personnel-inbox-item";
+        button.dataset.messageOpen = message.id;
+        button.dataset.unread = String(!message.readAt);
+        avatar.src = definition.avatar;
+        avatar.alt = "";
+        copy.className = "personnel-inbox-item__copy";
+        sender.textContent = definition.sender;
+        subject.textContent = definition.subject;
+        preview.textContent = definition.preview;
+        mark.className = "personnel-inbox-item__mark";
+        mark.textContent = message.readAt ? "" : "●";
+        copy.append(sender, subject, preview);
+        button.append(avatar, copy, mark);
+        inbox.append(button);
+      });
+    };
+
+    const closeMessage = () => {
+      activeMessageId = null;
+      messageDetail.hidden = true;
+      messageAttachment.hidden = true;
+      delete messageAttachment.dataset.artifactOpen;
+    };
+
+    const renderMessage = (profile, messageId) => {
+      const message = profile.messages.find((item) => item.id === messageId);
+      const definition = staffMessages[messageId];
+      if (!message || !definition || isDeleted(profile, "message", messageId)) {
+        closeMessage();
+        return;
+      }
+
+      activeMessageId = messageId;
+      messageAvatar.src = definition.avatar;
+      messageAvatar.alt = `Аватар отправителя ${definition.sender}`;
+      messageSender.textContent = definition.sender;
+      messageSubject.textContent = definition.subject;
+      messageBody.textContent =
+        typeof definition.body === "function"
+          ? definition.body(profile)
+          : definition.body;
+      messageAttachment.hidden = !definition.attachmentArtifactId;
+      if (definition.attachmentArtifactId) {
+        messageAttachment.dataset.artifactOpen =
+          definition.attachmentArtifactId;
+      } else {
+        delete messageAttachment.dataset.artifactOpen;
+      }
+      messageDetail.hidden = false;
+    };
+
+    const renderTrash = (profile) => {
+      trash.innerHTML = "";
+      trashEmptyCopy.hidden = profile.deletedItems.length > 0;
+      trashEmptyButton.hidden = profile.deletedItems.length === 0;
+      trashCount.textContent = profile.deletedItems.length
+        ? `●${profile.deletedItems.length}`
+        : "";
+
+      profile.deletedItems
+        .slice()
+        .sort((left, right) => right.deletedAt - left.deletedAt)
+        .forEach((item) => {
+          const definition =
+            item.kind === "message"
+              ? staffMessages[item.id]
+              : staffArtifacts[item.id];
+          if (!definition) return;
+          const row = document.createElement("article");
+          const image = document.createElement("img");
+          const copy = document.createElement("div");
+          const title = document.createElement("strong");
+          const kind = document.createElement("span");
+          const actions = document.createElement("div");
+          const restore = document.createElement("button");
+          const remove = document.createElement("button");
+          row.className = "personnel-trash-item";
+          image.src =
+            item.kind === "message"
+              ? definition.avatar
+              : definition.src || audioAsset("assets/staff/logo.png");
+          image.alt = "";
+          copy.className = "personnel-trash-item__copy";
+          title.textContent =
+            item.kind === "message" ? definition.subject : definition.title;
+          kind.textContent =
+            item.kind === "message" ? "СООБЩЕНИЕ" : "МАТЕРИАЛ";
+          actions.className = "personnel-trash-item__actions";
+          restore.type = "button";
+          restore.dataset.trashRestore = `${item.kind}:${item.id}`;
+          restore.textContent = "ВОССТАНОВИТЬ";
+          remove.type = "button";
+          remove.dataset.trashRemove = `${item.kind}:${item.id}`;
+          remove.textContent = "УДАЛИТЬ";
+          copy.append(title, kind);
+          actions.append(restore, remove);
+          row.append(image, copy, actions);
+          trash.append(row);
+        });
+    };
+
+    const setActiveProfileTab = (tab, profile) => {
+      const availableTab =
+        tab === "identity" && profile.status !== "completed" ? "inbox" : tab;
+      activeProfileTab = availableTab;
+      profileTabs.forEach((button) => {
+        const disabled =
+          button.dataset.playerTab === "identity" &&
+          profile.status !== "completed";
+        button.disabled = disabled;
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.playerTab === availableTab)
+        );
+      });
+      profileViews.forEach((view) => {
+        view.hidden = view.dataset.playerView !== availableTab;
+      });
+    };
+
+    const renderProfileCollections = (profile) => {
+      renderInbox(profile);
+      renderMaterials(profile);
+      renderSessions(profile);
+      renderTrash(profile);
+      setActiveProfileTab(activeProfileTab, profile);
+      if (activeMessageId) renderMessage(profile, activeMessageId);
+    };
+
     const renderPlayerDossier = (profile) => {
-      dossierName.textContent = "ТЕКУЩИЙ ОПЕРАТОР";
+      dossierName.textContent = getProfileName(profile);
       dossierRole.textContent = getProfileRole(profile);
       dossierStatus.textContent = getProfileStatus(profile);
       dossierNote.textContent =
@@ -5281,10 +5676,12 @@
         claimButton.hidden =
           profile.status !== "completed" || hasActiveDossierAuthSession();
       }
-      renderSessions(profile);
-      renderMaterials(profile);
+      nameInput.value = profile.displayName || "";
+      nameState.textContent = profile.displayName
+        ? "ЗАРЕГИСТРИРОВАНО"
+        : "НЕ УСТАНОВЛЕНО";
+      nameResponse.textContent = "";
 
-      identification.hidden = profile.status !== "completed";
       identificationCopy.textContent = profile.avatarId
         ? "ЛИЦО ЗАРЕГИСТРИРОВАНО. ПОВТОРНАЯ ИДЕНТИФИКАЦИЯ ЗАМЕНИТ ТЕКУЩУЮ ЗАПИСЬ."
         : "ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.";
@@ -5295,6 +5692,7 @@
           String(button.dataset.avatarChoice === profile.avatarId)
         );
       });
+      renderProfileCollections(profile);
     };
 
     const readIntrusionState = () => {
@@ -5411,6 +5809,60 @@
       artifactClose.focus();
     };
 
+    const moveProfileItemToTrash = (kind, id) => {
+      const profile = readStaffProfile();
+      if (!profile || isDeleted(profile, kind, id)) return;
+      const exists =
+        kind === "message"
+          ? profile.messages.some((message) => message.id === id)
+          : profile.artifacts.some((artifact) => artifact.id === id);
+      if (!exists) return;
+      profile.deletedItems.push({
+        kind,
+        id,
+        deletedAt: Date.now(),
+      });
+      saveStaffProfile(profile);
+      if (kind === "message" && activeMessageId === id) closeMessage();
+      renderPlayerCard();
+      renderPlayerDossier(profile);
+    };
+
+    const restoreProfileItem = (kind, id) => {
+      const profile = readStaffProfile();
+      if (!profile) return;
+      profile.deletedItems = profile.deletedItems.filter(
+        (item) => !(item.kind === kind && item.id === id)
+      );
+      saveStaffProfile(profile);
+      renderPlayerCard();
+      renderPlayerDossier(profile);
+    };
+
+    const removeProfileItemPermanently = (kind, id) => {
+      const profile = readStaffProfile();
+      if (!profile) return;
+      profile.deletedItems = profile.deletedItems.filter(
+        (item) => !(item.kind === kind && item.id === id)
+      );
+      if (kind === "message") {
+        profile.messages = profile.messages.filter((message) => message.id !== id);
+        if (!profile.removedMessageIds.includes(id)) {
+          profile.removedMessageIds.push(id);
+        }
+      } else {
+        profile.artifacts = profile.artifacts.filter(
+          (artifact) => artifact.id !== id
+        );
+        if (!profile.removedArtifactIds.includes(id)) {
+          profile.removedArtifactIds.push(id);
+        }
+      }
+      saveStaffProfile(profile);
+      renderPlayerCard();
+      renderPlayerDossier(profile);
+    };
+
     grid.querySelectorAll("[data-personnel-open]").forEach((button) => {
       button.addEventListener("click", () => {
         openPersonnelDossier(button.dataset.personnelOpen, button);
@@ -5463,14 +5915,144 @@
     });
 
     materials.addEventListener("click", (event) => {
+      const remove = event.target.closest("[data-artifact-delete]");
+      if (remove) {
+        moveProfileItemToTrash("artifact", remove.dataset.artifactDelete);
+        return;
+      }
       const button = event.target.closest("[data-artifact-open]");
       if (button) openArtifact(button.dataset.artifactOpen);
+    });
+
+    profileTabs.forEach((button) => {
+      button.addEventListener("click", () => {
+        const profile = readStaffProfile();
+        if (!profile) return;
+        setActiveProfileTab(button.dataset.playerTab, profile);
+      });
+    });
+
+    inbox.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-message-open]");
+      if (!button) return;
+      const profile = readStaffProfile();
+      const message = profile?.messages.find(
+        (item) => item.id === button.dataset.messageOpen
+      );
+      if (!profile || !message) return;
+      if (!message.readAt) {
+        message.readAt = Date.now();
+        saveStaffProfile(profile);
+      }
+      renderInbox(profile);
+      renderMessage(profile, message.id);
+    });
+
+    messageClose.addEventListener("click", closeMessage);
+    messageDelete.addEventListener("click", () => {
+      if (activeMessageId) {
+        moveProfileItemToTrash("message", activeMessageId);
+      }
+    });
+    messageAttachment.addEventListener("click", () => {
+      const artifactId = messageAttachment.dataset.artifactOpen;
+      if (artifactId) openArtifact(artifactId);
+    });
+
+    trash.addEventListener("click", (event) => {
+      const restore = event.target.closest("[data-trash-restore]");
+      const remove = event.target.closest("[data-trash-remove]");
+      const token = restore?.dataset.trashRestore || remove?.dataset.trashRemove;
+      if (!token) return;
+      const separator = token.indexOf(":");
+      const kind = token.slice(0, separator);
+      const id = token.slice(separator + 1);
+      if (restore) {
+        restoreProfileItem(kind, id);
+      } else {
+        if (remove.dataset.confirming !== "true") {
+          remove.dataset.confirming = "true";
+          remove.textContent = "ПОДТВЕРДИТЬ";
+          window.setTimeout(() => {
+            if (!remove.isConnected) return;
+            remove.dataset.confirming = "false";
+            remove.textContent = "УДАЛИТЬ";
+          }, 8000);
+          return;
+        }
+        removeProfileItemPermanently(kind, id);
+      }
+    });
+
+    trashEmptyButton.addEventListener("click", () => {
+      if (trashEmptyButton.dataset.confirming !== "true") {
+        trashEmptyButton.dataset.confirming = "true";
+        trashEmptyButton.textContent = "ПОДТВЕРДИТЬ ОЧИСТКУ";
+        window.setTimeout(() => {
+          if (!trashEmptyButton.isConnected) return;
+          trashEmptyButton.dataset.confirming = "false";
+          trashEmptyButton.textContent = "ОЧИСТИТЬ";
+        }, 8000);
+        return;
+      }
+      const profile = readStaffProfile();
+      if (!profile) return;
+      profile.deletedItems.slice().forEach((item) => {
+        if (item.kind === "message") {
+          profile.messages = profile.messages.filter(
+            (message) => message.id !== item.id
+          );
+          if (!profile.removedMessageIds.includes(item.id)) {
+            profile.removedMessageIds.push(item.id);
+          }
+        } else {
+          profile.artifacts = profile.artifacts.filter(
+            (artifact) => artifact.id !== item.id
+          );
+          if (!profile.removedArtifactIds.includes(item.id)) {
+            profile.removedArtifactIds.push(item.id);
+          }
+        }
+      });
+      profile.deletedItems = [];
+      trashEmptyButton.dataset.confirming = "false";
+      trashEmptyButton.textContent = "ОЧИСТИТЬ";
+      saveStaffProfile(profile);
+      renderPlayerCard();
+      renderPlayerDossier(profile);
     });
 
     artifactClose.addEventListener("click", () => artifactDialog.close());
 
     claimButton?.addEventListener("click", () => {
       openDossierClaim();
+    });
+
+    nameForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const profile = readStaffProfile();
+      const displayName = nameInput.value
+        .replace(/[\u0000-\u001f\u007f]/g, "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .slice(0, 32);
+      if (!profile || !displayName) {
+        nameResponse.textContent = "УКАЖИТЕ ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ.";
+        return;
+      }
+      if (
+        profile.displayName &&
+        profile.displayName.toLocaleLowerCase("ru-RU") !==
+          displayName.toLocaleLowerCase("ru-RU")
+      ) {
+        profile.nameHistory.push(profile.displayName);
+        profile.nameHistory = profile.nameHistory.slice(-8);
+      }
+      profile.displayName = displayName;
+      saveStaffProfile(profile);
+      renderPlayerCard();
+      renderPlayerDossier(profile);
+      nameResponse.textContent = "ИМЯ ПРИНЯТО К ИСПОЛЬЗОВАНИЮ.";
     });
 
     dossier.querySelectorAll("[data-avatar-choice]").forEach((button) => {

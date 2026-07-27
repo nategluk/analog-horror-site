@@ -122,6 +122,53 @@
       incoming.sessions,
       chooseSession
     );
+    merged.messages = mergeById(
+      current.messages,
+      incoming.messages,
+      (known, next) => {
+        if (!known) return clone(next);
+        if (!next) return clone(known);
+        const knownReadAt = getTimestamp(known.readAt);
+        const nextReadAt = getTimestamp(next.readAt);
+        return {
+          ...clone(known),
+          ...clone(next),
+          deliveredAt:
+            getTimestamp(known.deliveredAt) <= getTimestamp(next.deliveredAt)
+              ? known.deliveredAt
+              : next.deliveredAt,
+          readAt:
+            knownReadAt >= nextReadAt ? known.readAt : next.readAt,
+        };
+      }
+    );
+    const mergeUnique = (...lists) => [
+      ...new Set(lists.flat().filter((value) => typeof value === "string")),
+    ];
+    merged.removedArtifactIds = mergeUnique(
+      current.removedArtifactIds || [],
+      incoming.removedArtifactIds || []
+    );
+    merged.removedMessageIds = mergeUnique(
+      current.removedMessageIds || [],
+      incoming.removedMessageIds || []
+    );
+    merged.nameHistory = mergeUnique(
+      current.nameHistory || [],
+      incoming.nameHistory || []
+    ).slice(-8);
+    const deletedItems = new Map();
+    [...(current.deletedItems || []), ...(incoming.deletedItems || [])].forEach(
+      (item) => {
+        if (!item?.kind || !item?.id) return;
+        const key = `${item.kind}:${item.id}`;
+        const known = deletedItems.get(key);
+        if (!known || getTimestamp(item.deletedAt) > getTimestamp(known.deletedAt)) {
+          deletedItems.set(key, clone(item));
+        }
+      }
+    );
+    merged.deletedItems = [...deletedItems.values()];
 
     return merged;
   };

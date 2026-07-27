@@ -1,9 +1,9 @@
 # Диалоги игры Ирины
 
 Автоматический экспорт из `js/app.js`, объект `curatorNodes`.
-Сгенерировано: 2026-07-27T02:59:17.393Z.
+Сгенерировано: 2026-07-27T09:09:20.651Z.
 
-Узлов: **114**. Вариантов ответа: **175**.
+Узлов: **116**. Вариантов ответа: **177**.
 
 > Это производный файл для чтения, литературной сверки и загрузки в чат
 > с библией лора. Не редактируйте его как источник игры: изменения нужно
@@ -169,12 +169,51 @@ progress.flags.questionsAdultStatus
 **Ответы игрока:**
 
 1. **ДА, УВЕРЕН**
-   - Переход: `adult-ack`
+   - Переход: `name-prompt`
    - Последствия: `{"flags":{"ageVerified":true}}`
 2. **НЕТ**
    - Отказ/выход: `self-unverified`
 
-## 09. minor-doctor-check
+## 09. name-prompt
+
+- Этап: ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ
+- Говорящий: ИРИНА В.
+- Видео/состояние: `state-file-investigation`
+
+**Реплика:**
+
+> Подожди. В карточке вместо имени пустая строка. Как мне к тебе обращаться? Можно настоящее. Можно другое.
+
+**Ввод игрока:**
+
+- Тип: `displayName`
+- Подпись: **ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ**
+- Кнопка: **ПОДТВЕРДИТЬ ИМЯ**
+- Переход: `name-ack`
+
+## 10. name-ack
+
+- Этап: ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ
+- Говорящий: ИРИНА В.
+- Видео/состояние: `state-warm`
+
+**Реплика:**
+
+*Реплика зависит от предыдущих выборов. Полная логика:*
+
+```js
+() => {
+  const displayName = readStaffProfile()?.displayName || "Так";
+  return `Хорошо, ${displayName}. Я запишу так. Если это не настоящее имя, система всё равно привыкнет.`;
+}
+```
+
+**Ответы игрока:**
+
+1. **ПРОДОЛЖИТЬ**
+   - Переход: `adult-ack`
+
+## 11. minor-doctor-check
 
 - Этап: ПРОВЕРКА ДЕТСКОГО ДОПУСКА
 - Говорящий: ИРИНА В.
@@ -193,7 +232,7 @@ progress.flags.questionsAdultStatus
    - Переход: `minor-inspector-check`
    - Последствия: `{"flags":{"minorDoctorContract":false}}`
 
-## 10. minor-inspector-check
+## 12. minor-inspector-check
 
 - Этап: ПРОВЕРКА ДЕТСКОГО ДОПУСКА
 - Говорящий: ИРИНА В.
@@ -217,7 +256,7 @@ progress.flags.minorDoctorContract
 2. **НЕТ**
    - Отказ/выход: `minor-unregistered`
 
-## 11. adult-ack
+## 13. adult-ack
 
 - Этап: ПРОВЕРКА ДОПУСКА // 1 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -239,7 +278,7 @@ progress.flags.minorDoctorContract
    - Переход: `adult-reason`
    - Последствия: `{"flags":{"returnsWithoutReason":true}}`
 
-## 12. adult-reason
+## 14. adult-reason
 
 - Этап: ПРОВЕРКА ДОПУСКА // 1 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -268,7 +307,7 @@ progress.flags.minorDoctorContract
 1. **И ЧТО ДАЛЬШЕ?**
    - Переход: `orientation-one`
 
-## 13. orientation-one
+## 15. orientation-one
 
 - Этап: ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ
 - Говорящий: ИРИНА В.
@@ -283,7 +322,7 @@ progress.flags.minorDoctorContract
 1. **И ЭТО СЧИТАЕТСЯ ВОЗВРАЩЕНИЕМ?**
    - Переход: `orientation-two`
 
-## 14. orientation-two
+## 16. orientation-two
 
 - Этап: ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ
 - Говорящий: ИРИНА В.
@@ -302,7 +341,7 @@ progress.flags.minorDoctorContract
    - Переход: `orientation-three`
    - Последствия: `{"flags":{"askedAboutOwnRoute":true}}`
 
-## 15. orientation-three
+## 17. orientation-three
 
 - Этап: ВВОДНЫЙ ИНСТРУКТАЖ // КУРАТОР
 - Говорящий: ИРИНА В.
@@ -326,7 +365,7 @@ progress.flags.askedAboutOwnRoute
 2. **МОЖЕМ НАЧИНАТЬ**
    - Переход: `role-question`
 
-## 16. orientation-personal
+## 18. orientation-personal
 
 - Этап: ВВОДНЫЙ ИНСТРУКТАЖ // КУРАТОР
 - Говорящий: ИРИНА В.
@@ -341,7 +380,7 @@ progress.flags.askedAboutOwnRoute
 1. **ТОГДА НАЧИНАЙ**
    - Переход: `role-question`
 
-## 17. role-question
+## 19. role-question
 
 - Этап: ВЫБОР РОЛИ // 2 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -363,7 +402,7 @@ progress.flags.askedAboutOwnRoute
    - Переход: `role-delegate`
    - Последствия: `{"scores":{"delegation":1},"flags":{"delegatedRole":true}}`
 
-## 18. role-animator
+## 20. role-animator
 
 - Этап: ВЫБОР РОЛИ // 2 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -378,7 +417,7 @@ progress.flags.askedAboutOwnRoute
 1. **ХОРОШО**
    - Переход: `class-briefing-one`
 
-## 19. role-volunteer
+## 21. role-volunteer
 
 - Этап: ВЫБОР РОЛИ // 2 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -393,7 +432,7 @@ progress.flags.askedAboutOwnRoute
 1. **ПОНЯТНО**
    - Переход: `class-briefing-one`
 
-## 20. role-delegate
+## 22. role-delegate
 
 - Этап: ВЫБОР РОЛИ // 2 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -409,7 +448,7 @@ progress.flags.askedAboutOwnRoute
    - Переход: `class-briefing-one`
    - Последствия: `{"scores":{"delegation":1}}`
 
-## 21. class-briefing-one
+## 23. class-briefing-one
 
 - Этап: КЛАССЫ УЧАСТИЯ // ОБЩИЕ ПРАВИЛА
 - Говорящий: ИРИНА В.
@@ -428,7 +467,7 @@ progress.flags.askedAboutOwnRoute
    - Переход: `class-briefing-two`
    - Последствия: `{"flags":{"askedWhoCanLook":true}}`
 
-## 22. class-briefing-two
+## 24. class-briefing-two
 
 - Этап: КЛАССЫ УЧАСТИЯ // АНИМАТОР
 - Говорящий: ИРИНА В.
@@ -450,7 +489,7 @@ progress.flags.askedWhoCanLeave
 1. **ПОНЯТНО. А ТЫ НЕ УСТАЛА ОБЪЯСНЯТЬ?**
    - Переход: `class-briefing-three`
 
-## 23. class-briefing-three
+## 25. class-briefing-three
 
 - Этап: КЛАССЫ УЧАСТИЯ // ВОЛОНТЁР
 - Говорящий: ИРИНА В.
@@ -469,7 +508,7 @@ progress.flags.askedWhoCanLeave
    - Переход: `rapport-response`
    - Последствия: `{"flags":{"gettingUsedToIrina":true}}`
 
-## 24. rapport-response
+## 26. rapport-response
 
 - Этап: КАНАЛ 0091-A // КОНТАКТ
 - Говорящий: ИРИНА В.
@@ -491,7 +530,7 @@ progress.flags.reassuredIrina
 1. **ЧТО ЭТО БЫЛО?**
    - Переход: `disco-response`
 
-## 25. disco-response
+## 27. disco-response
 
 - Этап: КАНАЛ 0091-A // КОНТАКТ
 - Говорящий: ИРИНА В.
@@ -506,7 +545,7 @@ progress.flags.reassuredIrina
 1. **ПРОВЕРЬ, КТО Я**
    - Переход: `waiting-test`
 
-## 26. waiting-test
+## 28. waiting-test
 
 - Этап: СИТУАЦИЯ // 3 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -528,7 +567,7 @@ progress.flags.reassuredIrina
    - Переход: `waiting-response`
    - Последствия: `{"profiles":{"animator":1},"scores":{"delegation":1},"flags":{"calledAdult":true}}`
 
-## 27. waiting-response
+## 29. waiting-response
 
 - Этап: СИТУАЦИЯ // 3 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -557,7 +596,7 @@ progress.flags.reassuredIrina
 1. **И ПОЧЕМУ?**
    - Переход: `parents-rule-one`
 
-## 28. parents-rule-one
+## 30. parents-rule-one
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ
 - Говорящий: ИРИНА В.
@@ -576,7 +615,7 @@ progress.flags.reassuredIrina
    - Переход: `parents-rule-two`
    - Последствия: `{"flags":{"questionedWaitingTime":true}}`
 
-## 29. parents-rule-two
+## 31. parents-rule-two
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ
 - Говорящий: ИРИНА В.
@@ -598,7 +637,7 @@ progress.flags.questionedWaitingTime
 1. **ТЕБЕ ПОКАЗЫВАЛИ ТАКУЮ ФОРМУ?**
    - Переход: `parents-rule-three`
 
-## 30. parents-rule-three
+## 32. parents-rule-three
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // ЗАКРЫТА
 - Говорящий: ИРИНА В.
@@ -613,7 +652,7 @@ progress.flags.questionedWaitingTime
 1. **СЛЕДУЮЩИЙ ВОПРОС**
    - Переход: `memory-drawing`
 
-## 31. memory-drawing
+## 33. memory-drawing
 
 - Этап: ИСТОЧНИК НЕ ОПРЕДЕЛЁН
 - Говорящий: ИРИНА В.
@@ -636,7 +675,7 @@ progress.flags.questionedWaitingTime
    - Переход: `memory-response`
    - Последствия: `{"flags":{"noticedDrawingBear":true}}`
 
-## 32. memory-response
+## 34. memory-response
 
 - Этап: ИСТОЧНИК НЕ ОПРЕДЕЛЁН
 - Говорящий: ИРИНА В.
@@ -665,7 +704,7 @@ progress.flags.questionedWaitingTime
 1. **ДАВАЙ ВЕРНЁМСЯ К ПРОВЕРКЕ**
    - Переход: `drawing-history`
 
-## 33. drawing-history
+## 35. drawing-history
 
 - Этап: ЛИЧНЫЙ ФАЙЛ // ПРОИСХОЖДЕНИЕ
 - Говорящий: ИРИНА В.
@@ -684,7 +723,7 @@ progress.flags.questionedWaitingTime
    - Переход: `drawing-missing`
    - Последствия: `{"flags":{"questionedDrawingReading":true}}`
 
-## 34. drawing-missing
+## 36. drawing-missing
 
 - Этап: ЛИЧНЫЙ ФАЙЛ // НЕПОЛНАЯ КОМПОЗИЦИЯ
 - Говорящий: ИРИНА В.
@@ -714,7 +753,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `drawing-missing-response`
    - Последствия: `{"flags":{"drawingMissingSelf":true}}`
 
-## 35. drawing-missing-response
+## 37. drawing-missing-response
 
 - Этап: ЛИЧНЫЙ ФАЙЛ // ДОПОЛНЕН
 - Говорящий: ИРИНА В.
@@ -743,7 +782,7 @@ progress.flags.questionedDrawingConsent
 1. **ДАВАЙ ДАЛЬШЕ**
    - Переход: `image-test`
 
-## 36. image-test
+## 38. image-test
 
 - Этап: ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -764,7 +803,7 @@ progress.flags.questionedDrawingConsent
    - Изображение выбора: `assets/staff/photos/polaroid-play-area.webp`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"choseOpenDoorFeed":true}}`
 
-## 37. image-response
+## 39. image-response
 
 - Этап: ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -790,7 +829,7 @@ progress.flags.questionedDrawingConsent
 1. **ЧТО ДАЛЬШЕ?**
    - Переход: `wristband-test`
 
-## 38. wristband-test
+## 40. wristband-test
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -812,7 +851,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `wristband-response`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"woreTomorrowBand":true}}`
 
-## 39. wristband-response
+## 41. wristband-response
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -842,7 +881,7 @@ progress.flags.questionedDrawingConsent
 1. **ПОЧЕМУ НЕЛЬЗЯ ПРОСТО УНИЧТОЖИТЬ БРАСЛЕТ?**
    - Переход: `wristband-explain`
 
-## 40. wristband-explain
+## 42. wristband-explain
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // УЧЁТ
 - Говорящий: ИРИНА В.
@@ -858,7 +897,7 @@ progress.flags.questionedDrawingConsent
 1. **ПОНЯТНО. ЧТО ДАЛЬШЕ?**
    - Переход: `damaged-file-arrival`
 
-## 41. damaged-file-arrival
+## 43. damaged-file-arrival
 
 - Этап: ВХОДЯЩИЙ МАТЕРИАЛ // ДЕЛО ПОВРЕЖДЕНО
 - Говорящий: ИРИНА В.
@@ -874,7 +913,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `file-recognition`
    - Последствия: `{"routeMark":"file-opened"}`
 
-## 42. file-recognition
+## 44. file-recognition
 
 - Этап: ДЕЛО РЕБЁНКА // СВЕРКА
 - Говорящий: ИРИНА В.
@@ -890,7 +929,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `damaged-file-evidence`
    - Последствия: `{"routeMark":"journal-checked","flags":{"requestedPaperCheck":true}}`
 
-## 43. damaged-file-evidence
+## 45. damaged-file-evidence
 
 - Этап: ДЕЛО РЕБЁНКА // МЕТКА 03
 - Говорящий: ИРИНА В.
@@ -910,7 +949,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `file-similarity`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"tracedDamagedFile":true},"routeMark":"file-traced"}`
 
-## 44. file-similarity
+## 46. file-similarity
 
 - Этап: ДЕЛО РЕБЁНКА // СОВПАДЕНИЕ
 - Говорящий: ИРИНА В.
@@ -943,7 +982,7 @@ progress.flags.questionedDrawingConsent
    - Переход: `file-similarity-response`
    - Последствия: `{"flags":{"askedIfChildRepeatsRoute":true},"routeMark":"route-compared"}`
 
-## 45. file-similarity-response
+## 47. file-similarity-response
 
 - Этап: ДЕЛО РЕБЁНКА // НОМЕР НАЗНАЧЕНИЯ
 - Говорящий: ИРИНА В.
@@ -965,7 +1004,7 @@ progress.flags.askedIfOwnFile
 1. **ОТКРЫТЬ ТЕРМИНАЛ**
    - Переход: `lost-child-terminal`
 
-## 46. lost-child-terminal
+## 48. lost-child-terminal
 
 - Этап: LOST CHILD TERMINAL™ // ЗАПРОС
 - Говорящий: СИСТЕМА
@@ -984,7 +1023,7 @@ progress.flags.askedIfOwnFile
    - Переход: `lost-terminal-ticket`
    - Последствия: `{"flags":{"terminalYesRight":true},"routeMark":"terminal-confirmed"}`
 
-## 47. lost-terminal-ticket
+## 49. lost-terminal-ticket
 
 - Этап: LOST CHILD TERMINAL™ // БИЛЕТ НАПЕЧАТАН
 - Говорящий: ИРИНА В.
@@ -1010,7 +1049,7 @@ progress.flags.askedIfOwnFile
    - Переход: `terminal-ticket-response`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"inspectedTicketDestination":true},"routeMark":"ticket-processed"}`
 
-## 48. terminal-ticket-response
+## 50. terminal-ticket-response
 
 - Этап: МАРШРУТ РЕБЁНКА // ВОССТАНОВЛЕНИЕ
 - Говорящий: ИРИНА В.
@@ -1040,7 +1079,7 @@ progress.flags.askedIfOwnFile
 1. **ПОКАЗАТЬ ПОСЛЕДНИЕ ФОТОГРАФИИ**
    - Переход: `route-photo-choice`
 
-## 49. route-photo-choice
+## 51. route-photo-choice
 
 - Этап: МАРШРУТ РЕБЁНКА // ПОСЛЕДНЯЯ ТОЧКА
 - Говорящий: ИРИНА В.
@@ -1061,7 +1100,7 @@ progress.flags.askedIfOwnFile
    - Изображение выбора: `assets/staff/photos/polaroid-empty-pool.webp`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"checkedEmptyPool":true},"routeMark":"last-location-found"}`
 
-## 50. route-photo-response
+## 52. route-photo-response
 
 - Этап: МАРШРУТ РЕБЁНКА // ЭФИРНЫЙ ВХОД
 - Говорящий: ИРИНА В.
@@ -1083,7 +1122,7 @@ progress.flags.checkedEmptyPool
 1. **ПРОВЕРИТЬ ПЕРЕДАЧУ**
    - Переход: `elena-question-one`
 
-## 51. elena-question-one
+## 53. elena-question-one
 
 - Этап: АРХИВНЫЙ ЭФИР // «ПРАВИЛЬНЫЙ ОТВЕТ»
 - Говорящий: ЕЛЕНА ПРАВИЛЬНАЯ
@@ -1109,7 +1148,7 @@ progress.flags.checkedEmptyPool
    - Переход: `elena-question-two`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"investigatedElenaBroadcast":true},"routeMark":"broadcast-handled"}`
 
-## 52. elena-question-two
+## 54. elena-question-two
 
 - Этап: АРХИВНЫЙ ЭФИР // «ПРАВИЛЬНЫЙ ОТВЕТ»
 - Говорящий: ЕЛЕНА ПРАВИЛЬНАЯ
@@ -1132,7 +1171,7 @@ progress.flags.checkedEmptyPool
    - Переход: `elena-breach`
    - Последствия: `{"profiles":{"volunteer":1},"flags":{"closedElenaFeed":true}}`
 
-## 53. elena-breach
+## 55. elena-breach
 
 - Этап: АРХИВНЫЙ ЭФИР // НАРУШЕНИЕ ФОРМАТА
 - Говорящий: ЕЛЕНА ПРАВИЛЬНАЯ
@@ -1146,7 +1185,7 @@ progress.flags.checkedEmptyPool
 
 **Ответы игрока:** отсутствуют.
 
-## 54. irina-reconnect
+## 56. irina-reconnect
 
 - Этап: ВОССТАНОВЛЕНИЕ КАНАЛА // 0091-A
 - Говорящий: ИРИНА В.
@@ -1159,7 +1198,7 @@ progress.flags.checkedEmptyPool
 
 **Ответы игрока:** отсутствуют.
 
-## 55. irina-reconnect-response
+## 57. irina-reconnect-response
 
 - Этап: КАНАЛ 0091-A // ЛИЧНАЯ ЗАПИСЬ
 - Говорящий: ИРИНА В.
@@ -1181,7 +1220,7 @@ progress.flags.answeredElena
 1. **ЧТО БУДЕТ С ДЕЛОМ?**
    - Переход: `file-preservation-choice`
 
-## 56. file-preservation-choice
+## 58. file-preservation-choice
 
 - Этап: ДЕЛО РЕБЁНКА // РЕЗЕРВНАЯ КОПИЯ
 - Говорящий: ИРИНА В.
@@ -1200,7 +1239,7 @@ progress.flags.answeredElena
    - Переход: `file-preserved`
    - Последствия: `{"profiles":{"animator":1},"scores":{"obedience":1},"flags":{"leftFileInChannel":true},"routeMark":"file-preserved"}`
 
-## 57. file-preserved
+## 59. file-preserved
 
 - Этап: ДЕЛО РЕБЁНКА // БУМАЖНАЯ КОПИЯ
 - Говорящий: ИРИНА В.
@@ -1220,7 +1259,7 @@ progress.flags.leftFileInChannel
 
 **Ответы игрока:** отсутствуют.
 
-## 58. file-preserved-response
+## 60. file-preserved-response
 
 - Этап: МАРШРУТ ВОССТАНОВЛЕН // 9 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -1235,7 +1274,7 @@ progress.flags.leftFileInChannel
 1. **ПРОДОЛЖИТЬ ПРОВЕРКУ**
    - Переход: `recognition-card`
 
-## 59. recognition-card
+## 61. recognition-card
 
 - Этап: ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ
 - Говорящий: ИРИНА В.
@@ -1258,7 +1297,7 @@ progress.flags.leftFileInChannel
    - Переход: `recognition-ink`
    - Последствия: `{"flags":{"sawInk":true}}`
 
-## 60. recognition-cat
+## 62. recognition-cat
 
 - Этап: ПОБОЧНЫЙ КАНАЛ // ПАВЕЛ К.
 - Говорящий: ИРИНА В.
@@ -1278,7 +1317,7 @@ progress.flags.leftFileInChannel
    - Переход: `pavel-response`
    - Последствия: `{"flags":{"askedIfPavelCat":true}}`
 
-## 61. pavel-response
+## 63. pavel-response
 
 - Этап: ПОБОЧНЫЙ КАНАЛ // ПАВЕЛ К.
 - Говорящий: ИРИНА В.
@@ -1300,7 +1339,7 @@ progress.flags.askedIfPavelCat
 1. **ДАВАЙ ДАЛЬШЕ**
    - Переход: `loneliness`
 
-## 62. recognition-rabbit
+## 64. recognition-rabbit
 
 - Этап: ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ
 - Говорящий: ИРИНА В.
@@ -1315,7 +1354,7 @@ progress.flags.askedIfPavelCat
 1. **ПОНЯТНО**
    - Переход: `loneliness`
 
-## 63. recognition-ink
+## 65. recognition-ink
 
 - Этап: ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ
 - Говорящий: ИРИНА В.
@@ -1330,7 +1369,7 @@ progress.flags.askedIfPavelCat
 1. **ЛАДНО. ДАВАЙ ДАЛЬШЕ**
    - Переход: `loneliness`
 
-## 64. loneliness
+## 66. loneliness
 
 - Этап: НЕЗАПЛАНИРОВАННЫЙ ВОПРОС
 - Говорящий: ИРИНА В.
@@ -1352,7 +1391,7 @@ progress.flags.askedIfPavelCat
    - Переход: `loneliness-formal`
    - Последствия: `{"flags":{"keptFormalDistance":true}}`
 
-## 65. private-file-video
+## 67. private-file-video
 
 - Этап: НЕЗАПЛАНИРОВАННАЯ ПЕРЕДАЧА
 - Говорящий: ИРИНА В.
@@ -1372,7 +1411,7 @@ progress.flags.askedIfPavelCat
    - Переход: `private-file-declined`
    - Последствия: `{"flags":{"declinedPrivatePhoto":true}}`
 
-## 66. private-file-accepted
+## 68. private-file-accepted
 
 - Этап: ФАЙЛ ПОЛУЧЕН // 1
 - Говорящий: ИРИНА В.
@@ -1388,7 +1427,7 @@ progress.flags.askedIfPavelCat
    - Переход: `costume-test`
    - Последствия: `{"flags":{"promisedNotToForget":true}}`
 
-## 67. private-file-declined
+## 69. private-file-declined
 
 - Этап: ПЕРЕДАЧА ОТМЕНЕНА
 - Говорящий: ИРИНА В.
@@ -1403,7 +1442,7 @@ progress.flags.askedIfPavelCat
 1. **ХОРОШО. ДАВАЙ ДАЛЬШЕ**
    - Переход: `costume-test`
 
-## 68. loneliness-bear
+## 70. loneliness-bear
 
 - Этап: НЕЗАПЛАНИРОВАННЫЙ ВОПРОС
 - Говорящий: ИРИНА В.
@@ -1418,7 +1457,7 @@ progress.flags.askedIfPavelCat
 1. **ПОНЯТНО. ДАВАЙ ДАЛЬШЕ**
    - Переход: `costume-test`
 
-## 69. loneliness-formal
+## 71. loneliness-formal
 
 - Этап: СЛУЖЕБНЫЙ КАНАЛ ВОССТАНОВЛЕН
 - Говорящий: ИРИНА В.
@@ -1433,7 +1472,7 @@ progress.flags.askedIfPavelCat
 1. **СЛЕДУЮЩИЙ ВОПРОС**
    - Переход: `costume-test`
 
-## 70. costume-test
+## 72. costume-test
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -1455,7 +1494,7 @@ progress.flags.askedIfPavelCat
    - Переход: `costume-response`
    - Последствия: `{"profiles":{"animator":1},"scores":{"obedience":1},"flags":{"continuedRoute":true}}`
 
-## 71. costume-response
+## 73. costume-response
 
 - Этап: СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -1484,7 +1523,7 @@ progress.flags.askedIfPavelCat
 1. **И ЧТО ЭТО ЗНАЧИТ?**
    - Переход: `costume-history-one`
 
-## 72. costume-history-one
+## 74. costume-history-one
 
 - Этап: ОБОЛОЧКИ // УЧЁТ
 - Говорящий: ИРИНА В.
@@ -1499,7 +1538,7 @@ progress.flags.askedIfPavelCat
 1. **КАК ЧЕЛОВЕК ОСТАЁТСЯ БЕЗ ДОЛЖНОСТИ?**
    - Переход: `costume-history-two`
 
-## 73. costume-history-two
+## 75. costume-history-two
 
 - Этап: ОБОЛОЧКИ // ПРИВЯЗКА
 - Говорящий: ИРИНА В.
@@ -1514,7 +1553,7 @@ progress.flags.askedIfPavelCat
 1. **А ЕСЛИ НЕ ПОНИМАЕТ?**
    - Переход: `bear-question`
 
-## 74. bear-question
+## 76. bear-question
 
 - Этап: ОБОЛОЧКА // ДЕМОНСТРАЦИЯ
 - Говорящий: ИРИНА В.
@@ -1536,7 +1575,7 @@ progress.flags.askedIfPavelCat
    - Переход: `bear-head-on`
    - Последствия: `{"flags":{"askedForBear":true}}`
 
-## 75. bear-head-on
+## 77. bear-head-on
 
 - Этап: ОБОЛОЧКА // АКТИВАЦИЯ
 - Говорящий: ИРИНА В.
@@ -1563,7 +1602,7 @@ progress.flags.askedIfPavelCat
 
 **Ответы игрока:** отсутствуют.
 
-## 76. bear-neutral
+## 78. bear-neutral
 
 - Этап: ОБОЛОЧКА // АКТИВНА
 - Говорящий: МЕДВЕДЬ
@@ -1585,7 +1624,7 @@ progress.flags.askedIfPavelCat
    - Переход: `bear-response`
    - Последствия: `{"flags":{"acceptsBearMode":true}}`
 
-## 77. bear-response
+## 79. bear-response
 
 - Этап: ОБОЛОЧКА // АКТИВНА
 - Говорящий: ИРИНА В.
@@ -1614,7 +1653,7 @@ progress.flags.askedIfPavelCat
 1. **ДАВАЙ ДАЛЬШЕ**
    - Переход: `bear-corridor`
 
-## 78. bear-corridor
+## 80. bear-corridor
 
 - Этап: СЛУЖЕБНОЕ НАБЛЮДЕНИЕ // МАРШРУТ 394
 - Говорящий: СИСТЕМА
@@ -1628,7 +1667,7 @@ progress.flags.askedIfPavelCat
 
 **Ответы игрока:** отсутствуют.
 
-## 79. aroma-warning
+## 81. aroma-warning
 
 - Этап: ПЛАНОВАЯ АРОМАТИЗАЦИЯ // 00:20
 - Говорящий: ИРИНА В.
@@ -1643,7 +1682,7 @@ progress.flags.askedIfPavelCat
 1. **ПОДОЖДАТЬ**
    - Переход: `aroma-cycle`
 
-## 80. aroma-cycle
+## 82. aroma-cycle
 
 - Этап: ПЛАНОВАЯ АРОМАТИЗАЦИЯ
 - Говорящий: СИСТЕМА
@@ -1656,7 +1695,7 @@ progress.flags.askedIfPavelCat
 
 **Ответы игрока:** отсутствуют.
 
-## 81. post-aroma-jelly
+## 83. post-aroma-jelly
 
 - Этап: ПЛАНОВАЯ АРОМАТИЗАЦИЯ // ЗАВЕРШЕНА
 - Говорящий: ИРИНА В.
@@ -1679,7 +1718,7 @@ progress.flags.askedIfPavelCat
    - Переход: `jelly-response`
    - Последствия: `{"flags":{"requestedJelly":true}}`
 
-## 82. jelly-response
+## 84. jelly-response
 
 - Этап: НОРМА СОТРУДНИКА // 0091-A
 - Говорящий: ИРИНА В.
@@ -1708,7 +1747,7 @@ progress.flags.askedIfPavelCat
 1. **О ЧЁМ МЫ ГОВОРИЛИ ДО АРОМАТИЗАЦИИ?**
    - Переход: `jelly-memory`
 
-## 83. jelly-memory
+## 85. jelly-memory
 
 - Этап: ПРОТОКОЛ ВОССТАНОВЛЕН
 - Говорящий: ИРИНА В.
@@ -1731,7 +1770,7 @@ progress.flags.askedIfPavelCat
    - Переход: `cycle-history-one`
    - Последствия: `{"flags":{"askedPreviousCall":true}}`
 
-## 84. cycle-history-one
+## 86. cycle-history-one
 
 - Этап: ЦИКЛ СОТРУДНИКА // 12 ЧАСОВ
 - Говорящий: ИРИНА В.
@@ -1750,7 +1789,7 @@ progress.flags.askedIfPavelCat
    - Переход: `cycle-history-two`
    - Последствия: `{"flags":{"askedIfIrinaRemembersHome":true}}`
 
-## 85. cycle-history-two
+## 87. cycle-history-two
 
 - Этап: ЦИКЛ СОТРУДНИКА // ВОЗРАСТ
 - Говорящий: ИРИНА В.
@@ -1772,7 +1811,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **ТЫ ХОЧЕШЬ ВЕРНУТЬСЯ ТУДА?**
    - Переход: `cycle-history-three`
 
-## 86. cycle-history-three
+## 88. cycle-history-three
 
 - Этап: ЦИКЛ СОТРУДНИКА // ОТКЛОНЕНИЕ
 - Говорящий: ИРИНА В.
@@ -1791,7 +1830,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `favorite-childrens-show`
    - Последствия: `{"flags":{"agreesToForgetParentsLine":true}}`
 
-## 87. favorite-childrens-show
+## 89. favorite-childrens-show
 
 - Этап: ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР
 - Говорящий: ИРИНА В.
@@ -1813,7 +1852,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `favorite-childrens-show-response`
    - Последствия: `{"flags":{"outgrewChildrensShows":true}}`
 
-## 88. favorite-childrens-show-response
+## 90. favorite-childrens-show-response
 
 - Этап: ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР
 - Говорящий: ИРИНА В.
@@ -1852,7 +1891,7 @@ progress.flags.askedIfIrinaRemembersHome
 ]
 ```
 
-## 89. ulybarych-archive
+## 91. ulybarych-archive
 
 - Этап: АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001
 - Говорящий: СИСТЕМА
@@ -1866,7 +1905,7 @@ progress.flags.askedIfIrinaRemembersHome
 
 **Ответы игрока:** отсутствуют.
 
-## 90. ulybarych-response
+## 92. ulybarych-response
 
 - Этап: АРХИВНЫЙ ЭФИР // ИСТОЧНИК 001
 - Говорящий: ИРИНА В.
@@ -1888,7 +1927,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `ulybarych-answer`
    - Последствия: `{"flags":{"remembersUlybarych":true}}`
 
-## 91. ulybarych-answer
+## 93. ulybarych-answer
 
 - Этап: АРХИВНЫЙ ЭФИР // ЗАВЕРШЁН
 - Говорящий: ИРИНА В.
@@ -1917,7 +1956,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **ДАВАЙ ВЕРНЁМСЯ К ЗВОНКУ**
    - Переход: `ulybarych-history-one`
 
-## 92. ulybarych-history-one
+## 94. ulybarych-history-one
 
 - Этап: АРХИВНЫЙ ЭФИР // СПРАВКА
 - Говорящий: ИРИНА В.
@@ -1932,7 +1971,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **ПОЧЕМУ ОН РАБОТАЕТ СО ВЗРОСЛЫМИ?**
    - Переход: `ulybarych-history-two`
 
-## 93. ulybarych-history-two
+## 95. ulybarych-history-two
 
 - Этап: АРХИВНЫЙ ЭФИР // ПОМОЩНИК ПО ВОЗРАСТУ
 - Говорящий: ИРИНА В.
@@ -1950,7 +1989,7 @@ progress.flags.askedIfIrinaRemembersHome
 2. **ДАВАЙ ПРОДОЛЖИМ**
    - Переход: `hears-noise`
 
-## 94. hears-noise
+## 96. hears-noise
 
 - Этап: ПРОВЕРКА КАНАЛА // 7 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -1972,7 +2011,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `noise-response`
    - Последствия: `{"profiles":{"volunteer":1},"scores":{"curiosity":1},"flags":{"lookedBehindIrina":true}}`
 
-## 95. noise-response
+## 97. noise-response
 
 - Этап: ПРОВЕРКА КАНАЛА // 7 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -2001,7 +2040,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **ПОДОЖДАТЬ**
    - Переход: `plague-doctor-camera`
 
-## 96. plague-doctor-camera
+## 98. plague-doctor-camera
 
 - Этап: ВНЕШНИЙ ЗАХВАТ КАНАЛА
 - Говорящий: СИСТЕМА
@@ -2015,7 +2054,7 @@ progress.flags.askedIfIrinaRemembersHome
 
 **Ответы игрока:** отсутствуют.
 
-## 97. plague-doctor-response
+## 99. plague-doctor-response
 
 - Этап: ФОТОГРАФИРОВАНИЕ ЗАВЕРШЕНО
 - Говорящий: ИРИНА В.
@@ -2037,7 +2076,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `plague-doctor-answer`
    - Последствия: `{"flags":{"askedAboutPass":true}}`
 
-## 98. plague-doctor-answer
+## 100. plague-doctor-answer
 
 - Этап: ВРЕМЕННЫЙ ПРОПУСК // СОЗДАНИЕ
 - Говорящий: ИРИНА В.
@@ -2066,7 +2105,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **И ЧТО ДАЛЬШЕ?**
    - Переход: `pass-history-one`
 
-## 99. pass-history-one
+## 101. pass-history-one
 
 - Этап: ВРЕМЕННЫЙ ПРОПУСК // ФОТО
 - Говорящий: ИРИНА В.
@@ -2081,7 +2120,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **А ЧТО БЫЛО НА ТВОЁМ ПРОПУСКЕ?**
    - Переход: `pass-history-two`
 
-## 100. pass-history-two
+## 102. pass-history-two
 
 - Этап: ВРЕМЕННЫЙ ПРОПУСК // 0091-A
 - Говорящий: ИРИНА В.
@@ -2099,7 +2138,7 @@ progress.flags.askedIfIrinaRemembersHome
 2. **ПОНЯТНО**
    - Переход: `shush-exit`
 
-## 101. shush-exit
+## 103. shush-exit
 
 - Этап: КАНАЛ ПРИОСТАНОВЛЕН // 8 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -2112,7 +2151,7 @@ progress.flags.askedIfIrinaRemembersHome
 
 **Ответы игрока:** отсутствуют.
 
-## 102. empty-room
+## 104. empty-room
 
 - Этап: ИСТОЧНИК НЕ ОПРЕДЕЛЁН // 8 ИЗ 9
 - Говорящий: МЕДВЕДЬ?
@@ -2135,7 +2174,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `return-sit`
    - Последствия: `{"profiles":{"animator":1},"scores":{"obedience":1},"flags":{"silentForBear":true}}`
 
-## 103. return-sit
+## 105. return-sit
 
 - Этап: ВОССТАНОВЛЕНИЕ КАНАЛА // 8 ИЗ 9
 - Говорящий: СИСТЕМА
@@ -2148,7 +2187,7 @@ progress.flags.askedIfIrinaRemembersHome
 
 **Ответы игрока:** отсутствуют.
 
-## 104. return-explain
+## 106. return-explain
 
 - Этап: КЛАССИФИКАЦИЯ // 9 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -2173,7 +2212,7 @@ progress.flags.askedIfIrinaRemembersHome
 1. **УЗНАТЬ НАЗНАЧЕНИЕ**
    - Переход: `return-memory-one`
 
-## 105. return-memory-one
+## 107. return-memory-one
 
 - Этап: КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ
 - Говорящий: ИРИНА В.
@@ -2205,7 +2244,7 @@ progress.flags.askedIfIrinaRemembersHome
    - Переход: `return-memory-two`
    - Последствия: `{"flags":{"trustsSystemMemory":true}}`
 
-## 106. return-memory-two
+## 108. return-memory-two
 
 - Этап: КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ
 - Говорящий: ИРИНА В.
@@ -2227,7 +2266,7 @@ progress.flags.promisesToRememberCall
 1. **КТО-ТО ЕЩЁ ВЫБИРАЕТ НАЗНАЧЕНИЕ?**
    - Переход: `private-argument`
 
-## 107. private-argument
+## 109. private-argument
 
 - Этап: КЛАССИФИКАЦИЯ // 9 ИЗ 9
 - Говорящий: ИРИНА В.
@@ -2240,7 +2279,7 @@ progress.flags.promisesToRememberCall
 
 **Ответы игрока:** отсутствуют.
 
-## 108. assignment
+## 110. assignment
 
 - Этап: НАЗНАЧЕНИЕ СОХРАНЕНО
 - Говорящий: ИРИНА В.
@@ -2274,7 +2313,7 @@ progress.flags.promisesToRememberCall
 ]
 ```
 
-## 109. assignment-close-choice
+## 111. assignment-close-choice
 
 - Этап: КЛАССИФИКАЦИЯ // ОСОЗНАННЫЙ ВЫБОР
 - Говорящий: ИРИНА В.
@@ -2293,7 +2332,7 @@ progress.flags.promisesToRememberCall
    - Переход: `assignment-role`
    - Последствия: `{"flags":{"finalRoleChoice":"volunteer"}}`
 
-## 110. assignment-role
+## 112. assignment-role
 
 - Этап: НАЗНАЧЕНИЕ СОХРАНЕНО
 - Говорящий: ИРИНА В.
@@ -2315,7 +2354,7 @@ getCuratorAssignment(progress) === "volunteer"
 1. **А ЧТО ОСТАНЕТСЯ ОТ ЗВОНКА?**
    - Переход: `assignment-keepsake`
 
-## 111. assignment-keepsake
+## 113. assignment-keepsake
 
 - Этап: КАНАЛ 0091-A // ЗАВЕРШЕНИЕ
 - Говорящий: ИРИНА В.
@@ -2346,7 +2385,7 @@ getCuratorAssignment(progress) === "volunteer"
 1. **ПРОВЕРИТЬ ЛИЧНОЕ ВЛОЖЕНИЕ**
    - Переход: `reward-offer`
 
-## 112. reward-offer
+## 114. reward-offer
 
 - Этап: ПЕРСОНАЛЬНЫЙ МАТЕРИАЛ
 - Говорящий: СИСТЕМА
@@ -2406,7 +2445,7 @@ getCuratorAssignment(progress) === "volunteer"
 }
 ```
 
-## 113. reward-accepted
+## 115. reward-accepted
 
 - Этап: МАТЕРИАЛ ПОЛУЧЕН
 - Говорящий: СИСТЕМА
@@ -2421,7 +2460,7 @@ getCuratorAssignment(progress) === "volunteer"
 1. **ЗАВЕРШИТЬ ИНСТРУКТАЖ**
    - Завершает эпизод
 
-## 114. reward-declined
+## 116. reward-declined
 
 - Этап: ОТКАЗ ЗАРЕГИСТРИРОВАН
 - Говорящий: СИСТЕМА
