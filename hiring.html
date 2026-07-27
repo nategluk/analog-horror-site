@@ -171,7 +171,7 @@
               <h2 id="curator-call-title">КУРАТОР 0091-A</h2>
             </div>
             <div class="curator-call__telemetry" aria-label="Состояние соединения">
-              <span class="curator-call__live"><i aria-hidden="true"></i> СЕАНС 01</span>
+              <span class="curator-call__live" data-curator-session><i aria-hidden="true"></i> СЕАНС 01</span>
               <span data-curator-signal>СИГНАЛ 63%</span>
             </div>
             <div
@@ -197,6 +197,15 @@
                   hidden
                 />
                 <img alt="" data-curator-still hidden />
+                <div class="curator-call__terminal" data-curator-terminal hidden>
+                  <span>LOST CHILD TERMINAL™</span>
+                  <strong>ТЫ ПОТЕРЯЛСЯ?</strong>
+                  <div aria-hidden="true">
+                    <i>ДА</i>
+                    <i>ДА</i>
+                  </div>
+                  <small>ОЖИДАНИЕ ВВОДА</small>
+                </div>
                 <div class="curator-call__flash" data-curator-flash aria-hidden="true"></div>
                 <div class="curator-call__scan" aria-hidden="true"></div>
                 <div class="curator-call__feed-meta" aria-hidden="true">
@@ -217,6 +226,7 @@
             <div class="curator-call__conversation">
               <div class="curator-call__progress">
                 <span data-curator-step>ПРОВЕРКА КАНАЛА</span>
+                <span data-curator-marks>МЕТКИ МАРШРУТА 0/9</span>
                 <span data-curator-save>НЕ СОХРАНЕНО</span>
               </div>
               <div class="curator-call__transcript" aria-live="polite" aria-atomic="true">
@@ -280,6 +290,10 @@
               <button type="button" data-curator-exit-cancel>ПРОДОЛЖИТЬ</button>
               <button type="button" data-curator-exit-accept>ЗАВЕРШИТЬ СЕАНС</button>
             </div>
+          </div>
+
+          <div class="curator-call__route-stamp" data-curator-route-stamp hidden aria-live="polite">
+            МЕТКА МАРШРУТА
           </div>
         </div>
       </section>

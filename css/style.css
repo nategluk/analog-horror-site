@@ -1012,6 +1012,28 @@ body.staff-mode .personnel-dossier button:focus-visible {
   gap: 0.65rem;
 }
 
+.personnel-sessions {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.personnel-session {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.6rem 0.7rem;
+  color: #8fc99a;
+  border: 1px solid #315d39;
+  background: rgba(7, 20, 10, 0.68);
+  font-size: 0.68rem;
+  letter-spacing: 0.035em;
+}
+
+.personnel-session strong {
+  color: #71ff89;
+}
+
 body.staff-mode .personnel-material {
   display: grid;
   align-content: start;
@@ -2830,6 +2852,53 @@ body.curator-call-open {
     radial-gradient(circle at 50% 42%, transparent 45%, rgba(0, 0, 0, 0.58) 100%);
 }
 
+.curator-call__terminal {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(1rem, 4vw, 2rem);
+  padding: 1.2rem;
+  color: #baffc4;
+  background:
+    linear-gradient(rgba(4, 18, 8, 0.88), rgba(0, 5, 2, 0.98)),
+    #020603;
+  text-align: center;
+}
+
+.curator-call__terminal > span,
+.curator-call__terminal > small {
+  color: #5fad6a;
+  font-size: clamp(0.58rem, 1.7vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.curator-call__terminal > strong {
+  color: #e4ffe8;
+  font-size: clamp(1.3rem, 5vw, 2.4rem);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 14px rgba(119, 255, 136, 0.48);
+}
+
+.curator-call__terminal > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(5rem, 1fr));
+  gap: 0.8rem;
+  width: min(100%, 15rem);
+}
+
+.curator-call__terminal i {
+  padding: 0.7rem;
+  color: #ffb0b0;
+  border: 1px solid #8c3737;
+  background: #250909;
+  font-style: normal;
+  font-weight: 800;
+}
+
 .curator-call__flash {
   position: absolute;
   z-index: 7;
@@ -2961,6 +3030,7 @@ body.curator-call-open {
 
 .curator-call__progress {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
   padding-bottom: 0.75rem;
@@ -3084,11 +3154,50 @@ body.curator-call-open {
 .curator-call__image-choice img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1;
   object-fit: cover;
   border: 1px solid rgba(119, 255, 136, 0.34);
   filter: grayscale(0.72) contrast(1.12) brightness(0.78) saturate(0.72);
   transition: filter 140ms ease;
+}
+
+.curator-call__route-stamp {
+  position: absolute;
+  z-index: 17;
+  top: 50%;
+  left: 50%;
+  width: min(82%, 27rem);
+  padding: 0.8rem 1rem;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  color: #ff9b9b;
+  border: 4px double currentColor;
+  background: rgba(20, 2, 2, 0.9);
+  box-shadow: 0 0 32px rgba(255, 90, 90, 0.22);
+  font-size: clamp(1rem, 4vw, 1.55rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(255, 80, 80, 0.5);
+  pointer-events: none;
+}
+
+.curator-call__route-stamp.is-active {
+  animation: curator-route-stamp 760ms steps(2, end) both;
+}
+
+@keyframes curator-route-stamp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.8) rotate(-7deg);
+  }
+  18%,
+  78% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(-3deg);
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .curator-call__image-choice span {
@@ -3430,6 +3539,14 @@ body.curator-call-open {
     align-content: start;
   }
 
+  .curator-call__progress {
+    justify-content: flex-start;
+  }
+
+  .curator-call__progress [data-curator-save] {
+    margin-left: auto;
+  }
+
   .curator-call__controls {
     position: static;
     justify-content: stretch;
@@ -3477,6 +3594,14 @@ body.curator-call-open {
   .curator-call__exit-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  .personnel-session {
+    grid-template-columns: 1fr auto;
+  }
+
+  .personnel-session span:last-child {
+    grid-column: 1 / -1;
   }
 }
 
@@ -3594,6 +3719,10 @@ body.staff-mode .vhs-noise {
   .curator-call *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .curator-call__route-stamp.is-active {
+    animation-duration: 1ms;
   }
 }
 

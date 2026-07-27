@@ -29,6 +29,14 @@ Web-ready media for curator `0091-A`.
   the figure behind her. Its opt-in foreground audio is the two-second
   murmur in `assets/audio/curator/sfx/muffled-help.mp3`; the file includes a
   1.5-second pre-roll matching the figure's delayed appearance.
+- The damaged-child route arc uses `action-damaged-file-arrival`,
+  `action-file-recognition`, the reusable `state-file-investigation`,
+  `archive-elena-question`, `archive-elena-breach`, `action-irina-reconnect`,
+  and `action-file-preserved`. Elena's question clip may be replayed for more
+  than one question; the text and choices stay in HTML.
+- `archive-elena-question` uses the separate seamless quiz timer while choices
+  are visible. `archive-elena-breach` uses the one-shot transition. Neither
+  sound is baked into the video.
 - The `artifacts/` directory contains still channel interruptions, materials
   saved to the player's personnel file, and Irina's optional downloadable
   private photograph. WebP assets retain their generated square resolution

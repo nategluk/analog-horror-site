@@ -33,9 +33,34 @@
       "video": "state-bear-neutral.mp4",
       "poster": "state-bear-neutral-poster.webp",
       "playback": "once-hold"
+    },
+    "file-investigation": {
+      "video": "state-file-investigation.mp4",
+      "poster": "state-file-investigation-poster.webp",
+      "playback": "once-hold"
     }
   },
   "actions": {
+    "damaged-file-arrival": {
+      "video": "action-damaged-file-arrival.mp4",
+      "poster": "action-damaged-file-arrival-poster.webp",
+      "playback": "once"
+    },
+    "file-recognition": {
+      "video": "action-file-recognition.mp4",
+      "poster": "action-file-recognition-poster.webp",
+      "playback": "once"
+    },
+    "irina-reconnect": {
+      "video": "action-irina-reconnect.mp4",
+      "poster": "action-irina-reconnect-poster.webp",
+      "playback": "once"
+    },
+    "file-preserved": {
+      "video": "action-file-preserved.mp4",
+      "poster": "action-file-preserved-poster.webp",
+      "playback": "once"
+    },
     "hears-noise": {
       "video": "action-hears-noise.mp4",
       "poster": "action-hears-noise-poster.webp",
@@ -114,6 +139,16 @@
       "video": "cctv-pavel-observation-booth.mp4",
       "poster": "cctv-pavel-observation-booth-poster.webp",
       "playback": "once"
+    },
+    "elena-question": {
+      "video": "archive-elena-question.mp4",
+      "poster": "archive-elena-question-poster.webp",
+      "playback": "once"
+    },
+    "elena-breach": {
+      "video": "archive-elena-breach.mp4",
+      "poster": "archive-elena-breach-poster.webp",
+      "playback": "once"
     }
   },
   "rooms": {
@@ -157,6 +192,14 @@
     },
     "operator-empty-chair": {
       "image": "artifacts/operator-empty-chair.webp",
+      "playback": "still-filtered"
+    },
+    "damaged-child-file": {
+      "image": "artifacts/damaged-child-file.webp",
+      "playback": "still-filtered"
+    },
+    "lost-child-route-ticket": {
+      "image": "artifacts/lost-child-route-ticket.webp",
       "playback": "still-filtered"
     }
   }

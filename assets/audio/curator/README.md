@@ -38,6 +38,10 @@ source renders supplied for the curator call:
   session and plays in the empty-room scene;
 - the three `child-laugh-*` files use one performance with distance, archive,
   and close treatments so the same child appears to move through the session.
+- `elena-tick-loop.ogg` and `.mp3` are the uniform eight-second quiz timer.
+  The browser loops it only while Elena's answer controls are active;
+- `elena-breach-transition.ogg` and `.mp3` are a one-shot twelve-second
+  ticking escalation used when the archive stops behaving like a recording.
 
 The source renders remain on the creator's Desktop and are not deployed.
 High-level source files were attenuated and filtered before MP3 encoding so

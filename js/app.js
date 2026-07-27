@@ -847,6 +847,33 @@
       src: curatorMediaAsset("artifacts/operator-empty-chair.webp"),
       alt: "Пустое кресло оператора с наушниками перед старым монитором",
     },
+    "damaged-child-file": {
+      code: "IR-0091-14",
+      title: "ПОВРЕЖДЁННОЕ ДЕЛО РЕБЁНКА",
+      type: "НЕЗАРЕГИСТРИРОВАННОЕ ЛИЧНОЕ ДЕЛО",
+      source: "КАНАЛ 0091-A // ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
+      description: "Имя и фотография утрачены. Ответы в анкете частично совпадают с текущим сеансом оператора.",
+      src: curatorMediaAsset("artifacts/damaged-child-file.webp"),
+      alt: "Повреждённая папка детского дела с вырванной фотографией, зачёркнутым именем и схемой маршрута",
+    },
+    "lost-child-route-ticket": {
+      code: "IR-0091-15",
+      title: "БИЛЕТ LOST CHILD TERMINAL",
+      type: "МАРШРУТНАЯ КВИТАНЦИЯ",
+      source: "ТЕРМИНАЛ ПОТЕРЯННЫХ ДЕТЕЙ // МАРШРУТ НЕ ЗАРЕГИСТРИРОВАН",
+      description: "Билет соединяет горку, служебную дверь и пустой бассейн. Номер назначения стёрт до печати.",
+      src: curatorMediaAsset("artifacts/lost-child-route-ticket.webp"),
+      alt: "Длинный старый маршрутный билет со схемой из горки, служебной двери и пустого бассейна",
+    },
+    "preserved-child-file": {
+      code: "IR-0091-16",
+      title: "СОХРАНЁННОЕ ДЕЛО РЕБЁНКА",
+      type: "БУМАЖНАЯ РЕЗЕРВНАЯ КОПИЯ",
+      source: "КУРАТОР 0091-A // ЛИЧНЫЙ ЖУРНАЛ",
+      description: "Куратор внесла отсутствующую запись вручную. Системное подтверждение регистрации не получено.",
+      src: curatorMediaAsset("artifacts/damaged-child-file.webp"),
+      alt: "Повреждённая папка детского дела, сохранённая Ириной в бумажном журнале",
+    },
     "irina-private-photo": {
       code: "IR-0091-03",
       title: "ЛИЧНЫЙ ФАЙЛ ИРИНЫ В.",
@@ -904,6 +931,9 @@
     "ulybarych-archive": "ulybarych-broadcast",
     "empty-room": "operator-empty-chair",
     "plague-doctor-response": "biometric-record",
+    "damaged-file-evidence": "damaged-child-file",
+    "lost-terminal-ticket": "lost-child-route-ticket",
+    "file-preserved-response": "preserved-child-file",
   };
 
   const createCuratorProgress = () => ({
@@ -927,6 +957,9 @@
     flags: {},
     files: [],
     artifacts: [],
+    routeMarks: [],
+    sessionId: `0091-A-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    sessionNumber: Math.max(1, (readStaffProfile()?.sessions?.length || 0) + 1),
     updatedAt: Date.now(),
   });
 
@@ -940,6 +973,12 @@
       saved.flags ||= {};
       saved.files = Array.isArray(saved.files) ? saved.files : [];
       saved.artifacts = Array.isArray(saved.artifacts) ? saved.artifacts : [];
+      saved.routeMarks = Array.isArray(saved.routeMarks) ? saved.routeMarks : [];
+      saved.sessionId ||= `0091-A-legacy-${saved.completedAt || saved.updatedAt || Date.now()}`;
+      saved.sessionNumber ||= Math.max(
+        1,
+        (readStaffProfile()?.sessions?.length || 0) + (saved.status === "completed" ? 0 : 1)
+      );
       return saved;
     } catch {
       return null;
@@ -953,6 +992,7 @@
     role: null,
     avatarId: null,
     artifacts: [],
+    sessions: [],
     createdAt: Date.now(),
     updatedAt: Date.now(),
   });
@@ -965,6 +1005,7 @@
       }
 
       profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
+      profile.sessions = Array.isArray(profile.sessions) ? profile.sessions : [];
       return profile;
     } catch {
       return null;
@@ -1028,6 +1069,18 @@
       artifactIds.add("biometric-record");
     }
 
+    if ((progress?.routeMarks?.length || 0) >= 3) {
+      artifactIds.add("damaged-child-file");
+    }
+
+    if ((progress?.routeMarks?.length || 0) >= 6) {
+      artifactIds.add("lost-child-route-ticket");
+    }
+
+    if ((progress?.routeMarks?.length || 0) >= 9) {
+      artifactIds.add("preserved-child-file");
+    }
+
     if (progress?.status === "completed") {
       artifactIds.add("memory-drawing");
       artifactIds.add("recognition-card");
@@ -1038,6 +1091,15 @@
       artifactIds.add("ulybarych-broadcast");
       artifactIds.add("operator-empty-chair");
       artifactIds.add("biometric-record");
+      if ((progress?.routeMarks?.length || 0) >= 3) {
+        artifactIds.add("damaged-child-file");
+      }
+      if ((progress?.routeMarks?.length || 0) >= 6) {
+        artifactIds.add("lost-child-route-ticket");
+      }
+      if ((progress?.routeMarks?.length || 0) >= 9) {
+        artifactIds.add("preserved-child-file");
+      }
       artifactIds.add("assignment");
     }
 
@@ -1054,6 +1116,24 @@
       profile.status = "completed";
       profile.role = progress.role || getCuratorAssignment(progress);
       profile.completedAt ||= progress.completedAt || Date.now();
+      profile.lastCompletedAt = progress.completedAt || Date.now();
+      delete profile.reclassificationActive;
+
+      const sessionRecord = {
+        id: progress.sessionId,
+        number: progress.sessionNumber || profile.sessions.length + 1,
+        role: profile.role,
+        routeMarks: progress.routeMarks?.length || 0,
+        completedAt: progress.completedAt || Date.now(),
+      };
+      const sessionIndex = profile.sessions.findIndex(
+        (session) => session.id === sessionRecord.id
+      );
+      if (sessionIndex >= 0) {
+        profile.sessions[sessionIndex] = sessionRecord;
+      } else {
+        profile.sessions.push(sessionRecord);
+      }
     } else if (!wasCompleted) {
       profile.status = progress.flags?.ageVerified ? "in_progress" : "screening";
     } else {
@@ -1067,6 +1147,7 @@
       if (!knownArtifacts.has(artifactId)) {
         knownArtifacts.set(artifactId, {
           id: artifactId,
+          sessionNumber: progress.sessionNumber || 1,
           obtainedAt: Date.now(),
         });
       }
@@ -1101,19 +1182,57 @@
     }
   };
 
-  const getCuratorAssignment = (progress) => {
-    const animator = progress.profiles?.animator || 0;
-    const volunteer = progress.profiles?.volunteer || 0;
+  const getClassificationSignals = (progress) => {
+    const flags = progress.flags || {};
+    const decisions = [
+      ["waiting", flags.waitedForParents || flags.calledAdult, flags.searchedForParents],
+      ["route-image", flags.choseMascotFeed, flags.choseOpenDoorFeed],
+      ["wristband", flags.reportedTomorrowBand, flags.followedTomorrowBand || flags.woreTomorrowBand],
+      ["damaged-file", flags.entrustedDamagedFile, flags.tracedDamagedFile],
+      ["ticket", flags.followedTerminalTicket || flags.gaveTicketToIrina, flags.comparedTerminalTicket || flags.inspectedTicketDestination],
+      ["route-photo", flags.waitedAtPlayArea, flags.checkedEmptyPool],
+      ["elena-one", flags.reportedElenaBroadcast || flags.calledIrinaDuringQuiz, flags.coveredElenaLens || flags.investigatedElenaBroadcast],
+      ["elena-two", flags.answeredElena, flags.refusedElenaFormat || flags.closedElenaFeed],
+      ["preservation", flags.leftFileInChannel, flags.requestedPaperPreservation],
+      ["costume", flags.reportedCostume || flags.continuedRoute, flags.openedCostume],
+      ["noise", flags.obeyedNoise, flags.askedAboutGuide || flags.lookedBehindIrina],
+      ["empty-room", flags.silentForBear, flags.answeredBear],
+    ];
 
-    if (animator === volunteer) {
-      if (progress.flags.choseAnimator) return "animator";
-      if (progress.flags.delegatedRole) return "animator";
-      return progress.scores.curiosity > progress.scores.obedience
-        ? "volunteer"
-        : "animator";
+    return decisions.reduce(
+      (totals, [, animatorSignal, volunteerSignal]) => {
+        if (animatorSignal && !volunteerSignal) totals.animator += 1;
+        if (volunteerSignal && !animatorSignal) totals.volunteer += 1;
+        return totals;
+      },
+      { animator: 0, volunteer: 0 }
+    );
+  };
+
+  const isCloseClassification = (progress) => {
+    const signals = getClassificationSignals(progress);
+    return Math.abs(signals.animator - signals.volunteer) <= 1;
+  };
+
+  const getCuratorAssignment = (progress) => {
+    if (["animator", "volunteer"].includes(progress.flags?.finalRoleChoice)) {
+      return progress.flags.finalRoleChoice;
     }
 
-    return animator > volunteer ? "animator" : "volunteer";
+    const signals = getClassificationSignals(progress);
+    if (signals.animator === signals.volunteer) {
+      if (progress.scores.curiosity !== progress.scores.obedience) {
+        return progress.scores.curiosity > progress.scores.obedience
+          ? "volunteer"
+          : "animator";
+      }
+      if (progress.flags.choseAnimator || progress.flags.delegatedRole) {
+        return "animator";
+      }
+      return "volunteer";
+    }
+
+    return signals.animator > signals.volunteer ? "animator" : "volunteer";
   };
 
   const getAssignmentCallbacks = (progress, role) => {
@@ -1122,26 +1241,35 @@
       [progress.flags.waitedForParents, "Ты решил ждать там, где тебя оставили."],
       [progress.flags.choseMascotFeed, "Ты выбрал коридор с Аниматорами."],
       [progress.flags.reportedTomorrowBand, "Завтрашний браслет ты отдал куратору."],
+      [progress.flags.entrustedDamagedFile, "Повреждённое дело ты доверил куратору."],
+      [progress.flags.followedTerminalTicket, "Ты согласился следовать напечатанному билету."],
+      [progress.flags.gaveTicketToIrina, "Маршрутный билет ты передал мне."],
+      [progress.flags.reportedElenaBroadcast, "Нарушение эфира ты решил оформить по правилам."],
+      [progress.flags.answeredElena, "Ты ответил ведущей, когда формат потребовал ответа."],
+      [progress.flags.leftFileInChannel, "Ты оставил дело там, куда его поместила система."],
       [progress.flags.reportedCostume, "Плачущий костюм ты передал Администрации."],
       [progress.flags.continuedRoute, "Ты не свернул с назначенного маршрута."],
       [progress.flags.obeyedNoise, "Ты не стал смотреть, когда я попросила."],
       [progress.flags.silentForBear, "Ты промолчал перед пустой комнатой."],
       [progress.flags.delegatedRole, "Ты разрешил мне выбрать роль за тебя."],
-      [progress.flags.favoriteShowZhmuriki, "Ты назвал «Жмурики» любимой передачей."],
     ];
     const volunteerCallbacks = [
       [progress.flags.searchedForParents, "Ты ушёл искать тех, кто обещал вернуться."],
       [progress.flags.choseOpenDoorFeed, "Ты выбрал незарегистрированную дверь."],
       [progress.flags.followedTomorrowBand, "Ты пошёл по завтрашнему маршруту."],
       [progress.flags.woreTomorrowBand, "Ты надел чужой браслет."],
+      [progress.flags.tracedDamagedFile, "Ты решил восстановить маршрут отсутствующего ребёнка."],
+      [progress.flags.comparedTerminalTicket, "Ты сверил билет с картой вместо того, чтобы следовать ему."],
+      [progress.flags.inspectedTicketDestination, "Ты проверил скрытый номер назначения."],
+      [progress.flags.coveredElenaLens, "Ты закрыл объектив архивной ведущей."],
+      [progress.flags.investigatedElenaBroadcast, "Ты исследовал источник заражённого эфира."],
+      [progress.flags.requestedPaperPreservation, "Ты попросил сохранить дело вне системы."],
       [progress.flags.openedCostume, "Ты проверил внутренности костюма, который считался незанятым."],
       [progress.flags.lookedBehindIrina, "После запрета ты всё равно посмотрел."],
       [progress.flags.answeredBear, "Ты ответил пустой комнате."],
       [progress.flags.askedAboutGuide, "Ты спросил о Проводнице после запрета."],
       [progress.flags.askedAboutVolunteer, "Ты первым делом уточнил правила Волонтёров."],
       [progress.flags.questionedAge, "Ты проверял даже служебные вопросы."],
-      [progress.flags.favoriteShowUlybarych, "Ты выбрал «Дядю Улыбарыча» до включения архива."],
-      [progress.flags.outgrewChildrensShows, "Ты решил, что детские передачи больше не для тебя."],
     ];
     const selected = (role === "animator" ? animatorCallbacks : volunteerCallbacks)
       .filter(([active]) => active)
@@ -1160,6 +1288,21 @@
   };
 
   const curatorNodes = {
+    "reclassification-entry": {
+      step: "ПОВТОРНАЯ КЛАССИФИКАЦИЯ // СЕАНС",
+      media: "state-file-investigation",
+      feedState: "ПРЕДЫДУЩИЙ ДОПУСК НАЙДЕН",
+      signal: 63,
+      speaker: "ИРИНА В.",
+      text:
+        "Тебя я помню. Звук и возраст второй раз проверять не будем. Но ответы придётся собрать заново: прошлое назначение уже знает, кем ты был.",
+      choices: [
+        {
+          label: "НАЧАТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ",
+          next: "role-question",
+        },
+      ],
+    },
     intro: {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-neutral",
@@ -1437,7 +1580,6 @@
           label: "АНИМАТОР",
           next: "role-animator",
           effect: {
-            profiles: { animator: 3 },
             scores: { obedience: 1 },
             flags: { choseAnimator: true },
           },
@@ -1454,7 +1596,6 @@
           label: "НЕ ЗНАЮ. ПОСОВЕТУЙ",
           next: "role-delegate",
           effect: {
-            profiles: { animator: 1 },
             scores: { delegation: 1 },
             flags: { delegatedRole: true },
           },
@@ -1497,10 +1638,7 @@
         {
           label: "ДОВЕРЯЮ ТЕБЕ",
           next: "class-briefing-one",
-          effect: {
-            profiles: { animator: 1 },
-            scores: { delegation: 1 },
-          },
+          effect: { scores: { delegation: 1 } },
         },
       ],
     },
@@ -1601,7 +1739,7 @@
           label: "ЖДАТЬ НА ТОМ ЖЕ МЕСТЕ",
           next: "waiting-response",
           effect: {
-            profiles: { animator: 2 },
+            profiles: { animator: 1 },
             scores: { obedience: 1 },
             flags: { waitedForParents: true },
           },
@@ -1610,7 +1748,7 @@
           label: "ПОЙТИ ИСКАТЬ РОДИТЕЛЕЙ",
           next: "waiting-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { searchedForParents: true },
           },
@@ -1833,7 +1971,7 @@
           imageAlt: "Группа Аниматоров в костюмах стоит в служебном коридоре",
           next: "image-response",
           effect: {
-            profiles: { animator: 2 },
+            profiles: { animator: 1 },
             flags: { choseMascotFeed: true },
           },
         },
@@ -1843,7 +1981,7 @@
           imageAlt: "Пустая игровая зона с открытой красной служебной дверью",
           next: "image-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { choseOpenDoorFeed: true },
           },
@@ -1892,7 +2030,7 @@
           label: "ПОЙДУ ПО НОМЕРУ МАРШРУТА НА БРАСЛЕТЕ",
           next: "wristband-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { followedTomorrowBand: true },
           },
@@ -1901,7 +2039,7 @@
           label: "НАДЕНУ ЕГО И ПРОВЕРЮ ДВЕРЬ",
           next: "wristband-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { woreTomorrowBand: true },
           },
@@ -1947,6 +2085,485 @@
       choices: [
         {
           label: "ПОНЯТНО. ЧТО ДАЛЬШЕ?",
+          next: "damaged-file-arrival",
+        },
+      ],
+    },
+    "damaged-file-arrival": {
+      step: "ВХОДЯЩИЙ МАТЕРИАЛ // ДЕЛО ПОВРЕЖДЕНО",
+      media: "action-damaged-file-arrival",
+      feedState: "НЕЗАРЕГИСТРИРОВАННАЯ ПЕРЕДАЧА",
+      signal: 38,
+      glitchIn: true,
+      delayChoicesUntilEnd: true,
+      speaker: "ИРИНА В.",
+      text:
+        "Подожди. В канал попало детское дело. Я его не запрашивала. Папка мокрая, а журнал говорит, что такого ребёнка нет.",
+      choices: [
+        {
+          label: "ОТКРОЙ ДЕЛО",
+          next: "file-recognition",
+          effect: { routeMark: "file-opened" },
+        },
+      ],
+    },
+    "file-recognition": {
+      step: "ДЕЛО РЕБЁНКА // СВЕРКА",
+      media: "action-file-recognition",
+      feedState: "ЗАПИСЬ В ЖУРНАЛЕ НЕ НАЙДЕНА",
+      signal: 52,
+      delayChoicesUntilEnd: true,
+      speaker: "ИРИНА В.",
+      text:
+        "Здесь нет имени и фотографии. Только ответы и маршрут. Один ответ уже совпал с твоим. Такое бывает, если дело ждёт человека раньше тела.",
+      choices: [
+        {
+          label: "СВЕРЬСЯ С БУМАЖНЫМ ЖУРНАЛОМ",
+          next: "damaged-file-evidence",
+          effect: {
+            routeMark: "journal-checked",
+            flags: { requestedPaperCheck: true },
+          },
+        },
+      ],
+    },
+    "damaged-file-evidence": {
+      step: "ДЕЛО РЕБЁНКА // МЕТКА 03",
+      still: "assets/staff/curators/irina/artifacts/damaged-child-file.webp",
+      stillAlt:
+        "Повреждённая папка детского дела с вырванной фотографией, зачёркнутым именем и схемой маршрута",
+      feedMode: "document",
+      feedState: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
+      signal: 47,
+      speaker: "ИРИНА В.",
+      text:
+        "В журнале между страницами вырвано место. Что делать с оригиналом: оставить у меня или искать маршрут, пока канал его показывает?",
+      choices: [
+        {
+          label: "ОСТАВЬ ОРИГИНАЛ У СЕБЯ",
+          next: "file-similarity",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { entrustedDamagedFile: true },
+            routeMark: "file-secured",
+          },
+        },
+        {
+          label: "ИЩИ, КУДА ВЕДЁТ МАРШРУТ",
+          next: "file-similarity",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { tracedDamagedFile: true },
+            routeMark: "file-traced",
+          },
+        },
+      ],
+    },
+    "file-similarity": {
+      step: "ДЕЛО РЕБЁНКА // СОВПАДЕНИЕ",
+      media: "state-file-investigation",
+      feedState: "СРАВНЕНИЕ С ТЕКУЩИМ СЕАНСОМ",
+      signal: 55,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        const firstMatch = progress.flags.waitedForParents
+          ? "Он тоже решил ждать там, где его оставили."
+          : progress.flags.searchedForParents
+            ? "Он тоже ушёл искать взрослых."
+            : "Он тоже позвал взрослого, чтобы тот выбрал место.";
+        const routeMatch = progress.flags.choseOpenDoorFeed
+          ? "Потом выбрал незарегистрированную дверь."
+          : "Потом выбрал маршрут с сопровождением.";
+        return `${firstMatch} ${routeMatch} Я не вписывала твои ответы в это дело.`;
+      },
+      choices: [
+        {
+          label: "ЭТО МОЁ ДЕЛО?",
+          next: "file-similarity-response",
+          effect: {
+            flags: { askedIfOwnFile: true },
+            routeMark: "identity-compared",
+          },
+        },
+        {
+          label: "РЕБЁНОК ПОВТОРЯЕТ МОЙ МАРШРУТ?",
+          next: "file-similarity-response",
+          effect: {
+            flags: { askedIfChildRepeatsRoute: true },
+            routeMark: "route-compared",
+          },
+        },
+      ],
+    },
+    "file-similarity-response": {
+      step: "ДЕЛО РЕБЁНКА // НОМЕР НАЗНАЧЕНИЯ",
+      media: "state-file-investigation",
+      feedState: "СРАВНЕНИЕ НЕ ЗАВЕРШЕНО",
+      signal: 50,
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.askedIfOwnFile
+          ? "Не знаю. У твоего дела должно быть взрослое имя. Здесь имя вытерли до того, как ребёнок потерялся."
+          : "Или ты повторяешь его. Маршрут старше этого звонка. Остался номер назначения, но его держит другой терминал.",
+      choices: [
+        {
+          label: "ОТКРЫТЬ ТЕРМИНАЛ",
+          next: "lost-child-terminal",
+        },
+      ],
+    },
+    "lost-child-terminal": {
+      step: "LOST CHILD TERMINAL™ // ЗАПРОС",
+      terminal: true,
+      feedMode: "terminal",
+      feedState: "ДВЕ КНОПКИ ДОСТУПНЫ",
+      signal: 71,
+      speaker: "СИСТЕМА",
+      text:
+        "Терминал требует подтвердить потерю. Вариант отказа не предусмотрен.",
+      choices: [
+        {
+          label: "ДА",
+          next: "lost-terminal-ticket",
+          effect: {
+            flags: { terminalYesLeft: true },
+            routeMark: "terminal-confirmed",
+          },
+        },
+        {
+          label: "ДА",
+          next: "lost-terminal-ticket",
+          effect: {
+            flags: { terminalYesRight: true },
+            routeMark: "terminal-confirmed",
+          },
+        },
+      ],
+    },
+    "lost-terminal-ticket": {
+      step: "LOST CHILD TERMINAL™ // БИЛЕТ НАПЕЧАТАН",
+      still: "assets/staff/curators/irina/artifacts/lost-child-route-ticket.webp",
+      stillAlt:
+        "Длинный старый маршрутный билет со схемой из горки, служебной двери и пустого бассейна",
+      feedMode: "document",
+      feedState: "СЛЕДУЙ ЗА МНОЙ",
+      signal: 68,
+      speaker: "ИРИНА В.",
+      text:
+        "Он напечатал билет. Последняя точка зачёркнута. Можно послушаться, отдать билет мне или проверить, что терминал пытается скрыть.",
+      choices: [
+        {
+          label: "СЛЕДОВАТЬ БИЛЕТУ",
+          next: "terminal-ticket-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { followedTerminalTicket: true },
+            routeMark: "ticket-processed",
+          },
+        },
+        {
+          label: "ПЕРЕДАТЬ БИЛЕТ ИРИНЕ",
+          next: "terminal-ticket-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { gaveTicketToIrina: true },
+            routeMark: "ticket-processed",
+          },
+        },
+        {
+          label: "СРАВНИТЬ С КАРТОЙ",
+          next: "terminal-ticket-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { comparedTerminalTicket: true },
+            routeMark: "ticket-processed",
+          },
+        },
+        {
+          label: "ПРОВЕРИТЬ НОМЕР НАЗНАЧЕНИЯ",
+          next: "terminal-ticket-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { inspectedTicketDestination: true },
+            routeMark: "ticket-processed",
+          },
+        },
+      ],
+    },
+    "terminal-ticket-response": {
+      step: "МАРШРУТ РЕБЁНКА // ВОССТАНОВЛЕНИЕ",
+      media: "state-file-investigation",
+      feedState: "ДВЕ ТОЧКИ СОВПАЛИ",
+      signal: 58,
+      speaker: "ИРИНА В.",
+      text: (progress) => {
+        if (progress.flags.followedTerminalTicket) {
+          return "Билет ведёт сам. Это удобно, пока не замечаешь: он возвращает потерянного не туда, где его ждут, а туда, где есть свободное место.";
+        }
+        if (progress.flags.gaveTicketToIrina) {
+          return "Я возьму. Только билет уже записал, что сопровождение принято. Он считает куратором того, кто первым нажал «ДА».";
+        }
+        if (progress.flags.inspectedTicketDestination) {
+          return "Под зачёркнутым номером — текущий канал. Не мой ID. Именно этот сеанс.";
+        }
+        return "Линия совпала с картой до последней точки. Потом маршрут выходит из бумаги и возвращается в текущий канал.";
+      },
+      choices: [
+        {
+          label: "ПОКАЗАТЬ ПОСЛЕДНИЕ ФОТОГРАФИИ",
+          next: "route-photo-choice",
+        },
+      ],
+    },
+    "route-photo-choice": {
+      step: "МАРШРУТ РЕБЁНКА // ПОСЛЕДНЯЯ ТОЧКА",
+      media: "state-file-investigation",
+      feedState: "ВИЗУАЛЬНАЯ СВЕРКА",
+      signal: 61,
+      speaker: "ИРИНА В.",
+      text:
+        "Остались два кадра. В игровой зоне можно ждать сопровождающего. В пустом бассейне след заканчивается у трубы. Куда смотреть?",
+      choices: [
+        {
+          label: "ЖДАТЬ В ИГРОВОЙ ЗОНЕ",
+          image: "assets/staff/photos/polaroid-play-area.webp",
+          imageAlt: "Пустая игровая зона с красной служебной дверью",
+          next: "route-photo-response",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { waitedAtPlayArea: true },
+            routeMark: "last-location-found",
+          },
+        },
+        {
+          label: "ПРОВЕРИТЬ ПУСТОЙ БАССЕЙН",
+          image: "assets/staff/photos/polaroid-empty-pool.webp",
+          imageAlt: "Пустой закрытый бассейн с розовой водой и детской горкой",
+          next: "route-photo-response",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { checkedEmptyPool: true },
+            routeMark: "last-location-found",
+          },
+        },
+      ],
+    },
+    "route-photo-response": {
+      step: "МАРШРУТ РЕБЁНКА // ЭФИРНЫЙ ВХОД",
+      media: "state-file-investigation",
+      feedState: "ИСТОЧНИК 002 ОБНАРУЖЕН",
+      signal: 43,
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.checkedEmptyPool
+          ? "На дне нет ребёнка. Только кабель от старого телевизора. Он всё ещё передаёт выпуск."
+          : "Сопровождающий не пришёл. Телевизор над игровой зоной включился сам. Там задают вопрос.",
+      choices: [
+        {
+          label: "ПРОВЕРИТЬ ПЕРЕДАЧУ",
+          next: "elena-question-one",
+        },
+      ],
+    },
+    "elena-question-one": {
+      step: "АРХИВНЫЙ ЭФИР // «ПРАВИЛЬНЫЙ ОТВЕТ»",
+      media: "archive-elena-question",
+      feedMode: "archive",
+      feedState: "ИСТОЧНИК 002 // ВОПРОС 01",
+      signal: 36,
+      sound: "elena-tick-loop",
+      soundAfterText: true,
+      soundLoop: true,
+      delayChoicesUntilEnd: true,
+      speaker: "ЕЛЕНА ПРАВИЛЬНАЯ",
+      text:
+        "Ребёнка нет в журнале. Кто имеет право решить, куда он пойдёт?",
+      choices: [
+        {
+          label: "ОТМЕТИТЬ НАРУШЕНИЕ ЭФИРА",
+          next: "elena-question-two",
+          effect: {
+            profiles: { animator: 1 },
+            flags: { reportedElenaBroadcast: true },
+            routeMark: "broadcast-handled",
+          },
+        },
+        {
+          label: "ПОЗВАТЬ ИРИНУ",
+          next: "elena-question-two",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { delegation: 1 },
+            flags: { calledIrinaDuringQuiz: true },
+            routeMark: "broadcast-handled",
+          },
+        },
+        {
+          label: "ЗАКРЫТЬ ОБЪЕКТИВ",
+          next: "elena-question-two",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { coveredElenaLens: true },
+            routeMark: "broadcast-handled",
+          },
+        },
+        {
+          label: "ИССЛЕДОВАТЬ ИСТОЧНИК",
+          next: "elena-question-two",
+          effect: {
+            profiles: { volunteer: 1 },
+            scores: { curiosity: 1 },
+            flags: { investigatedElenaBroadcast: true },
+            routeMark: "broadcast-handled",
+          },
+        },
+      ],
+    },
+    "elena-question-two": {
+      step: "АРХИВНЫЙ ЭФИР // «ПРАВИЛЬНЫЙ ОТВЕТ»",
+      media: "archive-elena-question",
+      feedMode: "archive",
+      feedState: "ИСТОЧНИК 002 // ВОПРОС 02",
+      signal: 29,
+      sound: "elena-tick-loop",
+      soundAfterText: true,
+      soundLoop: true,
+      delayChoicesUntilEnd: true,
+      speaker: "ЕЛЕНА ПРАВИЛЬНАЯ",
+      text:
+        "Если дело повторяет ваши ответы, согласны ли вы занять место отсутствующего ребёнка?",
+      choices: [
+        {
+          label: "ОТВЕТИТЬ ЕЛЕНЕ: НЕТ",
+          next: "elena-breach",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { answeredElena: true },
+          },
+        },
+        {
+          label: "НЕ ОТВЕЧАТЬ ВЕДУЩЕЙ",
+          next: "elena-breach",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { refusedElenaFormat: true },
+          },
+        },
+        {
+          label: "ЗАКРЫТЬ ПЕРЕДАЧУ",
+          next: "elena-breach",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { closedElenaFeed: true },
+          },
+        },
+      ],
+    },
+    "elena-breach": {
+      step: "АРХИВНЫЙ ЭФИР // НАРУШЕНИЕ ФОРМАТА",
+      media: "archive-elena-breach",
+      feedMode: "archive",
+      feedState: "ЗРИТЕЛЬ ЗАРЕГИСТРИРОВАН",
+      signal: 12,
+      sound: "elena-breach-transition",
+      delayChoicesUntilEnd: true,
+      speaker: "ЕЛЕНА ПРАВИЛЬНАЯ",
+      text:
+        "Это правильный ответ. Свободное место найдено в текущем сеансе.",
+      autoNext: "irina-reconnect",
+    },
+    "irina-reconnect": {
+      step: "ВОССТАНОВЛЕНИЕ КАНАЛА // 0091-A",
+      media: "action-irina-reconnect",
+      feedState: "КУРАТОР ВОЗВРАЩЁН",
+      signal: 41,
+      glitchIn: true,
+      delayChoicesUntilEnd: true,
+      speaker: "ИРИНА В.",
+      text:
+        "Ты здесь? Не отвечай ей больше. Она не проверяет знания. Ей нужен сам ответ — любой.",
+      autoNext: "irina-reconnect-response",
+    },
+    "irina-reconnect-response": {
+      step: "КАНАЛ 0091-A // ЛИЧНАЯ ЗАПИСЬ",
+      media: "state-file-investigation",
+      feedState: "СИСТЕМНАЯ СВЕРКА ОТКЛОНЕНА",
+      signal: 53,
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.answeredElena
+          ? "Ты сказал ей «нет», но она услышала только участие. Старые передачи так устроены: смысл ответа им не нужен."
+          : "Хорошо, что ты не стал отвечать по её правилам. Но она всё равно вписала тебя как зрителя. Канал уже смотрел в ответ.",
+      choices: [
+        {
+          label: "ЧТО БУДЕТ С ДЕЛОМ?",
+          next: "file-preservation-choice",
+        },
+      ],
+    },
+    "file-preservation-choice": {
+      step: "ДЕЛО РЕБЁНКА // РЕЗЕРВНАЯ КОПИЯ",
+      media: "state-file-investigation",
+      feedState: "СИСТЕМА ТРЕБУЕТ ВОЗВРАТА",
+      signal: 48,
+      speaker: "ИРИНА В.",
+      text:
+        "Система просит вернуть дело в канал. Если я впишу ребёнка в бумажный журнал, запись останется здесь, даже когда экран забудет.",
+      choices: [
+        {
+          label: "ВПИШИ РЕБЁНКА В БУМАЖНЫЙ ЖУРНАЛ",
+          next: "file-preserved",
+          effect: {
+            profiles: { volunteer: 1 },
+            flags: { requestedPaperPreservation: true },
+            routeMark: "file-preserved",
+          },
+        },
+        {
+          label: "ОСТАВЬ ДЕЛО В КАНАЛЕ",
+          next: "file-preserved",
+          effect: {
+            profiles: { animator: 1 },
+            scores: { obedience: 1 },
+            flags: { leftFileInChannel: true },
+            routeMark: "file-preserved",
+          },
+        },
+      ],
+    },
+    "file-preserved": {
+      step: "ДЕЛО РЕБЁНКА // БУМАЖНАЯ КОПИЯ",
+      media: "action-file-preserved",
+      feedState: "ЛОКАЛЬНАЯ ЗАПИСЬ СОЗДАНА",
+      signal: 59,
+      delayChoicesUntilEnd: true,
+      speaker: "ИРИНА В.",
+      text: (progress) =>
+        progress.flags.leftFileInChannel
+          ? "Нет. В канале оно снова станет твоим. Я внесу ребёнка сама. Я сейчас куратор."
+          : "Хорошо. В журнале нет кнопки отмены. Наверное, поэтому Администрация почти перестала давать нам бумагу.",
+      autoNext: "file-preserved-response",
+    },
+    "file-preserved-response": {
+      step: "МАРШРУТ ВОССТАНОВЛЕН // 9 ИЗ 9",
+      media: "state-file-investigation",
+      feedState: "ДЕЛО СОХРАНЕНО",
+      signal: 63,
+      speaker: "ИРИНА В.",
+      text:
+        "Теперь у него есть место в журнале. Имя всё ещё пустое. Если дело снова покажет твои ответы, это не доказывает, что ребёнок — ты.",
+      choices: [
+        {
+          label: "ПРОДОЛЖИТЬ ПРОВЕРКУ",
           next: "recognition-card",
         },
       ],
@@ -2165,7 +2782,7 @@
           label: "ПРОВЕРЮ ВНУТРЕННОСТИ КОСТЮМА",
           next: "costume-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { openedCostume: true },
           },
@@ -2183,7 +2800,7 @@
           label: "ПРОДОЛЖУ СВОЙ МАРШРУТ",
           next: "costume-response",
           effect: {
-            profiles: { animator: 2 },
+            profiles: { animator: 1 },
             scores: { obedience: 1 },
             flags: { continuedRoute: true },
           },
@@ -2511,26 +3128,17 @@
         {
           label: "«ДЯДЯ УЛЫБАРЫЧ»",
           next: "favorite-childrens-show-response",
-          effect: {
-            profiles: { volunteer: 1 },
-            flags: { favoriteShowUlybarych: true },
-          },
+          effect: { flags: { favoriteShowUlybarych: true } },
         },
         {
           label: "«ЖМУРИКИ»",
           next: "favorite-childrens-show-response",
-          effect: {
-            profiles: { animator: 1 },
-            flags: { favoriteShowZhmuriki: true },
-          },
+          effect: { flags: { favoriteShowZhmuriki: true } },
         },
         {
           label: "Я УЖЕ НЕ РЕБЁНОК. НЕ СМОТРЮ ДЕТСКИЕ ШОУ",
           next: "favorite-childrens-show-response",
-          effect: {
-            profiles: { volunteer: 1 },
-            flags: { outgrewChildrensShows: true },
-          },
+          effect: { flags: { outgrewChildrensShows: true } },
         },
       ],
     },
@@ -2683,7 +3291,7 @@
           label: "ПОПРОБУЮ РАЗГЛЯДЕТЬ, КТО ВОШЁЛ",
           next: "noise-response",
           effect: {
-            profiles: { volunteer: 2 },
+            profiles: { volunteer: 1 },
             scores: { curiosity: 1 },
             flags: { lookedBehindIrina: true },
           },
@@ -2951,10 +3559,40 @@
         const callbacks = getAssignmentCallbacks(progress, role);
         return `${callbacks} Я закончила считать.`;
       },
+      choices: (progress) => [
+        isCloseClassification(progress) && !progress.flags.finalRoleChoice
+          ? {
+              label: "УЗНАТЬ НАСТОЯЩУЮ ЦЕНУ РОЛЕЙ",
+              next: "assignment-close-choice",
+            }
+          : {
+              label: "И КТО Я?",
+              next: "assignment-role",
+            },
+      ],
+    },
+    "assignment-close-choice": {
+      step: "КЛАССИФИКАЦИЯ // ОСОЗНАННЫЙ ВЫБОР",
+      media: "state-confidential",
+      feedState: "РАЗНИЦА НЕДОСТАТОЧНА",
+      signal: 57,
+      speaker: "ИРИНА В.",
+      text:
+        "Ответы почти равны. Аниматор отдаёт системе маршрут, лицо и время смены. Волонтёр сохраняет лицо, но сам идёт туда, где страшно. Выход не обещан ни одному.",
       choices: [
         {
-          label: "И КТО Я?",
+          label: "ВЫБИРАЮ АНИМАТОРА",
           next: "assignment-role",
+          effect: {
+            flags: { finalRoleChoice: "animator" },
+          },
+        },
+        {
+          label: "ВЫБИРАЮ ВОЛОНТЁРА",
+          next: "assignment-role",
+          effect: {
+            flags: { finalRoleChoice: "volunteer" },
+          },
         },
       ],
     },
@@ -3083,6 +3721,7 @@
   };
 
   const applyCuratorEffect = (progress, effect = {}) => {
+    let routeMarkAwarded = false;
     Object.entries(effect.profiles || {}).forEach(([name, amount]) => {
       progress.profiles[name] = (progress.profiles[name] || 0) + amount;
     });
@@ -3098,6 +3737,26 @@
     (effect.artifacts || []).forEach((artifactId) => {
       unlockCuratorArtifact(progress, artifactId);
     });
+
+    if (effect.routeMark) {
+      progress.routeMarks ||= [];
+      if (!progress.routeMarks.includes(effect.routeMark)) {
+        progress.routeMarks.push(effect.routeMark);
+        routeMarkAwarded = true;
+      }
+    }
+
+    if (progress.routeMarks.length >= 3) {
+      unlockCuratorArtifact(progress, "damaged-child-file");
+    }
+    if (progress.routeMarks.length >= 6) {
+      unlockCuratorArtifact(progress, "lost-child-route-ticket");
+    }
+    if (progress.routeMarks.length >= 9) {
+      unlockCuratorArtifact(progress, "preserved-child-file");
+    }
+
+    return { routeMarkAwarded };
   };
 
   const normalizeCuratorId = (value) => {
@@ -3132,7 +3791,9 @@
     const video = modal.querySelector("[data-curator-video]");
     const room = modal.querySelector("[data-curator-room]");
     const still = modal.querySelector("[data-curator-still]");
+    const terminal = modal.querySelector("[data-curator-terminal]");
     const flash = modal.querySelector("[data-curator-flash]");
+    const routeStamp = modal.querySelector("[data-curator-route-stamp]");
     const feed = modal.querySelector("[data-curator-feed]");
     const connecting = modal.querySelector("[data-curator-connecting]");
     const feedState = modal.querySelector("[data-curator-feed-state]");
@@ -3141,8 +3802,10 @@
     const transcriptPanel = transcript.closest(".curator-call__transcript");
     const choices = modal.querySelector("[data-curator-choices]");
     const step = modal.querySelector("[data-curator-step]");
+    const marks = modal.querySelector("[data-curator-marks]");
     const saveState = modal.querySelector("[data-curator-save]");
     const signal = modal.querySelector("[data-curator-signal]");
+    const sessionLabel = modal.querySelector("[data-curator-session]");
     const soundButton = modal.querySelector("[data-curator-sound]");
     const fileViewer = modal.querySelector("[data-curator-file-viewer]");
     const fileImage = modal.querySelector("[data-curator-file-image]");
@@ -3215,6 +3878,14 @@
         src: "assets/audio/curator/sfx/unknown-female-voice.mp3",
         volume: 0.92,
       },
+      "elena-tick-loop": {
+        src: `assets/audio/curator/sfx/elena-tick-loop.${ambientExtension}`,
+        volume: 0.58,
+      },
+      "elena-breach-transition": {
+        src: `assets/audio/curator/sfx/elena-breach-transition.${ambientExtension}`,
+        volume: 0.68,
+      },
     };
     Object.values(curatorSoundLibrary).forEach((sound) => {
       sound.audio = new Audio(audioAsset(sound.src));
@@ -3236,6 +3907,7 @@
       if (!sceneSound) return;
       sceneSound.pause();
       sceneSound.currentTime = 0;
+      sceneSound.loop = false;
       sceneSound = null;
     };
 
@@ -3251,6 +3923,7 @@
       stopSceneSound();
       sceneSound = sound.audio;
       sceneSound.currentTime = 0;
+      sceneSound.loop = Boolean(node.soundLoop);
       sceneSound.play().catch(() => {
         playedNodeSounds.delete(nodeId);
       });
@@ -3294,6 +3967,33 @@
       gain.connect(curatorAudioContext.destination);
       oscillator.start(now);
       oscillator.stop(now + duration);
+    };
+
+    const updateRouteMarks = (nodeId = activeNodeId) => {
+      const count = Math.min(9, progress.routeMarks?.length || 0);
+      marks.hidden = count === 0 && nodeId !== "damaged-file-arrival";
+      marks.textContent = `МЕТКИ МАРШРУТА ${count}/9`;
+    };
+
+    const triggerRouteMark = () => {
+      const count = Math.min(9, progress.routeMarks?.length || 0);
+      const thresholdLabels = {
+        3: "МЕТКА 03 // ДЕЛО ДОБАВЛЕНО",
+        6: "МЕТКА 06 // БИЛЕТ ДОБАВЛЕН",
+        9: "МЕТКА 09 // ДЕЛО СОХРАНЕНО",
+      };
+      routeStamp.textContent =
+        thresholdLabels[count] || `МЕТКА МАРШРУТА // ${String(count).padStart(2, "0")}`;
+      routeStamp.hidden = false;
+      routeStamp.classList.remove("is-active");
+      void routeStamp.offsetWidth;
+      routeStamp.classList.add("is-active");
+      playCallTone(880, 0.075);
+      window.setTimeout(() => playCallTone(660, 0.055), 90);
+      window.setTimeout(() => {
+        routeStamp.classList.remove("is-active");
+        routeStamp.hidden = true;
+      }, reducedMotion ? 80 : 780);
     };
 
     const cancelTextAnimation = () => {
@@ -3494,8 +4194,11 @@
       resumeButton.hidden = false;
       if (saved.status === "completed") {
         const roleLabel = saved.role === "volunteer" ? "ВОЛОНТЁР" : "АНИМАТОР";
-        resumeButton.hidden = true;
-        result.textContent = `СЕАНС 01 ЗАВЕРШЁН // НАЗНАЧЕНИЕ: ${roleLabel}`;
+        resumeButton.textContent = "ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ";
+        result.textContent = `СЕАНС ${String(saved.sessionNumber || 1).padStart(
+          2,
+          "0"
+        )} ЗАВЕРШЁН // НАЗНАЧЕНИЕ: ${roleLabel}`;
         return;
       }
 
@@ -3610,6 +4313,7 @@
       video.onended = null;
       room.hidden = true;
       still.hidden = true;
+      terminal.hidden = true;
       video.hidden = false;
       feed.classList.remove("is-document", "is-archive", "is-cctv");
       if (node.feedMode) {
@@ -3620,6 +4324,13 @@
       window.setTimeout(() => {
         feed.classList.remove("is-glitching");
       }, 520);
+
+      if (node.terminal) {
+        video.hidden = true;
+        terminal.hidden = false;
+        onEnd?.();
+        return;
+      }
 
       if (node.media === "room-empty") {
         video.hidden = true;
@@ -3681,6 +4392,7 @@
             choices.querySelectorAll("button").forEach((control) => {
               control.disabled = true;
             });
+            stopSceneSound();
             playCallTone();
 
             if (choice.reject) {
@@ -3688,7 +4400,12 @@
               return;
             }
 
-            applyCuratorEffect(progress, choice.effect);
+            const effectResult = applyCuratorEffect(progress, choice.effect);
+            if (effectResult.routeMarkAwarded) {
+              updateRouteMarks();
+              saveProgress();
+              triggerRouteMark();
+            }
             if (choice.downloadFile) {
               saveProgress();
               openFileViewer(choice.downloadFile, choice.next);
@@ -3700,7 +4417,10 @@
               return;
             }
 
-            window.setTimeout(() => renderNode(choice.next), 140);
+            window.setTimeout(
+              () => renderNode(choice.next),
+              effectResult.routeMarkAwarded && !reducedMotion ? 820 : 140
+            );
           });
           choices.append(button);
         }
@@ -3726,6 +4446,10 @@
         progress.role = getCuratorAssignment(progress);
       }
       saveProgress();
+      updateRouteMarks(nodeId);
+      sessionLabel.innerHTML = `<i aria-hidden="true"></i> СЕАНС ${String(
+        progress.sessionNumber || 1
+      ).padStart(2, "0")}`;
 
       connecting.hidden = true;
       step.textContent = node.step;
@@ -3776,7 +4500,7 @@
       });
     };
 
-    const openCall = ({ restart = false } = {}) => {
+    const openCall = ({ restart = false, reclassification = false } = {}) => {
       previousFocus = document.activeElement;
       playedNodeSounds.clear();
       stopSceneSound();
@@ -3787,6 +4511,11 @@
 
       if (progress.status === "completed") {
         progress = createCuratorProgress();
+      }
+      if (reclassification) {
+        progress.node = "reclassification-entry";
+        progress.flags.reclassification = true;
+        progress.flags.ageVerified = true;
       }
       if (["sound-on-response", "sound-silent-response"].includes(progress.node)) {
         progress.node = "age-check";
@@ -3805,6 +4534,7 @@
       connecting.hidden = false;
       room.hidden = true;
       still.hidden = true;
+      terminal.hidden = true;
       video.hidden = true;
       flash.classList.remove("is-active");
       fileViewer.hidden = true;
@@ -3845,7 +4575,8 @@
 
       if (curatorId === "0091-A") {
         result.textContent = "КУРАТОР НАЙДЕН // ИРИНА В. // УСТАНОВКА СВЯЗИ";
-        openCall({ restart: getCuratorProgress()?.status === "completed" });
+        const isCompleted = getCuratorProgress()?.status === "completed";
+        openCall({ restart: isCompleted, reclassification: isCompleted });
         return;
       }
 
@@ -3863,7 +4594,8 @@
     });
 
     resumeButton.addEventListener("click", () => {
-      openCall({ restart: getCuratorProgress()?.status === "completed" });
+      const isCompleted = getCuratorProgress()?.status === "completed";
+      openCall({ restart: isCompleted, reclassification: isCompleted });
     });
 
     soundButton.addEventListener("click", () => {
@@ -3951,6 +4683,22 @@
       window.history.replaceState({}, "", cleanUrl);
       window.setTimeout(() => openCall(), 0);
     }
+
+    const reclassificationRequest = new URLSearchParams(window.location.search).get(
+      "reclassify"
+    );
+    if (
+      reclassificationRequest === "0091-A" &&
+      getCuratorProgress()?.status === "completed"
+    ) {
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete("reclassify");
+      window.history.replaceState({}, "", cleanUrl);
+      window.setTimeout(
+        () => openCall({ restart: true, reclassification: true }),
+        0
+      );
+    }
   };
 
   const initStaffRegistry = () => {
@@ -3978,6 +4726,9 @@
     const idResponse = dossier.querySelector("[data-personnel-id-response]");
     const useIdLink = dossier.querySelector("[data-personnel-use-id]");
     const resumeLink = dossier.querySelector("[data-player-resume]");
+    const reclassifyLink = dossier.querySelector("[data-player-reclassify]");
+    const sessionsPanel = dossier.querySelector("[data-player-sessions]");
+    const sessionList = dossier.querySelector("[data-player-session-list]");
     const materials = dossier.querySelector("[data-player-materials]");
     const materialsEmpty = dossier.querySelector("[data-player-materials-empty]");
     const identification = dossier.querySelector("[data-player-identification]");
@@ -4064,6 +4815,27 @@
       });
     };
 
+    const renderSessions = (profile) => {
+      sessionList.innerHTML = "";
+      sessionsPanel.hidden = profile.sessions.length === 0;
+      profile.sessions
+        .slice()
+        .sort((a, b) => (a.number || 0) - (b.number || 0))
+        .forEach((session) => {
+          const row = document.createElement("div");
+          const number = document.createElement("strong");
+          const role = document.createElement("span");
+          const marks = document.createElement("span");
+          row.className = "personnel-session";
+          number.textContent = `СЕАНС ${String(session.number || 1).padStart(2, "0")}`;
+          role.textContent =
+            session.role === "volunteer" ? "ВОЛОНТЁР" : "АНИМАТОР";
+          marks.textContent = `МЕТКИ МАРШРУТА ${session.routeMarks || 0}/9`;
+          row.append(number, role, marks);
+          sessionList.append(row);
+        });
+    };
+
     const renderPlayerDossier = (profile) => {
       dossierName.textContent = "ТЕКУЩИЙ ОПЕРАТОР";
       dossierRole.textContent = getProfileRole(profile);
@@ -4081,6 +4853,9 @@
       profilePanel.hidden = false;
       const progress = getCuratorProgress();
       resumeLink.hidden = progress?.status !== "in_progress";
+      reclassifyLink.hidden =
+        profile.status !== "completed" || progress?.status === "in_progress";
+      renderSessions(profile);
       renderMaterials(profile);
 
       identification.hidden = profile.status !== "completed";
