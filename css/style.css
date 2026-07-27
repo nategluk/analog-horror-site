@@ -1121,12 +1121,11 @@ body.staff-mode .personnel-dossier button.personnel-dossier__settings {
   display: none;
 }
 
-.personnel-dossier__avatar {
+.personnel-dossier__signal .personnel-dossier__avatar {
   position: absolute;
   inset: 0;
   min-height: 0;
   aspect-ratio: auto;
-  background-position: center;
 }
 
 .personnel-dossier__biosignal {
@@ -1577,23 +1576,59 @@ body.staff-mode .personnel-material:focus-visible small {
 
 .personnel-avatar-options {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.65rem;
 }
 
 body.staff-mode .personnel-avatar-options button {
-  display: grid;
-  gap: 0.45rem;
-  padding: 0.55rem;
+  position: relative;
+  display: block;
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  padding: 0.3rem;
   color: #aeeeb8;
   font-size: 0.66rem;
   letter-spacing: 0.05em;
   text-align: left;
 }
 
+body.staff-mode .personnel-avatar-options button > .personnel-avatar {
+  position: absolute;
+  inset: 0.3rem;
+  min-height: 0;
+  aspect-ratio: 1;
+  border: 1px solid rgba(49, 93, 57, 0.75);
+  border-radius: 2px;
+}
+
+body.staff-mode .personnel-avatar-options button > span:last-child {
+  position: absolute;
+  z-index: 2;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  left: 0.55rem;
+  overflow: hidden;
+  padding: 0.22rem 0.3rem;
+  color: #c7ffcf;
+  background: rgba(1, 7, 3, 0.84);
+  font-size: 0.54rem;
+  line-height: 1.2;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .personnel-avatar-options button[aria-pressed="true"] {
   border-color: #baffc4;
-  box-shadow: 0 0 14px rgba(113, 255, 137, 0.2);
+  box-shadow:
+    inset 0 0 0 2px #71ff89,
+    0 0 14px rgba(113, 255, 137, 0.2);
+}
+
+.personnel-avatar-options button[aria-pressed="true"] > span:last-child {
+  color: #061007;
+  background: #8cff9d;
 }
 
 .personnel-avatar {
@@ -1602,8 +1637,8 @@ body.staff-mode .personnel-avatar-options button {
   overflow: hidden;
   min-height: 8rem;
   aspect-ratio: 3 / 4;
-  background-position: center 20%;
-  background-size: cover;
+  background-position: center var(--personnel-avatar-y, 20%);
+  background-size: var(--personnel-avatar-size, cover);
   background-color: #071009;
   isolation: isolate;
 }
@@ -1668,18 +1703,26 @@ body.staff-mode .personnel-avatar-options button {
 }
 
 .personnel-avatar--avatar-01 {
+  --personnel-avatar-size: 170% auto;
+  --personnel-avatar-y: 9%;
   background-image: url("../assets/staff/player-avatars/avatar-01.webp");
 }
 
 .personnel-avatar--avatar-02 {
+  --personnel-avatar-size: 175% auto;
+  --personnel-avatar-y: 8%;
   background-image: url("../assets/staff/player-avatars/avatar-02.webp");
 }
 
 .personnel-avatar--avatar-03 {
+  --personnel-avatar-size: 180% auto;
+  --personnel-avatar-y: 7%;
   background-image: url("../assets/staff/player-avatars/avatar-03-fox.webp");
 }
 
 .personnel-avatar--avatar-04 {
+  --personnel-avatar-size: 175% auto;
+  --personnel-avatar-y: 6%;
   background-image: url("../assets/staff/player-avatars/avatar-04-dog.webp");
 }
 
@@ -2148,9 +2191,13 @@ body.staff-mode .personnel-intrusion button {
     gap: 0.35rem;
   }
 
-  .personnel-materials,
-  .personnel-avatar-options {
+  .personnel-materials {
     grid-template-columns: 1fr;
+  }
+
+  .personnel-avatar-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
   }
 
   .personnel-name form {
