@@ -765,12 +765,32 @@ body.staff-mode .staff-content.personnel-registry {
   cursor: pointer;
 }
 
-.personnel-access button:hover,
-.personnel-access button:focus-visible {
+body.staff-mode .site-wrapper .personnel-access button {
+  display: inline-flex;
+  gap: 0.55rem;
+  align-items: center;
+  justify-content: center;
+  color: #c7ffcf;
+  background: #07140a;
+}
+
+body.staff-mode .site-wrapper .personnel-access button:focus-visible {
   color: #061007;
   outline: 2px solid #baffc4;
   outline-offset: 2px;
   background: #71ff89;
+}
+
+@media (hover: hover) {
+  body.staff-mode .site-wrapper .personnel-access button:hover {
+    color: #061007;
+    background: #71ff89;
+  }
+}
+
+body.staff-mode .site-wrapper .personnel-access button:active {
+  color: #d8ffde;
+  background: #173e20;
 }
 
 .personnel-registry__grid {
@@ -830,6 +850,59 @@ body.staff-mode .personnel-card__button {
   filter: saturate(0.82) contrast(1.06);
 }
 
+.personnel-card__portrait-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.personnel-card__portrait-frame .personnel-card__portrait {
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+
+.personnel-card__live {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  left: 0.35rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.3rem;
+  align-items: center;
+  padding: 0.16rem 0.28rem;
+  color: #baffc4;
+  border: 1px solid rgba(113, 255, 137, 0.55);
+  background: rgba(1, 7, 3, 0.84);
+  box-shadow: 0 0 8px rgba(113, 255, 137, 0.12);
+  font: 700 0.45rem/1 var(--font-body);
+  letter-spacing: 0.09em;
+}
+
+.personnel-card__live svg {
+  display: block;
+  width: 100%;
+  height: 0.7rem;
+  overflow: visible;
+}
+
+.personnel-card__live polyline,
+.personnel-dossier__biosignal polyline {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 126;
+  stroke-dashoffset: 126;
+  animation: personnel-heartbeat 2.1s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(113, 255, 137, 0.42));
+}
+
 .personnel-card__body {
   display: grid;
   align-content: start;
@@ -862,35 +935,6 @@ body.staff-mode .personnel-card__button {
 .personnel-card__body small {
   margin-top: 0.35rem;
   color: #93f1a2;
-}
-
-.personnel-card__biosignal {
-  display: grid;
-  grid-template-columns: minmax(3rem, 5.5rem) auto;
-  gap: 0.45rem;
-  align-items: center;
-  min-height: 0;
-  color: #71ff89;
-  font-size: 0.56rem;
-  letter-spacing: 0.06em;
-}
-
-.personnel-card__biosignal svg {
-  display: block;
-  width: 100%;
-  height: 1rem;
-  overflow: visible;
-}
-
-.personnel-card__biosignal polyline {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.4;
-  vector-effect: non-scaling-stroke;
-  stroke-dasharray: 126;
-  stroke-dashoffset: 126;
-  animation: personnel-heartbeat 2.1s linear infinite;
-  filter: drop-shadow(0 0 3px rgba(113, 255, 137, 0.42));
 }
 
 @keyframes personnel-heartbeat {
@@ -1004,6 +1048,17 @@ body.staff-mode .personnel-artifact button,
   padding: 0.6rem 0.75rem;
 }
 
+.personnel-icon {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .personnel-dossier__header-actions {
   display: flex;
   flex: 0 0 auto;
@@ -1011,12 +1066,17 @@ body.staff-mode .personnel-artifact button,
   align-items: flex-start;
 }
 
+body.staff-mode .personnel-dossier button.personnel-icon-button {
+  display: grid;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem;
+}
+
 body.staff-mode .personnel-dossier button.personnel-dossier__settings {
-  min-height: 2.15rem;
-  padding: 0.4rem 0.55rem;
   color: #76ae80;
-  font-size: 0.56rem;
-  letter-spacing: 0.05em;
 }
 
 .personnel-dossier__settings[hidden] {
@@ -1025,9 +1085,67 @@ body.staff-mode .personnel-dossier button.personnel-dossier__settings {
 
 .personnel-dossier__identity {
   display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.personnel-dossier__identity--player {
+  grid-template-columns: minmax(0, 1fr) clamp(8rem, 24vw, 10rem);
+}
+
+.personnel-dossier__identity-copy {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   align-items: start;
+}
+
+.personnel-dossier__identity--player .personnel-dossier__identity-copy {
+  grid-template-columns: 1fr;
+}
+
+.personnel-dossier__signal {
+  position: relative;
+  display: grid;
+  align-content: end;
+  min-width: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #397a49;
+  border-radius: 4px;
+  background: #030805;
+}
+
+.personnel-dossier__signal[hidden] {
+  display: none;
+}
+
+.personnel-dossier__avatar {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  aspect-ratio: auto;
+  background-position: center;
+}
+
+.personnel-dossier__biosignal {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.14rem;
+  padding: 0.35rem 0.45rem;
+  color: #baffc4;
+  background: linear-gradient(180deg, transparent, rgba(1, 7, 3, 0.96) 30%);
+  font-size: 0.48rem;
+  letter-spacing: 0.055em;
+}
+
+.personnel-dossier__biosignal svg {
+  display: block;
+  width: 100%;
+  height: 0.82rem;
+  overflow: visible;
 }
 
 .personnel-dossier__recording {
@@ -1092,14 +1210,45 @@ body.staff-mode .personnel-dossier button.personnel-dossier__settings {
   text-align: center;
 }
 
-.personnel-dossier__action:hover,
 .personnel-dossier__action:focus-visible,
-body.staff-mode .personnel-dossier button:hover,
 body.staff-mode .personnel-dossier button:focus-visible {
   color: #071009;
   background: #8cff9d;
   border-color: #baffc4;
   outline: none;
+}
+
+@media (hover: hover) {
+  .personnel-dossier__action:hover,
+  body.staff-mode .personnel-dossier button:hover {
+    color: #071009;
+    background: #8cff9d;
+    border-color: #baffc4;
+    outline: none;
+  }
+}
+
+body.staff-mode .personnel-dossier button.personnel-icon-button--close,
+body.staff-mode .personnel-dossier button.personnel-icon-button--danger {
+  color: #ff8b8b;
+  border-color: rgba(255, 92, 92, 0.62);
+  background: rgba(42, 4, 4, 0.9);
+}
+
+body.staff-mode .personnel-dossier button.personnel-icon-button--close:focus-visible,
+body.staff-mode .personnel-dossier button.personnel-icon-button--danger:focus-visible {
+  color: #fff;
+  border-color: #ffb0b0;
+  background: #a51f1f;
+}
+
+@media (hover: hover) {
+  body.staff-mode .personnel-dossier button.personnel-icon-button--close:hover,
+  body.staff-mode .personnel-dossier button.personnel-icon-button--danger:hover {
+    color: #fff;
+    border-color: #ffb0b0;
+    background: #a51f1f;
+  }
 }
 
 .personnel-dossier__action[hidden] {
@@ -1230,6 +1379,18 @@ body.staff-mode .personnel-trash-item {
   box-shadow: inset 3px 0 #71ff89;
 }
 
+body.staff-mode .personnel-inbox-item:focus-visible
+  :is(.personnel-inbox-item__copy strong, .personnel-inbox-item__copy span, .personnel-inbox-item__copy small, .personnel-inbox-item__mark) {
+  color: #061007;
+}
+
+@media (hover: hover) {
+  body.staff-mode .personnel-inbox-item:hover
+    :is(.personnel-inbox-item__copy strong, .personnel-inbox-item__copy span, .personnel-inbox-item__copy small, .personnel-inbox-item__mark) {
+    color: #061007;
+  }
+}
+
 .personnel-inbox-item img,
 .personnel-message header img {
   width: 100%;
@@ -1314,10 +1475,16 @@ body.staff-mode .personnel-trash-item {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  justify-content: flex-end;
 }
 
 .personnel-message__actions button {
   flex: 1 1 12rem;
+}
+
+.personnel-message__actions .personnel-icon-button {
+  flex: 0 0 2.75rem;
+  margin-left: auto;
 }
 
 .personnel-materials {
@@ -1327,6 +1494,7 @@ body.staff-mode .personnel-trash-item {
 }
 
 .personnel-material-entry {
+  position: relative;
   display: grid;
   align-content: start;
   gap: 0.35rem;
@@ -1368,11 +1536,13 @@ body.staff-mode .personnel-material {
 }
 
 body.staff-mode .personnel-material-entry__delete {
-  min-height: 2rem;
-  padding: 0.35rem 0.5rem;
-  color: #76ae80;
-  border-style: dashed;
-  font-size: 0.58rem;
+  position: absolute;
+  z-index: 2;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 2.35rem;
+  min-height: 2.35rem;
+  padding: 0.45rem;
 }
 
 .personnel-material img {
@@ -1506,11 +1676,11 @@ body.staff-mode .personnel-avatar-options button {
 }
 
 .personnel-avatar--avatar-03 {
-  background-image: url("../assets/staff/player-avatars/avatar-03.webp");
+  background-image: url("../assets/staff/player-avatars/avatar-03-fox.webp");
 }
 
 .personnel-avatar--avatar-04 {
-  background-image: url("../assets/staff/player-avatars/avatar-04.webp");
+  background-image: url("../assets/staff/player-avatars/avatar-04-dog.webp");
 }
 
 .personnel-card__portrait.personnel-avatar {
@@ -1544,14 +1714,32 @@ body.staff-mode .personnel-avatar-options button {
 }
 
 .personnel-trash-item__actions {
-  display: grid;
+  display: flex;
   gap: 0.35rem;
 }
 
 body.staff-mode .personnel-trash-item__actions button {
-  min-height: 2rem;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.58rem;
+  width: 2.35rem;
+  min-height: 2.35rem;
+  padding: 0.42rem;
+}
+
+body.staff-mode .personnel-trash-item__actions button[data-confirming="true"] {
+  width: auto;
+  min-width: 7.2rem;
+  color: #fff;
+  border-color: #ff9a9a;
+  background: #8b1717;
+  font-size: 0.52rem;
+}
+
+body.staff-mode .personnel-dossier button.personnel-trash__empty {
+  min-height: 2.35rem;
+  padding: 0.4rem 0.65rem;
+  color: #ff9a9a;
+  border-color: rgba(255, 92, 92, 0.52);
+  background: rgba(42, 4, 4, 0.72);
+  font-size: 0.56rem;
 }
 
 .personnel-intrusion {
@@ -1920,6 +2108,12 @@ body.staff-mode .personnel-intrusion button {
     height: 6.4rem;
   }
 
+  .personnel-card__portrait-frame {
+    width: 6.4rem;
+    height: 6.4rem;
+    aspect-ratio: 1;
+  }
+
   .personnel-card__body {
     align-content: center;
     padding-top: 0;
@@ -1942,6 +2136,14 @@ body.staff-mode .personnel-intrusion button {
   }
 
   .personnel-dossier__identity {
+    gap: 0.65rem;
+  }
+
+  .personnel-dossier__identity--player {
+    grid-template-columns: minmax(0, 1fr) clamp(7.5rem, 31vw, 9rem);
+  }
+
+  .personnel-dossier__identity-copy {
     grid-template-columns: 1fr;
     gap: 0.35rem;
   }
@@ -1956,23 +2158,27 @@ body.staff-mode .personnel-intrusion button {
   }
 
   .personnel-message header {
-    grid-template-columns: 2.8rem minmax(0, 1fr);
+    grid-template-columns: 2.8rem minmax(0, 1fr) 2.75rem;
   }
 
   .personnel-message header button {
-    grid-column: 1 / -1;
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .personnel-card,
   .personnel-intrusion,
-  .personnel-card__biosignal polyline {
+  .personnel-card__live polyline,
+  .personnel-dossier__biosignal polyline {
     animation: none;
     transition: none;
   }
 
-  .personnel-card__biosignal polyline {
+  .personnel-card__live polyline,
+  .personnel-dossier__biosignal polyline {
     stroke-dashoffset: 0;
   }
 }

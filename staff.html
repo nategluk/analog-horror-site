@@ -83,7 +83,11 @@
             <span>Восстановите роль, сеансы и материалы без повторного прохождения.</span>
           </div>
           <button type="button" data-dossier-access>
-            ВОССТАНОВИТЬ ЛИЧНОЕ ДЕЛО
+            <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+              <path d="M3 4v6h6"></path>
+            </svg>
+            <span>ВОССТАНОВИТЬ ЛИЧНОЕ ДЕЛО</span>
           </button>
         </aside>
 
@@ -94,17 +98,19 @@
           <div class="personnel-registry__grid" data-personnel-grid>
             <article class="personnel-card personnel-card--operator" data-player-card hidden>
               <button class="personnel-card__button" type="button" data-personnel-open="player">
-                <span class="personnel-card__portrait personnel-avatar personnel-avatar--pending" data-player-card-avatar aria-hidden="true"></span>
+                <span class="personnel-card__portrait-frame" aria-hidden="true">
+                  <span class="personnel-card__portrait personnel-avatar personnel-avatar--pending" data-player-card-avatar></span>
+                  <span class="personnel-card__live">
+                    <svg viewBox="0 0 120 20" focusable="false">
+                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
+                    </svg>
+                    <span>LIVE</span>
+                  </span>
+                </span>
                 <span class="personnel-card__body">
                   <span class="personnel-card__label">ТЕКУЩИЙ ОПЕРАТОР</span>
                   <strong data-player-card-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
                   <span data-player-card-status>ЛИЧНОЕ ДЕЛО ФОРМИРУЕТСЯ</span>
-                  <span class="personnel-card__biosignal" aria-label="Биосигнал оператора активен">
-                    <svg viewBox="0 0 120 20" aria-hidden="true" focusable="false">
-                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
-                    </svg>
-                    <span>БИОСИГНАЛ: АКТИВЕН</span>
-                  </span>
                   <small>ОТКРЫТЬ ЛИЧНОЕ ДЕЛО</small>
                 </span>
               </button>
@@ -180,22 +186,43 @@
                 </div>
                 <div class="personnel-dossier__header-actions">
                   <button
-                    class="personnel-dossier__settings"
+                    class="personnel-dossier__settings personnel-icon-button"
                     type="button"
                     data-player-settings-toggle
                     aria-controls="personnel-profile-settings"
                     aria-expanded="false"
                     hidden
-                  >НАСТРОЙКИ</button>
-                  <button class="personnel-dossier__close" type="button" data-personnel-close>ЗАКРЫТЬ</button>
+                  >
+                    <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path>
+                    </svg>
+                    <span class="visually-hidden">НАСТРОЙКИ</span>
+                  </button>
+                  <button class="personnel-dossier__close personnel-icon-button personnel-icon-button--close" type="button" data-personnel-close aria-label="Закрыть личное дело">
+                    <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path d="M6 6l12 12M18 6 6 18"></path>
+                    </svg>
+                  </button>
                 </div>
               </header>
 
               <img class="personnel-dossier__recording" data-personnel-header-image alt="" hidden />
 
               <div class="personnel-dossier__identity">
-                <p><span>ДОЛЖНОСТЬ:</span> <strong data-personnel-role>НЕ НАЗНАЧЕНА</strong></p>
-                <p><span>СТАТУС:</span> <strong data-personnel-status>НЕ ОПРЕДЕЛЁН</strong></p>
+                <div class="personnel-dossier__identity-copy">
+                  <p><span>ДОЛЖНОСТЬ:</span> <strong data-personnel-role>НЕ НАЗНАЧЕНА</strong></p>
+                  <p><span>СТАТУС:</span> <strong data-personnel-status>НЕ ОПРЕДЕЛЁН</strong></p>
+                </div>
+                <aside class="personnel-dossier__signal" data-player-dossier-signal hidden aria-label="Биосигнал оператора активен">
+                  <span class="personnel-dossier__avatar personnel-avatar personnel-avatar--pending" data-player-dossier-avatar aria-hidden="true"></span>
+                  <span class="personnel-dossier__biosignal">
+                    <svg viewBox="0 0 120 20" aria-hidden="true" focusable="false">
+                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
+                    </svg>
+                    <span>БИОСИГНАЛ: АКТИВЕН</span>
+                  </span>
+                </aside>
               </div>
 
               <p class="personnel-dossier__note" data-personnel-note></p>
@@ -283,12 +310,20 @@
                         <span data-player-message-sender></span>
                         <strong data-player-message-subject></strong>
                       </div>
-                      <button type="button" data-player-message-close>ЗАКРЫТЬ</button>
+                      <button class="personnel-icon-button personnel-icon-button--close" type="button" data-player-message-close aria-label="Закрыть сообщение">
+                        <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path d="M6 6l12 12M18 6 6 18"></path>
+                        </svg>
+                      </button>
                     </header>
                     <p data-player-message-body></p>
                     <div class="personnel-message__actions">
                       <button type="button" data-player-message-attachment hidden>ОТКРЫТЬ ВЛОЖЕНИЕ</button>
-                      <button type="button" data-player-message-delete>УДАЛИТЬ СООБЩЕНИЕ</button>
+                      <button class="personnel-icon-button personnel-icon-button--danger" type="button" data-player-message-delete aria-label="Переместить сообщение в корзину">
+                        <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path>
+                        </svg>
+                      </button>
                     </div>
                   </article>
                   </section>
@@ -308,7 +343,7 @@
                   <section data-player-view="trash" hidden aria-labelledby="personnel-trash-title">
                   <div class="personnel-section-heading">
                     <h3 id="personnel-trash-title">КОРЗИНА</h3>
-                    <button type="button" data-player-trash-empty hidden>ОЧИСТИТЬ</button>
+                    <button class="personnel-trash__empty" type="button" data-player-trash-empty hidden>ОЧИСТИТЬ</button>
                   </div>
                   <p data-player-trash-empty-copy>КОРЗИНА ПУСТА</p>
                   <div class="personnel-trash" data-player-trash></div>

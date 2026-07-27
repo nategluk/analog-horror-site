@@ -812,7 +812,7 @@
     },
     "lora-red-room": {
       sender: "ЛОРА П.",
-      avatar: staffDirectory.lora.image,
+      avatar: audioAsset("assets/staff/staff/lora-message-avatar.webp"),
       subject: "НЕ ОТКРЫВАЙТЕ ВСЁ СРАЗУ",
       preview: "Некоторые материалы лучше оставлять внутри сообщения.",
       body: (profile) =>
@@ -820,7 +820,7 @@
     },
     "ulybarych-after-broadcast": {
       sender: "УЛЫБАРЫЧ",
-      avatar: audioAsset("assets/staff/documents/media-ulybarych-playroom.webp"),
+      avatar: audioAsset("assets/staff/documents/ulybarych-message-avatar.webp"),
       subject: "ТЫ ДОСМОТРЕЛ?",
       preview: "На твоём месте в студии пока никого нет.",
       body: (profile) =>
@@ -5338,6 +5338,9 @@
     const dossierRole = dossier.querySelector("[data-personnel-role]");
     const dossierStatus = dossier.querySelector("[data-personnel-status]");
     const dossierNote = dossier.querySelector("[data-personnel-note]");
+    const dossierIdentity = dossier.querySelector(".personnel-dossier__identity");
+    const dossierSignal = dossier.querySelector("[data-player-dossier-signal]");
+    const dossierAvatar = dossier.querySelector("[data-player-dossier-avatar]");
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
@@ -5396,13 +5399,35 @@
     let activeMessageId = null;
     let settingsOpen = false;
 
+    const personnelIconMarkup = {
+      settings:
+        '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path>',
+      back: '<path d="M19 12H5M11 18l-6-6 6-6"></path>',
+      restore:
+        '<path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v6h6"></path>',
+      trash:
+        '<path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path>',
+    };
+
+    const setPersonnelIconButton = (button, icon, label) => {
+      if (!button || !personnelIconMarkup[icon]) return;
+      button.classList.add("personnel-icon-button");
+      button.setAttribute("aria-label", label);
+      button.title = label;
+      button.innerHTML = `<svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${personnelIconMarkup[icon]}</svg>`;
+    };
+
     const setSettingsOpen = (open) => {
       settingsOpen = Boolean(open && activePersonnelKey === "player");
       settingsPanel.hidden = !settingsOpen;
       profileMain.hidden = settingsOpen;
       dossierNote.hidden = !settingsOpen && activePersonnelKey === "player";
       settingsToggle.setAttribute("aria-expanded", String(settingsOpen));
-      settingsToggle.textContent = settingsOpen ? "НАЗАД" : "НАСТРОЙКИ";
+      setPersonnelIconButton(
+        settingsToggle,
+        settingsOpen ? "back" : "settings",
+        settingsOpen ? "Назад к личному делу" : "Настройки личного дела"
+      );
     };
 
     const setAvatarAppearance = (element, avatarId) => {
@@ -5487,9 +5512,14 @@
         title.textContent = definition.title;
         type.textContent = definition.type;
         remove.type = "button";
-        remove.className = "personnel-material-entry__delete";
+        remove.className =
+          "personnel-material-entry__delete personnel-icon-button personnel-icon-button--danger";
         remove.dataset.artifactDelete = stored.id;
-        remove.textContent = "В КОРЗИНУ";
+        setPersonnelIconButton(
+          remove,
+          "trash",
+          `Переместить материал «${definition.title}» в корзину`
+        );
         button.append(image, code, title, type);
         entry.append(button, remove);
         materials.append(entry);
@@ -5540,6 +5570,7 @@
         button.className = "personnel-inbox-item";
         button.dataset.messageOpen = message.id;
         button.dataset.unread = String(!message.readAt);
+        button.setAttribute("aria-expanded", "false");
         avatar.src = definition.avatar;
         avatar.alt = "";
         copy.className = "personnel-inbox-item__copy";
@@ -5559,6 +5590,9 @@
       messageDetail.hidden = true;
       messageAttachment.hidden = true;
       delete messageAttachment.dataset.artifactOpen;
+      inbox.querySelectorAll("[data-message-open]").forEach((button) => {
+        button.setAttribute("aria-expanded", "false");
+      });
     };
 
     const renderMessage = (profile, messageId) => {
@@ -5585,6 +5619,15 @@
       } else {
         delete messageAttachment.dataset.artifactOpen;
       }
+      inbox.querySelectorAll("[data-message-open]").forEach((button) => {
+        button.setAttribute(
+          "aria-expanded",
+          String(button.dataset.messageOpen === messageId)
+        );
+      });
+      const activeMessageButton = [...inbox.querySelectorAll("[data-message-open]")]
+        .find((button) => button.dataset.messageOpen === messageId);
+      activeMessageButton?.after(messageDetail);
       messageDetail.hidden = false;
     };
 
@@ -5626,11 +5669,15 @@
             item.kind === "message" ? "СООБЩЕНИЕ" : "МАТЕРИАЛ";
           actions.className = "personnel-trash-item__actions";
           restore.type = "button";
+          restore.className = "personnel-icon-button";
           restore.dataset.trashRestore = `${item.kind}:${item.id}`;
-          restore.textContent = "ВОССТАНОВИТЬ";
+          setPersonnelIconButton(restore, "restore", `Восстановить «${title.textContent}»`);
           remove.type = "button";
+          remove.className =
+            "personnel-icon-button personnel-icon-button--danger";
           remove.dataset.trashRemove = `${item.kind}:${item.id}`;
-          remove.textContent = "УДАЛИТЬ";
+          remove.dataset.iconLabel = `Удалить «${title.textContent}» навсегда`;
+          setPersonnelIconButton(remove, "trash", remove.dataset.iconLabel);
           copy.append(title, kind);
           actions.append(restore, remove);
           row.append(image, copy, actions);
@@ -5678,6 +5725,9 @@
       dossierHeaderImage.hidden = true;
       dossierHeaderImage.removeAttribute("src");
       dossierHeaderImage.alt = "";
+      dossierIdentity.classList.add("personnel-dossier__identity--player");
+      dossierSignal.hidden = false;
+      setAvatarAppearance(dossierAvatar, profile.avatarId);
       employeeActions.hidden = true;
       profilePanel.hidden = false;
       settingsToggle.hidden = false;
@@ -5758,6 +5808,8 @@
       if (profile) {
         renderPlayerDossier(profile);
       } else {
+        dossierIdentity.classList.remove("personnel-dossier__identity--player");
+        dossierSignal.hidden = true;
         settingsToggle.hidden = true;
         settingsPanel.hidden = true;
         profileMain.hidden = false;
@@ -6002,10 +6054,15 @@
         if (remove.dataset.confirming !== "true") {
           remove.dataset.confirming = "true";
           remove.textContent = "ПОДТВЕРДИТЬ";
+          remove.setAttribute("aria-label", "Подтвердить окончательное удаление");
           window.setTimeout(() => {
             if (!remove.isConnected) return;
             remove.dataset.confirming = "false";
-            remove.textContent = "УДАЛИТЬ";
+            setPersonnelIconButton(
+              remove,
+              "trash",
+              remove.dataset.iconLabel || "Удалить навсегда"
+            );
           }, 8000);
           return;
         }
