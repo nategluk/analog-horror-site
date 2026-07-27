@@ -6286,6 +6286,7 @@
       details.className = "asset-record__details";
       details.id = detailsId;
       details.hidden = true;
+      heading.classList.add("visually-hidden");
       details.append(heading, description);
       mediaButton.after(details);
 
