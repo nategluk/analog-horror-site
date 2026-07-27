@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <title>TYNDEX // Закрепление личного дела</title>
+    <link rel="stylesheet" href="../css/auth.css" />
+  </head>
+  <body>
+    <div class="auth-noise" aria-hidden="true"></div>
+    <main class="auth-shell">
+      <header class="auth-header">
+        <img
+          class="auth-logo"
+          src="../assets/staff/logo.png"
+          alt="Детский Жир"
+        />
+        <div>
+          <p class="auth-eyebrow">TYNDEX HR // АДРЕС ВОССТАНОВЛЕНИЯ</p>
+          <p class="auth-channel">КАНАЛ 0091-A / TLS</p>
+        </div>
+      </header>
+
+      <section class="auth-terminal" aria-labelledby="auth-title">
+        <div class="auth-terminal__bar" aria-hidden="true">
+          <span>ЛИЧНОЕ ДЕЛО</span>
+          <span data-auth-signal>ПРОВЕРКА</span>
+        </div>
+
+        <div class="auth-terminal__body">
+          <p class="auth-code" data-auth-code>TRANSFER://PENDING</p>
+          <h1 id="auth-title" data-auth-title>
+            ПРОВЕРКА ССЫЛКИ ДОСТУПА
+          </h1>
+          <p class="auth-message" data-auth-message aria-live="polite">
+            Не закрывайте окно. Система сверяет адрес восстановления и
+            локальную копию личного дела.
+          </p>
+
+          <div class="auth-progress" data-auth-progress aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+
+          <dl class="auth-summary" data-auth-summary hidden>
+            <div>
+              <dt>СТАТУС</dt>
+              <dd data-auth-status>—</dd>
+            </div>
+            <div>
+              <dt>НАЗНАЧЕНИЕ</dt>
+              <dd data-auth-role>—</dd>
+            </div>
+            <div>
+              <dt>СЕАНСЫ</dt>
+              <dd data-auth-sessions>—</dd>
+            </div>
+            <div>
+              <dt>МАТЕРИАЛЫ</dt>
+              <dd data-auth-artifacts>—</dd>
+            </div>
+          </dl>
+
+          <div class="auth-actions">
+            <a class="auth-button" href="../hiring" data-auth-return hidden>
+              ВЕРНУТЬСЯ В КАДРОВУЮ БАЗУ
+            </a>
+            <button class="auth-button" type="button" data-auth-retry hidden>
+              ПОВТОРИТЬ ПРОВЕРКУ
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <p class="auth-footnote">
+        Адрес восстановления не передаётся куратору и не отображается в
+        кадровой карточке.
+      </p>
+    </main>
+
+    <script src="../js/auth-confirm.js" defer></script>
+  </body>
+</html>
