@@ -7,6 +7,7 @@
   const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
+  const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
   const DOSSIER_ACCESS_ENDPOINT =
@@ -374,6 +375,50 @@
     modeSwitchAudio.play().catch(() => {});
   };
 
+  const initStaffHomeNotice = () => {
+    const existingNotice = document.querySelector("[data-staff-home-notice]");
+    const isStaffHome =
+      body.classList.contains("staff-mode") &&
+      Boolean(document.querySelector('[data-home-hero="wonder"]'));
+
+    if (!isStaffHome) {
+      existingNotice?.remove();
+      return;
+    }
+
+    if (
+      existingNotice ||
+      localStorage.getItem(STAFF_HOME_NOTICE_KEY) === "true"
+    ) {
+      return;
+    }
+
+    localStorage.setItem(STAFF_HOME_NOTICE_KEY, "true");
+
+    const notice = document.createElement("aside");
+    notice.className = "staff-access-notice";
+    notice.dataset.staffHomeNotice = "true";
+    notice.setAttribute("role", "status");
+    notice.setAttribute("aria-live", "polite");
+    notice.innerHTML = `
+      <span aria-hidden="true">!</span>
+      <p><strong>СЛУЖЕБНОЕ ПРЕДУПРЕЖДЕНИЕ</strong>Несанкционированный доступ в закрытый контур.</p>
+      <button type="button" aria-label="Закрыть служебное предупреждение">&times;</button>
+    `;
+
+    let removalTimer;
+    const dismiss = () => {
+      window.clearTimeout(removalTimer);
+      notice.classList.remove("is-visible");
+      window.setTimeout(() => notice.remove(), 220);
+    };
+
+    notice.querySelector("button")?.addEventListener("click", dismiss);
+    body.append(notice);
+    window.requestAnimationFrame(() => notice.classList.add("is-visible"));
+    removalTimer = window.setTimeout(dismiss, 6500);
+  };
+
   const playNextTrack = () => {
     const tracks = getMusicTracks();
     const wasPlaying = audio && !audio.paused;
@@ -601,6 +646,7 @@
     setMusicMode(isStaff);
     updateCctvVideos(isStaff);
     localStorage.setItem(MODE_KEY, isStaff ? "staff" : "guest");
+    initStaffHomeNotice();
   };
 
   const runGlitchAndToggle = () => {
@@ -6395,6 +6441,30 @@
     renderSection(currentSection, { announce: false, updateHash: false });
   };
 
+  const initMobileNavigation = () => {
+    const nav = document.querySelector(".site-nav");
+    if (!nav || nav.dataset.mobileNavReady === "true") return;
+
+    nav.dataset.mobileNavReady = "true";
+    const currentLink = nav.querySelector('[aria-current="page"]');
+
+    const updateScrollCues = () => {
+      const maxScroll = Math.max(0, nav.scrollWidth - nav.clientWidth);
+      nav.classList.toggle("is-scroll-start", nav.scrollLeft <= 2);
+      nav.classList.toggle("is-scroll-end", nav.scrollLeft >= maxScroll - 2);
+    };
+
+    nav.addEventListener("scroll", updateScrollCues, { passive: true });
+    window.requestAnimationFrame(() => {
+      if (window.matchMedia("(max-width: 640px)").matches && currentLink) {
+        const targetLeft =
+          currentLink.offsetLeft - Math.max(0, (nav.clientWidth - currentLink.offsetWidth) / 2);
+        nav.scrollLeft = Math.max(0, targetLeft);
+      }
+      updateScrollCues();
+    });
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -6410,6 +6480,8 @@
     initDossierAccess();
     initAssetClassifier();
     initArchiveCatalog();
+    initMobileNavigation();
+    initStaffHomeNotice();
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
