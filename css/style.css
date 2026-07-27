@@ -664,10 +664,17 @@ body.staff-mode .staff-logo-image {
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.site-nav a:hover,
-.site-nav a[aria-current="page"] {
+.site-nav a[aria-current="page"],
+.site-nav a:active {
   border-color: var(--accent);
   transform: translateY(-1px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-nav a:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
 }
 
 .panel {
