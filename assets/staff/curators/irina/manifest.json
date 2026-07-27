@@ -155,6 +155,10 @@
     "empty": {
       "image": "room-empty.webp",
       "playback": "still-filtered"
+    },
+    "lost-child-terminal": {
+      "image": "lost-child-terminal.webp",
+      "playback": "still-filtered"
     }
   },
   "artifacts": {

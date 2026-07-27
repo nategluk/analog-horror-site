@@ -41,6 +41,9 @@ Web-ready media for curator `0091-A`.
   saved to the player's personnel file, and Irina's optional downloadable
   private photograph. WebP assets retain their generated square resolution
   and are stripped of source metadata.
+- `lost-child-terminal.webp` is the physical terminal feed. Its CRT contains no
+  baked controls; status text stays in HTML and the two physical keys are the
+  real dialogue buttons below the feed.
 - Keep captions, call controls, IDs, timestamps, and signal indicators in
   HTML/CSS rather than in the video.
 

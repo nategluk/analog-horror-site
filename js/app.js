@@ -2218,14 +2218,14 @@
       step: "LOST CHILD TERMINAL™ // ЗАПРОС",
       terminal: true,
       feedMode: "terminal",
-      feedState: "ДВЕ КНОПКИ ДОСТУПНЫ",
+      feedState: "ОЖИДАНИЕ ФИЗИЧЕСКОГО ВВОДА",
       signal: 71,
       speaker: "СИСТЕМА",
       text:
-        "Терминал требует подтвердить потерю. Вариант отказа не предусмотрен.",
+        "Терминал требует подтвердить потерю. Вариант отказа не предусмотрен. Выберите физическую клавишу.",
       choices: [
         {
-          label: "ДА",
+          label: "ЛЕВАЯ КЛАВИША — ДА",
           next: "lost-terminal-ticket",
           effect: {
             flags: { terminalYesLeft: true },
@@ -2233,7 +2233,7 @@
           },
         },
         {
-          label: "ДА",
+          label: "ПРАВАЯ КЛАВИША — ДА",
           next: "lost-terminal-ticket",
           effect: {
             flags: { terminalYesRight: true },
