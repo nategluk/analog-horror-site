@@ -736,6 +736,10 @@ body.staff-mode .staff-content.personnel-registry {
   background: rgba(4, 12, 6, 0.86);
 }
 
+body:not(.staff-mode) .personnel-access {
+  display: none;
+}
+
 .personnel-access[hidden] {
   display: none;
 }
