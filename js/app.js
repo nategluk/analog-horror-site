@@ -48,6 +48,28 @@
       },
     ],
   };
+  const cctvTeletextPages = [
+    ["P101", "СЕГОДНЯ ДЯДЯ УЛЫБАРЫЧ НАУЧИТ ТЕБЯ СМЕЯТЬСЯ"],
+    ["P112", "ЖИР ТВ. ТОЛЬКО ХОРОШИЕ НОВОСТИ"],
+    ["P121", "ВИДЕОДРОМ ВСТРЕЧАЕТ ДЕТСКИЙ ЖИР"],
+    ["P134", "НЕ ПЕРЕКЛЮЧАЙТЕСЬ. МЫ УЖЕ НАЧАЛИ"],
+    ["P147", "ПОГОДА В КОМПЛЕКСЕ: ТЕПЛО. ВЫХОДА НЕТ"],
+    ["P156", "СЕГОДНЯ В КАФЕ: МОЛОЧНЫЙ КОКТЕЙЛЬ «ВЕРНИСЬ ДОМОЙ»"],
+    ["P163", "КАЖДОМУ РЕБЁНКУ — ПО МЯГКОМУ МЕСТУ"],
+    ["P178", "ПАРК «СОЛНЫШКО». ТЕПЕРЬ ОТКРЫТ И ПОСЛЕ ЗАКРЫТИЯ"],
+    ["P184", "ЕСЛИ РЕБЁНОК МОЛЧИТ — ПРОГРАММА ЗАГРУЖАЕТСЯ"],
+    ["P196", "УВАЖАЕМЫЕ ГОСТИ! НЕ КОРМИТЕ ТЕХ, КТО ЗНАЕТ ВАШЕ ИМЯ"],
+    ["P207", "МАМА СКОРО ВЕРНЁТСЯ. РЕКЛАМА ПРОДОЛЖАЕТСЯ"],
+    ["P219", "ЗООПАРК СООБЩАЕТ: ВСЕ КЛЕТКИ ПО-ПРЕЖНЕМУ ПУСТЫ"],
+    ["P228", "БАССЕЙН «ДЕЛЬФИН»: ВОДА ПРОШЛА ПРОВЕРКУ. ПРОВЕРЯЮЩИЙ — НЕТ"],
+    ["P241", "СЕАНС В «ИЛЛЮЗИОНЕ» УЖЕ ИДЁТ. ВАШЕ МЕСТО ЗАНЯТО ВАМИ"],
+    ["P253", "УВИДЕЛИ СОТРУДНИКА БЕЗ УЛЫБКИ? ПОМОГИТЕ ЕМУ"],
+    ["P267", "СТРАНИЦА 404: РОДИТЕЛЬ НЕ НАЙДЕН"],
+    ["P278", "СОБЛЮДАЙТЕ ПРАВИЛА. ОНИ ПОМНЯТ ВАС"],
+    ["P289", "ИРИНА, НЕ ЧИТАЙ ЭТУ СТРОКУ"],
+    ["P300", "ЭТО НЕ СТРАНИЦА ТЕЛЕТЕКСТА"],
+    ["P312", "СПАСИБО, ЧТО ОСТАЛИСЬ С НАМИ"],
+  ];
   
   const body = document.body;
   let audio;
@@ -327,6 +349,76 @@
     delete consoleElement.dataset.cctvHauntNextAt;
   };
 
+  const shuffleCctvTeletextPages = (lastPage = "") => {
+    const pages = [...cctvTeletextPages];
+
+    for (let index = pages.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [pages[index], pages[swapIndex]] = [pages[swapIndex], pages[index]];
+    }
+
+    if (pages.length > 1 && pages[0][0] === lastPage) {
+      [pages[0], pages[1]] = [pages[1], pages[0]];
+    }
+
+    return pages;
+  };
+
+  const setCctvPowerButtons = (consoleElement, isPowered) => {
+    const powerOnButton = consoleElement.querySelector("[data-cctv-power-on]");
+    const powerOffButton = consoleElement.querySelector("[data-cctv-power-off]");
+
+    if (powerOnButton) powerOnButton.setAttribute("aria-pressed", String(isPowered));
+    if (powerOffButton) powerOffButton.setAttribute("aria-pressed", String(!isPowered));
+  };
+
+  const closeCctvTeletext = (consoleElement) => {
+    const teletext = consoleElement.querySelector("[data-cctv-teletext]");
+    const teletextButton = consoleElement.querySelector("[data-cctv-teletext-button]");
+
+    if (teletext) teletext.hidden = true;
+    consoleElement.classList.remove("is-teletext");
+    if (teletextButton) {
+      teletextButton.setAttribute("aria-pressed", "false");
+      teletextButton.setAttribute("aria-label", "Открыть телетекст");
+    }
+  };
+
+  const showNextCctvTeletextPage = (consoleElement) => {
+    const teletext = consoleElement.querySelector("[data-cctv-teletext]");
+    const pageNumber = consoleElement.querySelector("[data-cctv-teletext-page]");
+    const message = consoleElement.querySelector("[data-cctv-teletext-message]");
+    const teletextButton = consoleElement.querySelector("[data-cctv-teletext-button]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    const status = consoleElement.querySelector("[data-cctv-channel-status]");
+    const state = consoleElement._cctvState;
+    if (!teletext || !pageNumber || !message || !state) return;
+
+    if (consoleElement.dataset.cctvPowered !== "true") {
+      if (remoteStatus) remoteStatus.textContent = "TXT // НЕТ НЕСУЩЕЙ";
+      return;
+    }
+
+    if (!state.teletextDeck.length) {
+      state.teletextDeck = shuffleCctvTeletextPages(state.lastTeletextPage);
+    }
+
+    const [page, copy] = state.teletextDeck.shift();
+    state.lastTeletextPage = page;
+    pageNumber.textContent = page;
+    message.textContent = copy;
+    teletext.hidden = false;
+    consoleElement.classList.add("is-teletext");
+    if (teletextButton) {
+      teletextButton.setAttribute("aria-pressed", "true");
+      teletextButton.setAttribute("aria-label", "Следующая страница телетекста");
+    }
+    if (remoteStatus) remoteStatus.textContent = page;
+    if (label) label.textContent = `${page} // ЖИР-ТЕКСТ`;
+    if (status) status.textContent = "Информационная служба внутреннего вещания.";
+  };
+
   const applyCctvChannel = (
     consoleElement,
     source,
@@ -335,7 +427,6 @@
     const video = consoleElement.querySelector("[data-cctv-video]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     const status = consoleElement.querySelector("[data-cctv-channel-status]");
-    const powerButton = consoleElement.querySelector("[data-cctv-power]");
     const nextButton = consoleElement.querySelector("[data-cctv-next]");
     const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
     if (!video || !source) return;
@@ -354,6 +445,7 @@
     video.setAttribute("aria-label", `${channelCode} ${channelName}`);
     video.load();
 
+    closeCctvTeletext(consoleElement);
     if (label) label.textContent = `${channelCode} // ${channelName}`;
     if (status) status.textContent = source.dataset.status || "Статус: сигнал принят.";
     consoleElement.classList.remove("is-powered-off");
@@ -363,19 +455,13 @@
       consoleElement.dataset.cctvPowered = "false";
       consoleElement.dataset.cctvHauntPhase = "video";
       consoleElement.classList.add("is-haunting", "is-haunt-playing", "is-intercepted");
-      if (powerButton) {
-        powerButton.setAttribute("aria-pressed", "false");
-        powerButton.setAttribute("aria-label", "Включить телевизор");
-      }
+      setCctvPowerButtons(consoleElement, false);
       if (nextButton) nextButton.disabled = true;
     } else {
       consoleElement.dataset.cctvPowered = "true";
       consoleElement.dataset.cctvHauntPhase = "idle";
       consoleElement.classList.remove("is-haunting", "is-haunt-playing", "is-intercepted");
-      if (powerButton) {
-        powerButton.setAttribute("aria-pressed", "true");
-        powerButton.setAttribute("aria-label", "Выключить телевизор");
-      }
+      setCctvPowerButtons(consoleElement, true);
       if (nextButton) nextButton.disabled = false;
     }
 
@@ -388,7 +474,6 @@
     const video = consoleElement.querySelector("[data-cctv-video]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     const status = consoleElement.querySelector("[data-cctv-channel-status]");
-    const powerButton = consoleElement.querySelector("[data-cctv-power]");
     const nextButton = consoleElement.querySelector("[data-cctv-next]");
     const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
     if (!video) return;
@@ -398,16 +483,14 @@
       consoleElement._cctvState.hauntActive = false;
     }
     resetCctvVideo(video);
+    closeCctvTeletext(consoleElement);
     consoleElement.dataset.cctvPowered = "false";
     consoleElement.dataset.cctvHauntPhase = "idle";
     consoleElement.classList.add("is-powered-off");
     consoleElement.classList.remove("is-haunting", "is-haunt-playing", "is-intercepted");
     if (label) label.textContent = "CH -- // НЕТ СИГНАЛА";
     if (status) status.textContent = "Питание отключено.";
-    if (powerButton) {
-      powerButton.setAttribute("aria-pressed", "false");
-      powerButton.setAttribute("aria-label", "Включить телевизор");
-    }
+    setCctvPowerButtons(consoleElement, false);
     if (nextButton) nextButton.disabled = true;
     if (remoteStatus) remoteStatus.textContent = "TV OFF";
   };
@@ -445,13 +528,13 @@
     const video = consoleElement.querySelector("[data-cctv-video]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     const status = consoleElement.querySelector("[data-cctv-channel-status]");
-    const powerButton = consoleElement.querySelector("[data-cctv-power]");
     const nextButton = consoleElement.querySelector("[data-cctv-next]");
     const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
     if (!state || !video) return;
 
     clearCctvHauntTimer(consoleElement);
     resetCctvVideo(video);
+    closeCctvTeletext(consoleElement);
     state.hauntActive = true;
     consoleElement.dataset.cctvPowered = "false";
     consoleElement.dataset.cctvHauntPhase = "noise";
@@ -459,10 +542,7 @@
     consoleElement.classList.remove("is-haunt-playing", "is-intercepted");
     if (label) label.textContent = "CH -- // НЕТ СИГНАЛА";
     if (status) status.textContent = "Питание отключено.";
-    if (powerButton) {
-      powerButton.setAttribute("aria-pressed", "false");
-      powerButton.setAttribute("aria-label", "Включить телевизор");
-    }
+    setCctvPowerButtons(consoleElement, false);
     if (nextButton) nextButton.disabled = true;
     if (remoteStatus) remoteStatus.textContent = "TV OFF";
 
@@ -477,9 +557,18 @@
     const hauntedSources = [
       ...consoleElement.querySelectorAll("[data-cctv-haunted-source]"),
     ];
-    const powerButton = consoleElement.querySelector("[data-cctv-power]");
+    const powerOnButton = consoleElement.querySelector("[data-cctv-power-on]");
+    const powerOffButton = consoleElement.querySelector("[data-cctv-power-off]");
     const nextButton = consoleElement.querySelector("[data-cctv-next]");
-    if (!video || !sources.length || !powerButton || !nextButton) return;
+    const teletextButton = consoleElement.querySelector("[data-cctv-teletext-button]");
+    if (
+      !video ||
+      !sources.length ||
+      !powerOnButton ||
+      !powerOffButton ||
+      !nextButton ||
+      !teletextButton
+    ) return;
 
     consoleElement.dataset.cctvConsoleReady = "true";
     consoleElement._cctvState = {
@@ -488,16 +577,17 @@
       sourceIndex: 0,
       hauntActive: false,
       lastHauntedSource: null,
+      teletextDeck: [],
+      lastTeletextPage: "",
     };
 
-    powerButton.addEventListener("click", () => {
-      const isPowered = consoleElement.dataset.cctvPowered === "true";
-      if (isPowered) {
-        showCctvHauntNoise(consoleElement);
-        return;
-      }
-
+    powerOnButton.addEventListener("click", () => {
       startCctvNormal(consoleElement);
+    });
+
+    powerOffButton.addEventListener("click", () => {
+      if (consoleElement.dataset.cctvPowered !== "true") return;
+      showCctvHauntNoise(consoleElement);
     });
 
     nextButton.addEventListener("click", () => {
@@ -506,6 +596,10 @@
       const state = consoleElement._cctvState;
       state.sourceIndex = (state.sourceIndex + 1) % state.sources.length;
       applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
+    });
+
+    teletextButton.addEventListener("click", () => {
+      showNextCctvTeletextPage(consoleElement);
     });
 
     video.addEventListener("ended", () => {

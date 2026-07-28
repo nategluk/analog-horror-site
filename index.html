@@ -259,6 +259,25 @@
                   <strong>ЖИР ТВ</strong>
                   <span>НЕТ СИГНАЛА</span>
                 </div>
+                <div class="cctv-teletext" data-cctv-teletext hidden>
+                  <div class="cctv-teletext__header">
+                    <strong>ЖИР-ТЕКСТ</strong>
+                    <span data-cctv-teletext-page>P100</span>
+                  </div>
+                  <div class="cctv-teletext__rule" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <p class="cctv-teletext__section">ДЕТСКИЙ ЖИР // ИНФОРМАЦИЯ</p>
+                  <p
+                    class="cctv-teletext__message"
+                    data-cctv-teletext-message
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    ДОБРО ПОЖАЛОВАТЬ В ЭФИР
+                  </p>
+                  <p class="cctv-teletext__footer">TXT — СЛЕДУЮЩАЯ СТРАНИЦА</p>
+                </div>
               </div>
               <p class="cctv-monitor__status" data-cctv-channel-status>
                 Программа: детский утренний блок. Повтор 1991 года.
@@ -270,12 +289,21 @@
               <div class="cctv-remote__buttons">
                 <button
                   type="button"
-                  data-cctv-power
+                  data-cctv-power-on
                   aria-pressed="true"
+                  aria-label="Включить телевизор"
+                >
+                  <span aria-hidden="true">I</span>
+                  <strong>ON</strong>
+                </button>
+                <button
+                  type="button"
+                  data-cctv-power-off
+                  aria-pressed="false"
                   aria-label="Выключить телевизор"
                 >
-                  <span aria-hidden="true">◉</span>
-                  <strong>POWER</strong>
+                  <span aria-hidden="true">O</span>
+                  <strong>OFF</strong>
                 </button>
                 <button
                   type="button"
@@ -284,6 +312,15 @@
                 >
                   <span aria-hidden="true">CH</span>
                   <strong>NEXT +</strong>
+                </button>
+                <button
+                  type="button"
+                  data-cctv-teletext-button
+                  aria-pressed="false"
+                  aria-label="Открыть телетекст"
+                >
+                  <span aria-hidden="true">TXT</span>
+                  <strong>TEXT</strong>
                 </button>
               </div>
               <output data-cctv-remote-status>CH 01</output>
@@ -413,6 +450,6 @@
       </footer>
     </div>
     <script src="js/dossier-store.js"></script>
-    <script src="js/app.js?v=cctv-play-1"></script>
+    <script src="js/app.js?v=cctv-teletext-1"></script>
   </body>
 </html>
