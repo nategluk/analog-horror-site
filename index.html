@@ -328,7 +328,22 @@
                   <strong>TEXT</strong>
                 </button>
               </div>
-              <output data-cctv-remote-status>TV OFF</output>
+              <div class="cctv-remote__utility">
+                <button
+                  class="cctv-remote__mute"
+                  type="button"
+                  data-cctv-mute
+                  aria-pressed="false"
+                  aria-label="Выключить звук эфира"
+                >
+                  <span aria-hidden="true">M</span>
+                  <strong aria-hidden="true">MUTE</strong>
+                </button>
+                <output data-cctv-remote-status>
+                  <span data-cctv-remote-state>TV OFF</span>
+                  <span data-cctv-mute-indicator hidden>MUTE</span>
+                </output>
+              </div>
             </nav>
 
             <div hidden data-cctv-sources>

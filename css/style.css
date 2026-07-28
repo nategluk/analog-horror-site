@@ -8262,8 +8262,60 @@ body.staff-mode .broadcast-shell-page .cctv-remote button:disabled {
   opacity: 0.38;
 }
 
+body.staff-mode .broadcast-shell-page .cctv-remote__utility {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.55rem;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute {
+  min-height: 3.25rem;
+  padding: 0.18rem;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute span {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-color: #0a0c10;
+  background: #555b63;
+  font-size: 0.62rem;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute strong {
+  color: #c7cbd0;
+  font-size: 0.52rem;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute:hover,
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute:focus-visible {
+  border: 0;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute[aria-pressed="true"] {
+  border: 0;
+  background: #20242b;
+  box-shadow: inset 0 0 0 1px #11151a;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute[aria-pressed="true"] span {
+  background: #30343a;
+  box-shadow:
+    inset 2px 3px 5px rgba(0, 0, 0, 0.78),
+    0 0 0 1px #5d626b;
+}
+
 body.staff-mode .broadcast-shell-page .cctv-remote output {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.55rem 0.45rem;
   border: 1px solid #080a0d;
   color: var(--broadcast-green);
@@ -8272,6 +8324,12 @@ body.staff-mode .broadcast-shell-page .cctv-remote output {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-align: center;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote output [data-cctv-mute-indicator] {
+  flex: 0 0 auto;
+  font-weight: 800;
+  text-shadow: 0 0 7px rgba(110, 208, 139, 0.7);
 }
 
 body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-intercepted .cctv-monitor {
