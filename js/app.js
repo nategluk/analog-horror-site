@@ -1305,6 +1305,31 @@
 
   // Content source of truth: content/irina/call-content.js
   const curatorRewardCopy = irinaCallContent.rewardCopy || {};
+
+  const renderArtifactCopy = (container, copy) => {
+    if (!container) return;
+
+    container.replaceChildren();
+    container.hidden = !copy;
+    if (!copy) return;
+
+    const title = document.createElement("h3");
+    title.textContent = copy.title;
+    container.append(title);
+
+    copy.lines.forEach((line) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = line;
+      container.append(paragraph);
+    });
+
+    if (copy.stamp) {
+      const stamp = document.createElement("footer");
+      stamp.textContent = copy.stamp;
+      container.append(stamp);
+    }
+  };
+
   const curatorFiles = hydrateCatalog(irinaCallContent.files || {});
   const curatorMediaAsset = (filename) =>
     audioAsset(
