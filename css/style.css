@@ -5872,7 +5872,7 @@ body.staff-mode .vhs-noise {
     align-items: center;
     min-height: 2.4rem;
     padding: 0.42rem 0.7rem;
-    font-size: 0.76rem;
+    font-size: 0.88rem;
     white-space: nowrap;
   }
 
@@ -5895,7 +5895,7 @@ body.staff-mode .vhs-noise {
     width: auto;
     min-height: 2.4rem;
     padding: 0.42rem 0.7rem;
-    font-size: 0.74rem;
+    font-size: 0.86rem;
     line-height: 1;
     text-align: center;
     white-space: nowrap;
@@ -7800,8 +7800,8 @@ body.staff-mode .broadcast-shell-page .site-nav a {
   box-shadow:
     inset 1px 1px rgba(255, 255, 255, 0.08),
     inset -2px -2px rgba(0, 0, 0, 0.42);
-  font-size: 0.68rem;
-  line-height: 1.15;
+  font-size: 0.84rem;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -7833,15 +7833,6 @@ body.staff-mode .broadcast-shell-page .site-nav a:active {
     inset 2px 2px 5px rgba(0, 0, 0, 0.8),
     0 0 0 1px #4e555f;
   transform: translateY(1px);
-}
-
-body.staff-mode .broadcast-shell-page .staff-nav-code {
-  display: block;
-  margin-bottom: 0.22rem;
-  color: inherit;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
 }
 
 body.staff-mode .broadcast-shell-page .panel {
