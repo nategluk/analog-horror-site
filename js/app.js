@@ -70,6 +70,25 @@
     ["P300", "ЭТО НЕ СТРАНИЦА ТЕЛЕТЕКСТА"],
     ["P312", "СПАСИБО, ЧТО ОСТАЛИСЬ С НАМИ"],
   ];
+  const cctvSoundLibrary = {
+    click: {
+      src: "assets/audio/staff/cctv/remote-button-click.mp3",
+      volume: 0.22,
+    },
+    static: {
+      src: "assets/audio/staff/cctv/tv-static-loop.mp3",
+      volume: 0.055,
+      loop: true,
+    },
+    channel: {
+      src: "assets/audio/staff/cctv/channel-static.mp3",
+      volume: 0.1,
+    },
+    teletext: {
+      src: "assets/audio/staff/cctv/teletext-tone.mp3",
+      volume: 0.11,
+    },
+  };
   
   const body = document.body;
   let audio;
@@ -372,6 +391,50 @@
     if (powerOffButton) powerOffButton.setAttribute("aria-pressed", String(!isPowered));
   };
 
+  const createCctvSoundRack = () => Object.fromEntries(
+    Object.entries(cctvSoundLibrary).map(([name, sound]) => {
+      const soundElement = new Audio(audioAsset(sound.src));
+      soundElement.preload = "none";
+      soundElement.volume = sound.volume;
+      soundElement.loop = sound.loop === true;
+      return [name, soundElement];
+    })
+  );
+
+  const playCctvSound = (consoleElement, name) => {
+    const sound = consoleElement._cctvState?.sounds?.[name];
+    if (!sound) return;
+
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+  };
+
+  const startCctvStaticSound = (consoleElement) => {
+    if (!body.classList.contains("staff-mode")) return;
+
+    const staticSound = consoleElement._cctvState?.sounds?.static;
+    if (!staticSound || !staticSound.paused) return;
+    staticSound.play().catch(() => {});
+  };
+
+  const stopCctvStaticSound = (consoleElement) => {
+    const staticSound = consoleElement._cctvState?.sounds?.static;
+    if (!staticSound) return;
+
+    staticSound.pause();
+    staticSound.currentTime = 0;
+  };
+
+  const stopAllCctvSounds = (consoleElement) => {
+    const sounds = consoleElement._cctvState?.sounds;
+    if (!sounds) return;
+
+    Object.values(sounds).forEach((sound) => {
+      sound.pause();
+      sound.currentTime = 0;
+    });
+  };
+
   const closeCctvTeletext = (consoleElement) => {
     const teletext = consoleElement.querySelector("[data-cctv-teletext]");
     const teletextButton = consoleElement.querySelector("[data-cctv-teletext-button]");
@@ -436,6 +499,7 @@
     const channelCode = source.dataset.channelCode || "CH --";
     const channelName = source.dataset.channelName || "ИСТОЧНИК НЕ ОПРЕДЕЛЁН";
 
+    stopCctvStaticSound(consoleElement);
     video.pause();
     video.removeAttribute("src");
     video.dataset.videoPool = source.dataset.videoPool || "";
@@ -470,7 +534,7 @@
     }
   };
 
-  const stopCctvConsole = (consoleElement) => {
+  const stopCctvConsole = (consoleElement, { playStatic = false } = {}) => {
     const video = consoleElement.querySelector("[data-cctv-video]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     const status = consoleElement.querySelector("[data-cctv-channel-status]");
@@ -493,6 +557,12 @@
     setCctvPowerButtons(consoleElement, false);
     if (nextButton) nextButton.disabled = true;
     if (remoteStatus) remoteStatus.textContent = "TV OFF";
+
+    if (playStatic && body.classList.contains("staff-mode")) {
+      startCctvStaticSound(consoleElement);
+    } else {
+      stopAllCctvSounds(consoleElement);
+    }
   };
 
   const startCctvNormal = (consoleElement) => {
@@ -546,6 +616,7 @@
     if (nextButton) nextButton.disabled = true;
     if (remoteStatus) remoteStatus.textContent = "TV OFF";
 
+    startCctvStaticSound(consoleElement);
     scheduleCctvHauntVideo(consoleElement);
   };
 
@@ -579,26 +650,40 @@
       lastHauntedSource: null,
       teletextDeck: [],
       lastTeletextPage: "",
+      sounds: createCctvSoundRack(),
     };
 
     powerOnButton.addEventListener("click", () => {
+      playCctvSound(consoleElement, "click");
       startCctvNormal(consoleElement);
     });
 
     powerOffButton.addEventListener("click", () => {
-      if (consoleElement.dataset.cctvPowered !== "true") return;
+      playCctvSound(consoleElement, "click");
+      if (consoleElement.dataset.cctvPowered !== "true") {
+        startCctvStaticSound(consoleElement);
+        return;
+      }
       showCctvHauntNoise(consoleElement);
     });
 
     nextButton.addEventListener("click", () => {
       if (consoleElement.dataset.cctvPowered !== "true") return;
 
+      playCctvSound(consoleElement, "click");
       const state = consoleElement._cctvState;
       state.sourceIndex = (state.sourceIndex + 1) % state.sources.length;
       applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
+      playCctvSound(consoleElement, "channel");
     });
 
     teletextButton.addEventListener("click", () => {
+      playCctvSound(consoleElement, "click");
+      if (consoleElement.dataset.cctvPowered !== "true") {
+        startCctvStaticSound(consoleElement);
+      } else {
+        playCctvSound(consoleElement, "teletext");
+      }
       showNextCctvTeletextPage(consoleElement);
     });
 
@@ -611,21 +696,15 @@
       showCctvHauntNoise(consoleElement);
     });
 
-    if (body.classList.contains("staff-mode")) {
-      startCctvNormal(consoleElement);
-    } else {
-      stopCctvConsole(consoleElement);
-    }
+    stopCctvConsole(consoleElement, {
+      playStatic: body.classList.contains("staff-mode"),
+    });
   };
 
   const updateCctvVideos = (isStaff) => {
     document.querySelectorAll("[data-cctv-console]").forEach((consoleElement) => {
       initCctvConsole(consoleElement);
-      if (isStaff) {
-        if (consoleElement.dataset.cctvPowered !== "true") {
-          startCctvNormal(consoleElement);
-        }
-      } else {
+      if (!isStaff) {
         stopCctvConsole(consoleElement);
       }
     });
@@ -6899,6 +6978,7 @@
     initMobileNavigation();
     initHiringThreshold();
     initStaffHomeNotice();
+    updateCctvVideos(body.classList.contains("staff-mode"));
 
     const savedMode = localStorage.getItem(MODE_KEY);
     
@@ -7001,6 +7081,10 @@
       
       if (newWrapper && currentWrapper) {
         resolveFragmentUrls(newWrapper, response.url || url);
+
+        document.querySelectorAll("[data-cctv-console]").forEach((consoleElement) => {
+          stopCctvConsole(consoleElement);
+        });
 
         // Detach player before replacing HTML
         if (player && player.parentNode) player.parentNode.removeChild(player);

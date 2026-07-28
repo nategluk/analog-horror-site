@@ -232,7 +232,11 @@
           </div>
         </section>
 
-        <section class="staff-content staff-cctv-dashboard" data-cctv-console>
+        <section
+          class="staff-content staff-cctv-dashboard is-powered-off"
+          data-cctv-console
+          data-cctv-powered="false"
+        >
           <div class="cctv-console">
             <article class="cctv-monitor">
               <div class="cctv-monitor__brand" aria-hidden="true">
@@ -241,7 +245,7 @@
               </div>
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span>
-                <span data-cctv-channel-label>CH 01 // ШОУ УЛЫБАРЫЧА</span>
+                <span data-cctv-channel-label>CH -- // НЕТ СИГНАЛА</span>
               </div>
               <div class="cctv-screen" data-cctv-screen>
                 <video
@@ -280,7 +284,7 @@
                 </div>
               </div>
               <p class="cctv-monitor__status" data-cctv-channel-status>
-                Программа: детский утренний блок. Повтор 1991 года.
+                Питание отключено.
               </p>
             </article>
 
@@ -290,7 +294,7 @@
                 <button
                   type="button"
                   data-cctv-power-on
-                  aria-pressed="true"
+                  aria-pressed="false"
                   aria-label="Включить телевизор"
                 >
                   <span aria-hidden="true">I</span>
@@ -299,7 +303,7 @@
                 <button
                   type="button"
                   data-cctv-power-off
-                  aria-pressed="false"
+                  aria-pressed="true"
                   aria-label="Выключить телевизор"
                 >
                   <span aria-hidden="true">O</span>
@@ -309,6 +313,7 @@
                   type="button"
                   data-cctv-next
                   aria-label="Следующий канал"
+                  disabled
                 >
                   <span aria-hidden="true">CH</span>
                   <strong>NEXT +</strong>
@@ -323,7 +328,7 @@
                   <strong>TEXT</strong>
                 </button>
               </div>
-              <output data-cctv-remote-status>CH 01</output>
+              <output data-cctv-remote-status>TV OFF</output>
             </nav>
 
             <div hidden data-cctv-sources>
