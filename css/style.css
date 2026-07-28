@@ -4581,14 +4581,6 @@ body.staff-mode .site-wrapper :where(button) {
   max-width: 760px;
 }
 
-.staff-content.donate-panel {
-  display: none;
-}
-
-body.staff-mode .staff-content.donate-panel {
-  display: grid;
-}
-
 .donate-copy {
   display: grid;
   gap: 0.5rem;
@@ -4627,6 +4619,10 @@ body.staff-mode .staff-content.donate-panel {
     box-shadow 0.2s ease,
     color 0.2s ease,
     transform 0.2s ease;
+}
+
+body.staff-mode .donate-action {
+  color: var(--text);
 }
 
 .donate-action span {
@@ -4692,49 +4688,11 @@ body.staff-mode .staff-content.donate-panel {
   min-width: 0;
 }
 
-.donate-note,
-.finance-route {
+.donate-note {
   margin: 0;
   color: var(--muted);
   font-size: 0.86rem;
   line-height: 1.45;
-}
-
-body.staff-mode .staff-donate-panel {
-  text-transform: uppercase;
-}
-
-body.staff-mode .staff-donate-panel .donate-copy p {
-  color: var(--accent);
-  letter-spacing: 0.04em;
-}
-
-body.staff-mode .staff-routes .donate-action {
-  color: var(--accent);
-  background: #0b160d;
-  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
-}
-
-body.staff-mode .staff-routes .donate-action--primary {
-  color: #050505;
-  background: linear-gradient(140deg, var(--accent), var(--accent-2));
-  border-color: transparent;
-}
-
-body.staff-mode .staff-routes .donate-action small {
-  color: var(--accent-2);
-  letter-spacing: 0.04em;
-}
-
-body.staff-mode .staff-collaboration-card {
-  background: #071108;
-  border-color: color-mix(in srgb, var(--accent) 42%, var(--border));
-}
-
-body.staff-mode .finance-route {
-  color: var(--accent);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .hiring-panel {
@@ -9826,212 +9784,23 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
   font-size: 0.8rem;
 }
 
-body.staff-mode .donate-broadcast-page .donate-page-panel {
-  padding: clamp(0.7rem, 2vw, 1.2rem);
-  border-color: #090b0e;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 32%),
-    #26292f;
-  box-shadow:
-    inset 0 0 0 3px #4c5058,
-    inset 0 0 0 5px #101216,
-    0 1.1rem 2.5rem rgba(0, 0, 0, 0.42);
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate-panel {
-  max-width: none;
-  gap: 0.85rem;
-  padding: clamp(0.7rem, 2vw, 1.1rem);
-  border: 3px solid #0b0d10;
-  border-radius: 0.65rem;
-  background:
-    radial-gradient(circle at 8% 4%, rgba(255, 255, 255, 0.07), transparent 23%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
-    #30333a;
-  box-shadow:
-    inset 0 0 0 2px #565a63,
-    inset 0 0 1.3rem rgba(0, 0, 0, 0.46);
-  text-transform: none;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate__header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.9rem 1rem;
-  border-left: 0.42rem solid var(--broadcast-yellow);
-  background: #11151c;
-  box-shadow: inset 0 0 0 1px #474c55;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate__header h2,
-body.staff-mode .donate-broadcast-page .staff-donate__header p {
-  margin: 0;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate__header p {
-  color: var(--broadcast-yellow);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate__header h2 {
-  margin-top: 0.35rem;
-  color: #eee8d6;
-  font-size: clamp(1.35rem, 3.4vw, 2.05rem);
-  line-height: 1.05;
-  text-shadow: 0.12rem 0.12rem 0 #090b0e;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate__header > span {
-  flex: 0 0 auto;
-  padding: 0.4rem 0.55rem;
-  color: #101216;
-  background: #52d3dc;
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  box-shadow: 0.18rem 0.18rem 0 #090b0e;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate-panel .promo-banner {
-  width: 100%;
-  max-height: 31rem;
-  aspect-ratio: 16 / 7;
-  padding: 0.5rem;
-  border: 0.4rem solid #0b0d10;
-  border-radius: 1.2rem / 0.55rem;
-  object-fit: cover;
-  background: #070b13;
-  box-shadow:
-    inset 0 0 2rem rgba(0, 0, 0, 0.78),
-    0 0 0 1px #575c65;
-  filter: saturate(0.78) contrast(1.06);
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate-panel > .donate-copy {
-  max-width: none;
-  padding: 0.75rem 0.85rem;
-  border-left: 0.3rem solid #52d3dc;
-  background: #141820;
-}
-
-body.staff-mode .donate-broadcast-page .staff-donate-panel .donate-copy p {
-  color: #c5c6c0;
-  font-size: 0.78rem;
-  letter-spacing: 0.025em;
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.65rem;
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action {
-  position: relative;
-  min-height: 5.6rem;
-  padding: 0.85rem;
-  color: #e9e5d8;
-  border: 3px solid #0b0d10;
-  border-radius: 0.35rem;
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 4px),
-    #20242b;
-  box-shadow:
-    inset 0 0 0 1px #555a63,
-    0 0.3rem 0.6rem rgba(0, 0, 0, 0.3);
-  text-align: left;
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action::after {
-  content: "";
-  position: absolute;
-  top: 0.55rem;
-  right: 0.55rem;
-  width: 0.45rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #52d3dc;
-  box-shadow: 0 0 0.45rem rgba(82, 211, 220, 0.5);
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action:nth-child(2)::after {
-  background: var(--broadcast-magenta);
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action:nth-child(3)::after {
-  background: var(--broadcast-yellow);
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action:nth-child(4)::after {
-  background: var(--broadcast-green);
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action--primary {
-  color: #111318;
-  border-color: #0b0d10;
-  background: var(--broadcast-yellow);
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action small {
-  color: #aeb1ad;
-}
-
-body.staff-mode .donate-broadcast-page .staff-routes .donate-action--primary small {
-  color: #3f3b27;
-}
-
-body.staff-mode .donate-broadcast-page .finance-route {
-  padding: 0.65rem 0.75rem;
-  color: #f4cbc7;
-  border: 1px solid #893a3a;
-  background: #351417;
-  font-size: 0.72rem;
-}
-
-body.staff-mode .donate-broadcast-page .staff-collaboration-card {
-  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.45fr);
-  align-items: end;
-  margin: 0;
-  padding: 0.85rem;
-  border: 2px solid #0b0d10;
-  border-left: 0.35rem solid var(--broadcast-magenta);
-  border-radius: 0;
-  background: #141820;
-  box-shadow: inset 0 0 0 1px #4d525b;
-}
-
-body.staff-mode .donate-broadcast-page .staff-collaboration-card h3 {
-  color: var(--broadcast-magenta);
-}
-
-body.staff-mode .donate-broadcast-page .staff-collaboration-card .staff-routes {
-  grid-template-columns: 1fr;
-}
-
 @media (max-width: 720px) {
-  body.staff-mode .faq-broadcast-page .faq-panel,
-  body.staff-mode .donate-broadcast-page .donate-page-panel {
+  body.staff-mode .faq-broadcast-page .faq-panel {
     padding: 0.5rem;
   }
 
-  body.staff-mode .faq-broadcast-page .staff-faq,
-  body.staff-mode .donate-broadcast-page .staff-donate-panel {
+  body.staff-mode .faq-broadcast-page .staff-faq {
     padding: 0.5rem;
     border-radius: 0.45rem;
   }
 
-  body.staff-mode .faq-broadcast-page .staff-faq__header,
-  body.staff-mode .donate-broadcast-page .staff-donate__header {
+  body.staff-mode .faq-broadcast-page .staff-faq__header {
     display: grid;
     align-items: start;
     padding: 0.75rem;
   }
 
-  body.staff-mode .faq-broadcast-page .staff-faq__header > span,
-  body.staff-mode .donate-broadcast-page .staff-donate__header > span {
+  body.staff-mode .faq-broadcast-page .staff-faq__header > span {
     justify-self: start;
   }
 
@@ -10058,26 +9827,6 @@ body.staff-mode .donate-broadcast-page .staff-collaboration-card .staff-routes {
     font-size: 0.73rem;
   }
 
-  body.staff-mode .donate-broadcast-page .staff-donate-panel .promo-banner {
-    aspect-ratio: 4 / 3;
-    padding: 0.35rem;
-    border-width: 0.3rem;
-    border-radius: 0.8rem / 0.4rem;
-  }
-
-  body.staff-mode .donate-broadcast-page .staff-routes {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  body.staff-mode .donate-broadcast-page .staff-routes .donate-action {
-    min-height: 5rem;
-    padding: 0.65rem;
-  }
-
-  body.staff-mode .donate-broadcast-page .staff-collaboration-card {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ─── Broadcast-to-hiring threshold ─── */
