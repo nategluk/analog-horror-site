@@ -3214,11 +3214,14 @@ body.staff-mode .asset-classifier__records.is-enhanced .asset-record__media::aft
   content: "";
   position: absolute;
   inset: 0 0 auto;
-  height: min(18rem, 68%);
+  width: 100%;
+  aspect-ratio: 16 / 9;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, transparent 52%, rgba(0, 0, 0, 0.72)),
-    repeating-linear-gradient(0deg, rgba(113, 255, 137, 0.035) 0 1px, transparent 1px 5px);
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(113, 255, 137, 0.035) 0 1px,
+    transparent 1px 5px
+  );
 }
 
 body.staff-mode .asset-record__meta,
@@ -9336,9 +9339,11 @@ body.staff-mode
   .about-broadcast-page
   .asset-classifier__records.is-enhanced
   .asset-record__media::after {
-  background:
-    linear-gradient(180deg, transparent 48%, rgba(0, 0, 0, 0.82)),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 4px);
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.045) 0 1px,
+    transparent 1px 4px
+  );
 }
 
 body.staff-mode .about-broadcast-page .asset-record__meta,
