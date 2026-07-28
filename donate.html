@@ -18,14 +18,17 @@
     <meta property="og:image:alt" content="Фасад развлекательного комплекса «Детский ЖИР» в тумане, с теплым светом окон и улыбающимся знаком солнца." />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="donate-page">
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
+    <div class="site-wrapper glitch-target broadcast-shell-page donate-broadcast-page">
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
             <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="assets/staff/logo.png" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
           </h1>
           <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
         </div>
@@ -33,17 +36,17 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul>
-          <li><a href="/">Главная</a></li>
-          <li><a href="about">О компании</a></li>
-          <li><a href="staff">Персонал</a></li>
-          <li><a href="hiring">Работа</a></li>
-          <li><a href="faq">FAQ</a></li>
-          <li><a href="donate" aria-current="page">Связь и поддержка</a></li>
-          <li><a href="archive" rel="nofollow">Архив</a></li>
+          <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="about"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="hiring.html"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="faq"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="donate" aria-current="page"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
 
-      <main class="panel">
+      <main class="panel donate-page-panel">
         <section class="guest-content donate-panel">
           <h2>Поддержать проект</h2>
           <img class="promo-banner" src="assets/guest/good-dream.jpg" alt="Сладкий сон" />
@@ -90,7 +93,13 @@
         </section>
 
         <section class="staff-content donate-panel staff-donate-panel">
-          <h2>VOLUNTARY FINANCE NODE</h2>
+          <header class="staff-donate__header">
+            <div>
+              <p>ЖИР ТВ // ОБРАТНАЯ СВЯЗЬ</p>
+              <h2>Канал поддержки проекта</h2>
+            </div>
+            <span>LINE 03 // OPEN</span>
+          </header>
           <img class="promo-banner" src="assets/staff/bad-dream.jpg" alt="Плохой сон" />
           <div class="donate-copy">
             <p>STATUS: PROJECT SUPPORT CHANNELS ARE OPEN.</p>
@@ -132,19 +141,19 @@
 
       <footer class="site-footer">
         <p class="guest-content">Спасибо за ваше доверие и тепло.</p>
-        <p class="staff-content">FINANCE LOG: PENALTY RECORD READY FOR EXPORT</p>
+        <p class="staff-content">линия поддержки // сигнал принимается круглосуточно</p>
         <nav class="social-links" aria-label="Социальные сети">
-          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
-          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
-          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" aria-label="Telegram" data-vhs-code="01"><span>Telegram</span></a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" data-vhs-code="02"><span>Instagram</span></a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer" aria-label="YouTube" data-vhs-code="03"><span>YouTube</span></a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer" aria-label="VK" data-vhs-code="04"><span>VK</span></a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer" aria-label="TikTok" data-vhs-code="05"><span>TikTok</span></a>
           <a class="guest-content" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">Boosty</a>
           <a class="guest-content" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PayPal</a>
           <a class="guest-content" href="https://ko-fi.com/detskiyzhir" target="_blank" rel="noopener noreferrer">Ko-fi</a>
-          <a class="staff-content" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer">BOOSTY_FINANCE</a>
-          <a class="staff-content" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer">PAYPAL_GATEWAY</a>
-          <a class="staff-content" href="https://ko-fi.com/detskiyzhir" target="_blank" rel="noopener noreferrer">KO-FI_ROUTE</a>
+          <a class="staff-content" href="https://boosty.to/aivisions_lab/donate" target="_blank" rel="noopener noreferrer" aria-label="Boosty" data-vhs-code="06"><span>BOOSTY</span></a>
+          <a class="staff-content" href="https://paypal.me/NateGlukhov" target="_blank" rel="noopener noreferrer" aria-label="PayPal" data-vhs-code="07"><span>PAYPAL</span></a>
+          <a class="staff-content" href="https://ko-fi.com/detskiyzhir" target="_blank" rel="noopener noreferrer" aria-label="Ko-fi" data-vhs-code="08"><span>KO-FI</span></a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>

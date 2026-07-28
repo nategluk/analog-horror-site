@@ -20,12 +20,15 @@
   </head>
   <body>
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
+    <div class="site-wrapper glitch-target broadcast-shell-page home-broadcast-page">
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
             <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="assets/staff/logo.png" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
           </h1>
 
           <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
@@ -34,13 +37,13 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul>
-          <li><a href="/" aria-current="page">Главная</a></li>
-          <li><a href="about">О компании</a></li>
-          <li><a href="staff">Персонал</a></li>
-          <li><a href="hiring">Работа</a></li>
-          <li><a href="faq">FAQ</a></li>
-          <li><a href="donate">Связь и поддержка</a></li>
-          <li><a href="archive" rel="nofollow">Архив</a></li>
+          <li><a href="/" aria-current="page"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="about"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="hiring.html"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="faq"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="donate"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
       <section class="hero home-hero" data-home-hero="wonder">
@@ -102,7 +105,7 @@
         <div class="recruitment-banner__copy">
           <h2 id="home-recruitment-heading">ТВОЙ ДОМ<br />ТАМ, ГДЕ<br />МЯГКО.</h2>
           <p>«Лосиный Остров» ищет новых друзей.</p>
-          <a class="recruitment-banner__button" href="hiring">СТАТЬ СВОИМ</a>
+          <a class="recruitment-banner__button" href="hiring.html">СТАТЬ СВОИМ</a>
         </div>
       </section>
 
@@ -229,127 +232,140 @@
           </div>
         </section>
 
-        <section class="staff-content staff-cctv-dashboard">
-          <h2>Внутренний периметр: Прямой эфир</h2>
-          <div class="grid cctv-grid">
-            <article class="card cctv-feed">
-              <div class="cctv-status">
-                <span class="cctv-dot blink"></span> CAM 01 - ЗООПАРК
+        <section class="staff-content staff-cctv-dashboard" data-cctv-console>
+          <div class="cctv-console">
+            <article class="cctv-monitor">
+              <div class="cctv-monitor__brand" aria-hidden="true">
+                <strong>ТЫНДЕКС ВИДЕО</strong>
+                <span>MODEL 312-C</span>
               </div>
-              <div class="cctv-screen">
+              <div class="cctv-status">
+                <span class="cctv-dot blink"></span>
+                <span data-cctv-channel-label>CH 01 // ШОУ УЛЫБАРЫЧА</span>
+              </div>
+              <div class="cctv-screen" data-cctv-screen>
                 <video
                   class="cctv-media"
                   data-cctv-video
-                  data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
-                  poster="assets/staff/cctv/zoo-poster.jpg"
-                  aria-label="CCTV Зоопарк"
+                  data-video-pool="assets/staff/curators/irina/archive-ulybarych-empty-chair.mp4"
+                  poster="assets/staff/curators/irina/archive-ulybarych-empty-chair-poster.webp"
+                  aria-label="CH 01 Шоу Улыбарыча"
                   muted
                   loop
                   playsinline
                   preload="none"
                 ></video>
-                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Зоопарк">
-                  <span aria-hidden="true">▶</span>
-                  PLAY
-                </button>
+                <div class="cctv-no-signal" aria-hidden="true">
+                  <strong>ЖИР ТВ</strong>
+                  <span>НЕТ СИГНАЛА</span>
+                </div>
               </div>
-              <p class="muted">Статус: Обнаружено движение в вольере 4.</p>
-            </article>
-            
-            <article class="card cctv-feed">
-              <div class="cctv-status">
-                <span class="cctv-dot blink"></span> CAM 02 - ГОРКА
-              </div>
-              <div class="cctv-screen">
-                <video
-                  class="cctv-media"
-                  data-cctv-video
-                  data-video-pool="assets/staff/cctv/slide-01.mp4"
-                  poster="assets/staff/cctv/slide-poster.jpg"
-                  aria-label="CCTV Горка"
-                  muted
-                  loop
-                  playsinline
-                  preload="none"
-                ></video>
-                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Горка">
-                  <span aria-hidden="true">▶</span>
-                  PLAY
-                </button>
-              </div>
-              <p class="muted">Статус: Механизм запущен (Автономно).</p>
+              <p class="cctv-monitor__status" data-cctv-channel-status>
+                Программа: детский утренний блок. Повтор 1991 года.
+              </p>
             </article>
 
-            <article class="card cctv-feed">
-              <div class="cctv-status">
-                <span class="cctv-dot blink"></span> CAM 04 - БАССЕЙН
-              </div>
-              <div class="cctv-screen">
-                <video
-                  class="cctv-media"
-                  data-cctv-video
-                  data-video-pool="assets/staff/cctv/pool-01.mp4"
-                  poster="assets/staff/cctv/pool-poster.jpg"
-                  aria-label="CCTV Бассейн"
-                  muted
-                  loop
-                  playsinline
-                  preload="none"
-                ></video>
-                <button class="cctv-play-button" type="button" data-cctv-play aria-label="Включить камеру Бассейн">
-                  <span aria-hidden="true">▶</span>
-                  PLAY
+            <nav class="cctv-remote" aria-label="Пульт внутреннего эфира">
+              <p aria-hidden="true">REMOTE CONTROL // MODEL R-04</p>
+              <div class="cctv-remote__buttons">
+                <button
+                  type="button"
+                  data-cctv-power
+                  aria-pressed="true"
+                  aria-label="Выключить телевизор"
+                >
+                  <span aria-hidden="true">◉</span>
+                  <strong>POWER</strong>
+                </button>
+                <button
+                  type="button"
+                  data-cctv-next
+                  aria-label="Следующий канал"
+                >
+                  <span aria-hidden="true">CH</span>
+                  <strong>NEXT +</strong>
                 </button>
               </div>
-              <p class="muted">Статус: Изменение объема биомассы.</p>
-            </article>
+              <output data-cctv-remote-status>CH 01</output>
+            </nav>
+
+            <div hidden data-cctv-sources>
+              <span
+                data-cctv-source
+                data-channel-code="CH 01"
+                data-channel-name="ШОУ УЛЫБАРЫЧА"
+                data-video-pool="assets/staff/curators/irina/archive-ulybarych-empty-chair.mp4"
+                data-poster="assets/staff/curators/irina/archive-ulybarych-empty-chair-poster.webp"
+                data-status="Программа: детский утренний блок. Повтор 1991 года."
+              ></span>
+              <span
+                data-cctv-source
+                data-channel-code="CH 02"
+                data-channel-name="ПРАВИЛЬНЫЙ ОТВЕТ"
+                data-video-pool="assets/staff/curators/irina/archive-elena-question.mp4"
+                data-poster="assets/staff/curators/irina/archive-elena-question-poster.webp"
+                data-status="Программа: семейная викторина. Запись из фонда вещания."
+              ></span>
+              <span
+                data-cctv-source
+                data-channel-code="CH 03"
+                data-channel-name="ВЕЧЕРНИЙ ПОВТОР"
+                data-video-pool="assets/staff/curators/irina/archive-elena-breach.mp4"
+                data-poster="assets/staff/curators/irina/archive-elena-breach-poster.webp"
+                data-status="Программа: ответы на письма телезрителей. Повтор."
+              ></span>
+            </div>
+
+            <div hidden data-cctv-haunted-sources>
+              <span
+                data-cctv-haunted-source
+                data-channel-code="SOURCE 001"
+                data-channel-name="ВОЛЬЕР 4"
+                data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
+                data-poster="assets/staff/cctv/zoo-poster.jpg"
+                data-status="Канал отключён. Наблюдение продолжается."
+                data-loop="false"
+              ></span>
+              <span
+                data-cctv-haunted-source
+                data-channel-code="SOURCE 002"
+                data-channel-name="ПУСТОЙ БАССЕЙН"
+                data-video-pool="assets/staff/cctv/pool-01.mp4"
+                data-poster="assets/staff/cctv/pool-poster.jpg"
+                data-status="Канал отключён. На объекте обнаружено присутствие."
+                data-loop="false"
+              ></span>
+              <span
+                data-cctv-haunted-source
+                data-channel-code="SOURCE 003"
+                data-channel-name="ТЕХНИЧЕСКИЙ СПУСК"
+                data-video-pool="assets/staff/cctv/slide-01.mp4"
+                data-poster="assets/staff/cctv/slide-poster.jpg"
+                data-status="Канал отключён. Механизм продолжает работу."
+                data-loop="false"
+              ></span>
+              <span
+                data-cctv-haunted-source
+                data-channel-code="SOURCE 004"
+                data-channel-name="СИГНАЛ ПОМОЩИ"
+                data-video-pool="assets/staff/curators/irina/intrusion-help-sign.mp4|assets/staff/curators/irina/intrusion-disco-room.mp4"
+                data-poster="assets/staff/curators/irina/intrusion-help-sign-poster.webp"
+                data-status="Канал отключён. Сообщение не зарегистрировано."
+                data-loop="false"
+              ></span>
+              <span
+                data-cctv-haunted-source
+                data-channel-code="SOURCE 005"
+                data-channel-name="НЕИЗВЕСТНАЯ КАМЕРА"
+                data-video-pool="assets/staff/curators/irina/intrusion-plague-doctor-camera.mp4"
+                data-poster="assets/staff/curators/irina/intrusion-plague-doctor-camera-poster.webp"
+                data-status="Канал отключён. Источник сигнала отсутствует."
+                data-loop="false"
+              ></span>
+            </div>
           </div>
         </section>
 
-        <section class="staff-content staff-archive-terminal">
-          <div class="archive-login-screen" id="archive-login-screen">
-            <p class="archive-status blink">ДОСТУП В АРХИВ ОГРАНИЧЕН</p>
-            <p class="archive-prompt">Введите код авторизации для доступа к протоколам:</p>
-            <div id="archive-auth-form" class="archive-form">
-              <input type="text" id="archive-password" class="archive-input" placeholder="***" maxlength="3" autocomplete="off" style="-webkit-text-security: disc;" />
-              <button type="button" id="archive-submit-btn" class="archive-submit">ВВОД</button>
-            </div>
-            <p id="archive-error" class="archive-error" hidden>ОШИБКА: НЕВЕРНЫЙ КОД</p>
-          </div>
-
-          <div class="archive-content" id="archive-content" hidden>
-            <p class="archive-success">ДОСТУП РАЗРЕШЕН. ЗАГРУЗКА ПОСЛЕДНИХ ФАЙЛОВ...</p>
-            
-            <div class="archive-grid">
-              <div class="archive-item">
-                <img src="assets/staff/archive/blueprint_01.webp" alt="Чертеж биомассы" class="archive-thumbnail" data-full="assets/staff/archive/blueprint_01.webp" />
-                <span class="archive-label">FILE_089: PROTOCOL_B</span>
-              </div>
-              <div class="archive-item">
-                <img src="assets/staff/archive/graph_01.webp" alt="График аномалии" class="archive-thumbnail" data-full="assets/staff/archive/graph_01.webp" />
-                <span class="archive-label">FILE_091: STATS_ANOMALY</span>
-              </div>
-              <div class="archive-item">
-                <img src="assets/staff/archive/artifact_01.webp" alt="Артефакт" class="archive-thumbnail" data-full="assets/staff/archive/artifact_01.webp" />
-                <span class="archive-label">FILE_094: OBJECT_VIEW</span>
-              </div>
-            </div>
-
-            <div class="archive-actions">
-              <button class="archive-button" type="button" data-archive-request>ЗАПРОСИТЬ ОСТАЛЬНЫЕ ФАЙЛЫ</button>
-              <p class="archive-request-response" data-archive-request-response aria-live="polite" hidden></p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Lightbox Modal -->
-        <div id="image-lightbox" class="lightbox" hidden>
-          <div class="lightbox-content">
-            <button class="lightbox-close" aria-label="Закрыть">&times;</button>
-            <img id="lightbox-image" src="" alt="Full size" />
-            <div class="lightbox-caption"></div>
-          </div>
-        </div>
       </main>
 
       <footer class="site-footer">
@@ -385,13 +401,13 @@
 
         <p class="guest-content">© Тындекс Роботикс. Радость, проверенная временем.</p>
 
-        <p class="staff-content">© TYDEX ROBOTICS INTERNAL NETWORK // ARCHIVE UNIT-4</p>
+        <p class="staff-content">все выпуски наших шоу</p>
         <nav class="social-links" aria-label="Социальные сети">
-          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
-          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
-          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="01" aria-label="Telegram"><span>Telegram</span></a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" data-vhs-code="02" aria-label="Instagram"><span>Instagram</span></a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer" data-vhs-code="03" aria-label="YouTube"><span>YouTube</span></a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="04" aria-label="VK"><span>VK</span></a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer" data-vhs-code="05" aria-label="TikTok"><span>TikTok</span></a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>

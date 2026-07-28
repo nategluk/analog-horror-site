@@ -20,12 +20,15 @@
   </head>
   <body class="about-page">
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
+    <div class="site-wrapper glitch-target broadcast-shell-page about-broadcast-page">
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
             <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="assets/staff/logo.png" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
           </h1>
           <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
         </div>
@@ -33,17 +36,17 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul>
-          <li><a href="/">Главная</a></li>
-          <li><a href="about" aria-current="page">О компании</a></li>
-          <li><a href="staff">Персонал</a></li>
-          <li><a href="hiring">Работа</a></li>
-          <li><a href="faq">FAQ</a></li>
-          <li><a href="donate">Связь и поддержка</a></li>
-          <li><a href="archive" rel="nofollow">Архив</a></li>
+          <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="about" aria-current="page"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="hiring.html"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="faq"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="donate"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
 
-      <main class="panel">
+      <main class="panel about-panel">
         <section class="guest-content">
           <div class="about-intro">
             <div class="about-intro__copy">
@@ -123,28 +126,51 @@
           </p>
         </section>
 
-        <section class="staff-content">
-          <img src="assets/staff/about-slides.png" alt="Технические коммуникации парка: серые панели и водные горки" style="display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--border) 60%, transparent); margin-bottom: 2rem; box-shadow: 0 10px 30px var(--shadow); filter: contrast(1.15) brightness(0.85);" />
-          <h2>ПРОТОКОЛ 01: ЛИМИНАЛЬНАЯ ЛОМКА</h2>
-          <p>
-            Статус: <strong>Сбор сырья.</strong> Эффективность экстракции:
-            <strong>98.4%</strong>
-          </p>
-          <h3>Цели и Задачи (Директива Администрации):</h3>
-          <p>
-            Корпорация «Детский Жир» — это вертикально-интегрированный производственный цикл по
-            выжимке липидных воспоминаний и гормонального субстрата из малогабаритных
-            биологических единиц. Наша цель: бесперебойная поставка Формулы 312. 
-            
-          </p>
+        <section class="staff-content staff-about">
+          <header class="staff-about__header">
+            <div>
+              <p class="staff-about__kicker">ЖИР ТВ // КАССЕТА ДЛЯ НОВЫХ СОТРУДНИКОВ</p>
+              <h2>Ориентационный фильм №01</h2>
+            </div>
+            <span>PLAYBACK // 31:12</span>
+          </header>
+          <figure class="staff-about__screen">
+            <img
+              src="assets/staff/about-slides.png"
+              alt="Технические коммуникации парка: серые панели и водные горки"
+            />
+            <figcaption>
+              <span>CH 01</span>
+              <strong>ПРОТОКОЛ 01: ЛИМИНАЛЬНАЯ ЛОМКА</strong>
+              <span>SP</span>
+            </figcaption>
+          </figure>
+          <section class="staff-about__brief" aria-labelledby="staff-about-brief-title">
+            <div>
+              <p>СТАТУС ПРОГРАММЫ</p>
+              <strong>СБОР СЫРЬЯ</strong>
+            </div>
+            <div>
+              <p>ЭФФЕКТИВНОСТЬ ЭКСТРАКЦИИ</p>
+              <strong>98.4%</strong>
+            </div>
+            <div class="staff-about__brief-copy">
+              <h3 id="staff-about-brief-title">Директива Администрации</h3>
+              <p>
+                Корпорация «Детский Жир» — это вертикально-интегрированный производственный цикл
+                по выжимке липидных воспоминаний и гормонального субстрата из малогабаритных
+                биологических единиц. Наша цель: бесперебойная поставка Формулы 312.
+              </p>
+            </div>
+          </section>
           <section class="asset-classifier" data-asset-classifier aria-labelledby="asset-classifier-title">
             <header class="asset-classifier__header">
               <div>
-                <p class="asset-classifier__kicker">ВНУТРЕННИЙ РЕЕСТР // ДОПУСК ЗЕЛЁНЫЙ</p>
-                <h3 id="asset-classifier-title">Структура активов:</h3>
+                <p class="asset-classifier__kicker">ГЛАВЫ КАССЕТЫ // ДОПУСК ЗЕЛЁНЫЙ</p>
+                <h3 id="asset-classifier-title">Каталог служебных ролей</h3>
               </div>
               <p class="asset-classifier__status" data-asset-status hidden>
-                ЗАПИСЬ <output data-asset-position>01 / 11</output>
+                ГЛАВА <output data-asset-position>01 / 11</output>
               </p>
             </header>
             <div class="asset-classifier__toolbar" data-asset-toolbar hidden>
@@ -155,7 +181,7 @@
                 aria-controls="asset-classifier-catalog"
                 data-asset-catalog-toggle
               >
-                [ КАТАЛОГ ]
+                [ СОДЕРЖАНИЕ ]
               </button>
               <input
                 class="asset-classifier__progress"
@@ -267,9 +293,9 @@
             </article>
             </div>
             <div class="asset-classifier__actions" data-asset-actions hidden>
-              <button type="button" data-asset-previous>← НАЗАД</button>
-              <span aria-hidden="true">СВАЙП / КЛАВИШИ ← →</span>
-              <button type="button" data-asset-next>СЛЕДУЮЩАЯ ЗАПИСЬ →</button>
+              <button type="button" data-asset-previous>← ПРЕДЫДУЩАЯ</button>
+              <span aria-hidden="true">ПЕРЕМОТКА / КЛАВИШИ ← →</span>
+              <button type="button" data-asset-next>СЛЕДУЮЩАЯ ГЛАВА →</button>
             </div>
             <p class="visually-hidden" role="status" aria-live="polite" data-asset-announcer></p>
           </section>
@@ -314,13 +340,13 @@
 
       <footer class="site-footer site-footer--quiet">
         <p class="guest-content">Мы рядом — пока вы верите в добро.</p>
-        <p class="staff-content">COMPLIANCE LOG: CORP_PROFILE VIEW — SESSION AUDITED</p>
+        <p class="staff-content">обязательная вводная кассета // просмотр зарегистрирован</p>
         <nav class="social-links" aria-label="Социальные сети">
-          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
-          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
-          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="01" aria-label="Telegram"><span>Telegram</span></a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" data-vhs-code="02" aria-label="Instagram"><span>Instagram</span></a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer" data-vhs-code="03" aria-label="YouTube"><span>YouTube</span></a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="04" aria-label="VK"><span>VK</span></a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer" data-vhs-code="05" aria-label="TikTok"><span>TikTok</span></a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>

@@ -8,6 +8,7 @@
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
+  const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
   const DOSSIER_ACCESS_ENDPOINT =
@@ -286,79 +287,263 @@
     loadCurrentTrack({ keepPlaying: wasPlaying });
   };
 
-  const getCctvPool = (video) => (video.dataset.videoPool || "")
+  const getCctvPool = (source) => (source.dataset.videoPool || "")
     .split("|")
     .map((src) => src.trim())
     .filter(Boolean);
 
-  const getCctvPlayButton = (video) => video.closest(".cctv-screen")?.querySelector("[data-cctv-play]");
-
-  const setCctvButtonState = (video, state) => {
-    const button = getCctvPlayButton(video);
-    if (!button) return;
-
-    button.classList.toggle("is-playing", state === "playing");
-    button.classList.toggle("is-loading", state === "loading");
-    button.disabled = state === "loading";
-
-    if (state === "playing") {
-      button.innerHTML = '<span aria-hidden="true">Ⅱ</span> PAUSE';
-    } else if (state === "loading") {
-      button.innerHTML = '<span aria-hidden="true">...</span> SYNC';
-    } else {
-      button.innerHTML = '<span aria-hidden="true">▶</span> PLAY';
-    }
+  const pickCctvSource = (pool, currentSource = "") => {
+    const alternatives = pool.filter((src) => src !== currentSource);
+    const candidates = alternatives.length ? alternatives : pool;
+    return candidates[Math.floor(Math.random() * candidates.length)] || "";
   };
 
   const resetCctvVideo = (video) => {
     video.pause();
     video.removeAttribute("src");
     video.load();
-    delete video.dataset.cctvSelected;
-    setCctvButtonState(video, "ready");
   };
 
-  const ensureCctvControls = (video) => {
-    if (video.dataset.cctvControlsReady === "true") return;
+  const playCctvVideo = (video) => {
+    const pool = getCctvPool(video);
+    if (!pool.length) return;
 
-    const button = getCctvPlayButton(video);
-    if (!button) return;
+    if (!video.dataset.cctvSelected) {
+      video.dataset.cctvSelected = pickCctvSource(pool);
+    }
 
-    video.dataset.cctvControlsReady = "true";
-    button.addEventListener("click", () => {
-      if (!video.paused) {
-        video.pause();
+    if (!video.src) {
+      video.src = video.dataset.cctvSelected;
+    }
+
+    video.play().catch(() => {});
+  };
+
+  const clearCctvHauntTimer = (consoleElement) => {
+    if (!consoleElement._cctvHauntTimer) return;
+
+    window.clearTimeout(consoleElement._cctvHauntTimer);
+    consoleElement._cctvHauntTimer = null;
+    delete consoleElement.dataset.cctvHauntNextAt;
+  };
+
+  const applyCctvChannel = (
+    consoleElement,
+    source,
+    { autoplay = false, haunted = false } = {}
+  ) => {
+    const video = consoleElement.querySelector("[data-cctv-video]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    const status = consoleElement.querySelector("[data-cctv-channel-status]");
+    const powerButton = consoleElement.querySelector("[data-cctv-power]");
+    const nextButton = consoleElement.querySelector("[data-cctv-next]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
+    if (!video || !source) return;
+
+    const pool = getCctvPool(source);
+    const nextSource = pickCctvSource(pool, video.dataset.cctvSelected);
+    const channelCode = source.dataset.channelCode || "CH --";
+    const channelName = source.dataset.channelName || "ИСТОЧНИК НЕ ОПРЕДЕЛЁН";
+
+    video.pause();
+    video.removeAttribute("src");
+    video.dataset.videoPool = source.dataset.videoPool || "";
+    video.dataset.cctvSelected = nextSource;
+    video.poster = source.dataset.poster || "";
+    video.loop = source.dataset.loop !== "false";
+    video.setAttribute("aria-label", `${channelCode} ${channelName}`);
+    video.load();
+
+    if (label) label.textContent = `${channelCode} // ${channelName}`;
+    if (status) status.textContent = source.dataset.status || "Статус: сигнал принят.";
+    consoleElement.classList.remove("is-powered-off");
+    if (remoteStatus) remoteStatus.textContent = channelCode;
+
+    if (haunted) {
+      consoleElement.dataset.cctvPowered = "false";
+      consoleElement.dataset.cctvHauntPhase = "video";
+      consoleElement.classList.add("is-haunting", "is-haunt-playing", "is-intercepted");
+      if (powerButton) {
+        powerButton.setAttribute("aria-pressed", "false");
+        powerButton.setAttribute("aria-label", "Включить телевизор");
+      }
+      if (nextButton) nextButton.disabled = true;
+    } else {
+      consoleElement.dataset.cctvPowered = "true";
+      consoleElement.dataset.cctvHauntPhase = "idle";
+      consoleElement.classList.remove("is-haunting", "is-haunt-playing", "is-intercepted");
+      if (powerButton) {
+        powerButton.setAttribute("aria-pressed", "true");
+        powerButton.setAttribute("aria-label", "Выключить телевизор");
+      }
+      if (nextButton) nextButton.disabled = false;
+    }
+
+    if (autoplay && body.classList.contains("staff-mode")) {
+      playCctvVideo(video);
+    }
+  };
+
+  const stopCctvConsole = (consoleElement) => {
+    const video = consoleElement.querySelector("[data-cctv-video]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    const status = consoleElement.querySelector("[data-cctv-channel-status]");
+    const powerButton = consoleElement.querySelector("[data-cctv-power]");
+    const nextButton = consoleElement.querySelector("[data-cctv-next]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
+    if (!video) return;
+
+    clearCctvHauntTimer(consoleElement);
+    if (consoleElement._cctvState) {
+      consoleElement._cctvState.hauntActive = false;
+    }
+    resetCctvVideo(video);
+    consoleElement.dataset.cctvPowered = "false";
+    consoleElement.dataset.cctvHauntPhase = "idle";
+    consoleElement.classList.add("is-powered-off");
+    consoleElement.classList.remove("is-haunting", "is-haunt-playing", "is-intercepted");
+    if (label) label.textContent = "CH -- // НЕТ СИГНАЛА";
+    if (status) status.textContent = "Питание отключено.";
+    if (powerButton) {
+      powerButton.setAttribute("aria-pressed", "false");
+      powerButton.setAttribute("aria-label", "Включить телевизор");
+    }
+    if (nextButton) nextButton.disabled = true;
+    if (remoteStatus) remoteStatus.textContent = "TV OFF";
+  };
+
+  const startCctvNormal = (consoleElement) => {
+    const state = consoleElement._cctvState;
+    if (!state?.sources.length) return;
+
+    clearCctvHauntTimer(consoleElement);
+    state.hauntActive = false;
+    applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
+  };
+
+  const scheduleCctvHauntVideo = (consoleElement) => {
+    const state = consoleElement._cctvState;
+    if (!state?.hauntActive || !state.hauntedSources.length) return;
+
+    clearCctvHauntTimer(consoleElement);
+    consoleElement.dataset.cctvHauntNextAt = String(Date.now() + CCTV_HAUNT_DELAY);
+    consoleElement._cctvHauntTimer = window.setTimeout(() => {
+      if (!consoleElement.isConnected || !state.hauntActive) return;
+
+      const alternatives = state.hauntedSources.filter(
+        (source) => source !== state.lastHauntedSource
+      );
+      const candidates = alternatives.length ? alternatives : state.hauntedSources;
+      const source = candidates[Math.floor(Math.random() * candidates.length)];
+      state.lastHauntedSource = source;
+      applyCctvChannel(consoleElement, source, { autoplay: true, haunted: true });
+    }, CCTV_HAUNT_DELAY);
+  };
+
+  const showCctvHauntNoise = (consoleElement) => {
+    const state = consoleElement._cctvState;
+    const video = consoleElement.querySelector("[data-cctv-video]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    const status = consoleElement.querySelector("[data-cctv-channel-status]");
+    const powerButton = consoleElement.querySelector("[data-cctv-power]");
+    const nextButton = consoleElement.querySelector("[data-cctv-next]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-status]");
+    if (!state || !video) return;
+
+    clearCctvHauntTimer(consoleElement);
+    resetCctvVideo(video);
+    state.hauntActive = true;
+    consoleElement.dataset.cctvPowered = "false";
+    consoleElement.dataset.cctvHauntPhase = "noise";
+    consoleElement.classList.add("is-powered-off", "is-haunting");
+    consoleElement.classList.remove("is-haunt-playing", "is-intercepted");
+    if (label) label.textContent = "CH -- // НЕТ СИГНАЛА";
+    if (status) status.textContent = "Питание отключено.";
+    if (powerButton) {
+      powerButton.setAttribute("aria-pressed", "false");
+      powerButton.setAttribute("aria-label", "Включить телевизор");
+    }
+    if (nextButton) nextButton.disabled = true;
+    if (remoteStatus) remoteStatus.textContent = "TV OFF";
+
+    scheduleCctvHauntVideo(consoleElement);
+  };
+
+  const initCctvConsole = (consoleElement) => {
+    if (consoleElement.dataset.cctvConsoleReady === "true") return;
+
+    const video = consoleElement.querySelector("[data-cctv-video]");
+    const sources = [...consoleElement.querySelectorAll("[data-cctv-source]")];
+    const hauntedSources = [
+      ...consoleElement.querySelectorAll("[data-cctv-haunted-source]"),
+    ];
+    const powerButton = consoleElement.querySelector("[data-cctv-power]");
+    const nextButton = consoleElement.querySelector("[data-cctv-next]");
+    if (!video || !sources.length || !powerButton || !nextButton) return;
+
+    consoleElement.dataset.cctvConsoleReady = "true";
+    consoleElement._cctvState = {
+      sources,
+      hauntedSources,
+      sourceIndex: 0,
+      hauntActive: false,
+      lastHauntedSource: null,
+    };
+
+    powerButton.addEventListener("click", () => {
+      const isPowered = consoleElement.dataset.cctvPowered === "true";
+      if (isPowered) {
+        showCctvHauntNoise(consoleElement);
         return;
       }
 
-      const pool = getCctvPool(video);
-      if (!pool.length) return;
-
-      if (!video.dataset.cctvSelected) {
-        video.dataset.cctvSelected = pool[Math.floor(Math.random() * pool.length)];
-      }
-
-      if (!video.src) {
-        video.src = video.dataset.cctvSelected;
-      }
-
-      setCctvButtonState(video, "loading");
-      video.play()
-        .then(() => setCctvButtonState(video, "playing"))
-        .catch(() => setCctvButtonState(video, "ready"));
+      startCctvNormal(consoleElement);
     });
 
-    video.addEventListener("play", () => setCctvButtonState(video, "playing"));
-    video.addEventListener("pause", () => setCctvButtonState(video, "ready"));
+    nextButton.addEventListener("click", () => {
+      if (consoleElement.dataset.cctvPowered !== "true") return;
+
+      const state = consoleElement._cctvState;
+      state.sourceIndex = (state.sourceIndex + 1) % state.sources.length;
+      applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
+    });
+
+    video.addEventListener("ended", () => {
+      const state = consoleElement._cctvState;
+      if (!state?.hauntActive || !consoleElement.classList.contains("is-haunt-playing")) {
+        return;
+      }
+
+      showCctvHauntNoise(consoleElement);
+    });
+
+    if (body.classList.contains("staff-mode")) {
+      startCctvNormal(consoleElement);
+    } else {
+      stopCctvConsole(consoleElement);
+    }
   };
 
   const updateCctvVideos = (isStaff) => {
+    document.querySelectorAll("[data-cctv-console]").forEach((consoleElement) => {
+      initCctvConsole(consoleElement);
+      if (isStaff) {
+        if (consoleElement.dataset.cctvPowered !== "true") {
+          startCctvNormal(consoleElement);
+        }
+      } else {
+        stopCctvConsole(consoleElement);
+      }
+    });
+
     document.querySelectorAll("[data-cctv-video]").forEach((video) => {
       if (video.tagName !== "VIDEO") return;
-      ensureCctvControls(video);
 
       if (!isStaff) {
-        resetCctvVideo(video);
+        const consoleElement = video.closest("[data-cctv-console]");
+        if (!consoleElement) {
+          resetCctvVideo(video);
+        }
         return;
       }
     });
@@ -373,6 +558,89 @@
 
     modeSwitchAudio.currentTime = 0;
     modeSwitchAudio.play().catch(() => {});
+  };
+
+  const initHiringThreshold = () => {
+    const wrapper = document.querySelector(".broadcast-shell-page");
+    if (!wrapper) return;
+
+    let dialog = document.querySelector("[data-hiring-threshold]");
+    if (!dialog) {
+      dialog = document.createElement("dialog");
+      dialog.className = "hiring-threshold";
+      dialog.dataset.hiringThreshold = "true";
+      dialog.setAttribute("aria-labelledby", "hiring-threshold-title");
+      dialog.setAttribute("aria-describedby", "hiring-threshold-copy");
+      dialog.innerHTML = `
+        <div class="hiring-threshold__panel">
+          <p class="hiring-threshold__kicker">ЖИР ТВ // ВЫХОД ИЗ ЭФИРА</p>
+          <h2 id="hiring-threshold-title">Ты уверен?</h2>
+          <p id="hiring-threshold-copy">
+            Следующий канал не относится к телевизионной сети. Возврат к обычному сигналу
+            не гарантируется.
+          </p>
+          <div class="hiring-threshold__actions">
+            <button type="button" data-hiring-threshold-cancel>НЕТ, ОСТАТЬСЯ</button>
+            <button type="button" data-hiring-threshold-confirm>ДА</button>
+          </div>
+        </div>
+      `;
+      body.append(dialog);
+    }
+
+    const cancelButton = dialog.querySelector("[data-hiring-threshold-cancel]");
+    const confirmButton = dialog.querySelector("[data-hiring-threshold-confirm]");
+    if (dialog.dataset.hiringThresholdReady !== "true") {
+      dialog.dataset.hiringThresholdReady = "true";
+
+      const closeDialog = () => {
+        if (dialog.open) dialog.close();
+        dialog._hiringSourceLink?.focus();
+      };
+
+      cancelButton?.addEventListener("click", closeDialog);
+      dialog.addEventListener("cancel", (event) => {
+        event.preventDefault();
+        closeDialog();
+      });
+
+      confirmButton?.addEventListener("click", () => {
+        if (!dialog._hiringTargetUrl || switching || isNavigating) return;
+
+        confirmButton.disabled = true;
+        dialog.close();
+        playModeSwitchSound();
+        body.classList.add("glitching");
+
+        window.setTimeout(async () => {
+          const url = dialog._hiringTargetUrl;
+          dialog._hiringTargetUrl = null;
+          const success = await fetchAndReplace(url);
+          if (success) {
+            window.history.pushState({}, "", url);
+            window.scrollTo({ top: 0, behavior: "auto" });
+          }
+          body.classList.remove("glitching");
+          confirmButton.disabled = false;
+        }, 1050);
+      });
+    }
+
+    wrapper.querySelectorAll('.site-nav a[href="hiring"], .site-nav a[href="hiring.html"]').forEach((link) => {
+      if (link.dataset.hiringThresholdReady === "true") return;
+      link.dataset.hiringThresholdReady = "true";
+
+      link.addEventListener("click", (event) => {
+        if (!body.classList.contains("staff-mode")) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        dialog._hiringSourceLink = link;
+        dialog._hiringTargetUrl = new URL("hiring.html", window.location.href).href;
+        dialog.showModal();
+        window.requestAnimationFrame(() => confirmButton?.focus());
+      });
+    });
   };
 
   const initStaffHomeNotice = () => {
@@ -1629,8 +1897,8 @@
         <section class="dossier-claim__sent" data-access-sent hidden>
           <strong>ССЫЛКА ДОСТУПА ОТПРАВЛЕНА</strong>
           <p>
-            Откройте новое письмо на этом устройстве. Роль, история сеансов и
-            материалы будут загружены из серверной кадровой базы.
+            Откройте новое письмо на этом устройстве. Роль и материалы будут
+            загружены из серверной кадровой базы.
           </p>
           <button type="button" data-access-done>ПОНЯТНО</button>
         </section>
@@ -5421,8 +5689,6 @@
     const messageClose = dossier.querySelector("[data-player-message-close]");
     const messageAttachment = dossier.querySelector("[data-player-message-attachment]");
     const messageDelete = dossier.querySelector("[data-player-message-delete]");
-    const sessionsEmpty = dossier.querySelector("[data-player-sessions-empty]");
-    const sessionList = dossier.querySelector("[data-player-session-list]");
     const materials = dossier.querySelector("[data-player-materials]");
     const materialsEmpty = dossier.querySelector("[data-player-materials-empty]");
     const identification = dossier.querySelector("[data-player-identification]");
@@ -5572,27 +5838,6 @@
         entry.append(button, remove);
         materials.append(entry);
       });
-    };
-
-    const renderSessions = (profile) => {
-      sessionList.innerHTML = "";
-      sessionsEmpty.hidden = profile.sessions.length > 0;
-      profile.sessions
-        .slice()
-        .sort((a, b) => (a.number || 0) - (b.number || 0))
-        .forEach((session) => {
-          const row = document.createElement("div");
-          const number = document.createElement("strong");
-          const role = document.createElement("span");
-          const marks = document.createElement("span");
-          row.className = "personnel-session";
-          number.textContent = `СЕАНС ${String(session.number || 1).padStart(2, "0")}`;
-          role.textContent =
-            session.role === "volunteer" ? "ВОЛОНТЁР" : "АНИМАТОР";
-          marks.textContent = `МЕТКИ МАРШРУТА ${session.routeMarks || 0}/9`;
-          row.append(number, role, marks);
-          sessionList.append(row);
-        });
     };
 
     const renderInbox = (profile) => {
@@ -5754,7 +5999,6 @@
     const renderProfileCollections = (profile) => {
       renderInbox(profile);
       renderMaterials(profile);
-      renderSessions(profile);
       renderTrash(profile);
       setActiveProfileTab(activeProfileTab, profile);
       if (activeMessageId) renderMessage(profile, activeMessageId);
@@ -6241,7 +6485,7 @@
     classifier.dataset.assetClassifierReady = "true";
     recordsContainer.classList.add("is-enhanced");
     recordsContainer.tabIndex = 0;
-    recordsContainer.setAttribute("aria-label", "Просмотр записей внутреннего реестра");
+    recordsContainer.setAttribute("aria-label", "Просмотр глав ориентационной кассеты");
     status.hidden = false;
     toolbar.hidden = false;
     actions.hidden = false;
@@ -6274,11 +6518,11 @@
       mediaButton.setAttribute("aria-label", `Открыть карточку: ${title}`);
 
       meta.className = "asset-record__meta";
-      meta.textContent = `ЗАПИСЬ ${String(index + 1).padStart(2, "0")} // ДОПУСК ЗЕЛЁНЫЙ`;
+      meta.textContent = `ГЛАВА ${String(index + 1).padStart(2, "0")} // ДОПУСК ЗЕЛЁНЫЙ`;
       visibleTitle.className = "asset-record__visible-title";
       visibleTitle.textContent = title;
       cue.className = "asset-record__cue";
-      cue.textContent = "[ ОТКРЫТЬ КАРТОЧКУ ]";
+      cue.textContent = "[ ПОКАЗАТЬ ТИТРЫ ]";
 
       image.replaceWith(mediaButton);
       mediaButton.append(image, meta, visibleTitle, cue);
@@ -6298,7 +6542,7 @@
           "aria-label",
           `${isOpen ? "Скрыть" : "Открыть"} карточку: ${title}`
         );
-        cue.textContent = isOpen ? "[ СКРЫТЬ КАРТОЧКУ ]" : "[ ОТКРЫТЬ КАРТОЧКУ ]";
+        cue.textContent = isOpen ? "[ СКРЫТЬ ТИТРЫ ]" : "[ ПОКАЗАТЬ ТИТРЫ ]";
       };
 
       mediaButton.addEventListener("click", () => {
@@ -6311,7 +6555,7 @@
     const closeCatalog = () => {
       catalog.hidden = true;
       catalogToggle.setAttribute("aria-expanded", "false");
-      catalogToggle.textContent = "[ КАТАЛОГ ]";
+      catalogToggle.textContent = "[ СОДЕРЖАНИЕ ]";
     };
 
     const catalogButtons = records.map((record, index) => {
@@ -6363,7 +6607,7 @@
       localStorage.setItem(ABOUT_ASSET_RECORD_KEY, String(currentIndex + 1));
 
       if (announce && announcer) {
-        announcer.textContent = `Запись ${currentIndex + 1} из ${records.length}: ${activeHeading}`;
+        announcer.textContent = `Глава ${currentIndex + 1} из ${records.length}: ${activeHeading}`;
       }
     };
 
@@ -6371,7 +6615,7 @@
       const shouldOpen = catalog.hidden;
       catalog.hidden = !shouldOpen;
       catalogToggle.setAttribute("aria-expanded", String(shouldOpen));
-      catalogToggle.textContent = shouldOpen ? "[ ЗАКРЫТЬ КАТАЛОГ ]" : "[ КАТАЛОГ ]";
+      catalogToggle.textContent = shouldOpen ? "[ ЗАКРЫТЬ СОДЕРЖАНИЕ ]" : "[ СОДЕРЖАНИЕ ]";
       if (shouldOpen) {
         catalogButtons[currentIndex]?.scrollIntoView({ block: "nearest" });
       }
@@ -6559,6 +6803,7 @@
     initStaffProtocolWarning();
     initArchiveCatalog();
     initMobileNavigation();
+    initHiringThreshold();
     initStaffHomeNotice();
 
     const savedMode = localStorage.getItem(MODE_KEY);
@@ -6639,80 +6884,6 @@
       });
     });
 
-    // Archive Terminal Logic
-    const archiveForm = document.getElementById("archive-auth-form");
-    const archivePassword = document.getElementById("archive-password");
-    const archiveError = document.getElementById("archive-error");
-    const archiveLoginScreen = document.getElementById("archive-login-screen");
-    const archiveContent = document.getElementById("archive-content");
-    
-    // Lightbox Logic
-    const lightbox = document.getElementById("image-lightbox");
-    const lightboxImg = document.getElementById("lightbox-image");
-    const lightboxCaption = document.querySelector(".lightbox-caption");
-    const lightboxClose = document.querySelector(".lightbox-close");
-    const archiveThumbnails = document.querySelectorAll(".archive-thumbnail");
-
-    const archiveBtn = document.getElementById("archive-submit-btn");
-    const archiveRequest = document.querySelector("[data-archive-request]");
-    const archiveRequestResponse = document.querySelector("[data-archive-request-response]");
-
-    const handleArchiveAuth = () => {
-      if (archivePassword.value === "312") {
-        archiveLoginScreen.hidden = true;
-        archiveContent.hidden = false;
-        playModeSwitchSound();
-      } else {
-        archiveError.hidden = false;
-        archivePassword.value = "";
-        archivePassword.focus();
-      }
-    };
-
-    if (archiveBtn) {
-      archiveBtn.addEventListener("click", handleArchiveAuth);
-      archivePassword.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          e.preventDefault();
-          handleArchiveAuth();
-        }
-      });
-    }
-
-    if (archiveRequest && archiveRequestResponse) {
-      archiveRequest.addEventListener("click", () => {
-        archiveRequestResponse.textContent =
-          "ЗАПРОС ОТКЛОНЕН // BLUE ACCESS ONLY // ОСТАВШИЕСЯ ФАЙЛЫ НЕ ПРЕДНАЗНАЧЕНЫ ДЛЯ ГОСТЕЙ";
-        archiveRequestResponse.hidden = false;
-        archiveRequest.textContent = "ПОВТОРИТЬ ЗАПРОС";
-        archiveRequest.classList.add("is-denied");
-        playModeSwitchSound();
-      });
-    }
-
-    if (lightbox && lightboxClose) {
-      archiveThumbnails.forEach(img => {
-        img.addEventListener("click", () => {
-          const fullSrc = img.getAttribute("data-full");
-          const caption = img.nextElementSibling ? img.nextElementSibling.textContent : "";
-          lightboxImg.src = fullSrc;
-          lightboxCaption.textContent = caption;
-          lightbox.hidden = false;
-        });
-      });
-
-      lightboxClose.addEventListener("click", () => {
-        lightbox.hidden = true;
-        lightboxImg.src = "";
-      });
-
-      lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox) {
-          lightbox.hidden = true;
-          lightboxImg.src = "";
-        }
-      });
-    }
   };
 
   // --- SPA Router ---

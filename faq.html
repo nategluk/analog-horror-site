@@ -18,14 +18,17 @@
     <meta property="og:image:alt" content="Фасад развлекательного комплекса «Детский ЖИР» в тумане, с теплым светом окон и улыбающимся знаком солнца." />
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body>
+  <body class="faq-page">
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
+    <div class="site-wrapper glitch-target broadcast-shell-page faq-broadcast-page">
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
             <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="assets/staff/logo.png" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
           </h1>
           <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
         </div>
@@ -33,13 +36,13 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul>
-          <li><a href="/">Главная</a></li>
-          <li><a href="about">О компании</a></li>
-          <li><a href="staff">Персонал</a></li>
-          <li><a href="hiring">Работа</a></li>
-          <li><a href="faq" aria-current="page">FAQ</a></li>
-          <li><a href="donate">Связь и поддержка</a></li>
-          <li><a href="archive" rel="nofollow">Архив</a></li>
+          <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="about"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="hiring.html"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="faq" aria-current="page"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="donate"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
 
@@ -174,8 +177,13 @@
         </section>
 
         <section class="staff-content faq-section staff-faq" aria-labelledby="staff-faq-heading">
-          <p class="faq-kicker">ВНУТРЕННИЙ ПОРТАЛ АДМИНИСТРАЦИИ</p>
-          <h2 id="staff-faq-heading">Инструктаж для персонала</h2>
+          <header class="staff-faq__header">
+            <div>
+              <p class="faq-kicker">ЖИР ТВ // СЛУЖЕБНАЯ СПРАВОЧНАЯ</p>
+              <h2 id="staff-faq-heading">Инструктаж для персонала</h2>
+            </div>
+            <span>PAGE 300 // HOLD</span>
+          </header>
 
           <div class="faq-list">
             <details class="faq-item" open>
@@ -302,13 +310,13 @@
 
       <footer class="site-footer">
         <p class="guest-content">Справочная служба слышит каждый вопрос.</p>
-        <p class="staff-content">TRAINING LOG: FAQ ACCESS GRANTED // SESSION RECORDED</p>
+        <p class="staff-content">служебная справочная // выберите вопрос на пульте</p>
         <nav class="social-links" aria-label="Социальные сети">
-          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
-          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
-          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
-          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" aria-label="Telegram" data-vhs-code="01"><span>Telegram</span></a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" data-vhs-code="02"><span>Instagram</span></a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer" aria-label="YouTube" data-vhs-code="03"><span>YouTube</span></a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer" aria-label="VK" data-vhs-code="04"><span>VK</span></a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer" aria-label="TikTok" data-vhs-code="05"><span>TikTok</span></a>
         </nav>
         <div class="footer-trigger" title="service point" aria-hidden="true"></div>
       </footer>
