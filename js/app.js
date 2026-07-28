@@ -2112,7 +2112,8 @@
     if (!panel || !button || button.dataset.accessReady === "true") return;
 
     button.dataset.accessReady = "true";
-    panel.hidden = hasActiveDossierAuthSession();
+    panel.hidden =
+      Boolean(readStaffProfile()) || hasActiveDossierAuthSession();
     button.addEventListener("click", openDossierAccess);
   };
 
