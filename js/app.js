@@ -1279,6 +1279,12 @@
     "avatar-03",
     "avatar-04",
   ];
+  const staffAvatarSources = {
+    "avatar-01": audioAsset("assets/staff/player-avatars/avatar-01.webp"),
+    "avatar-02": audioAsset("assets/staff/player-avatars/avatar-02.webp"),
+    "avatar-03": audioAsset("assets/staff/player-avatars/avatar-03-fox.webp"),
+    "avatar-04": audioAsset("assets/staff/player-avatars/avatar-04-dog.webp"),
+  };
   const legacyStaffAvatarMap = {
     overexposed: "avatar-02",
     drawing: "avatar-04",
@@ -5919,10 +5925,18 @@
 
     const setAvatarAppearance = (element, avatarId) => {
       if (!element) return;
+      const resolvedAvatarId = getStaffAvatarId(avatarId);
       element.classList.remove(...avatarClasses);
       element.classList.add(
-        `personnel-avatar--${getStaffAvatarId(avatarId) || "pending"}`
+        `personnel-avatar--${resolvedAvatarId || "pending"}`
       );
+      if (element instanceof HTMLImageElement) {
+        if (resolvedAvatarId) {
+          element.src = staffAvatarSources[resolvedAvatarId];
+        } else {
+          element.removeAttribute("src");
+        }
+      }
     };
 
     const getProfileStatus = (profile) => {
