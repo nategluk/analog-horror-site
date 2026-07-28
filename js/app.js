@@ -654,6 +654,17 @@
     applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
   };
 
+  const advanceCctvChannel = (consoleElement) => {
+    const state = consoleElement._cctvState;
+    if (!state?.sources.length || consoleElement.dataset.cctvPowered !== "true") {
+      return;
+    }
+
+    state.sourceIndex = (state.sourceIndex + 1) % state.sources.length;
+    applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
+    playCctvSound(consoleElement, "channel");
+  };
+
   const scheduleCctvHauntVideo = (consoleElement) => {
     const state = consoleElement._cctvState;
     if (!state?.hauntActive || !state.hauntedSources.length) return;
@@ -760,10 +771,7 @@
       if (consoleElement.dataset.cctvPowered !== "true") return;
 
       playCctvSound(consoleElement, "click");
-      const state = consoleElement._cctvState;
-      state.sourceIndex = (state.sourceIndex + 1) % state.sources.length;
-      applyCctvChannel(consoleElement, state.sources[state.sourceIndex], { autoplay: true });
-      playCctvSound(consoleElement, "channel");
+      advanceCctvChannel(consoleElement);
     });
 
     teletextButton.addEventListener("click", () => {
@@ -791,11 +799,12 @@
 
     video.addEventListener("ended", () => {
       const state = consoleElement._cctvState;
-      if (!state?.hauntActive || !consoleElement.classList.contains("is-haunt-playing")) {
+      if (state?.hauntActive && consoleElement.classList.contains("is-haunt-playing")) {
+        showCctvHauntNoise(consoleElement);
         return;
       }
 
-      showCctvHauntNoise(consoleElement);
+      advanceCctvChannel(consoleElement);
     });
 
     stopCctvConsole(consoleElement, {
