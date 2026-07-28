@@ -282,10 +282,53 @@
                   </p>
                   <p class="cctv-teletext__footer">TXT — СЛЕДУЮЩАЯ СТРАНИЦА</p>
                 </div>
+                <div class="cctv-source-screen" data-cctv-source-screen hidden>
+                  <div class="cctv-source-screen__header">
+                    <strong>VIDEO INPUT</strong>
+                    <span>VCR</span>
+                  </div>
+                  <div class="cctv-source-screen__slot" aria-hidden="true">
+                    <span></span>
+                  </div>
+                  <p class="cctv-source-screen__message">
+                    ВСТАВЬТЕ ВИДЕОКАССЕТУ
+                  </p>
+                  <p class="cctv-source-screen__status">
+                    НОСИТЕЛЬ НЕ ОБНАРУЖЕН
+                  </p>
+                  <p class="cctv-source-screen__footer">
+                    SOURCE — ВЕРНУТЬСЯ К ЭФИРУ
+                  </p>
+                </div>
+                <div
+                  class="cctv-screen__mute"
+                  data-cctv-mute-indicator
+                  aria-hidden="true"
+                  hidden
+                >
+                  MUTE
+                </div>
               </div>
-              <p class="cctv-monitor__status" data-cctv-channel-status>
-                Питание отключено.
-              </p>
+              <div class="cctv-monitor__controls">
+                <button
+                  class="cctv-monitor__power-button cctv-monitor__power-button--on"
+                  type="button"
+                  data-cctv-power-on
+                  aria-pressed="false"
+                  aria-label="Включить телевизор"
+                >
+                  <span aria-hidden="true"></span>
+                </button>
+                <button
+                  class="cctv-monitor__power-button cctv-monitor__power-button--off"
+                  type="button"
+                  data-cctv-power-off
+                  aria-pressed="true"
+                  aria-label="Выключить телевизор"
+                >
+                  <span aria-hidden="true"></span>
+                </button>
+              </div>
             </article>
 
             <nav class="cctv-remote" aria-label="Пульт внутреннего эфира">
@@ -293,21 +336,21 @@
               <div class="cctv-remote__buttons">
                 <button
                   type="button"
-                  data-cctv-power-on
+                  data-cctv-source-button
                   aria-pressed="false"
-                  aria-label="Включить телевизор"
+                  aria-label="Открыть внешний источник"
                 >
-                  <span aria-hidden="true">I</span>
-                  <strong>ON</strong>
+                  <span aria-hidden="true">SRC</span>
+                  <strong>SOURCE</strong>
                 </button>
                 <button
                   type="button"
-                  data-cctv-power-off
-                  aria-pressed="true"
-                  aria-label="Выключить телевизор"
+                  data-cctv-mute
+                  aria-pressed="false"
+                  aria-label="Выключить звук эфира"
                 >
-                  <span aria-hidden="true">O</span>
-                  <strong>OFF</strong>
+                  <span aria-hidden="true">M</span>
+                  <strong>MUTE</strong>
                 </button>
                 <button
                   type="button"
@@ -328,22 +371,9 @@
                   <strong>TEXT</strong>
                 </button>
               </div>
-              <div class="cctv-remote__utility">
-                <button
-                  class="cctv-remote__mute"
-                  type="button"
-                  data-cctv-mute
-                  aria-pressed="false"
-                  aria-label="Выключить звук эфира"
-                >
-                  <span aria-hidden="true">M</span>
-                  <strong aria-hidden="true">MUTE</strong>
-                </button>
-                <output data-cctv-remote-status>
-                  <span data-cctv-remote-state>TV OFF</span>
-                  <span data-cctv-mute-indicator hidden>MUTE</span>
-                </output>
-              </div>
+              <output data-cctv-remote-status>
+                <span data-cctv-remote-state>TV OFF</span>
+              </output>
             </nav>
 
             <div hidden data-cctv-sources>

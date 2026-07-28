@@ -473,6 +473,55 @@
     }
   };
 
+  const closeCctvSourceScreen = (consoleElement, { restoreDisplay = false } = {}) => {
+    const sourceScreen = consoleElement.querySelector("[data-cctv-source-screen]");
+    const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-state]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    const state = consoleElement._cctvState;
+
+    if (sourceScreen) sourceScreen.hidden = true;
+    consoleElement.classList.remove("is-source");
+    if (sourceButton) {
+      sourceButton.setAttribute("aria-pressed", "false");
+      sourceButton.setAttribute("aria-label", "Открыть внешний источник");
+    }
+
+    if (!restoreDisplay || !state?.sources.length) return;
+
+    const source = state.sources[state.sourceIndex];
+    const channelCode = source.dataset.channelCode || "CH --";
+    const channelName = source.dataset.channelName || "ИСТОЧНИК НЕ ОПРЕДЕЛЁН";
+    if (remoteStatus) remoteStatus.textContent = channelCode;
+    if (label) label.textContent = `${channelCode} // ${channelName}`;
+  };
+
+  const toggleCctvSourceScreen = (consoleElement) => {
+    const sourceScreen = consoleElement.querySelector("[data-cctv-source-screen]");
+    const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const remoteStatus = consoleElement.querySelector("[data-cctv-remote-state]");
+    const label = consoleElement.querySelector("[data-cctv-channel-label]");
+    if (!sourceScreen || !sourceButton) return;
+
+    if (consoleElement.dataset.cctvPowered !== "true") {
+      if (remoteStatus) remoteStatus.textContent = "SRC // TV OFF";
+      return;
+    }
+
+    if (consoleElement.classList.contains("is-source")) {
+      closeCctvSourceScreen(consoleElement, { restoreDisplay: true });
+      return;
+    }
+
+    closeCctvTeletext(consoleElement);
+    sourceScreen.hidden = false;
+    consoleElement.classList.add("is-source");
+    sourceButton.setAttribute("aria-pressed", "true");
+    sourceButton.setAttribute("aria-label", "Вернуться к телевизионному эфиру");
+    if (remoteStatus) remoteStatus.textContent = "SOURCE";
+    if (label) label.textContent = "SRC // ВНЕШНИЙ ВХОД";
+  };
+
   const showNextCctvTeletextPage = (consoleElement) => {
     const teletext = consoleElement.querySelector("[data-cctv-teletext]");
     const pageNumber = consoleElement.querySelector("[data-cctv-teletext-page]");
@@ -488,6 +537,8 @@
       if (remoteStatus) remoteStatus.textContent = "TXT // НЕТ НЕСУЩЕЙ";
       return;
     }
+
+    closeCctvSourceScreen(consoleElement);
 
     if (!state.teletextDeck.length) {
       state.teletextDeck = shuffleCctvTeletextPages(state.lastTeletextPage);
@@ -537,6 +588,7 @@
     video.load();
 
     closeCctvTeletext(consoleElement);
+    closeCctvSourceScreen(consoleElement);
     if (label) label.textContent = `${channelCode} // ${channelName}`;
     if (status) status.textContent = source.dataset.status || "Статус: сигнал принят.";
     consoleElement.classList.remove("is-powered-off");
@@ -575,6 +627,7 @@
     }
     resetCctvVideo(video);
     closeCctvTeletext(consoleElement);
+    closeCctvSourceScreen(consoleElement);
     consoleElement.dataset.cctvPowered = "false";
     consoleElement.dataset.cctvHauntPhase = "idle";
     consoleElement.classList.add("is-powered-off");
@@ -632,6 +685,7 @@
     clearCctvHauntTimer(consoleElement);
     resetCctvVideo(video);
     closeCctvTeletext(consoleElement);
+    closeCctvSourceScreen(consoleElement);
     state.hauntActive = true;
     consoleElement.dataset.cctvPowered = "false";
     consoleElement.dataset.cctvHauntPhase = "noise";
@@ -660,6 +714,8 @@
     const nextButton = consoleElement.querySelector("[data-cctv-next]");
     const teletextButton = consoleElement.querySelector("[data-cctv-teletext-button]");
     const muteButton = consoleElement.querySelector("[data-cctv-mute]");
+    const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const sourceScreen = consoleElement.querySelector("[data-cctv-source-screen]");
     if (
       !video ||
       !sources.length ||
@@ -667,7 +723,9 @@
       !powerOffButton ||
       !nextButton ||
       !teletextButton ||
-      !muteButton
+      !muteButton ||
+      !sourceButton ||
+      !sourceScreen
     ) return;
 
     consoleElement.dataset.cctvConsoleReady = "true";
@@ -716,6 +774,14 @@
         playCctvSound(consoleElement, "teletext");
       }
       showNextCctvTeletextPage(consoleElement);
+    });
+
+    sourceButton.addEventListener("click", () => {
+      playCctvSound(consoleElement, "click");
+      if (consoleElement.dataset.cctvPowered === "true") {
+        playCctvSound(consoleElement, "teletext");
+      }
+      toggleCctvSourceScreen(consoleElement);
     });
 
     muteButton.addEventListener("click", () => {

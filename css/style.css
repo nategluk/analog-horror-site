@@ -8043,6 +8043,134 @@ body.staff-mode .broadcast-shell-page .cctv-teletext__footer {
   text-align: right;
 }
 
+body.staff-mode .broadcast-shell-page .cctv-source-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto auto;
+  align-items: center;
+  padding: clamp(0.8rem, 3vw, 2.2rem);
+  color: #f4f1df;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 10px,
+      rgba(110, 208, 139, 0.04) 10px 11px
+    ),
+    linear-gradient(#04080d, #010408);
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen[hidden] {
+  display: none;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 2px solid var(--broadcast-cyan);
+  color: var(--broadcast-cyan);
+  font-size: clamp(0.72rem, 2vw, 1.15rem);
+  letter-spacing: 0.1em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__header span {
+  color: var(--broadcast-yellow);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__slot {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  width: min(70%, 26rem);
+  height: clamp(2.6rem, 9vw, 5.4rem);
+  margin-bottom: clamp(0.8rem, 3vw, 1.5rem);
+  border: clamp(0.3rem, 1vw, 0.65rem) solid #313740;
+  border-radius: 4px;
+  background: #05070a;
+  box-shadow:
+    inset 0 0 18px rgba(0, 0, 0, 0.9),
+    0 0 0 2px #080a0d,
+    0 3px 0 #59606a;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__slot span {
+  position: absolute;
+  top: 50%;
+  right: 7%;
+  left: 7%;
+  height: 2px;
+  background: #111820;
+  box-shadow: 0 -1px #020305;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__message {
+  margin: 0;
+  color: var(--broadcast-yellow);
+  font-size: clamp(1rem, 4vw, 2.3rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow: 0.07em 0 var(--broadcast-magenta);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__status {
+  margin: clamp(0.45rem, 1.5vw, 0.8rem) 0 0;
+  color: var(--broadcast-green);
+  font-size: clamp(0.54rem, 1.35vw, 0.76rem);
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__footer {
+  margin: clamp(0.8rem, 3vw, 1.5rem) 0 0;
+  padding-top: 0.4rem;
+  border-top: 1px solid #555d68;
+  color: #aeb5bf;
+  font-size: clamp(0.48rem, 1.25vw, 0.7rem);
+  letter-spacing: 0.08em;
+  text-align: right;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-screen__mute {
+  position: absolute;
+  top: clamp(0.65rem, 2vw, 1.25rem);
+  right: clamp(0.7rem, 2.2vw, 1.4rem);
+  z-index: 4;
+  padding: 0.18rem 0.38rem;
+  border: 1px solid rgba(110, 208, 139, 0.58);
+  color: var(--broadcast-green);
+  background: rgba(2, 10, 7, 0.76);
+  box-shadow:
+    inset 0 0 8px rgba(110, 208, 139, 0.12),
+    0 0 8px rgba(110, 208, 139, 0.24);
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(0.62rem, 1.6vw, 0.92rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 0 7px rgba(110, 208, 139, 0.72);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-screen__mute[hidden] {
+  display: none;
+}
+
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-teletext .cctv-screen__mute {
+  top: auto;
+  bottom: clamp(2.2rem, 5vw, 3.4rem);
+}
+
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-source .cctv-screen__mute {
+  top: auto;
+  bottom: clamp(2.2rem, 5vw, 3.4rem);
+}
+
 body.staff-mode .broadcast-shell-page .cctv-no-signal {
   position: absolute;
   inset: 0;
@@ -8138,11 +8266,58 @@ body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-powered-off .cctv
   }
 }
 
-body.staff-mode .broadcast-shell-page .cctv-monitor__status {
-  min-height: 2.4em;
-  margin: 0.65rem 0.7rem 0.2rem;
-  color: var(--muted);
-  font-size: 0.74rem;
+body.staff-mode .broadcast-shell-page .cctv-monitor__controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  min-height: 3.35rem;
+  margin: 0.5rem 0.7rem 0.1rem;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button {
+  display: grid;
+  place-items: center;
+  width: 3.35rem;
+  height: 3.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button span {
+  display: block;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 2px solid #0a0c10;
+  border-radius: 50%;
+  box-shadow:
+    inset 2px 2px rgba(255, 255, 255, 0.28),
+    inset -2px -2px rgba(0, 0, 0, 0.32),
+    0 2px 0 #101319;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button--on span {
+  background: var(--broadcast-green);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button--off span {
+  background: #d95a55;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button:hover,
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button:focus-visible {
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button[aria-pressed="true"] span,
+body.staff-mode .broadcast-shell-page .cctv-monitor__power-button:active span {
+  box-shadow:
+    inset 2px 3px 6px rgba(0, 0, 0, 0.75),
+    0 0 0 1px #5d626b;
+  transform: translateY(2px);
 }
 
 body.staff-mode .broadcast-shell-page .cctv-remote {
@@ -8214,17 +8389,19 @@ body.staff-mode .broadcast-shell-page .cctv-remote button strong {
   letter-spacing: 0.08em;
 }
 
-body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-power-on] span {
-  background: var(--broadcast-green);
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-power-off] span {
-  background: #d95a55;
+body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-mute] span {
+  background: #626871;
 }
 
 body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-next] span,
-body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-teletext-button] span {
+body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-teletext-button] span,
+body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-source-button] span {
   border-radius: 4px;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-source-button] span {
+  background: var(--broadcast-yellow);
+  font-size: 0.58rem;
 }
 
 body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-next] span {
@@ -8262,49 +8439,7 @@ body.staff-mode .broadcast-shell-page .cctv-remote button:disabled {
   opacity: 0.38;
 }
 
-body.staff-mode .broadcast-shell-page .cctv-remote__utility {
-  display: grid;
-  grid-template-columns: 3.25rem minmax(0, 1fr);
-  align-items: stretch;
-  gap: 0.55rem;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute {
-  min-height: 3.25rem;
-  padding: 0.18rem;
-  border: 0;
-  border-radius: 5px;
-  background: transparent;
-  box-shadow: none;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute span {
-  width: 1.8rem;
-  height: 1.8rem;
-  border-color: #0a0c10;
-  background: #555b63;
-  font-size: 0.62rem;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute strong {
-  color: #c7cbd0;
-  font-size: 0.52rem;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute:hover,
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute:focus-visible {
-  border: 0;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 0 0 1px var(--accent);
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute[aria-pressed="true"] {
-  border: 0;
-  background: #20242b;
-  box-shadow: inset 0 0 0 1px #11151a;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute[aria-pressed="true"] span {
+body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-mute][aria-pressed="true"] span {
   background: #30343a;
   box-shadow:
     inset 2px 3px 5px rgba(0, 0, 0, 0.78),
@@ -8312,10 +8447,7 @@ body.staff-mode .broadcast-shell-page .cctv-remote button.cctv-remote__mute[aria
 }
 
 body.staff-mode .broadcast-shell-page .cctv-remote output {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+  display: block;
   padding: 0.55rem 0.45rem;
   border: 1px solid #080a0d;
   color: var(--broadcast-green);
@@ -8324,12 +8456,6 @@ body.staff-mode .broadcast-shell-page .cctv-remote output {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-align: center;
-}
-
-body.staff-mode .broadcast-shell-page .cctv-remote output [data-cctv-mute-indicator] {
-  flex: 0 0 auto;
-  font-weight: 800;
-  text-shadow: 0 0 7px rgba(110, 208, 139, 0.7);
 }
 
 body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-intercepted .cctv-monitor {
