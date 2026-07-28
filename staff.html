@@ -217,18 +217,70 @@
 
               <div class="personnel-dossier__identity">
                 <div class="personnel-dossier__identity-copy">
-                  <p><span>ДОЛЖНОСТЬ:</span> <strong data-personnel-role>НЕ НАЗНАЧЕНА</strong></p>
-                  <p><span>СТАТУС:</span> <strong data-personnel-status>НЕ ОПРЕДЕЛЁН</strong></p>
+                  <button class="personnel-dossier__name-control" type="button" data-player-name-open hidden>
+                    <span>ИМЯ ОПЕРАТОРА</span>
+                    <strong data-player-dossier-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
+                    <small>ИЗМЕНИТЬ СЛУЖЕБНУЮ ЗАПИСЬ</small>
+                  </button>
+
+                  <div class="personnel-dossier__badges">
+                    <p class="personnel-dossier__badge">
+                      <span>ДОЛЖНОСТЬ</span>
+                      <strong data-personnel-role>НЕ НАЗНАЧЕНА</strong>
+                    </p>
+                    <p class="personnel-dossier__badge">
+                      <span>СТАТУС</span>
+                      <strong data-personnel-status>НЕ ОПРЕДЕЛЁН</strong>
+                    </p>
+                    <span class="personnel-dossier__review-badge" data-player-review-badge hidden>ПОВТОРНАЯ ПРОВЕРКА</span>
+                  </div>
+
+                  <dl class="personnel-dossier__metadata" data-player-dossier-metadata hidden>
+                    <div>
+                      <dt>КУРАТОР</dt>
+                      <dd data-player-curator-id>0091-A</dd>
+                    </div>
+                    <div>
+                      <dt>ДОПУСК</dt>
+                      <dd data-player-clearance>ПРОВЕРКА</dd>
+                    </div>
+                    <div>
+                      <dt>ПОСЛЕДНЯЯ ЗАПИСЬ</dt>
+                      <dd data-player-last-record>—</dd>
+                    </div>
+                  </dl>
                 </div>
-                <aside class="personnel-dossier__signal" data-player-dossier-signal hidden aria-label="Биосигнал оператора активен">
-                  <img class="personnel-dossier__avatar personnel-avatar personnel-avatar--pending" data-player-dossier-avatar alt="" aria-hidden="true" />
-                  <span class="personnel-dossier__biosignal">
-                    <svg viewBox="0 0 120 20" aria-hidden="true" focusable="false">
-                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
-                    </svg>
-                    <span>БИОСИГНАЛ: АКТИВЕН</span>
-                  </span>
+
+                <aside class="personnel-dossier__visual" data-player-dossier-visual hidden aria-label="Кадровое изображение и состояние личного дела">
+                  <div class="personnel-dossier__signal" data-player-dossier-signal aria-label="Биосигнал оператора активен">
+                    <img class="personnel-dossier__avatar personnel-avatar personnel-avatar--pending" data-player-dossier-avatar alt="" aria-hidden="true" />
+                    <span class="personnel-dossier__biosignal">
+                      <svg viewBox="0 0 120 20" aria-hidden="true" focusable="false">
+                        <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
+                      </svg>
+                      <span>БИОСИГНАЛ: АКТИВЕН</span>
+                    </span>
+                  </div>
+                  <div class="personnel-dossier__integrity" data-player-integrity data-state="forming">
+                    <span>ЦЕЛОСТНОСТЬ ФАЙЛА</span>
+                    <strong data-player-integrity-state>ФОРМИРУЕТСЯ</strong>
+                    <span class="personnel-dossier__integrity-meter" aria-hidden="true"><i></i><i></i><i></i></span>
+                  </div>
+                  <div class="personnel-dossier__channel">
+                    <span>ВНУТРЕННИЙ КАНАЛ</span>
+                    <strong data-player-channel-state>ВХОДЯЩИЕ</strong>
+                  </div>
                 </aside>
+
+                <nav class="personnel-profile__tabs personnel-profile__tabs--summary" data-player-summary-tabs aria-label="Разделы личного дела" hidden>
+                  <button type="button" data-player-tab="inbox" aria-pressed="true">
+                    <span>ВХОДЯЩИЕ</span> <span data-player-unread-count></span>
+                  </button>
+                  <button type="button" data-player-tab="materials" aria-pressed="false">МАТЕРИАЛЫ</button>
+                  <button type="button" data-player-tab="trash" aria-pressed="false">
+                    <span>КОРЗИНА</span> <span data-player-trash-count></span>
+                  </button>
+                </nav>
               </div>
 
               <p class="personnel-dossier__note" data-personnel-note></p>
@@ -266,7 +318,7 @@
                         <input
                           type="text"
                           name="displayName"
-                          maxlength="32"
+                          maxlength="20"
                           autocomplete="nickname"
                           placeholder="ВВЕДИТЕ ИМЯ"
                           required
@@ -291,20 +343,9 @@
                 </section>
 
                 <div class="personnel-profile__main" data-player-profile-main>
-                  <nav class="personnel-profile__tabs" aria-label="Разделы личного дела">
-                    <button type="button" data-player-tab="inbox" aria-pressed="true">
-                      ВХОДЯЩИЕ <span data-player-unread-count></span>
-                    </button>
-                    <button type="button" data-player-tab="materials" aria-pressed="false">МАТЕРИАЛЫ</button>
-                    <button type="button" data-player-tab="trash" aria-pressed="false">
-                      КОРЗИНА <span data-player-trash-count></span>
-                    </button>
-                  </nav>
-
                   <section data-player-view="inbox" aria-labelledby="personnel-inbox-title">
                   <div class="personnel-section-heading">
                     <h3 id="personnel-inbox-title">ЛИЧНЫЕ ВХОДЯЩИЕ</h3>
-                    <span>ВНУТРЕННИЙ КАНАЛ</span>
                   </div>
                   <p data-player-inbox-empty>НОВЫХ СООБЩЕНИЙ НЕТ</p>
                   <div class="personnel-inbox" data-player-inbox></div>

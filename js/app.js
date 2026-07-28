@@ -8,6 +8,7 @@
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
+  const STAFF_DISPLAY_NAME_MAX = 20;
   const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
@@ -1666,7 +1667,9 @@
 
   const normalizeStaffProfile = (profile) => {
     profile.displayName =
-      typeof profile.displayName === "string" ? profile.displayName.slice(0, 32) : "";
+      typeof profile.displayName === "string"
+        ? profile.displayName.slice(0, STAFF_DISPLAY_NAME_MAX)
+        : "";
     profile.nameHistory = Array.isArray(profile.nameHistory)
       ? profile.nameHistory.filter((name) => typeof name === "string").slice(-8)
       : [];
@@ -5541,7 +5544,7 @@
         labelText.textContent = node.input.label;
         input.type = "text";
         input.name = "displayName";
-        input.maxLength = 32;
+        input.maxLength = STAFF_DISPLAY_NAME_MAX;
         input.autocomplete = "nickname";
         input.placeholder = node.input.placeholder;
         input.required = true;
@@ -5559,7 +5562,7 @@
             .replace(/[\u0000-\u001f\u007f]/g, "")
             .trim()
             .replace(/\s+/g, " ")
-            .slice(0, 32);
+            .slice(0, STAFF_DISPLAY_NAME_MAX);
           if (!displayName) {
             status.textContent = "ИМЯ НЕ ПРИНЯТО. ЗАПОЛНИТЕ СТРОКУ.";
             input.focus();
@@ -5945,8 +5948,20 @@
     const dossierStatus = dossier.querySelector("[data-personnel-status]");
     const dossierNote = dossier.querySelector("[data-personnel-note]");
     const dossierIdentity = dossier.querySelector(".personnel-dossier__identity");
+    const dossierPlayerName = dossier.querySelector("[data-player-dossier-name]");
+    const dossierNameOpen = dossier.querySelector("[data-player-name-open]");
+    const dossierMetadata = dossier.querySelector("[data-player-dossier-metadata]");
+    const dossierVisual = dossier.querySelector("[data-player-dossier-visual]");
     const dossierSignal = dossier.querySelector("[data-player-dossier-signal]");
     const dossierAvatar = dossier.querySelector("[data-player-dossier-avatar]");
+    const dossierReviewBadge = dossier.querySelector("[data-player-review-badge]");
+    const dossierCuratorId = dossier.querySelector("[data-player-curator-id]");
+    const dossierClearance = dossier.querySelector("[data-player-clearance]");
+    const dossierLastRecord = dossier.querySelector("[data-player-last-record]");
+    const dossierIntegrity = dossier.querySelector("[data-player-integrity]");
+    const dossierIntegrityState = dossier.querySelector("[data-player-integrity-state]");
+    const dossierChannelState = dossier.querySelector("[data-player-channel-state]");
+    const summaryTabs = dossier.querySelector("[data-player-summary-tabs]");
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
@@ -6021,12 +6036,25 @@
       button.innerHTML = `<svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${personnelIconMarkup[icon]}</svg>`;
     };
 
+    const setSummaryChannel = () => {
+      if (!dossierChannelState) return;
+      dossierChannelState.textContent = settingsOpen
+        ? "СЛУЖЕБНЫЕ НАСТРОЙКИ"
+        : {
+            inbox: "ВХОДЯЩИЕ",
+            materials: "АРХИВ МАТЕРИАЛОВ",
+            trash: "УДАЛЁННЫЕ ЗАПИСИ",
+          }[activeProfileTab] || "ВХОДЯЩИЕ";
+    };
+
     const setSettingsOpen = (open) => {
       settingsOpen = Boolean(open && activePersonnelKey === "player");
       settingsPanel.hidden = !settingsOpen;
       profileMain.hidden = settingsOpen;
+      summaryTabs.hidden = settingsOpen || activePersonnelKey !== "player";
       dossierNote.hidden = !settingsOpen && activePersonnelKey === "player";
       settingsToggle.setAttribute("aria-expanded", String(settingsOpen));
+      setSummaryChannel();
       setPersonnelIconButton(
         settingsToggle,
         settingsOpen ? "back" : "settings",
@@ -6061,6 +6089,13 @@
         : "ПРОВЕРКА ДОПУСКА";
     };
 
+    const getProfilePrimaryStatus = (profile) => {
+      if (profile.status === "completed") return "ДОПУЩЕН";
+      return profile.status === "in_progress"
+        ? "КУРАТОРСКАЯ ПРОВЕРКА"
+        : "ПРОВЕРКА ДОПУСКА";
+    };
+
     const getProfileRole = (profile) => {
       if (profile.role === "volunteer") return "ВОЛОНТЁР";
       if (profile.role === "animator") return "АНИМАТОР";
@@ -6071,6 +6106,20 @@
       profile.displayName?.trim()
         ? profile.displayName.trim().toLocaleUpperCase("ru-RU")
         : "ИМЯ НЕ УСТАНОВЛЕНО";
+
+    const formatDossierTimestamp = (value) => {
+      const timestamp = new Date(value);
+      if (!Number.isFinite(timestamp.getTime())) return "—";
+      return new Intl.DateTimeFormat("ru-RU", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+        .format(timestamp)
+        .replace(",", "");
+    };
 
     const isDeleted = (profile, kind, id) =>
       profile.deletedItems.some(
@@ -6292,6 +6341,7 @@
       profileViews.forEach((view) => {
         view.hidden = view.dataset.playerView !== availableTab;
       });
+      setSummaryChannel();
     };
 
     const renderProfileCollections = (profile) => {
@@ -6303,9 +6353,43 @@
     };
 
     const renderPlayerDossier = (profile) => {
-      dossierName.textContent = getProfileName(profile);
+      const profileName = getProfileName(profile);
+      const primaryStatus = getProfilePrimaryStatus(profile);
+      const fileComplete = Boolean(
+        profile.status === "completed" &&
+        profile.displayName?.trim() &&
+        profile.avatarId
+      );
+      const integrityState = fileComplete
+        ? "stable"
+        : profile.status === "completed"
+          ? "incomplete"
+          : "forming";
+      const integrityLabel =
+        integrityState === "stable"
+          ? "СТАБИЛЬНА"
+          : integrityState === "incomplete"
+            ? "НЕПОЛНАЯ"
+            : "ФОРМИРУЕТСЯ";
+
+      dossier.classList.add("personnel-dossier--player");
+      dossierName.textContent = profileName;
+      dossierPlayerName.textContent = profileName;
       dossierRole.textContent = getProfileRole(profile);
-      dossierStatus.textContent = getProfileStatus(profile);
+      dossierStatus.textContent = primaryStatus;
+      dossierNameOpen.hidden = false;
+      dossierMetadata.hidden = false;
+      dossierVisual.hidden = false;
+      dossierReviewBadge.hidden = !profile.reclassificationActive;
+      dossierCuratorId.textContent = profile.curatorId || "0091-A";
+      dossierClearance.textContent = primaryStatus;
+      dossierLastRecord.textContent = formatDossierTimestamp(profile.updatedAt);
+      dossierIntegrity.dataset.state = integrityState;
+      dossierIntegrityState.textContent = integrityLabel;
+      dossierIntegrity.setAttribute(
+        "aria-label",
+        `Целостность файла: ${integrityLabel.toLocaleLowerCase("ru-RU")}`
+      );
       dossierNote.textContent =
         profile.status === "completed"
           ? "Личное дело сформировано. Назначение и полученные материалы сохранены кадровой системой."
@@ -6398,8 +6482,14 @@
       if (profile) {
         renderPlayerDossier(profile);
       } else {
+        dossier.classList.remove("personnel-dossier--player");
         dossierIdentity.classList.remove("personnel-dossier__identity--player");
+        dossierNameOpen.hidden = true;
+        dossierMetadata.hidden = true;
+        dossierVisual.hidden = true;
         dossierSignal.hidden = true;
+        dossierReviewBadge.hidden = true;
+        summaryTabs.hidden = true;
         settingsToggle.hidden = true;
         settingsPanel.hidden = true;
         profileMain.hidden = false;
@@ -6540,6 +6630,10 @@
           button.dataset.playerTab === activeProfileTab
         )?.focus();
       }
+    });
+    dossierNameOpen.addEventListener("click", () => {
+      setSettingsOpen(true);
+      nameInput.focus();
     });
     dossier.addEventListener("close", () => {
       intrusion.hidden = true;
@@ -6711,7 +6805,7 @@
         .replace(/[\u0000-\u001f\u007f]/g, "")
         .trim()
         .replace(/\s+/g, " ")
-        .slice(0, 32);
+        .slice(0, STAFF_DISPLAY_NAME_MAX);
       if (!profile || !displayName) {
         nameResponse.textContent = "УКАЖИТЕ ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ.";
         return;
