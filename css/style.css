@@ -17,13 +17,6 @@
   --guest-overlay-bottom: rgba(252, 238, 248, 0.68);
 }
 
-/* ─── Staff personnel: ЖИР ТВ кадровый канал ─── */
-body.staff-mode .site-wrapper.personnel-broadcast-page .site-header::after {
-  content: "PERSONNEL FEED // P200";
-  color: #111318;
-  background: #59d9df;
-}
-
 body.staff-mode .personnel-broadcast-page .personnel-panel {
   padding: clamp(0.75rem, 2vw, 1.25rem);
   border-color: #08090c;
@@ -7645,18 +7638,6 @@ body.staff-mode .broadcast-shell-page .site-header {
   border-top: 4px solid var(--accent);
 }
 
-body.staff-mode .broadcast-shell-page .site-header::after {
-  content: "BROADCAST UNIT 04";
-  position: absolute;
-  right: 1rem;
-  bottom: -0.45rem;
-  padding: 0.08rem 0.35rem;
-  color: #151820;
-  background: var(--broadcast-yellow);
-  font: 700 0.55rem/1.2 var(--font-main);
-  letter-spacing: 0.08em;
-}
-
 body.staff-mode .broadcast-shell-page .staff-tv-ident {
   position: relative;
   display: grid;
@@ -8613,10 +8594,6 @@ body.staff-mode .broadcast-shell-page .social-links a:focus-visible {
     border-radius: 2px;
   }
 
-  body.staff-mode .broadcast-shell-page .site-header::after {
-    right: 0.65rem;
-  }
-
   body.staff-mode .broadcast-shell-page .status-pill {
     max-width: 8.5rem;
     font-size: 0.62rem;
@@ -8669,12 +8646,6 @@ body.staff-mode .broadcast-shell-page .social-links a:focus-visible {
   body.staff-mode .broadcast-shell-page .cctv-no-signal::before {
     animation: none;
   }
-}
-
-/* ─── Staff archive: ЖИР ТВ home video library ─── */
-body.staff-mode .archive-broadcast-page .site-header::after {
-  content: "VIDEO LIBRARY // P400";
-  background: var(--broadcast-magenta);
 }
 
 body.staff-mode .archive-broadcast-page .archive-panel {
@@ -8999,12 +8970,6 @@ body.staff-mode .archive-broadcast-page .archive-photo-grid .staff-photo-card sp
   body.staff-mode .archive-broadcast-page .archive-record-list .archive-record:focus-visible {
     transform: translateY(-1px);
   }
-}
-
-/* ─── Staff about: ЖИР ТВ orientation tape ─── */
-body.staff-mode .about-broadcast-page .site-header::after {
-  content: "TRAINING TAPE // P110";
-  background: var(--broadcast-yellow);
 }
 
 body.staff-mode .about-broadcast-page .about-panel {
@@ -9432,13 +9397,6 @@ body.staff-mode .about-broadcast-page .staff-protocol-warning {
   }
 }
 
-/* ─── Staff FAQ: teletext help desk ─── */
-body.staff-mode .site-wrapper.faq-broadcast-page .site-header::after {
-  content: "HELP DESK // P300";
-  color: #111318;
-  background: var(--broadcast-magenta);
-}
-
 body.staff-mode .faq-broadcast-page .faq-panel {
   padding: clamp(0.7rem, 2vw, 1.2rem);
   border-color: #090b0e;
@@ -9584,13 +9542,6 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
   border-top: 1px dashed #59616d;
   background: rgba(0, 0, 0, 0.18);
   font-size: 0.8rem;
-}
-
-/* ─── Staff support: broadcast support line ─── */
-body.staff-mode .site-wrapper.donate-broadcast-page .site-header::after {
-  content: "SUPPORT LINE // P310";
-  color: #111318;
-  background: var(--broadcast-yellow);
 }
 
 body.staff-mode .donate-broadcast-page .donate-page-panel {
@@ -9959,13 +9910,6 @@ body.staff-mode .hiring-threshold__actions button:disabled {
   body.staff-mode .hiring-threshold__actions [data-hiring-threshold-confirm] {
     grid-row: 1;
   }
-}
-
-/* ─── Archive document playback: paper inserts inside the ЖИР ТВ shell ─── */
-body.staff-mode .site-wrapper.document-broadcast-page .site-header::after {
-  content: "DOCUMENT PLAYBACK // P400";
-  color: #111318;
-  background: var(--broadcast-yellow);
 }
 
 body.staff-mode .document-broadcast-page .document-page-panel {
