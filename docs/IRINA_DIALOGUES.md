@@ -1,13 +1,14 @@
 # Диалоги игры Ирины
 
-Автоматический экспорт из `js/app.js`, объект `curatorNodes`.
-Сгенерировано: 2026-07-27T09:09:20.651Z.
+Автоматический экспорт из `content/irina/call-content.js` (`nodes`).
+Сгенерировано: 2026-07-28T20:09:41.599Z.
 
 Узлов: **116**. Вариантов ответа: **177**.
 
 > Это производный файл для чтения, литературной сверки и загрузки в чат
 > с библией лора. Не редактируйте его как источник игры: изменения нужно
-> переносить в `js/app.js`, после чего повторно запускать экспорт.
+> переносить в `content/irina/call-content.js`, после чего повторно
+> запускать экспорт.
 
 Условные реплики и ответы сохранены как короткие фрагменты JavaScript,
 чтобы не потерять связь текста с предыдущими выборами игрока.
@@ -2480,9 +2481,10 @@ getCuratorAssignment(progress) === "volunteer"
 # Приложение: итоговая классификация
 
 Финальные реплики узлов `assignment`, `assignment-role`,
-`assignment-keepsake` и `reward-offer` используют эти две функции.
-Они приложены, чтобы экспорт содержал все возможные фразы итогового
-назначения и правила их выбора.
+`assignment-keepsake` и `reward-offer` используют эти две функции
+(логика остаётся в `js/app.js`):
+
+## getCuratorAssignment
 
 ```js
 const getCuratorAssignment = (progress) => {
@@ -2506,6 +2508,8 @@ const getCuratorAssignment = (progress) => {
   return signals.animator > signals.volunteer ? "animator" : "volunteer";
 };
 ```
+
+## getAssignmentCallbacks
 
 ```js
 const getAssignmentCallbacks = (progress, role) => {

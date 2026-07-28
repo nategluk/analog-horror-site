@@ -1,12 +1,16 @@
 # Звонок Ирине: устройство игры и правила расширения
 
-Актуально для локальной версии сайта и утверждённого плана расширения на
-27 июля 2026 года.
+Актуально для локальной версии сайта. Механика звонка и серверное дело —
+с 27 июля 2026; **content pipeline / admin (Stage 0–1)** — с 28 июля 2026.
 
 Этот файл — точка входа для агента или разработчика, который впервые работает
-с игрой на странице `hiring.html`. Он описывает фактическое поведение текущей
-версии и отдельно помеченные утверждённые контракты расширения, а не полный
-канон Ирины и не список неутверждённых идей.
+с **механикой** игры на странице `hiring.html`. Он описывает фактическое
+поведение текущей версии и отдельно помеченные утверждённые контракты
+расширения, а не полный канон Ирины и не список неутверждённых идей.
+
+**Как править диалоги, где лежит сценарий, admin, surgical save, runtime
+bridge** — отдельный handoff: [`docs/IRINA_CONTENT_PIPELINE.md`](./IRINA_CONTENT_PIPELINE.md).
+Его нужно читать перед любыми правками текста узлов.
 
 Канон персонажа, её биография, психологическая защита и допустимая степень
 неоднозначности находятся отдельно: `../../md_lore/irina.md`.
@@ -20,7 +24,8 @@
   `hiring.html`.
 - На `hiring.html` не должно быть дисклеймера, анонса игры или текста,
   объясняющего, что ввод ID запускает интерактивный эпизод.
-- Текущий эпизод состоит из 114 узлов и 175 вариантов ответа.
+- Текущий эпизод состоит из **116** узлов и ≈**177** вариантов ответа
+  (перепроверять `node scripts/validate-irina-call-content.js`).
 - Новая линия повреждённого дела добавляет к первому прохождению примерно
   6–8 минут. Целевая продолжительность всего первого сеанса — около 20 минут,
   но игра не должна удерживать игрока искусственными таймерами.
@@ -43,7 +48,8 @@
 ## Где находится реализация
 
 - Разметка звонка и служебная форма: `hiring.html`
-- Сценарий, состояние и логика: `js/app.js`
+- **Сценарий (узлы, файлы, сообщения, каталог артефактов):** `content/irina/call-content.js`
+- Состояние, UI звонка и классификация: `js/app.js`
 - Адаптер личного дела и текущего сеанса: `js/dossier-store.js`
 - Внешний вид и эффекты канала: `css/style.css`
 - Видео Ирины: `assets/staff/curators/irina/`
@@ -51,6 +57,22 @@
 - Ambient звонка: `assets/audio/curator/`
 - Карточки для выбора маршрута: `assets/staff/photos/`
 - Канон Ирины: `../../md_lore/irina.md`
+
+`content/irina/call-content.js` загружается **до** `js/app.js` на каждой
+странице. Это Stage 0 content-split: диалоги больше не правятся внутри
+массивов `app.js`.
+
+| Задача | Команда / путь |
+|--------|----------------|
+| Handoff pipeline (читать агенту) | `docs/IRINA_CONTENT_PIPELINE.md` |
+| Validate графа | `node scripts/validate-irina-call-content.js` |
+| Export реплик | `node scripts/export-irina-dialogues.js` → `docs/IRINA_DIALOGUES.md` |
+| Smoke bridge | `node scripts/smoke-irina-call.js` |
+| Local admin | `node scripts/admin-server.js` → http://127.0.0.1:8787/admin/ |
+| Короткий workflow | `content/irina/README.md` |
+
+Admin слушает только `127.0.0.1`. Не деплоить `/admin` на прод без auth.
+Save в admin **surgical**: не пересобирает весь content-файл.
 
 В `assets/staff/curators/irina/README.md` описаны правила подготовки видео.
 В `assets/audio/curator/README.md` описана сборка фонового звука.
@@ -923,7 +945,9 @@ tyndex_curator_call_v4
 
 ## Узлы диалога
 
-Сценарий хранится в объекте `curatorNodes`. Минимальный узел:
+Сценарий хранится в `content/irina/call-content.js` как
+`window.TyndexIrinaCallContent.nodes` (в runtime — `curatorNodes`).
+Минимальный узел:
 
 ```js
 "example-node": {
@@ -984,9 +1008,11 @@ tyndex_curator_call_v4
 
 Для литературной сверки и загрузки в чат с библией лора используется
 производный файл `docs/IRINA_DIALOGUES.md`. Его не следует редактировать как
-источник игры. После изменения `curatorNodes` экспорт обновляется командой:
+источник игры. После изменения `content/irina/call-content.js` экспорт
+обновляется командой:
 
 ```sh
+node scripts/validate-irina-call-content.js
 node scripts/export-irina-dialogues.js
 ```
 
@@ -1262,17 +1288,23 @@ IRINA_PRIVATE_01.jpg
 
 1. Определить её функцию: классификация, lore, близость, шутка, смена кадра или
    награда.
-2. Добавить новый узел в `curatorNodes`.
+2. Добавить новый узел в `content/irina/call-content.js` → `nodes`
+   (или через admin Create). Не в `js/app.js`.
 3. Соединить его через `next` или `autoNext`.
 4. Использовать существующее состояние Ирины, если новое видео не меняет
    действие.
 5. Добавлять один сигнал профиля только при реальном выборе между подчинением и
    охотой; не усиливать ранние ответы множителями.
 6. Для личных реакций предпочитать `flags`, а не скрытые очки.
-7. Если появляется новый файл, зарегистрировать его в `curatorFiles`.
-8. Проверить сохранение до и после сцены.
-9. Проверить пропуск печатающегося текста.
-10. Проверить ветку с выключенным звуком.
+7. Если появляется новый файл, зарегистрировать его в content `files` /
+   `staffArtifacts`.
+8. `node scripts/validate-irina-call-content.js` и export.
+9. Проверить сохранение до и после сцены.
+10. Проверить пропуск печатающегося текста.
+11. Проверить ветку с выключенным звуком.
+12. Если в `text`/`choices` нужны classification helpers — только через
+    уже существующий runtime bridge (`window.TyndexIrinaRuntime`), не
+    замыкание на символы из `app.js`.
 
 ## Как добавлять нового куратора
 
@@ -1354,10 +1386,14 @@ IRINA_PRIVATE_01.jpg
 
 Если этот документ расходится с реализацией, сначала проверить:
 
-1. `curatorNodes`, `createCuratorProgress()` и `getCuratorAssignment()` в
-   `js/app.js`;
-2. разметку `[data-curator-call]` в `hiring.html`;
-3. стили `.curator-call` в `css/style.css`;
-4. `../../md_lore/irina.md` для характера и канона.
+1. `docs/IRINA_CONTENT_PIPELINE.md` — где править, admin, bridge, запреты;
+2. `content/irina/call-content.js` — узлы, файлы, сообщения, артефакты;
+3. `createCuratorProgress()` и `getCuratorAssignment()` в `js/app.js`;
+4. `window.TyndexIrinaRuntime` в `js/app.js` (bridge для function-реплик);
+5. разметку `[data-curator-call]` в `hiring.html`;
+6. стили `.curator-call` в `css/style.css`;
+7. `../../md_lore/irina.md` для характера и канона.
 
 После изменения механики нужно обновить этот файл в том же изменении.
+После изменения диалогов — content-модуль, validate, export; при смене
+pipeline/admin — `docs/IRINA_CONTENT_PIPELINE.md`.

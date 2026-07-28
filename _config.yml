@@ -1,0 +1,4 @@
+# Local authoring tools are versioned with the project but are not site routes.
+exclude:
+  - admin
+  - scripts

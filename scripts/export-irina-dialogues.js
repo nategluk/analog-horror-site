@@ -7,39 +7,37 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const projectRoot = path.resolve(__dirname, "..");
-const sourcePath = path.join(projectRoot, "js", "app.js");
+const contentPath = path.join(projectRoot, "content", "irina", "call-content.js");
+const appPath = path.join(projectRoot, "js", "app.js");
 const outputPath = path.join(projectRoot, "docs", "IRINA_DIALOGUES.md");
 
-const source = fs.readFileSync(sourcePath, "utf8");
-const objectMarker = "  const curatorNodes = ";
-const objectEndMarker = "\n  const applyCuratorEffect = ";
-const objectStart = source.indexOf(objectMarker);
-const objectEnd = source.indexOf(objectEndMarker, objectStart);
-
-if (objectStart === -1 || objectEnd === -1) {
-  throw new Error("Не удалось найти объект curatorNodes в js/app.js.");
-}
-
-const objectSource = source
-  .slice(objectStart + objectMarker.length, objectEnd)
-  .trim()
-  .replace(/;$/, "");
-const curatorNodes = vm.runInNewContext(`(${objectSource})`, Object.create(null), {
-  filename: sourcePath,
-  timeout: 1000,
+const contentSource = fs.readFileSync(contentPath, "utf8");
+const sandbox = { window: {}, console };
+vm.runInNewContext(contentSource, sandbox, {
+  filename: contentPath,
+  timeout: 3000,
 });
 
+const content = sandbox.window.TyndexIrinaCallContent;
+if (!content?.nodes) {
+  throw new Error("Не удалось загрузить TyndexIrinaCallContent из content/irina/call-content.js");
+}
+
+const curatorNodes = content.nodes;
+
+// Classification helpers still live in app.js (runtime logic, not dialogue text).
+const appSource = fs.readFileSync(appPath, "utf8");
 const extractDeclaration = (name, nextName) => {
   const startMarker = `  const ${name} = `;
   const endMarker = `\n  const ${nextName} = `;
-  const start = source.indexOf(startMarker);
-  const end = source.indexOf(endMarker, start);
+  const start = appSource.indexOf(startMarker);
+  const end = appSource.indexOf(endMarker, start);
 
   if (start === -1 || end === -1) {
     throw new Error(`Не удалось извлечь ${name} из js/app.js.`);
   }
 
-  return source.slice(start, end).trim();
+  return appSource.slice(start, end).trim();
 };
 
 const assignmentSource = extractDeclaration(
@@ -171,19 +169,20 @@ const renderNode = ([id, node], index) => {
 };
 
 const nodeEntries = Object.entries(curatorNodes);
-const choiceCount = (objectSource.match(/\blabel\s*:/g) || []).length;
+const choiceCount = (contentSource.match(/\blabel\s*:/g) || []).length;
 const generatedAt = new Date().toISOString();
 const output = [
   "# Диалоги игры Ирины",
   "",
-  `Автоматический экспорт из \`js/app.js\`, объект \`curatorNodes\`.`,
+  "Автоматический экспорт из `content/irina/call-content.js` (`nodes`).",
   `Сгенерировано: ${generatedAt}.`,
   "",
   `Узлов: **${nodeEntries.length}**. Вариантов ответа: **${choiceCount}**.`,
   "",
   "> Это производный файл для чтения, литературной сверки и загрузки в чат",
   "> с библией лора. Не редактируйте его как источник игры: изменения нужно",
-  "> переносить в `js/app.js`, после чего повторно запускать экспорт.",
+  "> переносить в `content/irina/call-content.js`, после чего повторно",
+  "> запускать экспорт.",
   "",
   "Условные реплики и ответы сохранены как короткие фрагменты JavaScript,",
   "чтобы не потерять связь текста с предыдущими выборами игрока.",
@@ -196,11 +195,14 @@ const output = [
   "# Приложение: итоговая классификация",
   "",
   "Финальные реплики узлов `assignment`, `assignment-role`,",
-  "`assignment-keepsake` и `reward-offer` используют эти две функции.",
-  "Они приложены, чтобы экспорт содержал все возможные фразы итогового",
-  "назначения и правила их выбора.",
+  "`assignment-keepsake` и `reward-offer` используют эти две функции",
+  "(логика остаётся в `js/app.js`):",
+  "",
+  "## getCuratorAssignment",
   "",
   codeBlock(assignmentSource),
+  "",
+  "## getAssignmentCallbacks",
   "",
   codeBlock(callbacksSource),
   "",
@@ -208,5 +210,5 @@ const output = [
 
 fs.writeFileSync(outputPath, output, "utf8");
 console.log(
-  `Готово: ${path.relative(projectRoot, outputPath)} (${nodeEntries.length} узлов, ${choiceCount} ответов).`
+  `Exported ${nodeEntries.length} nodes / ~${choiceCount} choices → ${path.relative(projectRoot, outputPath)}`
 );
