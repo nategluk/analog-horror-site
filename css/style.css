@@ -144,18 +144,22 @@ body.staff-mode .personnel-broadcast-page .personnel-card {
     0 0.45rem 0.8rem rgba(0, 0, 0, 0.3);
 }
 
-body.staff-mode .personnel-broadcast-page .personnel-card::before {
+body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame::after {
   content: "";
   position: absolute;
   z-index: 2;
-  top: 0.45rem;
-  right: 0.45rem;
-  width: 0.48rem;
+  right: 0.65rem;
+  bottom: 0.08rem;
+  width: 0.34rem;
   aspect-ratio: 1;
-  border: 1px solid #090a0d;
+  border: 1px solid #050608;
   border-radius: 50%;
-  background: #dc4453;
-  box-shadow: 0 0 0.45rem rgba(255, 52, 73, 0.65);
+  background:
+    radial-gradient(circle at 35% 30%, #ff8790 0 12%, #dc4453 34%, #861c29 78%);
+  box-shadow:
+    0 0 0 1px #343840,
+    inset 0 -1px 1px rgba(0, 0, 0, 0.65),
+    0 0 0.32rem rgba(255, 52, 73, 0.5);
   pointer-events: none;
 }
 
