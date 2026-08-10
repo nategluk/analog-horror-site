@@ -108,6 +108,7 @@
   let adminProtocolRunning = false;
   let navigationAnnouncer;
   let curatorAudioContext;
+  const pageScriptPromises = new Map();
 
   const getMusicTracks = () => musicLibrary[currentMusicMode] || musicLibrary.guest;
   const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
@@ -1119,6 +1120,53 @@
     fragment.querySelectorAll("[srcset]").forEach((element) => {
       resolveSrcsetAttribute(element, "srcset", baseUrl);
     });
+  };
+
+  const loadPageScript = (src) => {
+    if (pageScriptPromises.has(src)) {
+      return pageScriptPromises.get(src);
+    }
+
+    const existingScript = [...document.scripts].find((script) => script.src === src);
+    if (existingScript) {
+      const ready = Promise.resolve();
+      pageScriptPromises.set(src, ready);
+      return ready;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+
+    const promise = new Promise((resolve, reject) => {
+      script.addEventListener("load", resolve, { once: true });
+      script.addEventListener(
+        "error",
+        () => reject(new Error(`Failed to load page script: ${src}`)),
+        { once: true }
+      );
+    });
+
+    pageScriptPromises.set(src, promise);
+    body.append(script);
+    return promise;
+  };
+
+  const initEpisodeCatalogPage = async (baseUrl) => {
+    if (!document.querySelector("[data-episode-catalog]")) return;
+
+    const dataScript = new URL("content/archive/episode-catalog.js", baseUrl).href;
+    const runtimeScript = new URL("js/archive-catalog.js", baseUrl).href;
+
+    if (!Array.isArray(window.DZ_EPISODE_CATALOG)) {
+      await loadPageScript(dataScript);
+    }
+
+    if (typeof window.DZInitEpisodeCatalog !== "function") {
+      await loadPageScript(runtimeScript);
+    }
+
+    window.DZInitEpisodeCatalog?.();
   };
 
   const initMusicPlayer = () => {
@@ -4683,7 +4731,8 @@
         } else if (player) {
           body.append(player);
         }
-        
+
+        await initEpisodeCatalogPage(response.url || url);
         initDOMListeners();
         announceNavigationChange();
         return true;

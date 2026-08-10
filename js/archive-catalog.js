@@ -268,6 +268,8 @@
     render();
   };
 
+  window.DZInitEpisodeCatalog = initEpisodeCatalog;
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initEpisodeCatalog, { once: true });
   } else {
