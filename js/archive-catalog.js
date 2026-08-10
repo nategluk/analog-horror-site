@@ -169,7 +169,9 @@
       const icon = document.createElement("span");
       const tag = document.createElement("span");
       const copy = document.createElement("div");
+      const meta = document.createElement("div");
       const metadata = document.createElement("p");
+      const mobileTag = document.createElement("span");
       const title = document.createElement("h3");
       const description = document.createElement("p");
       const platforms = document.createElement("div");
@@ -185,8 +187,12 @@
       thumbnail.append(icon, tag);
 
       copy.className = "episode-entry__copy";
+      meta.className = "episode-entry__meta";
       metadata.className = "episode-entry__metadata";
       metadata.textContent = episode.id;
+      mobileTag.className = "episode-entry__mobile-tag";
+      mobileTag.textContent = episode.tag || "АРХИВ";
+      meta.append(metadata, mobileTag);
       title.textContent = getDisplayTitle(episode.title);
       description.className = "episode-entry__description";
       description.textContent = episode.description;
@@ -199,7 +205,7 @@
         platforms.append(platformLabel);
       });
 
-      copy.append(metadata, title, description, platforms);
+      copy.append(meta, title, description, platforms);
 
       button.className = "episode-entry__watch";
       button.type = "button";
