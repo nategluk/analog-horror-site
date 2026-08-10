@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Развлекательный Комплекс «Детский ЖИР» — Все серии</title>
+    <meta
+      name="description"
+      content="Каталог всех серий «Детского Жира» и ссылки на доступные площадки просмотра."
+    />
+    <link rel="canonical" href="https://detskiyzhir.org/episodes" />
+    <meta property="og:site_name" content="Развлекательный Комплекс «Детский ЖИР»" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Развлекательный Комплекс «Детский ЖИР» — Все серии" />
+    <meta
+      property="og:description"
+      content="Каталог всех серий «Детского Жира» и ссылки на доступные площадки просмотра."
+    />
+    <meta property="og:url" content="https://detskiyzhir.org/episodes" />
+    <meta property="og:image" content="https://detskiyzhir.org/assets/og-image.png" />
+    <meta property="og:image:width" content="1672" />
+    <meta property="og:image:height" content="941" />
+    <meta
+      property="og:image:alt"
+      content="Фасад развлекательного комплекса «Детский ЖИР» в тумане."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="vhs-noise" aria-hidden="true"></div>
+    <div class="site-wrapper glitch-target broadcast-shell-page archive-broadcast-page episode-catalog-page">
+      <header class="site-header">
+        <div class="logo-area">
+          <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
+            <img class="logo-image" src="assets/guest/logo.svg" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
+          </h1>
+          <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
+        </div>
+      </header>
+
+      <nav class="site-nav" aria-label="Основная навигация">
+        <ul>
+          <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="about"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="hiring.html"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="faq"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="donate"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="archive.html" rel="nofollow" aria-current="page" data-full-navigation><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
+        </ul>
+      </nav>
+
+      <main class="panel archive-panel episode-catalog-panel">
+        <p class="episode-catalog-back"><a href="archive.html" data-full-navigation>← Вернуться в архив комплекса</a></p>
+
+        <section
+          class="episode-catalog"
+          aria-labelledby="episode-catalog-heading"
+          data-episode-catalog
+        >
+          <header class="episode-catalog__masthead">
+            <div>
+              <p class="episode-catalog__kicker">
+                <span class="episode-catalog__guest-label">АРХИВ ПЕРЕДАЧ // ОТКРЫТЫЙ ДОСТУП</span>
+                <span class="episode-catalog__staff-label">ЖИР ТВ // ЭФИРНЫЙ УКАЗАТЕЛЬ</span>
+              </p>
+              <h2 id="episode-catalog-heading">Все серии «Детского Жира»</h2>
+              <p class="episode-catalog__intro">
+                Найдите выпуск и выберите площадку, на которой вам удобнее его посмотреть.
+              </p>
+            </div>
+            <p class="episode-catalog__counter" data-episode-total>59 ВЫПУСКОВ</p>
+          </header>
+
+          <div class="episode-catalog__tools" aria-label="Поиск и сортировка серий">
+            <label class="episode-search">
+              <span class="visually-hidden">Найти серию</span>
+              <span class="episode-search__icon" aria-hidden="true">⌕</span>
+              <input
+                type="search"
+                autocomplete="off"
+                placeholder="Номер, название или слово из описания"
+                data-episode-search
+              />
+            </label>
+            <button
+              class="episode-sort"
+              type="button"
+              aria-pressed="false"
+              data-episode-sort
+            >
+              ↑ Сначала ранние
+            </button>
+          </div>
+
+          <div class="episode-catalog__index">
+            <p>КАТАЛОГ ЭПИЗОДОВ</p>
+            <p aria-live="polite" data-episode-visible-count>Показано: 59</p>
+          </div>
+
+          <div class="episode-list" data-episode-list></div>
+          <p class="episode-catalog__empty" data-episode-empty hidden>
+            По этому запросу серии не найдены.
+          </p>
+          <noscript>
+            <p class="episode-catalog__empty">Для просмотра каталога включите JavaScript.</p>
+          </noscript>
+        </section>
+      </main>
+
+      <dialog class="episode-dialog" data-episode-dialog aria-labelledby="episode-dialog-title">
+        <div class="episode-dialog__bar">
+          <span>ВЫБЕРИТЕ ИСТОЧНИК</span>
+          <button type="button" aria-label="Закрыть окно" data-episode-dialog-close>×</button>
+        </div>
+        <div class="episode-dialog__body">
+          <p class="episode-dialog__id" data-episode-dialog-id></p>
+          <h2 id="episode-dialog-title" data-episode-dialog-title></h2>
+          <p class="episode-dialog__note">
+            Доступность выпуска может различаться на разных площадках.
+          </p>
+          <div class="episode-dialog__sources" data-episode-dialog-sources></div>
+          <p class="episode-dialog__foot">Ссылка откроется в новой вкладке</p>
+        </div>
+      </dialog>
+
+      <footer class="site-footer">
+        <p class="guest-content">Открытый каталог передач комплекса.</p>
+        <p class="staff-content">public transmission log // 59 entries</p>
+        <nav class="social-links" aria-label="Социальные сети">
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="01" aria-label="Telegram"><span>Telegram</span></a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" data-vhs-code="02" aria-label="Instagram"><span>Instagram</span></a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer" data-vhs-code="03" aria-label="YouTube"><span>YouTube</span></a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="04" aria-label="VK"><span>VK</span></a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer" data-vhs-code="05" aria-label="TikTok"><span>TikTok</span></a>
+        </nav>
+        <div class="footer-trigger" title="service point" aria-hidden="true"></div>
+      </footer>
+    </div>
+    <script src="js/dossier-store.js"></script>
+    <script src="content/irina/call-content.js"></script>
+    <script src="content/archive/episode-catalog.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/archive-catalog.js"></script>
+  </body>
+</html>
