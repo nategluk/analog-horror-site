@@ -844,7 +844,7 @@ window.DZ_EPISODE_CATALOG = Object.freeze(
   },
   {
     "id": "Special-1",
-    "sortOrder": 1001,
+    "sortOrder": 30.1,
     "title": "Спецвыпуск — Выбери Аниматора: ЧАСТЬ 1",
     "description": "Выбери Аниматора. Твой выбор продиктует, с кем ты проведешь следующие 24 часа.",
     "theme": "mask",
@@ -859,7 +859,7 @@ window.DZ_EPISODE_CATALOG = Object.freeze(
   },
   {
     "id": "Special-2",
-    "sortOrder": 1002,
+    "sortOrder": 30.2,
     "title": "Спецвыпуск — Выбери Аниматора: ЧАСТЬ 2",
     "description": "Выбери Аниматора. Твой выбор продиктует, с кем ты проведешь следующие 24 часа.",
     "theme": "mask",
