@@ -11173,3 +11173,390 @@ body.staff-mode .episode-source:focus-visible {
     padding: 1rem;
   }
 }
+
+/* --- Свободный столик / Красная Комната --- */
+.red-room-shift {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.85rem;
+  color: #f3dcc6;
+  border: 1px solid #5a2230;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 186, 92, 0.12), transparent 28%),
+    linear-gradient(180deg, #4a1620 0%, #2a0c14 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 214, 160, 0.08), 0 12px 28px rgba(42, 12, 20, 0.28);
+}
+
+.rr-head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.rr-kicker {
+  margin: 0;
+  color: #e8b072;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rr-line {
+  min-height: 2.6em;
+  margin: 0;
+  color: #f7e6d4;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.rr-hall {
+  display: grid;
+  grid-template-columns: minmax(88px, 22%) minmax(0, 1fr);
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.rr-curtain,
+.rr-zone,
+.rr-player,
+.rr-entrance,
+.rr-action {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.rr-curtain,
+.rr-zone {
+  appearance: none;
+  display: grid;
+  align-content: space-between;
+  width: 100%;
+  padding: 0.55rem;
+  color: inherit;
+  border: 1px solid #7a3142;
+  background: #3a121c;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rr-curtain:disabled,
+.rr-zone:disabled {
+  cursor: default;
+}
+
+.rr-curtain {
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+  border-color: #8a1f36;
+  background: #2b0810;
+}
+
+.rr-curtain__fabric {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #6b1428 0 10px,
+      #4d0d1b 10px 18px
+    );
+  opacity: 0.92;
+}
+
+.rr-curtain.is-open {
+  box-shadow: 0 0 0 2px #f0b15a;
+}
+
+.rr-curtain.is-used .rr-curtain__fabric {
+  opacity: 0.38;
+  filter: saturate(0.4);
+}
+
+.rr-curtain.is-looking .rr-curtain__fabric {
+  opacity: 0.7;
+  box-shadow: inset 0 0 24px rgba(240, 177, 90, 0.45);
+}
+
+.rr-curtain .rr-zone-label {
+  position: relative;
+  z-index: 1;
+}
+
+.rr-room {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.rr-room.is-dim {
+  filter: saturate(0.7) brightness(0.86);
+}
+
+.rr-zone--table,
+.rr-zone--counter,
+.rr-player,
+.rr-entrance {
+  min-height: 108px;
+}
+
+.rr-player,
+.rr-entrance {
+  display: grid;
+  align-content: space-between;
+  padding: 0.55rem;
+  border: 1px dashed #7a3142;
+  background: rgba(20, 6, 10, 0.55);
+}
+
+.rr-zone.is-open,
+.rr-player.is-last-chair {
+  box-shadow: 0 0 0 2px #f0b15a;
+}
+
+.rr-zone.is-evict {
+  box-shadow: 0 0 0 2px #d9c4a0;
+}
+
+.rr-zone.is-last-chair {
+  box-shadow: 0 0 0 2px #f0b15a;
+}
+
+.rr-zone--table .rr-lamp {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #5a4030;
+  box-shadow: none;
+}
+
+.rr-zone--table.is-warm .rr-lamp {
+  background: #ffc56a;
+  box-shadow: 0 0 16px #ffb347;
+}
+
+.rr-zone--table.is-his {
+  border-color: #f0b15a;
+}
+
+.rr-zone-label {
+  color: #e8b072;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rr-zone-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: flex-end;
+  min-height: 3.2rem;
+}
+
+.rr-zone--table.is-facing-door .rr-person {
+  transform: scaleX(-1);
+}
+
+.rr-person {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 46px;
+}
+
+.rr-person i,
+.rr-person b {
+  position: absolute;
+  left: 50%;
+  display: block;
+  background: currentColor;
+  transform: translateX(-50%);
+}
+
+.rr-person i {
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.rr-person b {
+  top: 16px;
+  width: 20px;
+  height: 30px;
+  border-radius: 10px 10px 4px 4px;
+}
+
+.rr-person--tired { color: #c9a48a; }
+.rr-person--coffee { color: #d8c07a; }
+.rr-person--door { color: #9eb4c8; }
+.rr-person--returned { color: #e7c4b0; }
+.rr-person--player { color: #f3dcc6; }
+.rr-person.is-gone { opacity: 0.45; }
+.rr-person.is-standing-aside { opacity: 0.8; }
+
+.rr-person.is-walking {
+  position: fixed;
+  z-index: 80;
+  margin: 0;
+  pointer-events: none;
+  transition: transform 0.7s ease;
+}
+
+.rr-prop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  min-height: 18px;
+}
+
+.rr-prop--clock {
+  color: #f0b15a;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.rr-prop--bill {
+  padding: 0.1rem 0.28rem;
+  color: #2a0c14;
+  background: #f0d7a8;
+  font-size: 0.58rem;
+  font-weight: 800;
+}
+
+.rr-prop--cup,
+.rr-prop--chair {
+  width: 16px;
+  height: 20px;
+  border: 2px solid #f0b15a;
+  border-radius: 0 0 6px 6px;
+}
+
+.rr-prop--chair {
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.rr-prop--cup::after {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 10px;
+  background: #c4783a;
+}
+
+.rr-prop--cup.is-drinking::after {
+  height: 4px;
+}
+
+.rr-prop--cup-wet,
+.rr-prop--reserved {
+  border-color: #d9c4a0;
+}
+
+.rr-prop--reserved::after {
+  background: #d9c4a0;
+}
+
+.rr-dock {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.rr-guest {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: center;
+  min-height: 72px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #7a3142;
+  background: #230910;
+}
+
+.rr-guest--empty {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.rr-guest p {
+  margin: 0;
+  color: #f7e6d4;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.rr-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  color: #2a0c14;
+  border: 0;
+  border-radius: 8px;
+  background: #f0b15a;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.red-room-shift.is-busy .rr-action,
+.red-room-shift.is-busy .rr-zone.is-open,
+.red-room-shift.is-busy .rr-zone.is-evict,
+.red-room-shift.is-busy .rr-curtain.is-open {
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .rr-hall {
+    grid-template-columns: 1fr;
+  }
+
+  .rr-curtain {
+    min-height: 72px;
+    order: 3;
+  }
+
+  .rr-room {
+    order: 1;
+  }
+
+  .rr-dock {
+    order: 2;
+  }
+
+  .red-room-shift {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rr-head {
+    order: 0;
+  }
+
+  .rr-hall {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-person.is-walking,
+  .rr-curtain__fabric,
+  .rr-prop--cup::after {
+    transition: none;
+  }
+}

@@ -1169,6 +1169,21 @@
     window.DZInitEpisodeCatalog?.();
   };
 
+  const initRedRoomShift = async () => {
+    const root = document.querySelector("[data-red-room-shift]");
+    if (!root) return;
+
+    if (typeof window.TyndexRedRoomShift?.init !== "function") {
+      const appScript = [...document.scripts].find((script) =>
+        /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
+      );
+      const src = new URL("red-room-shift.js", appScript?.src || window.location.href).href;
+      await loadPageScript(src);
+    }
+
+    window.TyndexRedRoomShift?.init(root);
+  };
+
   const initMusicPlayer = () => {
     if (audio) return;
     
@@ -4733,6 +4748,7 @@
         }
 
         await initEpisodeCatalogPage(response.url || url);
+        await initRedRoomShift();
         initDOMListeners();
         announceNavigationChange();
         return true;
