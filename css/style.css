@@ -11375,8 +11375,8 @@ body.staff-mode .episode-source:focus-visible {
 }
 
 .rr-person[data-guest] {
-  width: 44px;
-  height: 66px;
+  width: 54px;
+  height: 54px;
 }
 
 .rr-person__sprite {
@@ -11500,7 +11500,7 @@ body.staff-mode .episode-source:focus-visible {
 
 .rr-guest {
   display: grid;
-  grid-template-columns: 66px minmax(0, 1fr);
+  grid-template-columns: 80px minmax(0, 1fr);
   gap: 0.65rem;
   align-items: center;
   min-height: 100px;
@@ -11510,8 +11510,8 @@ body.staff-mode .episode-source:focus-visible {
 }
 
 .rr-guest .rr-person[data-guest] {
-  width: 58px;
-  height: 87px;
+  width: 72px;
+  height: 72px;
 }
 
 .rr-guest--empty {

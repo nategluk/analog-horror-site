@@ -10,21 +10,21 @@
   const GUESTS = {
     tired: {
       id: "tired",
-      label: "Уставший",
+      label: "Без сил",
       sprite: `${GUEST_ASSET_ROOT}/guest-tired.webp`,
       arrive: "Можно сесть?\nКоридоры не кончаются.",
       table: "Лампа загорелась.",
-      counter: "Он смотрит на пустой стол.",
-      curtain: "Ткань закрылась за ним.",
+      counter: "Медвежья маска повёрнута к пустому столу.",
+      curtain: "Ткань закрылась за гостем.",
     },
     coffee: {
       id: "coffee",
       label: "Просит кофе",
       sprite: `${GUEST_ASSET_ROOT}/guest-coffee.webp`,
-      arrive: "Мне счёт.\nИ кофе, пока не проснулся.",
+      arrive: "Мне счёт.\nИ кофе. Я ещё сплю.",
       table: "Чашка на столе. Часы пошли.",
-      counter: "Он пьёт. Чашка пустеет.",
-      curtain: "Ушёл. Счёт остался на стойке.",
+      counter: "Чашка пустеет. Лисья улыбка не меняется.",
+      curtain: "Гость ушёл. Счёт остался на стойке.",
     },
     door: {
       id: "door",
@@ -37,12 +37,12 @@
     },
     returned: {
       id: "returned",
-      label: "Уже был",
+      label: "Уже здесь",
       sprite: `${GUEST_ASSET_ROOT}/guest-returned.webp`,
-      arrive: "Этот столик был мой.",
-      table: "Лампа стала теплее.\nЭто его место.",
-      counter: "Смотрит на ваш стул.",
-      curtain: "Ушёл. Зал его забыл.",
+      arrive: "Я помню этот столик.",
+      table: "Лампа стала теплее.\nМаска узнаёт это место.",
+      counter: "Знакомая маска смотрит на ваш стул.",
+      curtain: "Гость ушёл. Зал снова всё забыл.",
     },
   };
 
@@ -200,7 +200,7 @@
     }
     if (zone === "table") {
       if (state.playerSeat === "reserved" && !state.table) return "Последний стул";
-      if (state.traces.tableHis && state.table === "returned") return "Его столик";
+      if (state.traces.tableHis && state.table === "returned") return "Знакомый столик";
       return "Стол";
     }
     return "Стойка";
@@ -313,7 +313,7 @@
           : state.replay === "standing"
             ? "Смена // вы стоите"
             : state.replay === "returned-first"
-              ? "Смена // он пришёл первым"
+              ? "Смена // знакомая маска первая"
               : "Свободный столик";
     }
   };
@@ -369,7 +369,7 @@
       state.traces.counterChairOut = true;
     }
     state.traces.corridor = [...state.traces.corridor, guestId];
-    setLine(root, `${guestName(guestId)} встал и вышел в коридор.`);
+    setLine(root, `${guestName(guestId)} — теперь в коридоре.`);
   };
 
   const maybeTiredMoves = async (root, state) => {
@@ -378,8 +378,8 @@
     setLine(
       root,
       tookReserved
-        ? "Он сел на последний стул. Вам стоять."
-        : "Он не выдержал и сел за стол."
+        ? "Последний стул занят. Вам стоять."
+        : "Уставший гость занял пустой стол."
     );
     await wait(700);
     state.counter = null;
@@ -390,7 +390,7 @@
 
   const maybeCoffeeLeaves = async (root, state) => {
     if (state.counter !== "coffee") return false;
-    setLine(root, "Допил и вышел во вход.");
+    setLine(root, "Чашка опустела. Гость ушёл во вход.");
     const zoneEl = root.querySelector('[data-rr-zone="counter"]');
     const entrance = root.querySelector("[data-rr-entrance]");
     const person = zoneEl?.querySelector(".rr-person");
@@ -516,7 +516,7 @@
     if (state.phase !== "finale" || state.ending !== "hall" || state.busy) return;
     state.busy = true;
     if (state.counter === "returned" && hasPlayerChair(state)) {
-      setLine(root, "Он садится на ваш стул.");
+      setLine(root, "Знакомая маска занимает ваш стул.");
       render(root, state);
       await wait(700);
       state.counter = null;
