@@ -5,11 +5,13 @@
   const STORAGE_VERSION = 1;
   const FIRST_ORDER = ["tired", "coffee", "door", "returned"];
   const RETURNED_FIRST_ORDER = ["returned", "tired", "coffee", "door"];
+  const GUEST_ASSET_ROOT = "../assets/guest/red-room/game";
 
   const GUESTS = {
     tired: {
       id: "tired",
       label: "Уставший",
+      sprite: `${GUEST_ASSET_ROOT}/guest-tired.webp`,
       arrive: "Можно сесть?\nКоридоры не кончаются.",
       table: "Лампа загорелась.",
       counter: "Он смотрит на пустой стол.",
@@ -18,6 +20,7 @@
     coffee: {
       id: "coffee",
       label: "Просит кофе",
+      sprite: `${GUEST_ASSET_ROOT}/guest-coffee.webp`,
       arrive: "Мне счёт.\nИ кофе, пока не проснулся.",
       table: "Чашка на столе. Часы пошли.",
       counter: "Он пьёт. Чашка пустеет.",
@@ -26,6 +29,7 @@
     door: {
       id: "door",
       label: "Ищет дверь",
+      sprite: `${GUEST_ASSET_ROOT}/guest-door.webp`,
       arrive: "Где здесь обычная дверь?",
       table: "Стул смотрит на вход.",
       counter: "Спрашивает дорогу. Не пьёт.",
@@ -34,6 +38,7 @@
     returned: {
       id: "returned",
       label: "Уже был",
+      sprite: `${GUEST_ASSET_ROOT}/guest-returned.webp`,
       arrive: "Этот столик был мой.",
       table: "Лампа стала теплее.\nЭто его место.",
       counter: "Смотрит на ваш стул.",
@@ -146,7 +151,11 @@
 
   const renderPerson = (id, extraClass = "") => {
     if (!id) return "";
-    return `<span class="rr-person rr-person--${id} ${extraClass}" data-guest="${id}" aria-hidden="true"><i></i><b></b></span>`;
+    const guest = GUESTS[id];
+    const sprite = guest
+      ? `<img class="rr-person__sprite" src="${guest.sprite}" alt="" width="512" height="768" draggable="false" />`
+      : "";
+    return `<span class="rr-person rr-person--${id} ${extraClass}" data-guest="${id}" aria-hidden="true">${sprite}<i></i><b></b></span>`;
   };
 
   const renderZoneBody = (state, zone) => {
