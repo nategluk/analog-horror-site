@@ -122,6 +122,8 @@
 
   const guestName = (id) => (id && GUESTS[id] ? GUESTS[id].label : "");
 
+  const PLACEMENT_PROMPT = "Выберите: стол, стойка или штора.";
+
   const setLine = (root, text) => {
     const line = root.querySelector("[data-rr-line]");
     if (line) line.textContent = text || "";
@@ -443,7 +445,7 @@
     }
 
     state.currentGuest = state.order[state.index];
-    setLine(root, GUESTS[state.currentGuest].arrive.replace("\n", " "));
+    setLine(root, PLACEMENT_PROMPT);
     render(root, state);
   };
 
@@ -483,7 +485,7 @@
     state.playerSeated = true;
     state.playerSeat = "player";
     state.currentGuest = state.order[0];
-    setLine(root, GUESTS[state.currentGuest].arrive.replace("\n", " "));
+    setLine(root, PLACEMENT_PROMPT);
     render(root, state);
   };
 
