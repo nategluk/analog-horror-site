@@ -826,7 +826,7 @@
       guest: "fox-phone",
       props: ["note", "phone", "mic"],
       set: ["calledFoxEarly"],
-      sound: "phone",
+      sound: "buzz",
       autoNext: "dog_phone",
       delay: 600,
     },

@@ -130,7 +130,23 @@
     cup: { file: "sfx-cup.mp3", volume: 0.55 },
     door: { file: "sfx-door.mp3", volume: 0.62 },
     phone: { file: "sfx-phone.mp3", volume: 0.58 },
+    buzz: { file: "sfx-phone-buzz.mp3", volume: 0.52 },
     print: { file: "sfx-print.mp3", volume: 0.5 },
+  };
+  const PRESENCE_SITS = {
+    pig: { file: "sfx-sit-pig.mp3", volume: 0.46, delayMs: 520 },
+    fox: {
+      file: "sfx-sit-fox.mp3",
+      volume: 0.44,
+      delayMs: 480,
+      follow: { file: "sfx-phone-shutter.mp3", volume: 0.4, delayMs: 780 },
+    },
+    dog: { file: "sfx-sit-dog.mp3", volume: 0.5, delayMs: 280 },
+  };
+  const PRESENCE_SIGHS = {
+    pig: { file: "sfx-sigh-pig.mp3", volume: 0.26 },
+    fox: { file: "sfx-sigh-fox.mp3", volume: 0.24 },
+    dog: { file: "sfx-sigh-dog.mp3", volume: 0.28 },
   };
   const SEA_CHAIN = [
     { file: "sfx-sea-waves.mp3", volume: 0.4 },
@@ -156,6 +172,13 @@
   let bedAudio = null;
   let bedName = "";
   let cueAudio = null;
+  let presenceAudio = null;
+  let overlayAudios = [];
+  let sitTimer = 0;
+  let sitFollowTimer = 0;
+  let presenceTimer = 0;
+  let presencePrimed = false;
+  let lastSitGuest = "";
   let seaIndex = -1;
   let fadeRaf = 0;
   let bedFades = [];
@@ -370,6 +393,19 @@
     cueAudio = null;
   };
 
+  const stopOverlays = () => {
+    window.clearTimeout(sitTimer);
+    window.clearTimeout(sitFollowTimer);
+    window.clearTimeout(presenceTimer);
+    sitTimer = 0;
+    sitFollowTimer = 0;
+    presenceTimer = 0;
+    stopElement(presenceAudio);
+    presenceAudio = null;
+    overlayAudios.forEach((audio) => stopElement(audio));
+    overlayAudios = [];
+  };
+
   const tickBedFades = (now) => {
     bedFades = bedFades.filter((fade) => {
       if (!fade.audio) return false;
@@ -410,7 +446,109 @@
 
   const stopShiftAudio = () => {
     stopCues();
+    stopOverlays();
     stopBeds();
+  };
+
+  const playOverlayFile = (file, volume, retain) => {
+    const audio = new Audio(shiftAudioUrl(file));
+    audio.preload = "auto";
+    audio.volume = volume;
+    if (retain) {
+      stopElement(presenceAudio);
+      presenceAudio = audio;
+      audio.onended = () => {
+        if (presenceAudio === audio) presenceAudio = null;
+      };
+    } else {
+      overlayAudios = overlayAudios.filter((item) => item && !item.ended);
+      overlayAudios.push(audio);
+      audio.onended = () => {
+        overlayAudios = overlayAudios.filter((item) => item !== audio);
+      };
+    }
+    const play = audio.play();
+    if (play && typeof play.catch === "function") play.catch(() => {});
+  };
+
+  const presenceGuest = (node) => {
+    const guest = node?.guest || "none";
+    if (guest === "pig") return "pig";
+    if (guest === "fox") return "fox";
+    if (guest === "dog") return "dog";
+    return "none";
+  };
+
+  const shouldPlaySit = (node) => {
+    const guest = presenceGuest(node);
+    if (!guest || guest === "none" || guest === lastSitGuest) return false;
+    if (guest === "dog") return resolveVisual(node) === "V08_DOG_SETTLED";
+    return true;
+  };
+
+  const schedulePresenceSigh = (guest) => {
+    window.clearTimeout(presenceTimer);
+    presenceTimer = 0;
+    if (!soundEnabled || !PRESENCE_SIGHS[guest]) return;
+    presenceTimer = window.setTimeout(() => {
+      presenceTimer = 0;
+      if (!soundEnabled) return;
+      const node = nodeById(save?.currentNode);
+      if (presenceGuest(node) !== guest) return;
+      const sigh = PRESENCE_SIGHS[guest];
+      playOverlayFile(sigh.file, sigh.volume, false);
+      schedulePresenceSigh(guest);
+    }, 8000 + Math.round(Math.random() * 11000));
+  };
+
+  const playSit = (guest) => {
+    const sit = PRESENCE_SITS[guest];
+    if (!sit) return;
+    window.clearTimeout(sitTimer);
+    sitTimer = window.setTimeout(() => {
+      sitTimer = 0;
+      if (!soundEnabled) return;
+      const node = nodeById(save?.currentNode);
+      if (presenceGuest(node) !== guest) return;
+      playOverlayFile(sit.file, sit.volume, true);
+      if (sit.follow) {
+        window.clearTimeout(sitFollowTimer);
+        sitFollowTimer = window.setTimeout(() => {
+          sitFollowTimer = 0;
+          if (!soundEnabled) return;
+          const current = nodeById(save?.currentNode);
+          if (presenceGuest(current) !== guest) return;
+          playOverlayFile(sit.follow.file, sit.follow.volume, false);
+        }, sit.follow.delayMs || 0);
+      }
+    }, sit.delayMs || 0);
+  };
+
+  const syncPresence = (node) => {
+    if (!soundEnabled || !node) return;
+    const guest = presenceGuest(node);
+    if (!presencePrimed) {
+      presencePrimed = true;
+      lastSitGuest =
+        guest === "dog" && resolveVisual(node) !== "V08_DOG_SETTLED" ? "" : guest;
+      schedulePresenceSigh(lastSitGuest === "none" ? "" : lastSitGuest);
+      return;
+    }
+    if (guest === "none") {
+      lastSitGuest = "";
+      window.clearTimeout(sitTimer);
+      window.clearTimeout(sitFollowTimer);
+      sitTimer = 0;
+      sitFollowTimer = 0;
+      window.clearTimeout(presenceTimer);
+      presenceTimer = 0;
+      return;
+    }
+    if (shouldPlaySit(node)) {
+      lastSitGuest = guest;
+      playSit(guest);
+    }
+    schedulePresenceSigh(guest);
   };
 
   const playCueFile = (file, volume, onEnded) => {
@@ -506,6 +644,7 @@
     const node = nodeById(save?.currentNode);
     syncShiftAudio(node);
     if (node?.sound) playSceneSound(node.sound);
+    syncPresence(node);
   };
 
   const readingHoldMs = (text, node) => {
@@ -1095,6 +1234,7 @@
     stopCues();
     syncShiftAudio(node);
     if (node.sound) playSceneSound(node.sound);
+    syncPresence(node);
     root.dataset.state = "play";
     root.dataset.node = nodeId;
     renderScene(root, { ...node, id: nodeId });
@@ -1297,6 +1437,8 @@
     stopSceneVideo();
     stopShiftAudio();
     clearTimers(activeRoot);
+    presencePrimed = false;
+    lastSitGuest = "";
     const player = document.querySelector(".music-player");
     const logoArea = document.querySelector(".logo-area");
     if (player && logoArea && player.parentNode !== logoArea) {
