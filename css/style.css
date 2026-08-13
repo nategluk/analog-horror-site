@@ -11329,7 +11329,9 @@ body.staff-mode .episode-source:focus-visible {
   border-radius: 12px 12px 4px 4px;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.22), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.28)),
+    url("../assets/guest/red-room/game/espresso-metal-texture.webp") center / 16rem 16rem repeat,
     linear-gradient(180deg, #d8c8b4 0%, #8a7a6c 46%, #4e443c 100%);
+  background-blend-mode: screen, soft-light, normal;
   box-shadow:
     inset 0 1px 0 rgba(255, 248, 236, 0.55),
     0 12px 0 #231410;
@@ -11526,7 +11528,9 @@ body.staff-mode .episode-source:focus-visible {
       transparent 0 5px,
       rgba(90, 58, 28, 0.18) 5px 6px
     ),
+    url("../assets/guest/red-room/game/espresso-receipt-texture.webp") center / 10rem 10rem repeat,
     #f7ead0;
+  background-blend-mode: normal, multiply, normal;
   transition: top 0.45s ease;
 }
 
@@ -11616,7 +11620,9 @@ body.staff-mode .episode-source:focus-visible {
       transparent 0 11px,
       rgba(90, 58, 28, 0.12) 11px 12px
     ),
+    url("../assets/guest/red-room/game/espresso-receipt-texture.webp") center / 12rem 12rem repeat,
     #f4e4c4;
+  background-blend-mode: normal, multiply, normal;
 }
 
 .rr-espresso-receipt p {
