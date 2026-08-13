@@ -12,16 +12,16 @@
       id: "tired",
       label: "Без сил",
       sprite: `${GUEST_ASSET_ROOT}/guest-tired.webp`,
-      arrive: "Можно сесть?\nКоридоры не кончаются.",
-      table: "Лампа загорелась.",
-      counter: "Медвежья маска повёрнута к пустому столу.",
+      plea: "Я не прошу навсегда.\nТолько пока коридор перестанет двигаться.",
+      table: "Лампа стала теплее.",
+      counter: "Медвежья маска смотрит на пустой стол.",
       curtain: "Ткань закрылась за гостем.",
     },
     coffee: {
       id: "coffee",
       label: "Просит кофе",
       sprite: `${GUEST_ASSET_ROOT}/guest-coffee.webp`,
-      arrive: "Мне счёт.\nИ кофе. Я ещё сплю.",
+      plea: "У меня есть деньги.\nЯ закажу ещё, если место останется моим.",
       table: "Чашка на столе. Часы пошли.",
       counter: "Чашка пустеет. Лисья улыбка не меняется.",
       curtain: "Гость ушёл. Счёт остался на стойке.",
@@ -30,18 +30,18 @@
       id: "door",
       label: "Ищет дверь",
       sprite: `${GUEST_ASSET_ROOT}/guest-door.webp`,
-      arrive: "Где здесь обычная дверь?",
-      table: "Стул смотрит на вход.",
-      counter: "Спрашивает дорогу. Не пьёт.",
+      plea: "Мне не нужен кофе.\nПосадите меня туда, откуда видно дверь.",
+      table: "Стул повёрнут к входу.",
+      counter: "Заячья маска продолжает искать обычную дверь.",
       curtain: "Вы показали выход.",
     },
     returned: {
       id: "returned",
       label: "Уже здесь",
       sprite: `${GUEST_ASSET_ROOT}/guest-returned.webp`,
-      arrive: "Я помню этот столик.",
-      table: "Лампа стала теплее.\nМаска узнаёт это место.",
-      counter: "Знакомая маска смотрит на ваш стул.",
+      plea: "Я помню этот столик.\nИ чашку. И женщину в красном фартуке.",
+      table: "Лампа стала теплее. Маска узнаёт это место.",
+      counter: "Знакомая маска смотрит на место Лоры.",
       curtain: "Гость ушёл. Зал снова всё забыл.",
     },
   };
@@ -109,6 +109,76 @@
   });
 
   const bothSeatsFull = (state) => Boolean(state.table && state.counter);
+
+  const inSeat = (state, id) => state.table === id || state.counter === id;
+
+  const hallOccupants = (state) => [state.table, state.counter].filter(Boolean);
+
+  const guestContext = (id, state = {}) => {
+    if (id === "tired") {
+      if (inSeat(state, "coffee")) {
+        return "У неё ещё остались силы улыбаться.\nЗначит, постоять сможет.";
+      }
+      if (hallOccupants(state).length === 0) {
+        return "Здесь тихо. Я почти забыл, как это.";
+      }
+      return "Здесь тише, чем в коридоре.";
+    }
+    if (id === "coffee") {
+      if (state.table === "tired") {
+        return "Он спит.\nРазве место принадлежит тому, кто его не замечает?";
+      }
+      if (state.counter === "tired") {
+        return "Он ничего не закажет.\nТолько дождётся, пока вы отвернётесь.";
+      }
+      return "Я хотя бы могу оплатить свою чашку.";
+    }
+    if (id === "door") {
+      if (inSeat(state, "coffee")) {
+        return "Она не ищет выход.\nОна ждёт, когда вы принесёте ещё.";
+      }
+      if (inSeat(state, "tired")) {
+        return "Он уже отдыхает.\nЯ всё ещё пытаюсь выбраться.";
+      }
+      if (bothSeatsFull(state)) {
+        return "Им нужно остаться.\nМне место нужно, чтобы уйти.";
+      }
+      return "Мне нужно видеть, куда уходить.";
+    }
+    if (id === "returned") {
+      if (state.replay === "returned-first" && hallOccupants(state).length === 0) {
+        return "Ты всё-таки вернулась.\nИли фартук нашёл кого-то другого?";
+      }
+      if (bothSeatsFull(state)) {
+        return "Здесь нет свободных мест.\nНо одно из занятых — моё.";
+      }
+      if (hallOccupants(state).length > 0) {
+        return "Они пришли позже.\nТы тоже.";
+      }
+      return "Я помню, как здесь сидели.";
+    }
+    return "";
+  };
+
+  const guestCoda = (id, state = {}) => {
+    if (id === "returned" && state.replay === "none") return "Решай, Лора.";
+    return "";
+  };
+
+  const formatCopy = (text) =>
+    String(text || "")
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .join("<br />");
+
+  const heardCount = (state) => {
+    if (state.phase === "play") return state.index + 1;
+    if (state.phase === "await-next" || state.phase === "finale" || state.phase === "closed") {
+      return Math.min(state.index, 4);
+    }
+    return 0;
+  };
 
   const hasPlayerChair = (state) =>
     state.playerSeat === "reserved" || state.playerSeat === "player";
@@ -295,6 +365,8 @@
     let action = "";
     if (state.phase === "sit") {
       action = `<button type="button" class="rr-action" data-rr-sit>НАЧАТЬ СМЕНУ</button>`;
+    } else if (state.phase === "await-next") {
+      action = `<button type="button" class="rr-action" data-rr-next>СЛЕДУЮЩИЙ ГОСТЬ</button>`;
     } else if (state.phase === "finale" && state.ending === "hall") {
       action = `<button type="button" class="rr-action" data-rr-close>ЗАКРЫТЬ СМЕНУ</button>`;
     } else if (state.phase === "finale" && state.ending === "curtain") {
@@ -307,10 +379,17 @@
       action = `<button type="button" class="rr-action" data-rr-again>НОВАЯ СМЕНА</button>`;
     }
 
+    const context = guest ? guestContext(guest.id, state) : "";
+    const coda = guest ? guestCoda(guest.id, state) : "";
     const guestCard = guest
       ? `<div class="rr-guest" data-rr-guest="${guest.id}">
            ${renderPerson(guest.id)}
-           <p>${guest.arrive.replace("\n", "<br />")}</p>
+           <div class="rr-guest__copy">
+             <p class="rr-guest__name">${guest.label}</p>
+             <p>${formatCopy(guest.plea)}</p>
+             ${context ? `<p>${formatCopy(context)}</p>` : ""}
+             ${coda ? `<p class="rr-guest__coda">${formatCopy(coda)}</p>` : ""}
+           </div>
          </div>`
       : state.phase === "sit"
         ? `<div class="rr-guest rr-guest--empty"><p>На спинке стула висит красный фартук.<br />На бейдже — «ЛОРА».</p></div>`
@@ -332,6 +411,20 @@
     root.classList.toggle("is-staff-hidden", false);
     buildHall(root, state);
     buildDock(root, state);
+    const progress = root.querySelector("[data-rr-progress]");
+    if (progress) {
+      const heard = heardCount(state);
+      if (!heard || state.phase === "sit" || state.phase === "closed") {
+        progress.hidden = true;
+        progress.textContent = "";
+      } else {
+        progress.hidden = false;
+        const marks = [0, 1, 2, 3]
+          .map((slot) => (slot < heard ? "●" : "○"))
+          .join(" ");
+        progress.textContent = `Гость ${heard} из 4  ${marks}`;
+      }
+    }
     const kicker = root.querySelector("[data-rr-kicker]");
     if (kicker) {
       kicker.textContent =
@@ -446,34 +539,97 @@
     return true;
   };
 
-  const advanceAfterPlacement = async (root, state) => {
-    const placedIndex = state.index;
-    state.index += 1;
-    state.currentGuest = null;
-    render(root, state);
+  const persistLive = (state, previous) => {
+    const record = {
+      version: STORAGE_VERSION,
+      status: "in_progress",
+      ending: state.ending,
+      shiftsCompleted: previous?.shiftsCompleted || 0,
+      finale: previous?.finale || null,
+      live: {
+        phase: state.phase,
+        replay: state.replay,
+        playerSeated: state.playerSeated,
+        playerSeat: state.playerSeat,
+        table: state.table,
+        counter: state.counter,
+        curtainUsed: state.curtainUsed,
+        curtainLooked: state.curtainLooked,
+        order: state.order,
+        index: state.index,
+        currentGuest: state.currentGuest,
+        traces: clone(state.traces),
+        ending: state.ending,
+        lastLine: state.lastLine || "",
+      },
+      updatedAt: Date.now(),
+    };
+    writeRecord(record);
+    return record;
+  };
 
-    if (placedIndex === 1) {
-      await maybeTiredMoves(root, state);
-    }
-    if (placedIndex === 2) {
-      await maybeCoffeeLeaves(root, state);
-    }
+  const captureLine = (root, state, text) => {
+    state.lastLine = text || "";
+    setLine(root, text);
+  };
 
-    if (state.index >= state.order.length) {
-      state.ending = state.curtainUsed ? "hall" : "curtain";
-      state.phase = "finale";
-      if (state.ending === "curtain") state.curtainLooked = true;
-      setLine(root, "Смена закончена.");
-      render(root, state);
-      return;
-    }
+  const restoreLive = (live) => ({
+    phase: live.phase || "play",
+    replay: live.replay || "none",
+    playerSeated: Boolean(live.playerSeated),
+    playerSeat: live.playerSeat || "empty",
+    table: live.table || null,
+    counter: live.counter || null,
+    curtainUsed: Boolean(live.curtainUsed),
+    curtainLooked: Boolean(live.curtainLooked),
+    order: Array.isArray(live.order) && live.order.length ? live.order : [...FIRST_ORDER],
+    index: Number.isFinite(live.index) ? live.index : 0,
+    currentGuest: live.currentGuest || null,
+    traces: { ...emptyTraces(), ...(live.traces || {}) },
+    busy: false,
+    ending: live.ending || null,
+    lastLine: live.lastLine || "",
+  });
 
-    state.currentGuest = state.order[state.index];
-    setLine(root, waitingLine(state));
+  const openFinale = (root, state) => {
+    state.ending = state.curtainUsed ? "hall" : "curtain";
+    state.phase = "finale";
+    if (state.ending === "curtain") state.curtainLooked = true;
+    captureLine(root, state, "Смена закончена.");
     render(root, state);
   };
 
-  const placeGuest = async (root, state, zone) => {
+  const advanceAfterPlacement = (root, state, previousRef) => {
+    state.index += 1;
+    state.currentGuest = null;
+    if (state.index >= state.order.length) {
+      render(root, state);
+      return;
+    }
+    state.phase = "await-next";
+    render(root, state);
+    previousRef.current = persistLive(state, previousRef.current);
+  };
+
+  const nextGuest = async (root, state, previousRef) => {
+    if (state.phase !== "await-next" || state.busy) return;
+    state.busy = true;
+    render(root, state);
+    if (state.index === 2) {
+      await maybeTiredMoves(root, state);
+    }
+    if (state.index === 3) {
+      await maybeCoffeeLeaves(root, state);
+    }
+    state.currentGuest = state.order[state.index];
+    state.phase = "play";
+    captureLine(root, state, waitingLine(state));
+    state.busy = false;
+    render(root, state);
+    previousRef.current = persistLive(state, previousRef.current);
+  };
+
+  const placeGuest = async (root, state, zone, previousRef) => {
     const guestId = state.currentGuest;
     if (!guestId || state.busy || state.phase !== "play") return;
     const occupied = zone === "table" ? state.table : zone === "counter" ? state.counter : null;
@@ -493,34 +649,41 @@
     const reservedBefore = state.playerSeat === "reserved";
     applyPlacementEffects(state, guestId, zone);
     if (zone === "table" && reservedBefore) {
-      setLine(root, "Последний стул занят.");
+      captureLine(root, state, "Последний стул занят.");
     } else {
-      setLine(root, GUESTS[guestId][zone].replace("\n", " "));
+      captureLine(root, state, GUESTS[guestId][zone].replace("\n", " "));
     }
     render(root, state);
-    await wait(720);
-    await advanceAfterPlacement(root, state);
+    await wait(480);
+    advanceAfterPlacement(root, state, previousRef);
+    if (state.index >= state.order.length) {
+      await wait(520);
+      openFinale(root, state);
+      previousRef.current = persistLive(state, previousRef.current);
+    }
     state.busy = false;
     render(root, state);
   };
 
-  const sitDown = (root, state) => {
+  const sitDown = (root, state, previousRef) => {
     if (state.phase !== "sit" || state.busy) return;
     state.phase = "play";
     state.playerSeated = true;
     state.playerSeat = "player";
     state.currentGuest = state.order[0];
-    setLine(root, waitingLine(state));
+    captureLine(root, state, waitingLine(state));
     render(root, state);
+    previousRef.current = persistLive(state, previousRef.current);
   };
 
-  const startStandingShift = (root, state) => {
+  const startStandingShift = (root, state, previousRef) => {
     state.phase = "play";
     state.playerSeated = false;
     state.playerSeat = "reserved";
     state.currentGuest = state.order[0];
-    setLine(root, "Последний стул ещё ваш, пока его не отдали.");
+    captureLine(root, state, "Последний стул ещё ваш, пока его не отдали.");
     render(root, state);
+    previousRef.current = persistLive(state, previousRef.current);
   };
 
   const persistClosed = (state, previous) => {
@@ -606,7 +769,11 @@
     root.addEventListener("click", (event) => {
       const state = getState();
       if (event.target.closest("[data-rr-sit]")) {
-        sitDown(root, state);
+        sitDown(root, state, previousRef);
+        return;
+      }
+      if (event.target.closest("[data-rr-next]")) {
+        nextGuest(root, state, previousRef);
         return;
       }
       if (event.target.closest("[data-rr-close]")) {
@@ -622,16 +789,16 @@
         const next = createLiveState(replay);
         setState(next);
         updatePageCopy(null, false);
-        if (replay === "standing") startStandingShift(root, next);
+        if (replay === "standing") startStandingShift(root, next, previousRef);
         else {
-          setLine(root, "Столик снова свободен.");
+          captureLine(root, next, "Столик снова свободен.");
           render(root, next);
         }
         return;
       }
       const zoneButton = event.target.closest("[data-rr-zone]");
       if (!zoneButton || zoneButton.disabled) return;
-      placeGuest(root, state, zoneButton.dataset.rrZone);
+      placeGuest(root, state, zoneButton.dataset.rrZone, previousRef);
     });
   };
 
@@ -644,6 +811,7 @@
     root.innerHTML = `
       <header class="rr-head">
         <p class="rr-kicker" data-rr-kicker>Свободный столик</p>
+        <p class="rr-progress" data-rr-progress hidden></p>
         <p class="rr-line" data-rr-line aria-live="polite"></p>
       </header>
       <div class="rr-hall" data-rr-hall></div>
@@ -652,7 +820,10 @@
 
     const previousRef = { current: readRecord() };
     let state;
-    if (previousRef.current?.status === "closed" && previousRef.current.finale) {
+    if (previousRef.current?.status === "in_progress" && previousRef.current.live) {
+      state = restoreLive(previousRef.current.live);
+      setLine(root, previousRef.current.live.lastLine || waitingLine(state));
+    } else if (previousRef.current?.status === "closed" && previousRef.current.finale) {
       state = restoreClosed(previousRef.current);
       updatePageCopy(previousRef.current.ending, true);
       if (state.ending === "curtain") {
@@ -687,6 +858,8 @@
   window.TyndexRedRoomShift = {
     init,
     key: STORAGE_KEY,
+    guestContext,
+    guestCoda,
   };
 
   if (document.querySelector("[data-red-room-shift]")) {

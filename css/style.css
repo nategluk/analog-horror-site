@@ -11208,6 +11208,15 @@ body.staff-mode .episode-source:focus-visible {
   text-transform: uppercase;
 }
 
+.rr-progress {
+  margin: 0;
+  color: #c9a07a;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .rr-line {
   min-height: 2.6em;
   margin: 0;
@@ -11780,11 +11789,30 @@ body.staff-mode .episode-source:focus-visible {
   grid-template-columns: minmax(0, 1fr);
 }
 
+.rr-guest__copy {
+  display: grid;
+  gap: 0.32rem;
+  min-width: 0;
+}
+
+.rr-guest__name {
+  margin: 0;
+  color: #e8b072;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .rr-guest p {
   margin: 0;
   color: #f7e6d4;
-  font-size: 0.95rem;
-  line-height: 1.35;
+  font-size: 0.86rem;
+  line-height: 1.32;
+}
+
+.rr-guest__coda {
+  color: #f0b15a;
 }
 
 .rr-action {
