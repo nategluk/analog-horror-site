@@ -67,6 +67,8 @@
     counterChairOut: false,
     recognitionDim: false,
     corridor: [],
+    curtain: [],
+    curtainUnknown: false,
   });
 
   const createLiveState = (replay) => ({
@@ -82,6 +84,7 @@
     index: 0,
     currentGuest: null,
     traces: emptyTraces(),
+    rewards: [],
     busy: false,
     ending: null,
   });
@@ -106,6 +109,7 @@
     playerSeat: state.playerSeat,
     curtainUsed: state.curtainUsed,
     traces: clone(state.traces),
+    rewards: [...(state.rewards || [])],
   });
 
   const bothSeatsFull = (state) => Boolean(state.table && state.counter);
@@ -173,7 +177,7 @@
       .join("<br />");
 
   const heardCount = (state) => {
-    if (state.phase === "play") return state.index + 1;
+    if (state.phase === "play") return Math.min(state.index + 1, 4);
     if (state.phase === "await-next" || state.phase === "finale" || state.phase === "closed") {
       return Math.min(state.index, 4);
     }
@@ -191,6 +195,37 @@
   };
 
   const guestName = (id) => (id && GUESTS[id] ? GUESTS[id].label : "");
+
+  const addReward = (state, text) => {
+    if (!text) return;
+    state.rewards = [...(state.rewards || []), text];
+  };
+
+  const placementReward = (guestId, zone) => {
+    const rewards = {
+      tired: {
+        table: "Открыт след: лампа стала теплее.",
+        counter: "Стойка удержала того, кто больше не мог стоять.",
+        curtain: "Коридор перестал двигаться — но только для одной маски.",
+      },
+      coffee: {
+        table: "Открыт след: часы снова идут.",
+        counter: "Открыт след: чашка медленно пустеет.",
+        curtain: "Открыт след: на стойке остался неоплаченный счет.",
+      },
+      door: {
+        table: "Открыт след: стул повернут к выходу.",
+        counter: "От стойки видно только обычный вход.",
+        curtain: "Открыт след: обычная дверь больше не нужна.",
+      },
+      returned: {
+        table: "Открыт след: стол узнал гостя.",
+        counter: "Знакомая маска смотрит на место Лоры.",
+        curtain: "Открыт след: зал забыл знакомую маску.",
+      },
+    };
+    return rewards[guestId]?.[zone] || "Комната запомнила решение.";
+  };
 
   const WAIT_LINE = "Зал ждёт.";
   const EVICT_HINT = "Мест нет. Нажмите на занятую зону — гость уйдёт в коридор.";
@@ -395,11 +430,59 @@
         ? `<div class="rr-guest rr-guest--empty"><p>На спинке стула висит красный фартук.<br />На бейдже — «ЛОРА».</p></div>`
         : state.phase === "finale" && state.ending === "hall" && !state.busy
           ? `<div class="rr-guest rr-guest--empty"><p>Зал остаётся таким, каким вы его собрали.</p></div>`
-        : state.phase === "closed" && state.ending === "curtain"
-          ? `<div class="rr-guest rr-guest--empty"><p>Красная Комната осталась без хозяйки.</p></div>`
+        : state.phase === "closed"
+          ? buildFinaleCard(state)
         : "";
 
     dock.innerHTML = `${guestCard}${action}`;
+  };
+
+  const buildRewards = (root, state) => {
+    const panel = root.querySelector("[data-rr-rewards]");
+    if (!panel) return;
+    const rewards = state.rewards || [];
+    if (!rewards.length || state.phase === "closed") {
+      panel.hidden = true;
+      panel.innerHTML = "";
+      return;
+    }
+    panel.hidden = false;
+    panel.innerHTML = `
+      <p class="rr-rewards__title">Следы смены</p>
+      <ol>${rewards.map((reward) => `<li>${reward}</li>`).join("")}</ol>
+    `;
+  };
+
+  const finaleNames = (ids) =>
+    (ids || []).map(guestName).filter(Boolean).join(", ") || "никого";
+
+  const buildFinaleCard = (state) => {
+    const table = guestName(state.table) || "пусто";
+    const counter = guestName(state.counter) || "пусто";
+    const corridor = finaleNames(state.traces.corridor);
+    const curtainGuests = [...(state.traces.curtain || [])];
+    const behindCurtain = state.traces.curtainUnknown
+      ? "часть записи утрачена"
+      : state.ending === "curtain"
+      ? [...curtainGuests.map(guestName).filter(Boolean), "Лора"].join(", ")
+      : finaleNames(curtainGuests);
+    const comment = state.ending === "curtain"
+      ? "Вы не отдали выход ни одному гостю. Когда штора посмотрела на вас, вы выбрали себя."
+      : state.playerSeat === "returned"
+        ? "Ваше место заняли. Значит, смена продолжится."
+        : "Вы закрыли смену изнутри. Комната оставила вам место.";
+    return `
+      <article class="rr-finale">
+        <p class="rr-finale__kicker">Итог смены</p>
+        <p class="rr-finale__comment">${comment}</p>
+        <dl>
+          <div><dt>Стол</dt><dd>${table}</dd></div>
+          <div><dt>Стойка</dt><dd>${counter}</dd></div>
+          <div><dt>Коридор</dt><dd>${corridor}</dd></div>
+          <div><dt>За шторой</dt><dd>${behindCurtain}</dd></div>
+        </dl>
+      </article>
+    `;
   };
 
   const render = (root, state) => {
@@ -410,6 +493,7 @@
     root.classList.toggle("is-busy", state.busy);
     root.classList.toggle("is-staff-hidden", false);
     buildHall(root, state);
+    buildRewards(root, state);
     buildDock(root, state);
     const progress = root.querySelector("[data-rr-progress]");
     if (progress) {
@@ -460,6 +544,7 @@
     }
     if (zone === "curtain") {
       state.curtainUsed = true;
+      state.traces.curtain = [...(state.traces.curtain || []), guestId];
       if (guestId === "coffee") state.traces.unpaidBill = true;
       if (guestId === "returned") state.traces.recognitionDim = true;
     }
@@ -493,6 +578,7 @@
       state.traces.counterChairOut = true;
     }
     state.traces.corridor = [...state.traces.corridor, guestId];
+    addReward(state, `Коридор принял: ${guestName(guestId)}.`);
     setLine(root, "Маска ушла в коридор.");
   };
 
@@ -506,6 +592,7 @@
     await wait(700);
     state.counter = null;
     applyPlacementEffects(state, "tired", "table");
+    addReward(state, "Комната решила сама: уставший занял свободный стол.");
     render(root, state);
     return true;
   };
@@ -535,6 +622,7 @@
     state.counter = null;
     state.traces.wetCup = true;
     state.traces.corridor = [...state.traces.corridor, "coffee"];
+    addReward(state, "Гость ушел сам. На стойке остался мокрый след.");
     render(root, state);
     return true;
   };
@@ -559,6 +647,7 @@
         index: state.index,
         currentGuest: state.currentGuest,
         traces: clone(state.traces),
+        rewards: [...(state.rewards || [])],
         ending: state.ending,
         lastLine: state.lastLine || "",
       },
@@ -585,7 +674,14 @@
     order: Array.isArray(live.order) && live.order.length ? live.order : [...FIRST_ORDER],
     index: Number.isFinite(live.index) ? live.index : 0,
     currentGuest: live.currentGuest || null,
-    traces: { ...emptyTraces(), ...(live.traces || {}) },
+    traces: {
+      ...emptyTraces(),
+      ...(live.traces || {}),
+      curtainUnknown: Boolean(
+        live.curtainUsed && !Array.isArray(live.traces?.curtain)
+      ),
+    },
+    rewards: Array.isArray(live.rewards) ? [...live.rewards] : [],
     busy: false,
     ending: live.ending || null,
     lastLine: live.lastLine || "",
@@ -648,6 +744,7 @@
 
     const reservedBefore = state.playerSeat === "reserved";
     applyPlacementEffects(state, guestId, zone);
+    addReward(state, placementReward(guestId, zone));
     if (zone === "table" && reservedBefore) {
       captureLine(root, state, "Последний стул занят.");
     } else {
@@ -759,7 +856,14 @@
       order: [],
       index: 4,
       currentGuest: null,
-      traces: { ...emptyTraces(), ...(finale.traces || {}) },
+      traces: {
+        ...emptyTraces(),
+        ...(finale.traces || {}),
+        curtainUnknown: Boolean(
+          record.ending === "hall" && !Array.isArray(finale.traces?.curtain)
+        ),
+      },
+      rewards: Array.isArray(finale.rewards) ? [...finale.rewards] : [],
       busy: false,
       ending: record.ending,
     };
@@ -815,6 +919,7 @@
         <p class="rr-line" data-rr-line aria-live="polite"></p>
       </header>
       <div class="rr-hall" data-rr-hall></div>
+      <section class="rr-rewards" data-rr-rewards hidden></section>
       <div class="rr-dock" data-rr-dock></div>
     `;
 
