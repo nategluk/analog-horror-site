@@ -170,6 +170,7 @@
       } else if (view.phase === "ready") {
         buttons.push({ act: "take", label: "Забрать чек" });
       } else {
+        buttons.push({ act: "staff", label: "Пройти в персонал" });
         buttons.push({ act: "read", label: "Прочитать чек" });
         buttons.push({ act: "replay", label: "Приготовить ещё" });
       }
@@ -192,7 +193,7 @@
       if (sub && !sub.hidden) parts.push(sub.textContent);
       parts.push(`Вода: ${waterText}. Зерно: ${beansText}. Давление: ${pressureText}.`);
       if (receipt && !receipt.hidden) {
-        parts.push("Эспрессо готов. Служебный идентификатор куратора разблокирован. Проследуйте в технический раздел.");
+        parts.push("Эспрессо готов. Служебный идентификатор куратора разблокирован. Проследуйте в раздел «Персонал».");
       }
       if (view.flavor) parts.push(view.flavor);
       live.textContent = parts.join(" ");
@@ -320,17 +321,16 @@
       paint(target, view);
     };
 
-    const goWarm = () => {
-      view.phase = "warm";
-      view.water = true;
-      view.beans = true;
-      view.cup = "full";
-      view.busy = false;
-      view.flavor = "";
-      view.replaying = false;
-      view.completed = true;
-      applySettledFx(view);
-      paint(target, view);
+    const enterStaff = () => {
+      try {
+        window.localStorage.setItem("tyndex_mode", "staff");
+      } catch (error) {
+        /* mode persistence is optional */
+      }
+      const href =
+        target.getAttribute("data-staff-entry") ||
+        new URL("../staff.html", window.location.href).href;
+      window.location.assign(new URL(href, window.location.href).href);
     };
 
     const runBrew = async (token) => {
@@ -424,7 +424,13 @@
         if (act === "take" && view.phase === "ready") {
           view.completed = true;
           writeSave();
-          goWarm();
+          enterStaff();
+          return;
+        }
+
+        if (act === "staff" && (view.phase === "warm" || view.phase === "reading")) {
+          writeSave();
+          enterStaff();
           return;
         }
 

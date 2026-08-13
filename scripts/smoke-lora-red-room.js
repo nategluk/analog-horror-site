@@ -199,6 +199,32 @@ if (!nodes.end_leave.action || nodes.pig_reveal.speaker !== "СМЕНА") {
   throw new Error("text roles: narration and mixed action are not separated");
 }
 
+const povContract = [
+  ["pig_suit", "pig_suit_silent", "pig_center"],
+  ["fox_leave", "fox_take_number", "dog_arrive"],
+  ["dog_arrive", "dog_approach", "dog_where"],
+];
+povContract.forEach(([id, choiceId, next]) => {
+  if (nodes[id].autoNext) {
+    throw new Error(`pov: ${id} must wait for a player gesture`);
+  }
+  const choice = (nodes[id].choices || []).find((item) => item.id === choiceId);
+  if (choice?.next !== next) {
+    throw new Error(`pov: ${id} is missing ${choiceId} → ${next}`);
+  }
+});
+const foxTruth = (nodes.fox_monopoly.choices || []).map((choice) => choice.next);
+if (
+  nodes.fox_monopoly.autoNext ||
+  foxTruth.length !== 2 ||
+  foxTruth.some((next) => next !== "fox_leave")
+) {
+  throw new Error("pov: fox_monopoly must answer in place, then leave");
+}
+if (!(nodes.fox_leave.set || []).includes("foxLeftNumber")) {
+  throw new Error("pov: taking the number must still leave foxLeftNumber");
+}
+
 const revealRun = walk(
   {
     pig_blue_key: "ask_how",

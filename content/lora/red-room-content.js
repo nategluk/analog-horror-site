@@ -183,8 +183,7 @@
       line: "Им не нужно моё имя. Им нужен тот, кто влезет в костюм.\nОсвободится место — засунут следующего.",
       guest: "pig",
       props: ["note"],
-      autoNext: "pig_center",
-      delay: 500,
+      choices: [{ id: "pig_suit_silent", text: "Молчать", next: "pig_center" }],
     },
     pig_center: {
       scene: "table",
@@ -597,8 +596,10 @@
       line: "Администрация собирает чужой страх. Я собираю тех, кто умеет его причинять.\nТак честнее, правда?",
       guest: "fox",
       props: ["note"],
-      autoNext: "fox_leave",
-      delay: 600,
+      choices: [
+        { id: "fox_agree_truth", text: "Правда.", next: "fox_leave" },
+        { id: "fox_no_answer", text: "Не отвечать", next: "fox_leave" },
+      ],
     },
     fox_leave: {
       scene: "counter",
@@ -609,8 +610,7 @@
       props: ["note", "phone"],
       set: ["foxLeftNumber"],
       sound: "door",
-      autoNext: "dog_arrive",
-      delay: 800,
+      choices: [{ id: "fox_take_number", text: "Взять номер", next: "dog_arrive" }],
     },
     dog_arrive: {
       scene: "counter",
@@ -620,8 +620,7 @@
       guest: "dog",
       props: ["note", "phone", "mic"],
       sound: "door",
-      autoNext: "dog_where",
-      delay: 700,
+      choices: [{ id: "dog_approach", text: "Подойти", next: "dog_where" }],
     },
     dog_where: {
       scene: "counter",

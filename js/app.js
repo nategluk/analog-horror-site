@@ -1338,6 +1338,10 @@
       applyMode(nextIsStaff);
       body.classList.remove("glitching");
       switching = false;
+      if (!nextIsStaff) return;
+      const staffEntry = document.querySelector("[data-staff-entry]")?.getAttribute("data-staff-entry");
+      if (!staffEntry) return;
+      window.location.assign(new URL(staffEntry, window.location.href).href);
     }, 1600);
   };
 

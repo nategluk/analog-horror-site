@@ -219,6 +219,18 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
   "assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
   "assets/guest/red-room/lora/scenes/v12-empty-curtain.webp",
+  "assets/audio/guest/red-room/shift/bed-empty.mp3",
+  "assets/audio/guest/red-room/shift/bed-pig.mp3",
+  "assets/audio/guest/red-room/shift/bed-fox.mp3",
+  "assets/audio/guest/red-room/shift/bed-dog.mp3",
+  "assets/audio/guest/red-room/shift/sfx-door.mp3",
+  "assets/audio/guest/red-room/shift/sfx-cup.mp3",
+  "assets/audio/guest/red-room/shift/sfx-phone.mp3",
+  "assets/audio/guest/red-room/shift/sfx-print.mp3",
+  "assets/audio/guest/red-room/shift/sfx-sea-waves.mp3",
+  "assets/audio/guest/red-room/shift/sfx-sea-gulls.mp3",
+  "assets/audio/guest/red-room/shift/sfx-sea-plastic.mp3",
+  "assets/audio/guest/red-room/shift/sfx-sea-thud.mp3",
 ];
 const missingAssets = requiredAssets.filter(
   (asset) => !fs.existsSync(path.join(__dirname, "..", asset))

@@ -56,14 +56,41 @@
     },
   };
 
+  const SHIFT_AUDIO = "../assets/audio/guest/red-room/shift/";
+  const BED_VOLUME = 0.18;
+  const BED_FADE_MS = 1400;
+  const SCENE_SOUNDS = {
+    cup: { file: "sfx-cup.mp3", volume: 0.55 },
+    door: { file: "sfx-door.mp3", volume: 0.62 },
+    phone: { file: "sfx-phone.mp3", volume: 0.58 },
+    print: { file: "sfx-print.mp3", volume: 0.5 },
+  };
+  const SEA_CHAIN = [
+    { file: "sfx-sea-waves.mp3", volume: 0.4 },
+    { file: "sfx-sea-gulls.mp3", volume: 0.38 },
+    { file: "sfx-sea-plastic.mp3", volume: 0.5 },
+    { file: "sfx-sea-thud.mp3", volume: 0.58 },
+  ];
+  const BED_FILES = {
+    empty: "bed-empty.mp3",
+    pig: "bed-pig.mp3",
+    fox: "bed-fox.mp3",
+    dog: "bed-dog.mp3",
+  };
+
   let activeRoot = null;
   let save = null;
   let revealTimer = 0;
   let autoTimer = 0;
   let ambientTimer = 0;
-  let audioCtx = null;
   let soundEnabled = false;
   let activeSceneVideo = null;
+  let bedAudio = null;
+  let bedName = "";
+  let cueAudio = null;
+  let seaIndex = -1;
+  let fadeRaf = 0;
+  let bedFades = [];
 
   const prefersReducedMotion = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -249,58 +276,135 @@
     writeSave(save);
   };
 
-  const ensureAudio = () => {
-    if (audioCtx) return audioCtx;
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) return null;
-    audioCtx = new Ctx();
-    return audioCtx;
+  const shiftAudioUrl = (file) => assetUrl(`${SHIFT_AUDIO}${file}`);
+
+  const stopElement = (audio) => {
+    if (!audio) return;
+    audio.onended = null;
+    audio.pause();
+    audio.src = "";
   };
 
-  const playTone = (freq, duration, type = "sine", gainValue = 0.05) => {
-    const ctx = ensureAudio();
-    if (!ctx) return;
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    const oscillator = ctx.createOscillator();
-    const gain = ctx.createGain();
-    oscillator.type = type;
-    oscillator.frequency.value = freq;
-    gain.gain.setValueAtTime(gainValue, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    oscillator.connect(gain);
-    gain.connect(ctx.destination);
-    oscillator.start();
-    oscillator.stop(ctx.currentTime + duration);
+  const stopCues = () => {
+    seaIndex = -1;
+    stopElement(cueAudio);
+    cueAudio = null;
+  };
+
+  const tickBedFades = (now) => {
+    bedFades = bedFades.filter((fade) => {
+      if (!fade.audio) return false;
+      const t = Math.min(1, (now - fade.start) / fade.ms);
+      fade.audio.volume = Math.max(0, Math.min(1, fade.from + (fade.to - fade.from) * t));
+      if (t < 1) return true;
+      fade.onDone?.();
+      return false;
+    });
+    fadeRaf = bedFades.length ? window.requestAnimationFrame(tickBedFades) : 0;
+  };
+
+  const fadeBedTo = (audio, target, onDone) => {
+    if (!audio) {
+      onDone?.();
+      return;
+    }
+    bedFades = bedFades.filter((fade) => fade.audio !== audio);
+    bedFades.push({
+      audio,
+      from: audio.volume,
+      to: target,
+      start: performance.now(),
+      ms: BED_FADE_MS,
+      onDone,
+    });
+    if (!fadeRaf) fadeRaf = window.requestAnimationFrame(tickBedFades);
+  };
+
+  const stopBeds = () => {
+    window.cancelAnimationFrame(fadeRaf);
+    fadeRaf = 0;
+    bedFades = [];
+    stopElement(bedAudio);
+    bedAudio = null;
+    bedName = "";
+  };
+
+  const stopShiftAudio = () => {
+    stopCues();
+    stopBeds();
+  };
+
+  const playCueFile = (file, volume, onEnded) => {
+    stopElement(cueAudio);
+    const audio = new Audio(shiftAudioUrl(file));
+    audio.preload = "auto";
+    audio.volume = volume;
+    cueAudio = audio;
+    audio.onended = () => {
+      if (cueAudio === audio) cueAudio = null;
+      onEnded?.();
+    };
+    const play = audio.play();
+    if (play && typeof play.catch === "function") play.catch(() => {});
+  };
+
+  const playSeaChain = (index) => {
+    if (!soundEnabled || index >= SEA_CHAIN.length) {
+      seaIndex = -1;
+      return;
+    }
+    seaIndex = index;
+    const step = SEA_CHAIN[index];
+    playCueFile(step.file, step.volume, () => {
+      if (seaIndex === index) playSeaChain(index + 1);
+    });
   };
 
   const playSceneSound = (name) => {
     if (!name || !soundEnabled) return;
-    switch (name) {
-      case "cup":
-        playTone(880, 0.08, "triangle", 0.04);
-        window.setTimeout(() => playTone(620, 0.12, "sine", 0.03), 70);
-        break;
-      case "register":
-        playTone(240, 0.05, "square", 0.03);
-        window.setTimeout(() => playTone(180, 0.08, "square", 0.02), 60);
-        break;
-      case "door":
-        playTone(140, 0.18, "sawtooth", 0.03);
-        break;
-      case "phone":
-        playTone(520, 0.12, "square", 0.035);
-        window.setTimeout(() => playTone(520, 0.12, "square", 0.03), 220);
-        break;
-      case "print":
-        playTone(190, 0.28, "square", 0.025);
-        break;
-      case "sea":
-        playTone(210, 0.4, "sine", 0.02);
-        window.setTimeout(() => playTone(90, 0.2, "triangle", 0.04), prefersReducedMotion() ? 0 : 900);
-        break;
-      default:
-        playTone(400, 0.08, "sine", 0.03);
+    stopCues();
+    if (name === "sea") {
+      playSeaChain(0);
+      return;
     }
+    const cue = SCENE_SOUNDS[name];
+    if (!cue) return;
+    playCueFile(cue.file, cue.volume);
+  };
+
+  const bedForNode = (node) => {
+    const guest = node?.guest || "none";
+    if (guest === "pig") return "pig";
+    if (guest === "fox" || guest === "fox-phone") return "fox";
+    if (guest === "dog") return "dog";
+    return "empty";
+  };
+
+  const setBed = (name) => {
+    if (!soundEnabled) return;
+    const file = BED_FILES[name] || BED_FILES.empty;
+    if (bedName === name && bedAudio && !bedAudio.paused) return;
+    const previous = bedAudio;
+    const next = new Audio(shiftAudioUrl(file));
+    next.loop = true;
+    next.preload = "auto";
+    next.volume = 0;
+    bedAudio = next;
+    bedName = name;
+    const play = next.play();
+    if (play && typeof play.catch === "function") play.catch(() => {});
+    fadeBedTo(next, BED_VOLUME);
+    if (previous && previous !== next) {
+      const outgoing = previous;
+      fadeBedTo(outgoing, 0, () => {
+        if (bedAudio !== outgoing) stopElement(outgoing);
+      });
+    }
+  };
+
+  const syncShiftAudio = (node) => {
+    if (!soundEnabled || !node) return;
+    setBed(bedForNode(node));
   };
 
   const updateSoundButton = (root) => {
@@ -317,18 +421,38 @@
     soundEnabled = Boolean(enabled);
     updateSoundButton(root);
     if (!soundEnabled) {
-      if (audioCtx && audioCtx.state !== "closed") {
-        audioCtx.suspend?.().catch(() => {});
-      }
+      stopShiftAudio();
       return;
     }
-    const ctx = ensureAudio();
-    ctx?.resume?.().catch(() => {});
+    const node = nodeById(save?.currentNode);
+    syncShiftAudio(node);
+    if (node?.sound) playSceneSound(node.sound);
   };
 
-  const delayFor = (node) => {
-    if (prefersReducedMotion()) return 0;
-    return Number(node?.delay) || 0;
+  const readingHoldMs = (text, node) => {
+    const chars = String(text || "")
+      .replace(/\s+/g, " ")
+      .trim().length;
+    const fromLength = Math.min(8000, Math.max(900, chars * 55));
+    const authored = Number(node?.delay) || 0;
+    return Math.max(authored, fromLength);
+  };
+
+  const clearAdvanceWait = (root) => {
+    const panel = root?.querySelector(".lora-room__panel");
+    const lineEl = root?.querySelector("[data-lora-line]");
+    if (panel) {
+      delete panel.dataset.waitingAdvance;
+      if (panel._loraAdvance) {
+        panel.removeEventListener("click", panel._loraAdvance);
+        panel._loraAdvance = null;
+      }
+    }
+    if (lineEl) {
+      lineEl.onclick = null;
+      lineEl.onkeydown = null;
+      lineEl.removeAttribute("aria-description");
+    }
   };
 
   const visibleProps = (node) => {
@@ -551,13 +675,14 @@
     }, delay);
   };
 
-  const clearTimers = () => {
+  const clearTimers = (root) => {
     window.clearTimeout(revealTimer);
     window.clearTimeout(autoTimer);
     window.clearTimeout(ambientTimer);
     revealTimer = 0;
     autoTimer = 0;
     ambientTimer = 0;
+    if (root) clearAdvanceWait(root);
   };
 
   const setLine = (root, text, live) => {
@@ -680,11 +805,65 @@
     }
   };
 
+  const bindLineSkip = (lineEl, skip) => {
+    if (!lineEl) return;
+    lineEl.tabIndex = 0;
+    lineEl.onkeydown = (event) => {
+      if (["Enter", " "].includes(event.key)) {
+        event.preventDefault();
+        skip();
+      }
+    };
+    lineEl.onclick = (event) => {
+      event.stopPropagation();
+      skip();
+    };
+  };
+
+  const armAutoAdvance = (root, node, fullText) => {
+    const panel = root.querySelector(".lora-room__panel");
+    const lineEl = root.querySelector("[data-lora-line]");
+    let advanced = false;
+    const advance = (event) => {
+      if (advanced) return;
+      if (event?.target?.closest?.("[data-lora-choices]")) return;
+      if (event?.type === "keydown" && !["Enter", " "].includes(event.key)) return;
+      event?.preventDefault?.();
+      advanced = true;
+      goTo(root, node.autoNext);
+    };
+    if (panel) {
+      panel.dataset.waitingAdvance = "true";
+      panel._loraAdvance = (event) => advance(event);
+      panel.addEventListener("click", panel._loraAdvance);
+    }
+    if (lineEl) {
+      lineEl.tabIndex = 0;
+      lineEl.setAttribute("aria-description", "Нажмите, чтобы продолжить");
+      lineEl.onclick = (event) => {
+        event.stopPropagation();
+        advance(event);
+      };
+      lineEl.onkeydown = (event) => {
+        if (["Enter", " "].includes(event.key)) {
+          event.preventDefault();
+          advance(event);
+        }
+      };
+    }
+    autoTimer = window.setTimeout(() => {
+      advance();
+    }, readingHoldMs(fullText, node));
+  };
+
   const renderNode = (root, nodeId) => {
     const node = nodeById(nodeId);
     if (!node) return;
     stopSceneVideo();
-    clearTimers();
+    clearTimers(root);
+    stopCues();
+    syncShiftAudio(node);
+    if (node.sound) playSceneSound(node.sound);
     root.dataset.state = "play";
     root.dataset.node = nodeId;
     renderScene(root, { ...node, id: nodeId });
@@ -714,7 +893,7 @@
         lineEl.onkeydown = null;
       }
       if (actionEl && node.action) actionEl.hidden = false;
-      finishNode(root, node);
+      finishNode(root, node, fullText);
     };
     if (instant || fullText.length < 4) {
       setLine(root, fullText, live);
@@ -736,26 +915,17 @@
       revealTimer = window.setTimeout(tick, 16);
     };
     const skip = () => {
-      clearTimers();
+      window.clearTimeout(revealTimer);
+      revealTimer = 0;
       setLine(root, fullText, live);
       if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
       finish();
     };
-    if (lineEl) {
-      lineEl.tabIndex = 0;
-      lineEl.onkeydown = (event) => {
-        if (["Enter", " "].includes(event.key)) {
-          event.preventDefault();
-          skip();
-        }
-      };
-      lineEl.onclick = skip;
-    }
+    bindLineSkip(lineEl, skip);
     tick();
   };
 
-  const finishNode = (root, node) => {
-    if (node.sound) playSceneSound(node.sound);
+  const finishNode = (root, node, fullText) => {
     if (node.complete) {
       save.completed = true;
       writeSave(save);
@@ -773,9 +943,7 @@
           return;
         }
       }
-      autoTimer = window.setTimeout(() => {
-        goTo(root, node.autoNext);
-      }, delayFor(node) + (prefersReducedMotion() ? 0 : 280));
+      armAutoAdvance(root, node, fullText);
       return;
     }
     if (asset?.playback === "reveal") {
@@ -806,6 +974,7 @@
       leave.dataset.ready = "true";
       leave.addEventListener("click", () => {
         if (save) writeSave(save);
+        stopShiftAudio();
         window.location.assign(hiringUrl());
       });
     }
@@ -852,7 +1021,8 @@
 
   const destroy = () => {
     stopSceneVideo();
-    clearTimers();
+    stopShiftAudio();
+    clearTimers(activeRoot);
     const player = document.querySelector(".music-player");
     const logoArea = document.querySelector(".logo-area");
     if (player && logoArea && player.parentNode !== logoArea) {
