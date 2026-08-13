@@ -1,0 +1,35 @@
+{
+  "project": "lora-red-room-motion",
+  "tasks": [
+    {
+      "id": "v01-empty-idle",
+      "label": "V01 empty cafe idle loop",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 5 --aspect-ratio 16:9 --image assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v01-empty-idle.txt"
+    },
+    {
+      "id": "v02-pig-masked-idle",
+      "label": "V02 masked pig idle loop",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 5 --aspect-ratio 16:9 --image assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-masked-idle.txt"
+    },
+    {
+      "id": "v02-pig-wander",
+      "label": "V02 masked pig wander and return",
+      "cmd": "pixverse create transition --model v5 --quality 720p --duration 5 --images assets/guest/red-room/lora/scenes/v02-pig-masked.webp assets/guest/red-room/lora/scenes/v02-pig-wander.webp assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-wander.txt"
+    },
+    {
+      "id": "v02-pig-arrive",
+      "label": "V02 masked pig arrival",
+      "cmd": "pixverse create transition --model v5 --quality 720p --duration 8 --images assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp assets/guest/red-room/lora/scenes/v02-pig-arrive-far.webp assets/guest/red-room/lora/scenes/v02-pig-arrive-mid.webp assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-arrive.txt"
+    },
+    {
+      "id": "v02-pig-leave",
+      "label": "V02 masked pig departure",
+      "cmd": "pixverse create transition --model v5 --quality 720p --duration 8 --images assets/guest/red-room/lora/scenes/v02-pig-masked.webp assets/guest/red-room/lora/scenes/v02-pig-arrive-mid.webp assets/guest/red-room/lora/scenes/v02-pig-arrive-far.webp assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-leave.txt"
+    },
+    {
+      "id": "v08-dog-wander",
+      "label": "V08 masked dog wander and return",
+      "cmd": "pixverse create transition --model v5 --quality 720p --duration 8 --images assets/guest/red-room/lora/scenes/v08-dog-settled.webp assets/guest/red-room/lora/scenes/v08-dog-stand.webp assets/guest/red-room/lora/scenes/v08-dog-aisle.webp assets/guest/red-room/lora/scenes/v08-dog-settled.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v08-dog-wander.txt"
+    }
+  ]
+}

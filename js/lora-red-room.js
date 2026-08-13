@@ -9,9 +9,13 @@
   const VISUAL_ASSETS = {
     V01_EMPTY_COUNTER: {
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
+      video: "../assets/guest/red-room/lora/scenes/v01-empty-idle.mp4",
+      playback: "loop",
     },
     V02_PIG_MASKED: {
       image: "../assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
+      video: "../assets/guest/red-room/lora/scenes/v02-pig-masked-idle.mp4",
+      playback: "loop",
     },
     V03_PIG_REVEAL: {
       image: "../assets/guest/red-room/lora/scenes/v03-pig-reveal-poster.webp",
@@ -61,17 +65,20 @@
   const NODE_MOTIONS = {
     pig_arrive: {
       mode: "transition",
+      video: "v02-pig-arrive.mp4",
       openWith: "v02-pig-arrive-far.webp",
       frames: ["v02-pig-arrive-far.webp", "v02-pig-arrive-mid.webp"],
       holdMs: 900,
     },
     pig_escapes: {
       mode: "transition",
+      video: "v02-pig-wander.mp4",
       frames: ["v02-pig-wander.webp"],
       holdMs: 1100,
     },
     pig_talk: {
       mode: "burst",
+      video: "v02-pig-wander.mp4",
       requireVisual: "V02_PIG_MASKED",
       delayMs: 1600,
       frames: ["v02-pig-wander.webp"],
@@ -79,6 +86,7 @@
     },
     pig_hide: {
       mode: "transition",
+      video: "v02-pig-leave.mp4",
       requireVisual: "V02_PIG_MASKED",
       frames: PIG_LEAVE_FRAMES,
       holdMs: 800,
@@ -86,12 +94,14 @@
     },
     pig_tech_run: {
       mode: "transition",
+      video: "v02-pig-leave.mp4",
       frames: PIG_LEAVE_FRAMES,
       holdMs: 700,
       restore: false,
     },
     pig_tomorrow: {
       mode: "transition",
+      video: "v02-pig-leave.mp4",
       requireVisual: "V02_PIG_MASKED",
       frames: PIG_LEAVE_FRAMES,
       holdMs: 800,
@@ -99,6 +109,7 @@
     },
     pig_deny_leave: {
       mode: "transition",
+      video: "v02-pig-leave.mp4",
       requireVisual: "V02_PIG_MASKED",
       frames: PIG_LEAVE_FRAMES,
       holdMs: 800,
@@ -106,6 +117,7 @@
     },
     dog_dreams: {
       mode: "transition",
+      video: "v08-dog-wander.mp4",
       frames: ["v08-dog-stand.webp", "v08-dog-aisle.webp"],
       holdMs: 900,
     },
@@ -720,6 +732,72 @@
     return true;
   };
 
+  const playNodeMotionVideo = (
+    root,
+    node,
+    motion,
+    onComplete,
+    onFallback
+  ) => {
+    if (!motion?.video || prefersReducedMotion()) return false;
+    const stage = root.querySelector("[data-lora-stage]");
+    const image = root.querySelector("[data-lora-scene-image]");
+    const video = root.querySelector("[data-lora-scene-video]");
+    const asset = visualAsset(node);
+    if (!video) return false;
+
+    activeSceneVideo = video;
+    video.loop = false;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute("playsinline", "");
+    video.setAttribute("muted", "");
+    video.src = motionUrl(motion.video);
+    if (asset?.image) video.poster = assetUrl(asset.image);
+    video.currentTime = 0;
+    video.hidden = false;
+    if (image) image.hidden = true;
+    if (stage) {
+      stage.dataset.videoState = "playing";
+      stage.dataset.motion = "playing";
+    }
+
+    let settled = false;
+    const finishMotion = (failed = false) => {
+      if (settled || activeSceneVideo !== video) return;
+      settled = true;
+      video.pause();
+      video.onended = null;
+      video.onerror = null;
+      activeSceneVideo = null;
+      if (stage) stage.dataset.motion = "idle";
+      if (failed) {
+        video.hidden = true;
+        if (image) image.hidden = false;
+        if (stage) stage.dataset.videoState = "poster";
+        onFallback?.();
+        return;
+      }
+      if (motion.restore !== false) {
+        video.hidden = true;
+        if (image) {
+          if (asset?.image) image.src = assetUrl(asset.image);
+          image.hidden = false;
+        }
+        if (stage) stage.dataset.videoState = "poster";
+      } else if (stage) {
+        stage.dataset.videoState = "settled";
+      }
+      onComplete?.();
+    };
+
+    video.onended = () => finishMotion(false);
+    video.onerror = () => finishMotion(true);
+    const playback = video.play();
+    playback?.catch(() => finishMotion(true));
+    return true;
+  };
+
   const playStillSequence = (root, node, motion, onComplete) => {
     const image = root.querySelector("[data-lora-scene-image]");
     const stage = root.querySelector("[data-lora-stage]");
@@ -1087,6 +1165,25 @@
     const asset = visualAsset(node);
     const motion = motionFor(save.currentNode, node);
     if (node.autoNext) {
+      if (motion?.mode === "transition") {
+        const fallback = () =>
+          playStillSequence(root, node, motion, () =>
+            goTo(root, node.autoNext)
+          );
+        if (
+          playNodeMotionVideo(
+            root,
+            node,
+            motion,
+            () => goTo(root, node.autoNext),
+            fallback
+          )
+        ) {
+          return;
+        }
+        fallback();
+        return;
+      }
       if (asset?.playback === "transition") {
         if (prefersReducedMotion() && !hasFlag("dogSleepPlayed")) {
           applyFlags(["dogSleepPlayed"]);
@@ -1097,14 +1194,13 @@
           return;
         }
       }
-      if (motion?.mode === "transition") {
-        playStillSequence(root, node, motion, () => goTo(root, node.autoNext));
-        return;
-      }
       if (motion?.mode === "burst") {
         stillTimer = window.setTimeout(() => {
           if (save.currentNode === root.dataset.node) {
-            playStillSequence(root, node, motion);
+            const fallback = () => playStillSequence(root, node, motion);
+            if (!playNodeMotionVideo(root, node, motion, null, fallback)) {
+              fallback();
+            }
           }
         }, Number(motion.delayMs) || 1600);
       }
@@ -1124,7 +1220,10 @@
     if (motion?.mode === "burst") {
       stillTimer = window.setTimeout(() => {
         if (save.currentNode === root.dataset.node) {
-          playStillSequence(root, node, motion);
+          const fallback = () => playStillSequence(root, node, motion);
+          if (!playNodeMotionVideo(root, node, motion, null, fallback)) {
+            fallback();
+          }
         }
       }, Number(motion.delayMs) || 1600);
     }

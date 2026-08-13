@@ -1,0 +1,30 @@
+{
+  "project": "lora-red-room-motion",
+  "tasks": [
+    {
+      "id": "v01-empty-idle-r2",
+      "label": "V01 empty cafe idle loop retry",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 5 --aspect-ratio 16:9 --image assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v01-empty-idle-r2.txt"
+    },
+    {
+      "id": "v02-pig-masked-idle-r2",
+      "label": "V02 masked pig idle loop retry",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 5 --aspect-ratio 16:9 --image assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-masked-idle-r2.txt"
+    },
+    {
+      "id": "v02-pig-arrive-r2",
+      "label": "V02 masked pig arrival two-frame transition",
+      "cmd": "pixverse create transition --model v6 --quality 720p --duration 8 --images assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-arrive.txt"
+    },
+    {
+      "id": "v02-pig-leave-r2",
+      "label": "V02 masked pig departure two-frame transition",
+      "cmd": "pixverse create transition --model v6 --quality 720p --duration 8 --images assets/guest/red-room/lora/scenes/v02-pig-masked.webp assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-leave.txt"
+    },
+    {
+      "id": "v08-dog-wander-r2",
+      "label": "V08 masked dog wander three-frame transition",
+      "cmd": "pixverse create transition --model v5 --quality 720p --duration 5 --images assets/guest/red-room/lora/scenes/v08-dog-settled.webp assets/guest/red-room/lora/scenes/v08-dog-aisle.webp assets/guest/red-room/lora/scenes/v08-dog-settled.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v08-dog-wander-r2.txt"
+    }
+  ]
+}

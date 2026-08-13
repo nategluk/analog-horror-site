@@ -204,7 +204,12 @@ const revealWhenErrors = pigRevealedNodes.filter((id) => {
 });
 const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
+  "assets/guest/red-room/lora/scenes/v01-empty-idle.mp4",
   "assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
+  "assets/guest/red-room/lora/scenes/v02-pig-masked-idle.mp4",
+  "assets/guest/red-room/lora/scenes/v02-pig-wander.mp4",
+  "assets/guest/red-room/lora/scenes/v02-pig-arrive.mp4",
+  "assets/guest/red-room/lora/scenes/v02-pig-leave.mp4",
   "assets/guest/red-room/lora/scenes/v02-pig-wander.webp",
   "assets/guest/red-room/lora/scenes/v02-pig-arrive-far.webp",
   "assets/guest/red-room/lora/scenes/v02-pig-arrive-mid.webp",
@@ -219,6 +224,7 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v08-dog-settled.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-stand.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-aisle.webp",
+  "assets/guest/red-room/lora/scenes/v08-dog-wander.mp4",
   "assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
   "assets/guest/red-room/lora/scenes/v10-fox-dog.webp",
   "assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",

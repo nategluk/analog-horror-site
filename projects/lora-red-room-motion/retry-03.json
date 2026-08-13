@@ -1,0 +1,10 @@
+{
+  "project": "lora-red-room-motion",
+  "tasks": [
+    {
+      "id": "v02-pig-masked-idle-r3",
+      "label": "V02 masked pig fixed-endpoint idle",
+      "cmd": "pixverse create transition --model v6 --quality 720p --duration 5 --images assets/guest/red-room/lora/scenes/v02-pig-masked.webp assets/guest/red-room/lora/scenes/v02-pig-masked.webp --no-audio --prompt projects/lora-red-room-motion/prompts/v02-pig-masked-idle-r3.txt"
+    }
+  ]
+}
