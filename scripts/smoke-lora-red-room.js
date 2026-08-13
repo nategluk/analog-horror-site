@@ -221,8 +221,31 @@ if (
 ) {
   throw new Error("pov: fox_monopoly must answer in place, then leave");
 }
+if (
+  !nodes.fox_why.action ||
+  !nodes.fox_monopoly.action ||
+  nodes.fox_why.autoNext !== "fox_monopoly"
+) {
+  throw new Error("fox extras: rare action beats are missing or misplaced");
+}
 if (!(nodes.fox_leave.set || []).includes("foxLeftNumber")) {
   throw new Error("pov: taking the number must still leave foxLeftNumber");
+}
+const foxSpeech = Object.values(nodes)
+  .filter((node) => node.speaker === "ЛИСА")
+  .map((node) => [node.line, node.lineReplay].filter(Boolean).join("\n"))
+  .join("\n");
+const dogSpeech = Object.values(nodes)
+  .filter((node) => node.speaker === "ПЁС")
+  .map((node) => [node.line, node.lineReplay].filter(Boolean).join("\n"))
+  .join("\n");
+if (
+  !nodes.fox_oleg.props?.includes("photo") ||
+  nodes.fox_oleg.line !== "Аниматор самовольно покинул зоопарк «Лосиный Остров»." ||
+  /олег|журналист|микрофон/i.test(foxSpeech) ||
+  /олег/i.test(dogSpeech)
+) {
+  throw new Error("fox/dog investigation must remain implicit in dialogue");
 }
 
 const revealRun = walk(

@@ -1,0 +1,15 @@
+{
+  "project": "lora-red-room-motion",
+  "tasks": [
+    {
+      "id": "v14-fox-gum-pop-v6",
+      "label": "V14 Fox gum bubble pop v6",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 8 --aspect-ratio 16:9 --image projects/lora-red-room-motion/assets/images/v14-fox-gum-bubble.png --no-audio --prompt projects/lora-red-room-motion/prompts/v14-fox-gum-pop.txt"
+    },
+    {
+      "id": "v15-fox-candy-offer-v6",
+      "label": "V15 Fox candy offer v6",
+      "cmd": "pixverse create video --model v6 --quality 720p --duration 8 --aspect-ratio 16:9 --image projects/lora-red-room-motion/assets/images/v15-fox-candy-offer.png --no-audio --prompt projects/lora-red-room-motion/prompts/v15-fox-candy-offer.txt"
+    }
+  ]
+}

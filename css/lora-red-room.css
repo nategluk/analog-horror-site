@@ -234,10 +234,32 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 
 .lora-room__stage[data-visual="V01_EMPTY_COUNTER"] .lora-room__prop[data-lora-prop="note"],
 .lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="note"],
-.lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"] {
+.lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"],
+.lora-room__stage[data-visual="V06_FOX_ACTION"] .lora-room__prop[data-lora-prop="photo"] {
   visibility: visible;
   pointer-events: auto;
   z-index: 3;
+}
+
+.lora-room__prop[data-lora-prop="photo"] {
+  right: 7%;
+  bottom: 12%;
+  width: min(31vw, 220px);
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0.35rem;
+  background: #d8c5a8;
+  border: 1px solid rgba(38, 20, 14, 0.55);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.48);
+  transform: rotate(-3deg);
+}
+
+.lora-room__prop[data-lora-prop="photo"] img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(38, 20, 14, 0.35);
 }
 
 .lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"] {
@@ -553,6 +575,12 @@ body.lora-room-open .panel {
   .lora-room__guest[data-lora-guest="fox"],
   .lora-room__guest[data-lora-guest="fox-phone"] {
     right: 6%;
+  }
+
+  .lora-room__prop[data-lora-prop="photo"] {
+    right: 5%;
+    bottom: 10%;
+    width: min(42vw, 170px);
   }
 
   .lora-room__line {

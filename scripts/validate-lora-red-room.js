@@ -203,6 +203,7 @@ const revealWhenErrors = pigRevealedNodes.filter((id) => {
   );
 });
 const requiredAssets = [
+  "assets/staff/personnel/oleg-record.webp",
   "assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
   "assets/guest/red-room/lora/scenes/v01-empty-idle.mp4",
   "assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
@@ -220,6 +221,10 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v05-fox-gaze.webp",
   "assets/guest/red-room/lora/scenes/v06-fox-action-idle.mp4",
   "assets/guest/red-room/lora/scenes/v06-fox-action.webp",
+  "assets/guest/red-room/lora/scenes/v14-fox-gum-bubble.png",
+  "assets/guest/red-room/lora/scenes/v14-fox-gum-pop-v1.mp4",
+  "assets/guest/red-room/lora/scenes/v15-fox-candy-offer.png",
+  "assets/guest/red-room/lora/scenes/v15-fox-candy-offer-v1.mp4",
   "assets/guest/red-room/lora/scenes/v07-dog-blank.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-settled.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-stand.webp",
@@ -259,6 +264,26 @@ const emptyChoices = ids.filter((id) => {
   return !node.autoNext && !(node.choices && node.choices.length);
 });
 const unmappedNodes = ids.filter((id) => !expectedVisual[id]);
+const textFor = (node) =>
+  [
+    node.line,
+    node.lineReplay,
+    node.lineDefault,
+    node.lineHidden,
+    node.lineWaiting,
+    node.lineReported,
+  ]
+    .filter((line) => typeof line === "string")
+    .join("\n");
+const foxForbiddenText = ids
+  .filter((id) => nodes[id].speaker === "ЛИСА")
+  .filter((id) => /олег|журналист|микрофон/i.test(textFor(nodes[id])));
+const dogForbiddenText = ids
+  .filter((id) => nodes[id].speaker === "ПЁС")
+  .filter((id) => /олег/i.test(textFor(nodes[id])));
+const foxPhotoContract =
+  !nodes.fox_oleg?.props?.includes("photo") ||
+  nodes.fox_oleg.line !== "Аниматор самовольно покинул зоопарк «Лосиный Остров».";
 
 if (
   missing.length ||
@@ -269,7 +294,10 @@ if (
   revealWhenErrors.length ||
   missingAssets.length ||
   emptyChoices.length ||
-  unmappedNodes.length
+  unmappedNodes.length ||
+  foxForbiddenText.length ||
+  dogForbiddenText.length ||
+  foxPhotoContract
 ) {
   if (missing.length) {
     console.error("Missing next targets:", missing.join(", "));
@@ -297,6 +325,15 @@ if (
   }
   if (unmappedNodes.length) {
     console.error("Nodes missing from visual matrix:", unmappedNodes.join(", "));
+  }
+  if (foxForbiddenText.length) {
+    console.error("Fox dialogue exposes the investigation directly:", foxForbiddenText.join(", "));
+  }
+  if (dogForbiddenText.length) {
+    console.error("Dog dialogue names Oleg:", dogForbiddenText.join(", "));
+  }
+  if (foxPhotoContract) {
+    console.error("Fox photo contract is incomplete at fox_oleg.");
   }
   process.exit(1);
 }

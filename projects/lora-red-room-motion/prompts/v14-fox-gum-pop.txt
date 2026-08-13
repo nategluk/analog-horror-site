@@ -1,0 +1,7 @@
+Use the supplied still as the exact identity, wardrobe, location, lighting, and opening-frame reference for an 8-second 16:9 analog-horror game clip.
+
+Keep the same Fox: a woman in a black knitted fox balaclava with pointed red ears, deep red faux-fur coat, and black gloves, seated at the counter of the dark mirrored Red Room cafe. Preserve the camera height, centered waist-up composition, red practical lights, glossy counter reflections, and low-bitrate analog capture texture. Do not add a phone, other people, or a new location.
+
+Action timeline: for the first second she holds the reference pose and watches the player. She slowly blows a translucent pink chewing-gum bubble. The bubble grows for two seconds while her eyes stay fixed on the player. It suddenly pops with a small elastic snap toward camera; her face does not flinch. She wipes one finger across her lips, then calmly returns her gloved hand to the counter and keeps staring for the final beat. The action must feel rare, deliberate, and faintly threatening, not like a cute cartoon gag.
+
+Camera: locked-off cafe counter shot with only subtle human movement and a slight focus breath at the bubble pop; no zoom, no cut, no camera shake, no morphing. Materials and anatomy must remain realistic. No readable text, subtitles, logos, watermark, blood, gore, extra fingers, extra limbs, or distorted face. Generate no dialogue, music, score, melody, or audio; the site will handle sound separately.

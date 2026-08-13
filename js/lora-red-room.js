@@ -115,6 +115,24 @@
       holdMs: 800,
       restore: false,
     },
+    fox_why: {
+      mode: "burst",
+      video: "v14-fox-gum-pop-v1.mp4",
+      poster: "v14-fox-gum-bubble.png",
+      frames: ["v14-fox-gum-bubble.png"],
+      requireVisual: "V06_FOX_ACTION",
+      delayMs: 900,
+      holdMs: 1800,
+    },
+    fox_monopoly: {
+      mode: "burst",
+      video: "v15-fox-candy-offer-v1.mp4",
+      poster: "v15-fox-candy-offer.png",
+      frames: ["v15-fox-candy-offer.png"],
+      requireVisual: "V06_FOX_ACTION",
+      delayMs: 900,
+      holdMs: 1800,
+    },
     dog_dreams: {
       mode: "transition",
       video: "v08-dog-wander.mp4",
@@ -892,7 +910,11 @@
     video.setAttribute("playsinline", "");
     video.setAttribute("muted", "");
     video.src = motionUrl(motion.video);
-    if (asset?.image) video.poster = assetUrl(asset.image);
+    video.poster = motion.poster
+      ? motionUrl(motion.poster)
+      : asset?.image
+        ? assetUrl(asset.image)
+        : "";
     video.currentTime = 0;
     video.hidden = false;
     if (image) image.hidden = true;

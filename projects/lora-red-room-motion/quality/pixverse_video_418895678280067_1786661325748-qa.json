@@ -1,12 +1,12 @@
 {
-  "target": "projects/lora-red-room-motion/assets/videos/418895669949154/pixverse_video_418895669949154_1786661376128.mp4",
+  "target": "projects/lora-red-room-motion/assets/videos/418895678280067/pixverse_video_418895678280067_1786661325748.mp4",
   "checked_at": "2026-08-13T22:50:01+00:00",
   "exists": true,
   "kind": "video",
   "issues": [],
   "metadata": {
-    "path": "projects/lora-red-room-motion/assets/videos/418895669949154/pixverse_video_418895669949154_1786661376128.mp4",
-    "bytes": 1627477,
+    "path": "projects/lora-red-room-motion/assets/videos/418895678280067/pixverse_video_418895678280067_1786661325748.mp4",
+    "bytes": 2075560,
     "mime_guess": "video/mp4",
     "ffprobe": {
       "streams": [
@@ -44,7 +44,7 @@
           "start_time": "0.000000",
           "duration_ts": 98816,
           "duration": "8.041667",
-          "bit_rate": "1615861",
+          "bit_rate": "2061606",
           "bits_per_raw_sample": "8",
           "nb_frames": "193",
           "extradata_size": 48,
@@ -77,7 +77,7 @@
         }
       ],
       "format": {
-        "filename": "projects/lora-red-room-motion/assets/videos/418895669949154/pixverse_video_418895669949154_1786661376128.mp4",
+        "filename": "projects/lora-red-room-motion/assets/videos/418895678280067/pixverse_video_418895678280067_1786661325748.mp4",
         "nb_streams": 1,
         "nb_programs": 0,
         "nb_stream_groups": 0,
@@ -85,8 +85,8 @@
         "format_long_name": "QuickTime / MOV",
         "start_time": "0.000000",
         "duration": "8.041667",
-        "size": "1627477",
-        "bit_rate": "1619044",
+        "size": "2075560",
+        "bit_rate": "2064805",
         "probe_score": 100,
         "tags": {
           "major_brand": "isom",
@@ -107,12 +107,12 @@
     "expected_aspect_ratio": "16:9",
     "actual_aspect_ratio": 1.7778
   },
-  "report_path": "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/pixverse_video_418895669949154_1786661376128-qa.json",
+  "report_path": "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/pixverse_video_418895678280067_1786661325748-qa.json",
   "latest_report_path": "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/qa-report.json",
   "sample_frames": [
-    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895669949154_1786661376128/frame-001.jpg",
-    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895669949154_1786661376128/frame-002.jpg",
-    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895669949154_1786661376128/frame-003.jpg",
-    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895669949154_1786661376128/frame-004.jpg"
+    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895678280067_1786661325748/frame-001.jpg",
+    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895678280067_1786661325748/frame-002.jpg",
+    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895678280067_1786661325748/frame-003.jpg",
+    "/Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/quality/frames-pixverse_video_418895678280067_1786661325748/frame-004.jpg"
   ]
 }
