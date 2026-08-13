@@ -24,12 +24,12 @@
     V05_FOX_GAZE: {
       image: "../assets/guest/red-room/lora/scenes/v05-fox-gaze.webp",
       video: "../assets/guest/red-room/lora/scenes/v05-fox-gaze-idle.mp4",
-      playback: "ambient",
+      playback: "loop",
     },
     V06_FOX_ACTION: {
       image: "../assets/guest/red-room/lora/scenes/v06-fox-action.webp",
       video: "../assets/guest/red-room/lora/scenes/v06-fox-action-idle.mp4",
-      playback: "ambient",
+      playback: "loop",
     },
     V07_DOG_BLANK: {
       image: "../assets/guest/red-room/lora/scenes/v07-dog-blank.webp",
@@ -53,6 +53,61 @@
     },
     V13_RECEIPT: {
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
+    },
+  };
+
+  const MOTION_DIR = "../assets/guest/red-room/lora/scenes/";
+  const PIG_LEAVE_FRAMES = ["v02-pig-arrive-mid.webp", "v02-pig-arrive-far.webp"];
+  const NODE_MOTIONS = {
+    pig_arrive: {
+      mode: "transition",
+      openWith: "v02-pig-arrive-far.webp",
+      frames: ["v02-pig-arrive-far.webp", "v02-pig-arrive-mid.webp"],
+      holdMs: 900,
+    },
+    pig_escapes: {
+      mode: "transition",
+      frames: ["v02-pig-wander.webp"],
+      holdMs: 1100,
+    },
+    pig_talk: {
+      mode: "burst",
+      requireVisual: "V02_PIG_MASKED",
+      delayMs: 1600,
+      frames: ["v02-pig-wander.webp"],
+      holdMs: 1800,
+    },
+    pig_hide: {
+      mode: "transition",
+      requireVisual: "V02_PIG_MASKED",
+      frames: PIG_LEAVE_FRAMES,
+      holdMs: 800,
+      restore: false,
+    },
+    pig_tech_run: {
+      mode: "transition",
+      frames: PIG_LEAVE_FRAMES,
+      holdMs: 700,
+      restore: false,
+    },
+    pig_tomorrow: {
+      mode: "transition",
+      requireVisual: "V02_PIG_MASKED",
+      frames: PIG_LEAVE_FRAMES,
+      holdMs: 800,
+      restore: false,
+    },
+    pig_deny_leave: {
+      mode: "transition",
+      requireVisual: "V02_PIG_MASKED",
+      frames: PIG_LEAVE_FRAMES,
+      holdMs: 800,
+      restore: false,
+    },
+    dog_dreams: {
+      mode: "transition",
+      frames: ["v08-dog-stand.webp", "v08-dog-aisle.webp"],
+      holdMs: 900,
     },
   };
 
@@ -83,6 +138,7 @@
   let revealTimer = 0;
   let autoTimer = 0;
   let ambientTimer = 0;
+  let stillTimer = 0;
   let soundEnabled = false;
   let activeSceneVideo = null;
   let bedAudio = null;
@@ -113,6 +169,17 @@
   };
 
   const visualAsset = (node) => VISUAL_ASSETS[resolveVisual(node)] || null;
+
+  const motionFor = (nodeId, node) => {
+    const motion = NODE_MOTIONS[nodeId];
+    if (!motion) return null;
+    if (motion.requireVisual && resolveVisual(node) !== motion.requireVisual) {
+      return null;
+    }
+    return motion;
+  };
+
+  const motionUrl = (file) => assetUrl(MOTION_DIR + file);
 
   const hiringUrl = () => {
     try {
@@ -490,17 +557,22 @@
       stage.dataset.hasVisual = String(Boolean(asset?.image));
       stage.dataset.cameraOff = String(hasFlag("cameraDisabled"));
       stage.dataset.videoState = asset?.video ? "poster" : "none";
+      stage.dataset.motion = "idle";
     }
     if (image) {
       image.onload = null;
       image.onerror = null;
+      image.classList.remove("is-crossfading");
       if (asset?.image) {
         image.onerror = () => {
           image.hidden = true;
           image.removeAttribute("src");
           if (stage) stage.dataset.hasVisual = "false";
         };
-        image.src = assetUrl(asset.image);
+        const motion = motionFor(save?.currentNode, node);
+        image.src = assetUrl(
+          motion?.openWith ? MOTION_DIR + motion.openWith : asset.image
+        );
         image.hidden = false;
       } else {
         image.removeAttribute("src");
@@ -616,6 +688,85 @@
     playback?.catch(settleOnPoster);
   };
 
+  const playLoopSceneVideo = (root, node) => {
+    const asset = visualAsset(node);
+    if (
+      asset?.playback !== "loop" ||
+      !asset.video ||
+      prefersReducedMotion() ||
+      document.visibilityState !== "visible"
+    ) {
+      return false;
+    }
+    const stage = root.querySelector("[data-lora-stage]");
+    const image = root.querySelector("[data-lora-scene-image]");
+    const video = root.querySelector("[data-lora-scene-video]");
+    if (!video) return false;
+
+    activeSceneVideo = video;
+    video.loop = true;
+    video.currentTime = 0;
+    video.hidden = false;
+    if (image) image.hidden = true;
+    if (stage) stage.dataset.videoState = "playing";
+    const playback = video.play();
+    playback?.catch(() => {
+      if (activeSceneVideo !== video) return;
+      video.hidden = true;
+      if (image) image.hidden = false;
+      if (stage) stage.dataset.videoState = "poster";
+      activeSceneVideo = null;
+    });
+    return true;
+  };
+
+  const playStillSequence = (root, node, motion, onComplete) => {
+    const image = root.querySelector("[data-lora-scene-image]");
+    const stage = root.querySelector("[data-lora-stage]");
+    const asset = visualAsset(node);
+    if (!image || !motion?.frames?.length || prefersReducedMotion()) {
+      onComplete?.();
+      return false;
+    }
+    const scheduledNode = save.currentNode;
+    const holdMs = Number(motion.holdMs) || 1000;
+    const closing =
+      motion.restore === false || !asset?.image ? [] : [assetUrl(asset.image)];
+    const queue = motion.frames.map(motionUrl).concat(closing);
+    let index = 0;
+    if (stage) stage.dataset.motion = "playing";
+
+    const showNext = () => {
+      if (activeRoot !== root || save.currentNode !== scheduledNode) {
+        if (stage) stage.dataset.motion = "idle";
+        return;
+      }
+      if (index >= queue.length) {
+        if (stage) stage.dataset.motion = "idle";
+        onComplete?.();
+        return;
+      }
+      const nextSrc = queue[index];
+      index += 1;
+      if (image.getAttribute("src") === nextSrc || image.src.endsWith(motion.frames[index - 1] || "")) {
+        stillTimer = window.setTimeout(showNext, holdMs);
+        return;
+      }
+      image.classList.add("is-crossfading");
+      stillTimer = window.setTimeout(() => {
+        if (activeRoot !== root || save.currentNode !== scheduledNode) return;
+        image.onload = () => {
+          image.classList.remove("is-crossfading");
+          stillTimer = window.setTimeout(showNext, holdMs);
+        };
+        image.src = nextSrc;
+      }, 280);
+    };
+
+    showNext();
+    return true;
+  };
+
   const playTransitionSceneVideo = (root, node, onComplete) => {
     const asset = visualAsset(node);
     if (
@@ -676,6 +827,8 @@
   };
 
   const clearTimers = (root) => {
+    window.clearTimeout(stillTimer);
+    stillTimer = 0;
     window.clearTimeout(revealTimer);
     window.clearTimeout(autoTimer);
     window.clearTimeout(ambientTimer);
@@ -932,6 +1085,7 @@
       attachReceipt();
     }
     const asset = visualAsset(node);
+    const motion = motionFor(save.currentNode, node);
     if (node.autoNext) {
       if (asset?.playback === "transition") {
         if (prefersReducedMotion() && !hasFlag("dogSleepPlayed")) {
@@ -943,6 +1097,18 @@
           return;
         }
       }
+      if (motion?.mode === "transition") {
+        playStillSequence(root, node, motion, () => goTo(root, node.autoNext));
+        return;
+      }
+      if (motion?.mode === "burst") {
+        stillTimer = window.setTimeout(() => {
+          if (save.currentNode === root.dataset.node) {
+            playStillSequence(root, node, motion);
+          }
+        }, Number(motion.delayMs) || 1600);
+      }
+      playLoopSceneVideo(root, node);
       armAutoAdvance(root, node, fullText);
       return;
     }
@@ -955,7 +1121,16 @@
       }
     }
     renderChoices(root, node);
-    scheduleAmbientSceneVideo(root, node);
+    if (motion?.mode === "burst") {
+      stillTimer = window.setTimeout(() => {
+        if (save.currentNode === root.dataset.node) {
+          playStillSequence(root, node, motion);
+        }
+      }, Number(motion.delayMs) || 1600);
+    }
+    if (!playLoopSceneVideo(root, node)) {
+      scheduleAmbientSceneVideo(root, node);
+    }
   };
 
   const dockMusic = (root) => {

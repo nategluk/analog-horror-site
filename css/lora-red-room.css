@@ -173,6 +173,28 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: opacity 0.28s ease;
+}
+
+.lora-room__media.is-crossfading {
+  opacity: 0;
+}
+
+.lora-room__stage[data-visual="V01_EMPTY_COUNTER"][data-motion="idle"] [data-lora-scene-image],
+.lora-room__stage[data-visual="V07_DOG_BLANK"][data-motion="idle"] [data-lora-scene-image],
+.lora-room__stage[data-visual="V12_EMPTY_CURTAIN"][data-motion="idle"] [data-lora-scene-image] {
+  animation: lora-room-breathe 16s ease-in-out infinite;
+  transform-origin: 50% 42%;
+}
+
+@keyframes lora-room-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.028);
+  }
 }
 
 .lora-room__stage[data-video-state="playing"] [data-lora-scene-image] {
@@ -394,6 +416,12 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   .lora-room__panel[data-waiting-advance="true"] .lora-room__line::after {
     animation: none;
     opacity: 0.8;
+  }
+
+  .lora-room__media,
+  .lora-room__stage[data-visual] [data-lora-scene-image] {
+    animation: none;
+    transition: none;
   }
 }
 
