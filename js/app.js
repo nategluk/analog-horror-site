@@ -9,6 +9,10 @@
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
   const STAFF_DISPLAY_NAME_MAX = 20;
+  const LORA_CURATOR_ID = "0391-L";
+  const LORA_SAVE_KEY = "tyndex_lora_red_room_v1";
+  const LORA_ASSIGN_KEY = "tyndex_lora_channel_v1";
+  const LORA_RECEIPT_ID = "lora-night-receipt";
   const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
@@ -1169,19 +1173,73 @@
     window.DZInitEpisodeCatalog?.();
   };
 
-  const initRedRoomShift = async () => {
-    const root = document.querySelector("[data-red-room-shift]");
+  const initRedRoomEspresso = async () => {
+    const root = document.querySelector("[data-red-room-espresso]");
     if (!root) return;
 
-    if (typeof window.TyndexRedRoomShift?.init !== "function") {
+    if (typeof window.TyndexRedRoomEspresso?.init !== "function") {
       const appScript = [...document.scripts].find((script) =>
         /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
       );
-      const src = new URL("red-room-shift.js", appScript?.src || window.location.href).href;
+      const src = new URL("red-room-espresso.js", appScript?.src || window.location.href).href;
       await loadPageScript(src);
     }
 
-    window.TyndexRedRoomShift?.init(root);
+    window.TyndexRedRoomEspresso?.init(root);
+  };
+
+  const ensureLoraRoomStyles = () => {
+    if (document.querySelector("link[data-lora-room-css]")) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = new URL("../css/lora-red-room.css", scriptUrl).href;
+    link.dataset.loraRoomCss = "true";
+    document.head.append(link);
+  };
+
+  const initLoraRedRoom = async () => {
+    const root = document.querySelector("[data-lora-room]");
+    if (!root) {
+      document.body.classList.remove("lora-room-open");
+      return;
+    }
+
+    ensureLoraRoomStyles();
+    const appScript = [...document.scripts].find((script) =>
+      /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
+    );
+    const base = appScript?.src || window.location.href;
+    if (!window.TyndexLoraRedRoomContent) {
+      await loadPageScript(new URL("../content/lora/red-room-content.js", base).href);
+    }
+    if (typeof window.TyndexLoraRedRoom?.init !== "function") {
+      await loadPageScript(new URL("lora-red-room.js", base).href);
+    }
+    window.TyndexLoraRedRoom?.init(root);
+  };
+
+  const launchLoraShift = () => {
+    ensureLoraRoomStyles();
+    window.sessionStorage.setItem(
+      LORA_ASSIGN_KEY,
+      JSON.stringify({ assigned: true, at: Date.now() })
+    );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const veil = document.createElement("div");
+    veil.className = "lora-room-assign";
+    veil.setAttribute("role", "status");
+    veil.innerHTML =
+      "<div><p>КАНАЛ НАЗНАЧЕН</p><p>МЕСТО НАЗНАЧЕНИЯ: КРАСНАЯ КОМНАТА</p></div>";
+    document.body.append(veil);
+    document.body.classList.add("lora-room-open");
+    const target = new URL("../locations/red-room-shift.html", scriptUrl).href;
+    window.setTimeout(() => {
+      veil.innerHTML =
+        "<div><p>КУРАТОР НЕДОСТУПЕН</p><p>Лора П. использует один накопленный выходной.</p><p>Включено автоматическое замещение смены.</p></div>";
+    }, reducedMotion ? 0 : 650);
+    window.setTimeout(() => {
+      window.location.assign(target);
+    }, reducedMotion ? 280 : 1700);
   };
 
   const initMusicPlayer = () => {
@@ -1426,12 +1484,13 @@
     },
     lora: {
       name: "ЛОРА П.",
-      role: "ОФИЦИАНТКА КРАСНОЙ КОМНАТЫ",
+      role: "ВРЕМЕННЫЙ КУРАТОР ТРАНЗИТНОЙ СМЕНЫ",
       status: "АКТИВНА",
       note: "Укрывает Аниматоров в подсобном помещении.",
       image: audioAsset("assets/staff/staff/lora_sad.jpg"),
       headerImage: audioAsset("assets/staff/personnel/laura-record.webp"),
       dossier: "documents/dossier-laura.html",
+      curatorId: LORA_CURATOR_ID,
     },
     kirill: {
       name: "КИРИЛЛ З.",
@@ -1469,7 +1528,42 @@
 
 
   const staffMessages = hydrateCatalog(irinaCallContent.staffMessages || {});
-  const staffArtifacts = hydrateCatalog(irinaCallContent.staffArtifacts || {});
+  const loraReceiptVariants = {
+    left: "ГОСТЬ ОСТАВЛЕН ДО ВОЗВРАЩЕНИЯ КУРАТОРА",
+    given: "ПЕРЕДАН УПОЛНОМОЧЕННОМУ ВОЛОНТЁРУ",
+    sea: "НАПРАВЛЕН НА МАРШРУТ: МОРЕ / 07",
+    unassigned: "МАРШРУТ НЕ НАЗНАЧЕН",
+  };
+
+  const buildLoraReceiptCopy = (variant, replay) => ({
+    title: "КВИТАНЦИЯ ВРЕМЕННОГО ЗАМЕЩЕНИЯ",
+    lines: [
+      "Объект: Красная Комната",
+      "Сотрудник: не установлен",
+      "Посетителей принято: 3",
+      `Маршрутов назначено: ${loraReceiptVariants[variant] || "—"}`,
+      "Ответственность: принята",
+      "На обороте рукой Лоры:",
+      replay
+        ? "Я просила успокоить Пса. Не назначать его."
+        : "Когда вернусь, объяснишь.",
+      "Чек не выбрасывай.",
+      "Л.",
+    ],
+    stamp: "КАССА КК-312 // НОЧНАЯ СМЕНА",
+  });
+
+  const staffArtifacts = hydrateCatalog({
+    ...(irinaCallContent.staffArtifacts || {}),
+    [LORA_RECEIPT_ID]: {
+      code: "RR-0391-01",
+      title: "Квитанция ночной смены Красной Комнаты",
+      type: "КАССОВЫЙ ДОКУМЕНТ",
+      source: "КАФЕ «КРАСНАЯ КОМНАТА» // ВРЕМЕННОЕ ЗАМЕЩЕНИЕ",
+      description:
+        "Чек временного замещения стойки. Оборот заполнен от руки.",
+    },
+  });
   const curatorNodeArtifacts = {
     ...(irinaCallContent.nodeArtifacts || {}),
   };
@@ -1596,6 +1690,43 @@
     return profile;
   };
 
+  const readLoraSave = () => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(LORA_SAVE_KEY));
+      if (!saved || saved.version !== 1) return null;
+      return saved;
+    } catch {
+      return null;
+    }
+  };
+
+  const claimLoraReceiptArtifact = (profile) => {
+    if (!profile) return profile;
+    const lora = readLoraSave();
+    if (!lora?.receiptVariant || !staffArtifacts[LORA_RECEIPT_ID]) return profile;
+    profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
+    profile.removedArtifactIds = Array.isArray(profile.removedArtifactIds)
+      ? profile.removedArtifactIds
+      : [];
+    if (profile.removedArtifactIds.includes(LORA_RECEIPT_ID)) return profile;
+    const known = profile.artifacts.find((item) => item.id === LORA_RECEIPT_ID);
+    if (known) {
+      known.variant = lora.receiptVariant;
+      known.replay = Boolean(lora.playerFlags?.replayShift);
+      return profile;
+    }
+    profile.artifacts.push({
+      id: LORA_RECEIPT_ID,
+      sessionNumber: lora.playerFlags?.replayShift ? 2 : 1,
+      obtainedAt: lora.updatedAt || Date.now(),
+      variant: lora.receiptVariant,
+      replay: Boolean(lora.playerFlags?.replayShift),
+    });
+    profile.updatedAt = Date.now();
+    dossierStore.saveDossier(profile);
+    return profile;
+  };
+
   const readStaffProfile = () => {
     try {
       const profile = dossierStore.readDossier();
@@ -1603,7 +1734,7 @@
         return null;
       }
 
-      return seedStaffMessages(profile);
+      return claimLoraReceiptArtifact(seedStaffMessages(profile));
     } catch {
       return null;
     }
@@ -1752,7 +1883,7 @@
     });
     profile.artifacts = [...knownArtifacts.values()];
 
-    return saveStaffProfile(seedStaffMessages(profile));
+    return saveStaffProfile(claimLoraReceiptArtifact(seedStaffMessages(profile)));
   };
 
   const getStaffProfile = () => {
@@ -3234,6 +3365,13 @@
         return;
       }
 
+      if (curatorId === LORA_CURATOR_ID) {
+        result.style.whiteSpace = "pre-line";
+        result.textContent = "КАНАЛ НАЗНАЧЕН\nМЕСТО НАЗНАЧЕНИЯ: КРАСНАЯ КОМНАТА";
+        launchLoraShift();
+        return;
+      }
+
       const knownResponses = {
         "0144-C": "КАНАЛ 0144-C ПЕРЕМЕЩЁН // АДРЕС НЕ РАЗГЛАШАЕТСЯ",
         "0192-D": "КАНАЛ 0192-D НЕ НАЙДЕН // ПОИСК СОТРУДНИКА ПРОДОЛЖАЕТСЯ",
@@ -3971,7 +4109,19 @@
         image.alt = "";
       }
 
-      renderArtifactCopy(artifactCopy, definition.copy);
+      const storedReceipt = readStaffProfile()?.artifacts?.find(
+        (item) => item.id === artifactId
+      );
+      const receiptCopy =
+        artifactId === LORA_RECEIPT_ID
+          ? buildLoraReceiptCopy(
+              storedReceipt?.variant || readLoraSave()?.receiptVariant,
+              Boolean(
+                storedReceipt?.replay || readLoraSave()?.playerFlags?.replayShift
+              )
+            )
+          : definition.copy;
+      renderArtifactCopy(artifactCopy, receiptCopy);
       artifactDownload.hidden = !definition.downloadName || !definition.src;
       if (definition.downloadName && definition.src) {
         artifactDownload.href = definition.src;
@@ -4622,6 +4772,7 @@
     initMobileNavigation();
     initHiringThreshold();
     initStaffHomeNotice();
+    initLoraRedRoom();
     updateCctvVideos(body.classList.contains("staff-mode"));
 
     const savedMode = localStorage.getItem(MODE_KEY);
@@ -4748,7 +4899,8 @@
         }
 
         await initEpisodeCatalogPage(response.url || url);
-        await initRedRoomShift();
+        await initRedRoomEspresso();
+        await initLoraRedRoom();
         initDOMListeners();
         announceNavigationChange();
         return true;

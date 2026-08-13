@@ -1,0 +1,320 @@
+.lora-room {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  color: #f3e4d2;
+  background: #140808;
+  overflow: hidden;
+}
+
+.lora-room[data-state="denied"] {
+  position: relative;
+  inset: auto;
+  min-height: 62vh;
+  z-index: 1;
+}
+
+.lora-room__music:empty {
+  display: none;
+}
+
+.lora-room__music .music-player {
+  margin: 0;
+}
+
+.lora-room__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(12, 4, 4, 0.72);
+  border-bottom: 1px solid rgba(255, 196, 160, 0.18);
+}
+
+.lora-room__kicker {
+  margin: 0;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #e7b089;
+}
+
+.lora-room__sound,
+.lora-room__leave,
+.lora-room__choice {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgba(255, 210, 170, 0.35);
+  background: rgba(48, 14, 14, 0.86);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lora-room__sound:focus-visible,
+.lora-room__leave:focus-visible,
+.lora-room__choice:focus-visible,
+.lora-room__line:focus-visible {
+  outline: 2px solid #ffd7b0;
+  outline-offset: 3px;
+}
+
+.lora-room__stage-wrap {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.lora-room__stage {
+  position: absolute;
+  inset: -8%;
+  background:
+    linear-gradient(180deg, rgba(80, 0, 0, 0.18), rgba(20, 0, 0, 0.55)),
+    url("../assets/guest/locations/red-room-cafe.webp") center / cover no-repeat;
+  transform: scale(1.12) translateY(4%);
+  transition: transform 0.7s ease;
+}
+
+.lora-room__stage[data-has-visual="true"][data-scene] {
+  inset: 0;
+  transform: none;
+  background: #140808;
+}
+
+.lora-room__media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.lora-room__stage[data-has-visual="true"] .lora-room__light,
+.lora-room__stage[data-has-visual="true"] .lora-room__guest,
+.lora-room__stage[data-has-visual="true"] .lora-room__prop {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lora-room__stage[data-has-visual="true"][data-camera-off="true"]::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 15.2%;
+  left: 77.25%;
+  width: clamp(6px, 0.55vw, 9px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(7, 4, 4, 0.96);
+  box-shadow: 0 0 5px 2px rgba(7, 4, 4, 0.78);
+  pointer-events: none;
+}
+
+.lora-room__stage[data-scene="void"] {
+  filter: brightness(0.18);
+  transform: scale(1.04);
+}
+
+.lora-room__stage[data-scene="counter"] {
+  transform: scale(1.18) translateY(7%);
+}
+
+.lora-room__stage[data-scene="table"] {
+  transform: scale(1.28) translate(-10%, 2%);
+}
+
+.lora-room__stage[data-scene="curtain"] {
+  transform: scale(1.26) translate(14%, -4%);
+}
+
+.lora-room__light {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(255, 80, 60, 0.28), transparent 42%);
+  pointer-events: none;
+}
+
+.lora-room__guest {
+  position: absolute;
+  left: 18%;
+  bottom: 14%;
+  width: min(34vw, 220px);
+  height: min(48vh, 340px);
+  filter: drop-shadow(0 18px 18px rgba(0, 0, 0, 0.45));
+}
+
+.lora-room__guest[data-lora-guest="fox"],
+.lora-room__guest[data-lora-guest="fox-phone"] {
+  left: auto;
+  right: 16%;
+}
+
+.lora-room__guest[data-lora-guest="dog"] {
+  left: 38%;
+}
+
+.lora-room__silhouette {
+  position: absolute;
+  inset: 0;
+  background: #1a0b0b;
+  clip-path: polygon(22% 12%, 72% 8%, 88% 30%, 78% 100%, 18% 100%, 10% 36%);
+  opacity: 0.88;
+}
+
+.lora-room__guest[data-lora-guest="fox"] .lora-room__silhouette,
+.lora-room__guest[data-lora-guest="fox-phone"] .lora-room__silhouette {
+  background: #4a2014;
+  clip-path: polygon(18% 10%, 54% 4%, 86% 22%, 70% 100%, 24% 100%, 12% 40%);
+}
+
+.lora-room__guest[data-lora-guest="dog"] .lora-room__silhouette {
+  background: #2a2420;
+  clip-path: polygon(28% 16%, 68% 10%, 84% 38%, 74% 100%, 22% 100%, 14% 42%);
+}
+
+.lora-room__guest-label {
+  position: absolute;
+  left: 50%;
+  bottom: -1.4rem;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lora-room__prop {
+  position: absolute;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  padding: 0.35rem 0.5rem;
+  background: rgba(20, 8, 8, 0.72);
+  color: #f6d7b6;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lora-room__prop[data-lora-prop="note"] {
+  left: 12%;
+  bottom: 18%;
+}
+
+.lora-room__prop[data-lora-prop="tag"] {
+  left: 28%;
+  bottom: 16%;
+}
+
+.lora-room__prop[data-lora-prop="phone"] {
+  right: 18%;
+  bottom: 20%;
+}
+
+.lora-room__prop[data-lora-prop="mic"] {
+  left: 48%;
+  bottom: 15%;
+}
+
+.lora-room__prop[data-lora-prop="receipt"] {
+  right: 10%;
+  bottom: 14%;
+}
+
+.lora-room__panel {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.85rem 0.95rem 1rem;
+  background: linear-gradient(180deg, rgba(18, 6, 6, 0.82), rgba(10, 3, 3, 0.96));
+  border-top: 1px solid rgba(255, 196, 160, 0.2);
+}
+
+.lora-room__speaker {
+  margin: 0;
+  color: #ffc49a;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+}
+
+.lora-room__line {
+  margin: 0;
+  min-height: 4.6em;
+  max-height: 8.5em;
+  overflow: auto;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.lora-room__choices {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.lora-room__choice--link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.lora-room-assign {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(4, 0, 0, 0.92);
+  color: #f4d8c0;
+  text-align: center;
+}
+
+.lora-room-assign[hidden] {
+  display: none;
+}
+
+.lora-room-assign p {
+  margin: 0.35rem 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.lora-room-open .site-wrapper {
+  overflow: hidden;
+}
+
+@media (min-width: 720px) {
+  .lora-room__choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 430px) {
+  .lora-room__guest {
+    width: 42vw;
+    height: 38vh;
+    left: 8%;
+  }
+
+  .lora-room__guest[data-lora-guest="fox"],
+  .lora-room__guest[data-lora-guest="fox-phone"] {
+    right: 6%;
+  }
+
+  .lora-room__line {
+    font-size: 0.98rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lora-room__stage {
+    transition: none;
+  }
+}
