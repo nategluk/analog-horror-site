@@ -122,7 +122,13 @@
 
   const guestName = (id) => (id && GUESTS[id] ? GUESTS[id].label : "");
 
-  const PLACEMENT_PROMPT = "Выберите: стол, стойка или штора.";
+  const WAIT_LINE = "Зал ждёт.";
+  const EVICT_HINT = "Мест нет. Нажмите на занятую зону — гость уйдёт в коридор.";
+
+  const waitingLine = (state) =>
+    state.currentGuest && bothSeatsFull(state)
+      ? EVICT_HINT
+      : WAIT_LINE;
 
   const setLine = (root, text) => {
     const line = root.querySelector("[data-rr-line]");
@@ -160,27 +166,43 @@
     return `<span class="rr-person rr-person--${id} ${extraClass}" data-guest="${id}" aria-hidden="true">${sprite}<i></i><b></b></span>`;
   };
 
-  const renderZoneBody = (state, zone) => {
+  const renderZoneProps = (state, zone) => {
     const occupant = zone === "table" ? state.table : state.counter;
     const traces = state.traces;
     const bits = [];
-    if (occupant) bits.push(renderPerson(occupant));
     if (zone === "table") {
       if (state.playerSeat === "reserved" && !occupant) {
         bits.push('<span class="rr-prop rr-prop--cup rr-prop--reserved" aria-hidden="true"></span>');
       }
-      if (traces.clock) bits.push('<span class="rr-prop rr-prop--clock" aria-hidden="true">III</span>');
-      if (traces.tableChairOut && !occupant) bits.push('<span class="rr-prop rr-prop--chair" aria-hidden="true"></span>');
-    }
-    if (zone === "counter") {
-      if (traces.unpaidBill) bits.push('<span class="rr-prop rr-prop--bill">СЧЁТ</span>');
-      if (traces.wetCup) bits.push('<span class="rr-prop rr-prop--cup rr-prop--cup-wet" aria-hidden="true"></span>');
-      if (occupant === "coffee") bits.push('<span class="rr-prop rr-prop--cup is-drinking" aria-hidden="true"></span>');
-      if (traces.counterChairOut && !occupant && !traces.wetCup) {
+      if (traces.clock) bits.push('<span class="rr-prop rr-prop--clock" aria-hidden="true"></span>');
+      if (traces.tableChairOut && !occupant) {
         bits.push('<span class="rr-prop rr-prop--chair" aria-hidden="true"></span>');
       }
     }
+    if (zone === "counter") {
+      if (traces.unpaidBill) bits.push('<span class="rr-prop rr-prop--bill">счёт</span>');
+      if (traces.wetCup) {
+        bits.push('<span class="rr-prop rr-prop--cup rr-prop--cup-wet" aria-hidden="true"></span>');
+      }
+      if (occupant === "coffee") {
+        bits.push('<span class="rr-prop rr-prop--cup is-drinking" aria-hidden="true"></span>');
+      }
+    }
     return bits.join("");
+  };
+
+  const renderLoraStation = (state) => {
+    if (state.playerSeat === "returned") {
+      return `<span class="rr-station rr-station--taken">${renderPerson("returned")}</span>`;
+    }
+    return `
+      <span class="rr-station" aria-hidden="true">
+        <span class="rr-station__chair"></span>
+        <span class="rr-station__apron"></span>
+        <span class="rr-station__collar"></span>
+        <span class="rr-station__badge">ЛОРА</span>
+      </span>
+    `;
   };
 
   const highlightFor = (state, zone) => {
@@ -207,12 +229,12 @@
   };
 
   const playerCaption = (state) => {
-    if (state.playerSeat === "returned") return "Ваш стул занят";
+    if (state.playerSeat === "returned") return "Место Лоры занято";
     if (state.playerSeat === "reserved" || state.playerSeat === "standing") {
-      return "Вы стоите";
+      return "Лора стоит";
     }
-    if (state.playerSeat === "empty") return "Пустой стул";
-    return "Вы";
+    if (state.playerSeat === "empty") return "Стул Лоры";
+    return "Лора";
   };
 
   const buildHall = (root, state) => {
@@ -238,26 +260,29 @@
       </button>
       <div class="rr-room${recognition}">
         <button type="button" class="rr-zone rr-zone--table${tableHi ? ` ${tableHi}` : ""}${tableFacing}${tableWarm}${tableHis}${lastChair}" data-rr-zone="table" ${tableHi ? "" : "disabled"}>
-          <span class="rr-lamp" aria-hidden="true"></span>
           <span class="rr-zone-label">${zoneLabel(state, "table")}</span>
-          <span class="rr-zone-body">${renderZoneBody(state, "table")}</span>
+          <span class="rr-lamp" aria-hidden="true"></span>
+          <span class="rr-table-stage">
+            ${state.table ? renderPerson(state.table) : ""}
+            <span class="rr-tabletop" aria-hidden="true"></span>
+            <span class="rr-table-props">${renderZoneProps(state, "table")}</span>
+          </span>
         </button>
         <button type="button" class="rr-zone rr-zone--counter${counterHi ? ` ${counterHi}` : ""}" data-rr-zone="counter" ${counterHi ? "" : "disabled"}>
           <span class="rr-zone-label">${zoneLabel(state, "counter")}</span>
-          <span class="rr-zone-body">${renderZoneBody(state, "counter")}</span>
+          <span class="rr-counter-stage">
+            ${state.counter ? renderPerson(state.counter) : ""}
+            <span class="rr-counter-edge" aria-hidden="true"></span>
+            <span class="rr-counter-props">${renderZoneProps(state, "counter")}</span>
+          </span>
         </button>
         <div class="rr-player rr-player--${state.playerSeat}${state.playerSeated ? " is-seated" : " is-standing"}" data-rr-player data-player-seat="${state.playerSeat}">
           <span class="rr-zone-label">${playerCaption(state)}</span>
-          <span class="rr-zone-body">
-            ${state.playerSeat === "returned" ? renderPerson("returned") : ""}
-            ${state.playerSeat === "player" ? '<span class="rr-person rr-person--player" aria-hidden="true"><i></i><b></b></span>' : ""}
-            ${state.playerSeat === "reserved" || state.playerSeat === "standing" ? '<span class="rr-person rr-person--player is-standing-aside" aria-hidden="true"><i></i><b></b></span>' : ""}
-            ${state.playerSeat === "empty" ? '<span class="rr-prop rr-prop--chair" aria-hidden="true"></span>' : ""}
-          </span>
+          ${renderLoraStation(state)}
         </div>
         <div class="rr-entrance" data-rr-entrance aria-label="Обычный вход в коридор">
           <span class="rr-zone-label">Коридор</span>
-          <span class="rr-zone-body rr-entrance__body">${corridor}</span>
+          <span class="rr-doorway">${corridor}</span>
         </div>
       </div>
     `;
@@ -269,11 +294,15 @@
     const guest = state.currentGuest ? GUESTS[state.currentGuest] : null;
     let action = "";
     if (state.phase === "sit") {
-      action = `<button type="button" class="rr-action" data-rr-sit>СЯДЬ</button>`;
+      action = `<button type="button" class="rr-action" data-rr-sit>НАЧАТЬ СМЕНУ</button>`;
     } else if (state.phase === "finale" && state.ending === "hall") {
       action = `<button type="button" class="rr-action" data-rr-close>ЗАКРЫТЬ СМЕНУ</button>`;
     } else if (state.phase === "finale" && state.ending === "curtain") {
-      action = `<button type="button" class="rr-action" data-rr-leave>ВСТАТЬ ИЗ-ЗА СТОЛА</button>`;
+      const leaveLabel =
+        state.playerSeat === "player"
+          ? "ВСТАТЬ ИЗ-ЗА СТОЛА"
+          : "УЙТИ ЗА ШТОРУ";
+      action = `<button type="button" class="rr-action" data-rr-leave>${leaveLabel}</button>`;
     } else if (state.phase === "closed") {
       action = `<button type="button" class="rr-action" data-rr-again>НОВАЯ СМЕНА</button>`;
     }
@@ -284,12 +313,12 @@
            <p>${guest.arrive.replace("\n", "<br />")}</p>
          </div>`
       : state.phase === "sit"
-        ? `<div class="rr-guest rr-guest--empty"><p>Столик на одного.<br />Сядь. Выдохни.</p></div>`
-        : state.phase === "finale" && state.ending === "hall"
-          ? `<div class="rr-guest rr-guest--empty"><p>Зал остаётся таким,<br />каким вы его собрали.</p></div>`
-        : state.phase === "finale" && state.ending === "curtain"
-          ? `<div class="rr-guest rr-guest--empty"><p>Штора смотрит на вас.<br />Можно встать.</p></div>`
-        : `<div class="rr-guest rr-guest--empty"><p>Смена закрыта.</p></div>`;
+        ? `<div class="rr-guest rr-guest--empty"><p>На спинке стула висит красный фартук.<br />На бейдже — «ЛОРА».</p></div>`
+        : state.phase === "finale" && state.ending === "hall" && !state.busy
+          ? `<div class="rr-guest rr-guest--empty"><p>Зал остаётся таким, каким вы его собрали.</p></div>`
+        : state.phase === "closed" && state.ending === "curtain"
+          ? `<div class="rr-guest rr-guest--empty"><p>Красная Комната осталась без хозяйки.</p></div>`
+        : "";
 
     dock.innerHTML = `${guestCard}${action}`;
   };
@@ -311,10 +340,12 @@
             ? "Смена закрыта // зал"
             : "Смена закрыта // штора"
           : state.replay === "standing"
-            ? "Смена // вы стоите"
+            ? "Смена // Лора стоит"
             : state.replay === "returned-first"
               ? "Смена // знакомая маска первая"
-              : "Свободный столик";
+              : state.phase === "sit"
+                ? "Свободный столик"
+                : "Смена // Лора";
     }
   };
 
@@ -369,7 +400,7 @@
       state.traces.counterChairOut = true;
     }
     state.traces.corridor = [...state.traces.corridor, guestId];
-    setLine(root, `${guestName(guestId)} — теперь в коридоре.`);
+    setLine(root, "Маска ушла в коридор.");
   };
 
   const maybeTiredMoves = async (root, state) => {
@@ -377,9 +408,7 @@
     const tookReserved = state.playerSeat === "reserved";
     setLine(
       root,
-      tookReserved
-        ? "Последний стул занят. Вам стоять."
-        : "Уставший гость занял пустой стол."
+      tookReserved ? "Последний стул занят." : "Лампа загорелась."
     );
     await wait(700);
     state.counter = null;
@@ -390,7 +419,7 @@
 
   const maybeCoffeeLeaves = async (root, state) => {
     if (state.counter !== "coffee") return false;
-    setLine(root, "Чашка опустела. Гость ушёл во вход.");
+    setLine(root, "Гость ушёл.");
     const zoneEl = root.querySelector('[data-rr-zone="counter"]');
     const entrance = root.querySelector("[data-rr-entrance]");
     const person = zoneEl?.querySelector(".rr-person");
@@ -434,18 +463,13 @@
       state.ending = state.curtainUsed ? "hall" : "curtain";
       state.phase = "finale";
       if (state.ending === "curtain") state.curtainLooked = true;
-      setLine(
-        root,
-        state.ending === "hall"
-          ? "Зал остаётся. Штора уже была открыта."
-          : "Штора смотрит на вас."
-      );
+      setLine(root, "Смена закончена.");
       render(root, state);
       return;
     }
 
     state.currentGuest = state.order[state.index];
-    setLine(root, PLACEMENT_PROMPT);
+    setLine(root, waitingLine(state));
     render(root, state);
   };
 
@@ -463,12 +487,13 @@
     if (canEvict) {
       await evictToCorridor(root, state, zone);
       render(root, state);
+      await wait(520);
     }
 
     const reservedBefore = state.playerSeat === "reserved";
     applyPlacementEffects(state, guestId, zone);
     if (zone === "table" && reservedBefore) {
-      setLine(root, "Последний стул отдан. Вам стоять.");
+      setLine(root, "Последний стул занят.");
     } else {
       setLine(root, GUESTS[guestId][zone].replace("\n", " "));
     }
@@ -485,7 +510,7 @@
     state.playerSeated = true;
     state.playerSeat = "player";
     state.currentGuest = state.order[0];
-    setLine(root, PLACEMENT_PROMPT);
+    setLine(root, waitingLine(state));
     render(root, state);
   };
 
@@ -494,7 +519,7 @@
     state.playerSeated = false;
     state.playerSeat = "reserved";
     state.currentGuest = state.order[0];
-    setLine(root, "Вы стоите. Последний стул ещё ваш, пока его не отдали.");
+    setLine(root, "Последний стул ещё ваш, пока его не отдали.");
     render(root, state);
   };
 
@@ -516,7 +541,7 @@
     if (state.phase !== "finale" || state.ending !== "hall" || state.busy) return;
     state.busy = true;
     if (state.counter === "returned" && hasPlayerChair(state)) {
-      setLine(root, "Знакомая маска занимает ваш стул.");
+      setLine(root, "Знакомая маска заняла место Лоры.");
       render(root, state);
       await wait(700);
       state.counter = null;
@@ -528,7 +553,12 @@
     state.phase = "closed";
     state.currentGuest = null;
     state.busy = false;
-    setLine(root, "Смена закрыта.");
+    setLine(
+      root,
+      state.playerSeat === "returned"
+        ? "Знакомая маска заняла место Лоры."
+        : "Смена закрыта."
+    );
     render(root, state);
     updatePageCopy("hall", true);
   };
@@ -540,7 +570,7 @@
     state.curtainLooked = false;
     state.playerSeated = false;
     state.playerSeat = "empty";
-    setLine(root, "Вы встаёте и проходите за штору.");
+    setLine(root, "Лора покинула смену.");
     render(root, state);
     await wait(800);
     const record = persistClosed(state, previousRef.current);
@@ -625,7 +655,13 @@
     if (previousRef.current?.status === "closed" && previousRef.current.finale) {
       state = restoreClosed(previousRef.current);
       updatePageCopy(previousRef.current.ending, true);
-      setLine(root, "Смена закрыта. Можно начать новую.");
+      if (state.ending === "curtain") {
+        setLine(root, "Лора покинула смену.");
+      } else if (state.playerSeat === "returned") {
+        setLine(root, "Знакомая маска заняла место Лоры.");
+      } else {
+        setLine(root, "Смена закрыта.");
+      }
     } else {
       state = createLiveState("none");
       setLine(root, "В зале есть свободный столик.");
