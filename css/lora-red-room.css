@@ -51,10 +51,20 @@
   padding: 0.65rem 0.9rem;
   border: 1px solid rgba(255, 210, 170, 0.35);
   background: rgba(48, 14, 14, 0.86);
-  color: inherit;
+  color: #ffe4c9;
   font: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+body.staff-mode .site-wrapper .lora-room .lora-room__sound,
+body.staff-mode .site-wrapper .lora-room .lora-room__leave,
+body.staff-mode .site-wrapper .lora-room .lora-room__choice {
+  color: #ffe4c9;
+}
+
+body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
+  color: rgba(255, 228, 201, 0.58);
 }
 
 .lora-room__sound:focus-visible,
@@ -266,6 +276,10 @@
   border-top: 1px solid rgba(255, 196, 160, 0.2);
 }
 
+.lora-room__panel[data-text-kind="narration"] .lora-room__speaker {
+  color: #c78f72;
+}
+
 .lora-room__speaker {
   margin: 0;
   color: #ffc49a;
@@ -280,6 +294,20 @@
   overflow: auto;
   white-space: pre-wrap;
   line-height: 1.45;
+  color: #f5eadc;
+}
+
+.lora-room__panel[data-text-kind="narration"] .lora-room__line,
+.lora-room__action {
+  color: #d2aa91;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  letter-spacing: 0.015em;
+}
+
+.lora-room__action {
+  margin: -0.25rem 0 0;
+  line-height: 1.4;
 }
 
 .lora-room__choices {
@@ -343,6 +371,20 @@ body.lora-room-open .site-wrapper {
 
   .lora-room__line {
     font-size: 0.98rem;
+  }
+
+  .lora-room__panel {
+    max-height: 54svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .lora-room__choices {
+    max-height: 31svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    padding-right: 0.15rem;
   }
 }
 

@@ -181,6 +181,24 @@ if (
   }
 });
 
+["pig_talk", "fox_smell", "final_conflict_dog"].forEach((id) => {
+  const choices = nodes[id].choices || [];
+  if (choices.some((choice) => !choice.group)) {
+    throw new Error(`choice groups: ${id} contains an ungrouped choice`);
+  }
+  const groups = new Map();
+  choices.forEach((choice) => {
+    groups.set(choice.group, (groups.get(choice.group) || 0) + 1);
+  });
+  if (groups.size > 4 || [...groups.values()].some((count) => count > 3)) {
+    throw new Error(`choice groups: ${id} exceeds the four-button mobile budget`);
+  }
+});
+
+if (!nodes.end_leave.action || nodes.pig_reveal.speaker !== "СМЕНА") {
+  throw new Error("text roles: narration and mixed action are not separated");
+}
+
 const revealRun = walk(
   {
     pig_blue_key: "ask_how",

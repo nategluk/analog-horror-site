@@ -567,12 +567,29 @@
     if (live) live.textContent = text;
   };
 
-  const renderChoices = (root, node) => {
+  const renderChoices = (root, node, selectedGroup = null) => {
     const box = root.querySelector("[data-lora-choices]");
     if (!box) return;
     box.replaceChildren();
     const choices = (node.choices || []).filter(choiceVisible);
-    choices.forEach((choice) => {
+    const groups = [...new Set(choices.map((choice) => choice.group).filter(Boolean))];
+    if (groups.length && !selectedGroup) {
+      groups.forEach((group) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "lora-room__choice lora-room__choice--group";
+        button.textContent = group;
+        button.dataset.choiceGroup = group;
+        button.addEventListener("click", () => renderChoices(root, node, group));
+        box.append(button);
+      });
+      box.querySelector("button")?.focus();
+      return;
+    }
+    const visibleChoices = selectedGroup
+      ? choices.filter((choice) => choice.group === selectedGroup)
+      : choices;
+    visibleChoices.forEach((choice) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "lora-room__choice";
@@ -583,6 +600,15 @@
       });
       box.append(button);
     });
+    if (selectedGroup) {
+      const back = document.createElement("button");
+      back.type = "button";
+      back.className = "lora-room__choice lora-room__choice--back";
+      back.textContent = "← Назад";
+      back.dataset.choiceBack = "true";
+      back.addEventListener("click", () => renderChoices(root, node));
+      box.append(back);
+    }
     const first = box.querySelector("button");
     first?.focus();
   };
@@ -633,10 +659,15 @@
     root.dataset.state = "denied";
     const speaker = root.querySelector("[data-lora-speaker]");
     const line = root.querySelector("[data-lora-line]");
+    const action = root.querySelector("[data-lora-action]");
     const live = root.querySelector("[data-lora-live]");
     const choices = root.querySelector("[data-lora-choices]");
     if (speaker) speaker.textContent = "СИСТЕМА";
     if (line) line.textContent = "КАНАЛ НЕ НАЗНАЧЕН";
+    if (action) {
+      action.textContent = "";
+      action.hidden = true;
+    }
     if (live) live.textContent = "КАНАЛ НЕ НАЗНАЧЕН";
     if (choices) {
       choices.replaceChildren();
@@ -659,9 +690,18 @@
     renderScene(root, { ...node, id: nodeId });
     const speaker = root.querySelector("[data-lora-speaker]");
     const lineEl = root.querySelector("[data-lora-line]");
+    const actionEl = root.querySelector("[data-lora-action]");
+    const panel = root.querySelector(".lora-room__panel");
     const live = root.querySelector("[data-lora-live]");
     const choices = root.querySelector("[data-lora-choices]");
     if (speaker) speaker.textContent = node.speaker || "СМЕНА";
+    if (panel) {
+      panel.dataset.textKind = node.speaker === "СМЕНА" ? "narration" : "dialogue";
+    }
+    if (actionEl) {
+      actionEl.textContent = node.action || "";
+      actionEl.hidden = true;
+    }
     if (choices) choices.replaceChildren();
     const fullText = resolveLine({ ...node, id: nodeId });
     const instant = prefersReducedMotion();
@@ -673,10 +713,12 @@
         lineEl.onclick = null;
         lineEl.onkeydown = null;
       }
+      if (actionEl && node.action) actionEl.hidden = false;
       finishNode(root, node);
     };
     if (instant || fullText.length < 4) {
       setLine(root, fullText, live);
+      if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
       finish();
       return;
     }
@@ -687,7 +729,7 @@
       const slice = fullText.slice(0, index);
       if (lineEl) lineEl.textContent = slice;
       if (index >= fullText.length) {
-        if (live) live.textContent = fullText;
+        if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
         finish();
         return;
       }
@@ -696,6 +738,7 @@
     const skip = () => {
       clearTimers();
       setLine(root, fullText, live);
+      if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
       finish();
     };
     if (lineEl) {

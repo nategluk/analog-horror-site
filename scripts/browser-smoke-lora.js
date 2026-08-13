@@ -268,6 +268,23 @@ async function main() {
   await mobile.reload({ waitUntil: "domcontentloaded" });
   const clickChoice = async (text) => {
     await mobile.waitForFunction(
+      () => document.querySelector(".lora-room__choice"),
+      { timeout: 8000 },
+    );
+    await mobile.evaluate((label) => {
+      const visible = [...document.querySelectorAll(".lora-room__choice")].some(
+        (button) => button.textContent.trim() === label
+      );
+      if (visible) return;
+      const nodeId = document.querySelector("[data-lora-room]")?.dataset.node;
+      const node = window.TyndexLoraRedRoomContent?.nodes?.[nodeId];
+      const group = (node?.choices || []).find((choice) => choice.text === label)?.group;
+      if (!group) return;
+      [...document.querySelectorAll(".lora-room__choice")]
+        .find((button) => button.textContent.trim() === group)
+        ?.click();
+    }, text);
+    await mobile.waitForFunction(
       (label) =>
         [...document.querySelectorAll(".lora-room__choice")].some(
           (button) => button.textContent.trim() === label
