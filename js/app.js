@@ -1323,26 +1323,57 @@
     initStaffHomeNotice();
   };
 
-  const runGlitchAndToggle = () => {
-    if (switching) return;
-    switching = true;
-    const logo = document.querySelector(".logo");
-    logo?.classList.remove("logo-knock-one", "logo-knock-two");
-    const nextIsStaff = !body.classList.contains("staff-mode");
-    if (nextIsStaff) {
-      playModeSwitchSound();
-    }
-    body.classList.add("glitching");
+  const MODE_SWITCH_GLITCH_MS = 1600;
 
-    setTimeout(() => {
-      applyMode(nextIsStaff);
-      body.classList.remove("glitching");
-      switching = false;
-      if (!nextIsStaff) return;
-      const staffEntry = document.querySelector("[data-staff-entry]")?.getAttribute("data-staff-entry");
-      if (!staffEntry) return;
-      window.location.assign(new URL(staffEntry, window.location.href).href);
-    }, 1600);
+  const runModeGlitch = ({ sound, onDone } = {}) => {
+    if (switching) return false;
+    switching = true;
+    document.querySelector(".logo")?.classList.remove("logo-knock-one", "logo-knock-two");
+    if (sound) playModeSwitchSound();
+    body.classList.add("glitching");
+    const delay = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? 0
+      : MODE_SWITCH_GLITCH_MS;
+    window.setTimeout(() => {
+      try {
+        onDone?.();
+      } finally {
+        body.classList.remove("glitching");
+        switching = false;
+      }
+    }, delay);
+    return true;
+  };
+
+  const enterStaffWithGlitch = (href) => {
+    const started = runModeGlitch({
+      sound: true,
+      onDone: () => {
+        applyMode(true);
+        if (href) window.location.assign(href);
+      },
+    });
+    if (started || !href) return;
+    applyMode(true);
+    window.location.assign(href);
+  };
+
+  window.TyndexSiteFx = { enterStaff: enterStaffWithGlitch };
+
+  const runGlitchAndToggle = () => {
+    const nextIsStaff = !body.classList.contains("staff-mode");
+    const staffEntry = document
+      .querySelector("[data-staff-entry]")
+      ?.getAttribute("data-staff-entry");
+    runModeGlitch({
+      sound: nextIsStaff,
+      onDone: () => {
+        applyMode(nextIsStaff);
+        if (nextIsStaff && staffEntry) {
+          window.location.assign(new URL(staffEntry, window.location.href).href);
+        }
+      },
+    });
   };
 
   const showLogoKnockFeedback = (knockCount) => {
@@ -2383,6 +2414,7 @@
     getAssignmentCallbacks: null, // filled below
     isCloseClassification,
   };
+  window.TyndexSiteFx = { enterStaff: enterStaffWithGlitch };
 
   const getAssignmentCallbacks = (progress, role) => {
     const animatorCallbacks = [

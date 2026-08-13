@@ -249,7 +249,6 @@
 
     const view = createView(readSave().completed);
     let brewToken = 0;
-    let soundEnabled = false;
     let currentAudio = null;
 
     const stopCue = () => {
@@ -260,7 +259,7 @@
     };
 
     const playCue = (name) => {
-      if (!soundEnabled || prefersReducedMotion()) return;
+      if (prefersReducedMotion()) return;
       const file = SOUND_FILES[name];
       if (!file) return;
       stopCue();
@@ -272,20 +271,9 @@
       if (play && typeof play.catch === "function") play.catch(() => {});
     };
 
-    const updateSoundButton = () => {
-      const button = target.querySelector("[data-rr-sound]");
-      if (!button) return;
-      button.setAttribute("aria-pressed", String(soundEnabled));
-      button.textContent = soundEnabled ? "Звук: вкл" : "Звук: выкл";
-      button.title = soundEnabled
-        ? "Выключить звуки кофемашины"
-        : "Включить звуки кофемашины";
-    };
-
     abort.signal.addEventListener("abort", () => stopCue(), { once: true });
 
     paint(target, view);
-    updateSoundButton();
 
     const stillCurrent = (token) =>
       token === brewToken && target.isConnected && !abort.signal.aborted;
@@ -321,16 +309,39 @@
       paint(target, view);
     };
 
+    const playModeGlitchSound = () => {
+      const audio = new Audio(
+        new URL("../assets/audio/glitch-transition.wav", SCRIPT_URL).href
+      );
+      audio.preload = "auto";
+      audio.volume = 0.42;
+      const play = audio.play();
+      if (play && typeof play.catch === "function") play.catch(() => {});
+    };
+
     const enterStaff = () => {
+      stopCue();
+      view.busy = true;
+      paint(target, view);
+      const href = new URL(
+        target.getAttribute("data-staff-entry") || "../staff.html",
+        window.location.href
+      ).href;
+      if (typeof window.TyndexSiteFx?.enterStaff === "function") {
+        window.TyndexSiteFx.enterStaff(href);
+        return;
+      }
       try {
         window.localStorage.setItem("tyndex_mode", "staff");
       } catch (error) {
         /* mode persistence is optional */
       }
-      const href =
-        target.getAttribute("data-staff-entry") ||
-        new URL("../staff.html", window.location.href).href;
-      window.location.assign(new URL(href, window.location.href).href);
+      playModeGlitchSound();
+      document.body.classList.add("glitching");
+      const delay = prefersReducedMotion() ? 0 : 1600;
+      window.setTimeout(() => {
+        window.location.assign(href);
+      }, delay);
     };
 
     const runBrew = async (token) => {
@@ -376,14 +387,6 @@
     target.addEventListener(
       "click",
       async (event) => {
-        const soundButton = event.target.closest("[data-rr-sound]");
-        if (soundButton && target.contains(soundButton)) {
-          soundEnabled = !soundEnabled;
-          if (!soundEnabled) stopCue();
-          updateSoundButton();
-          return;
-        }
-
         const button = event.target.closest("[data-rr-act]");
         if (!button || !target.contains(button) || view.busy) return;
 

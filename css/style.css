@@ -11324,50 +11324,12 @@ body.staff-mode .episode-source:focus-visible {
   min-width: 0;
 }
 
-.rr-espresso-head__row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  min-width: 0;
-}
-
-.rr-espresso-sound {
-  appearance: none;
-  flex: 0 0 auto;
-  min-height: 44px;
-  padding: 0.35rem 0.7rem;
-  color: #e8b072;
-  border: 1px solid rgba(232, 176, 114, 0.42);
-  border-radius: 8px;
-  background: rgba(20, 6, 10, 0.28);
-  font: inherit;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-
-.rr-espresso-sound[aria-pressed="true"] {
-  color: #2a0c14;
-  border-color: #f0b15a;
-  background: #f0b15a;
-}
-
-.rr-espresso-sound:focus-visible {
-  outline: 2px solid #ffe1a8;
-  outline-offset: 3px;
-}
-
 .rr-espresso-kicker,
 .rr-espresso-sub {
   margin: 0;
 }
 
 .rr-espresso-kicker {
-  min-width: 0;
   color: #e8b072;
   font-size: 0.74rem;
   font-weight: 800;
