@@ -7,8 +7,11 @@
   const ARTIFACT_ID = "lora-night-receipt";
   const HIRING_HREF = "../hiring.html";
   const VISUAL_ASSETS = {
+    V01_EMPTY_COUNTER: {
+      image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
+    },
     V02_PIG_MASKED: {
-      image: "../assets/guest/red-room/lora/scenes/concepts/grok/v02-pig-masked-pilot.png",
+      image: "../assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
     },
     V03_PIG_REVEAL: {
       image: "../assets/guest/red-room/lora/scenes/v03-pig-reveal-poster.webp",
@@ -16,7 +19,7 @@
       playback: "reveal",
     },
     V04_PIG_UNMASKED: {
-      image: "../assets/guest/red-room/lora/scenes/concepts/grok/v04-pig-unmasked-pilot.png",
+      image: "../assets/guest/red-room/lora/scenes/v04-pig-unmasked.webp",
     },
     V05_FOX_GAZE: {
       image: "../assets/guest/red-room/lora/scenes/v05-fox-gaze.webp",
@@ -28,10 +31,28 @@
       video: "../assets/guest/red-room/lora/scenes/v06-fox-action-idle.mp4",
       playback: "ambient",
     },
+    V07_DOG_BLANK: {
+      image: "../assets/guest/red-room/lora/scenes/v07-dog-blank.webp",
+    },
+    V08_DOG_SETTLED: {
+      image: "../assets/guest/red-room/lora/scenes/v08-dog-settled.webp",
+    },
+    V09_DOG_CURTAIN: {
+      image: "../assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
+    },
+    V10_FOX_DOG: {
+      image: "../assets/guest/red-room/lora/scenes/v10-fox-dog.webp",
+    },
     V11_DOG_SLEEP: {
       image: "../assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
       video: "../assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
       playback: "transition",
+    },
+    V12_EMPTY_CURTAIN: {
+      image: "../assets/guest/red-room/lora/scenes/v12-empty-curtain.webp",
+    },
+    V13_RECEIPT: {
+      image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
     },
   };
 
@@ -336,16 +357,25 @@
     const stage = root.querySelector("[data-lora-stage]");
     const image = root.querySelector("[data-lora-scene-image]");
     const video = root.querySelector("[data-lora-scene-video]");
-    const asset = visualAsset(node);
+    const visualId = resolveVisual(node);
+    const asset = VISUAL_ASSETS[visualId] || null;
     if (stage) {
       stage.dataset.scene = node.scene || "counter";
       stage.dataset.guest = node.guest || "none";
-      stage.dataset.hasVisual = String(Boolean(asset));
+      stage.dataset.visual = visualId || "";
+      stage.dataset.hasVisual = String(Boolean(asset?.image));
       stage.dataset.cameraOff = String(hasFlag("cameraDisabled"));
       stage.dataset.videoState = asset?.video ? "poster" : "none";
     }
     if (image) {
+      image.onload = null;
+      image.onerror = null;
       if (asset?.image) {
+        image.onerror = () => {
+          image.hidden = true;
+          image.removeAttribute("src");
+          if (stage) stage.dataset.hasVisual = "false";
+        };
         image.src = assetUrl(asset.image);
         image.hidden = false;
       } else {
@@ -357,6 +387,9 @@
       video.hidden = true;
       video.loop = false;
       video.muted = true;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("muted", "");
       if (asset?.video) {
         video.src = assetUrl(asset.video);
         video.poster = assetUrl(asset.image);

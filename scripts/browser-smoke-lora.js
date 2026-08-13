@@ -354,7 +354,7 @@ async function main() {
     !revealPoster.image?.includes("v03-pig-reveal-poster.webp") ||
     !revealPoster.played ||
     revealContinuation.node !== "pig_suit" ||
-    !revealContinuation.image?.includes("v04-pig-unmasked-pilot.png") ||
+    !revealContinuation.image?.includes("v04-pig-unmasked.webp") ||
     !reducedReveal.videoHidden ||
     reducedReveal.videoState !== "poster" ||
     reducedReveal.choices !== 1 ||

@@ -97,11 +97,40 @@
   object-position: center;
 }
 
+.lora-room__stage[data-video-state="playing"] [data-lora-scene-image] {
+  visibility: hidden;
+}
+
+.lora-room__stage:not([data-video-state="playing"]) [data-lora-scene-video] {
+  visibility: hidden;
+}
+
 .lora-room__stage[data-has-visual="true"] .lora-room__light,
 .lora-room__stage[data-has-visual="true"] .lora-room__guest,
 .lora-room__stage[data-has-visual="true"] .lora-room__prop {
   visibility: hidden;
   pointer-events: none;
+}
+
+.lora-room__stage[data-visual="V01_EMPTY_COUNTER"] .lora-room__prop[data-lora-prop="note"],
+.lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="note"],
+.lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"] {
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"] {
+  right: 7%;
+  bottom: 16%;
+  min-width: min(46vw, 240px);
+  min-height: 7.5rem;
+  padding: 0.7rem 0.8rem;
+  background: #f3e4d0;
+  color: #3a1610;
+  border: 1px solid rgba(90, 40, 24, 0.35);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+  letter-spacing: 0.04em;
 }
 
 .lora-room__stage[data-has-visual="true"][data-camera-off="true"]::after {
@@ -297,6 +326,10 @@ body.lora-room-open .site-wrapper {
 }
 
 @media (max-width: 430px) {
+  .lora-room__media {
+    object-position: center 42%;
+  }
+
   .lora-room__guest {
     width: 42vw;
     height: 38vh;

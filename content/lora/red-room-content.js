@@ -9,6 +9,7 @@
   const nodes = {
     assign_notice: {
       scene: "void",
+      visual: "V00_SYSTEM_VOID",
       speaker: "СИСТЕМА",
       line: "КУРАТОР НЕДОСТУПЕН\nЛора П. использует один накопленный выходной.\nВключено автоматическое замещение смены.",
       autoNext: "shift_counter",
@@ -16,6 +17,7 @@
     },
     shift_counter: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Вы за стойкой Красной Комнаты. Кофемашина ещё тёплая. Рядом лежит сложенная записка.",
       props: ["note"],
@@ -27,6 +29,7 @@
     },
     note_read: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "ЗАПИСКА",
       line: "Кофе не пережигать.\nСиние ключи без меня не выдавать.\nЕсли придёт Пёс — сначала успокой его.\n\nЛ.",
       props: ["note"],
@@ -293,9 +296,6 @@
     pig_wait: {
       scene: "table",
       visual: "V02_PIG_MASKED",
-      visualWhen: [
-        { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
-      ],
       speaker: "СВИНЬЯ",
       line: "Подожду. Чашку поставь ближе.\nЕсли Лора настоящая, она узнает запах зоопарка раньше, чем меня увидит.",
       guest: "pig",
@@ -319,9 +319,6 @@
     pig_tech: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      visualWhen: [
-        { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
-      ],
       speaker: "СВИНЬЯ",
       line: "Не надо.\nЕсли ты уже набрал, я мёртв как сотрудник и жив как инвентарь.",
       guest: "pig",
@@ -332,6 +329,7 @@
     },
     pig_tech_run: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Он срывается к двери. Бирка остаётся на стойке, ещё тёплая.",
       guest: "none",
@@ -343,9 +341,6 @@
     pig_tomorrow: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      visualWhen: [
-        { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
-      ],
       speaker: "СВИНЬЯ",
       line: "Завтра Центр будет ближе.\nНо ладно. Я умею приходить в места, которых уже нет.",
       guest: "pig",
@@ -357,9 +352,6 @@
     pig_deny_leave: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      visualWhen: [
-        { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
-      ],
       speaker: "СВИНЬЯ",
       line: "Тогда я ошибся дверью.\nИли дверь ошиблась мной.",
       guest: "pig",
@@ -370,6 +362,7 @@
     },
     pig_gone: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Зал снова слишком тихий. От стойки пахнет мокрым костюмом.",
       props: ["note"],
@@ -607,6 +600,7 @@
     },
     dog_arrive: {
       scene: "counter",
+      visual: "V07_DOG_BLANK",
       speaker: "СМЕНА",
       line: "Последний гость почти не держит форму. Костюм порван. В кулаке — обломок, похожий на ручку микрофона.",
       guest: "dog",
@@ -617,6 +611,7 @@
     },
     dog_where: {
       scene: "counter",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Где я?",
       guest: "dog",
@@ -626,6 +621,7 @@
     },
     dog_hospital: {
       scene: "counter",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Это больница?",
       guest: "dog",
@@ -635,6 +631,7 @@
     },
     dog_costume: {
       scene: "counter",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Почему я в костюме?",
       guest: "dog",
@@ -648,6 +645,7 @@
     },
     dog_water: {
       scene: "counter",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Вода тёплая. Как из трубы.\nНо руки перестали стучать о стойку.",
       guest: "dog",
@@ -658,6 +656,7 @@
     },
     dog_coffee: {
       scene: "counter",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Горько. Значит, я ещё что-то чувствую.",
       guest: "dog",
@@ -668,6 +667,7 @@
     },
     dog_player_name: {
       scene: "counter",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Имя… Хорошо. Тогда я не один в этой комнате.",
       guest: "dog",
@@ -677,6 +677,7 @@
     },
     dog_ask_name: {
       scene: "counter",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Олег…\nНет. Не знаю.\nПросто во рту стало металлически.",
       guest: "dog",
@@ -687,6 +688,7 @@
     },
     dog_settled: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Теперь тише. Можно ещё один вопрос? Короткий.",
       guest: "dog",
@@ -711,6 +713,7 @@
     },
     dog_name_again: {
       scene: "table",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Олег…\nНет. Не знаю.\nПросто во рту стало металлически.",
       guest: "dog",
@@ -721,6 +724,7 @@
     },
     dog_after_name: {
       scene: "table",
+      visual: "V07_DOG_BLANK",
       speaker: "ПЁС",
       line: "Не повторяй это слово слишком часто. Оно остаётся на зубах.",
       guest: "dog",
@@ -739,6 +743,7 @@
     },
     dog_dreams: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Сны?\nПосле Терапии никому ничего не снится.",
       guest: "dog",
@@ -748,6 +753,7 @@
     },
     dog_exception: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Ты исключение?",
       guest: "dog",
@@ -761,6 +767,7 @@
     },
     dog_dream_cafe: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Значит, кафе помнит нас раньше, чем мы его.",
       guest: "dog",
@@ -770,6 +777,7 @@
     },
     dog_dream_forget: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Это честно. Я тоже начинаю с пустого места.",
       guest: "dog",
@@ -779,6 +787,7 @@
     },
     dog_dream_raw: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Тогда береги это. Если правда.\nТех, кто ещё видит сны, здесь считают неисправностью.",
       guest: "dog",
@@ -788,6 +797,7 @@
     },
     dog_dream_reverse: {
       scene: "table",
+      visual: "V08_DOG_SETTLED",
       speaker: "ПЁС",
       line: "Задавай. Только тихо. Мне кажется, комната тоже слушает.",
       guest: "dog",
@@ -797,6 +807,7 @@
     },
     dog_call_fox: {
       scene: "counter",
+      visual: "V08_DOG_SETTLED",
       speaker: "ЛИСА",
       line: "Уже?\nЕсли это он — не вешай трубку. Я иду.",
       guest: "fox-phone",
@@ -808,6 +819,7 @@
     },
     dog_exit_hint: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "ПЁС",
       line: "Выход… Штора тяжелее двери.\nМне кто-то говорил про море. Или про горку. Слова путаются.",
       guest: "dog",
@@ -817,6 +829,7 @@
     },
     dog_phone: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "СМЕНА",
       line: "Звонит внутренний телефон. Одновременно Пёс смотрит на штору, как на человека.",
       guest: "dog",
@@ -827,6 +840,7 @@
     },
     final_conflict: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "ЛИСА",
       line: "Ну что? Нашёлся журналист?",
       guest: "fox-phone",
@@ -836,6 +850,7 @@
     },
     final_conflict_dog: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "ПЁС",
       line: "Ты знаешь, как отсюда выйти?",
       guest: "dog",
@@ -880,6 +895,7 @@
     },
     pig_warns: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "СВИНЬЯ",
       line: "Не отправляй Пса к морю.\nОттуда возвращаются только костюмы.",
       guest: "pig",
@@ -938,6 +954,7 @@
     },
     end_give: {
       scene: "counter",
+      visual: "V10_FOX_DOG",
       speaker: "СМЕНА",
       line: "Лиса возвращается быстрее, чем должна была успеть. Парфюм снова режет сырость.",
       guest: "fox",
@@ -948,6 +965,7 @@
     },
     end_give_meet: {
       scene: "counter",
+      visual: "V10_FOX_DOG",
       speaker: "ПЁС",
       line: "Мы знакомы?",
       guest: "dog",
@@ -957,6 +975,7 @@
     },
     end_give_answer: {
       scene: "counter",
+      visual: "V10_FOX_DOG",
       speaker: "ЛИСА",
       line: "Пока нет.",
       guest: "fox",
@@ -966,6 +985,7 @@
     },
     end_give_leave: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Они уходят вместе. Дальше камера кафе не достаёт. Насилие остаётся за дверью, как обещанный уровень.",
       guest: "none",
@@ -976,6 +996,7 @@
     },
     end_sea: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "СМЕНА",
       line: "Найди седьмую горку. Она пахнет морем.",
       guest: "dog",
@@ -985,6 +1006,7 @@
     },
     end_sea_go: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "ПЁС",
       line: "Море. Хорошо. Если это слово настоящее, я дойду.",
       guest: "dog",
@@ -995,6 +1017,7 @@
     },
     end_sea_sound: {
       scene: "curtain",
+      visual: "V12_EMPTY_CURTAIN",
       speaker: "СМЕНА",
       line: "Сначала шум волн.\nПотом чайки.\nПотом пластиковый скрежет.\nПотом тяжёлый удар.",
       props: ["note"],
@@ -1004,6 +1027,7 @@
     },
     end_none: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "СМЕНА",
       line: "Олега здесь нет.\nЯ не знаю выхода.",
       guest: "dog",
@@ -1013,6 +1037,7 @@
     },
     end_none_stay: {
       scene: "curtain",
+      visual: "V09_DOG_CURTAIN",
       speaker: "ПЁС",
       line: "Тогда я постою здесь. Штора теплее двери.",
       guest: "dog",
@@ -1022,6 +1047,7 @@
     },
     end_none_morning: {
       scene: "curtain",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Утром его нет. Штора закрыта.",
       props: ["note"],
@@ -1030,6 +1056,7 @@
     },
     aftermath: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "Ночь заканчивается без объявления.",
       props: ["note"],
@@ -1038,6 +1065,7 @@
     },
     aftermath_pig: {
       scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
       speaker: "СМЕНА",
       line: "На стойке только записка Лоры.",
       lineHidden: "Из подсобки больше не доносится дыхание. Свинья либо ушёл, либо научился молчать.",
@@ -1050,6 +1078,7 @@
     },
     receipt_print: {
       scene: "counter",
+      visual: "V13_RECEIPT",
       speaker: "КАССА",
       line: "КВИТАНЦИЯ ВРЕМЕННОГО ЗАМЕЩЕНИЯ\nОбъект: Красная Комната\nСотрудник: не установлен\nПосетителей принято: 3\nМаршрутов назначено: [вариант]\nОтветственность: принята",
       props: ["note", "receipt"],
@@ -1060,6 +1089,7 @@
     },
     receipt_back: {
       scene: "counter",
+      visual: "V13_RECEIPT",
       speaker: "ЛОРА П.",
       line: "Когда вернусь, объяснишь.\nЧек не выбрасывай.\n\nЛ.",
       lineReplay: "Я просила успокоить Пса. Не назначать его.\nЧек не выбрасывай.\n\nЛ.",
@@ -1070,6 +1100,7 @@
     },
     shift_done: {
       scene: "counter",
+      visual: "V13_RECEIPT",
       speaker: "СИСТЕМА",
       line: "Смена закрыта. Квитанция зарегистрирована как материал личного дела, если дело уже закреплено.\nЕсли нет — документ будет прикреплён позже.",
       props: ["receipt"],

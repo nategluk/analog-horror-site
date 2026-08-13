@@ -59,14 +59,121 @@ const required = [
 ];
 const absentRequired = required.filter((id) => !nodes[id]);
 const allowedVisuals = new Set([
+  "V00_SYSTEM_VOID",
+  "V01_EMPTY_COUNTER",
   "V02_PIG_MASKED",
   "V03_PIG_REVEAL",
   "V04_PIG_UNMASKED",
   "V05_FOX_GAZE",
   "V06_FOX_ACTION",
+  "V07_DOG_BLANK",
+  "V08_DOG_SETTLED",
+  "V09_DOG_CURTAIN",
+  "V10_FOX_DOG",
   "V11_DOG_SLEEP",
+  "V12_EMPTY_CURTAIN",
+  "V13_RECEIPT",
 ]);
+const expectedVisual = {
+  assign_notice: "V00_SYSTEM_VOID",
+  shift_counter: "V01_EMPTY_COUNTER",
+  note_read: "V01_EMPTY_COUNTER",
+  pig_arrive: "V02_PIG_MASKED",
+  pig_enter: "V02_PIG_MASKED",
+  pig_today: "V02_PIG_MASKED",
+  pig_blue_key: "V02_PIG_MASKED",
+  pig_source: "V02_PIG_MASKED",
+  pig_deny: "V02_PIG_MASKED",
+  pig_follow_note: "V02_PIG_MASKED",
+  pig_escapes: "V02_PIG_MASKED",
+  pig_camera_check: "V02_PIG_MASKED",
+  pig_reveal: "V03_PIG_REVEAL",
+  pig_suit: "V02_PIG_MASKED",
+  pig_center: "V02_PIG_MASKED",
+  pig_test: "V02_PIG_MASKED",
+  pig_talk: "V02_PIG_MASKED",
+  pig_tag: "V02_PIG_MASKED",
+  pig_hide: "V02_PIG_MASKED",
+  pig_wait: "V02_PIG_MASKED",
+  pig_tech: "V02_PIG_MASKED",
+  pig_tomorrow: "V02_PIG_MASKED",
+  pig_deny_leave: "V02_PIG_MASKED",
+  pig_tech_run: "V01_EMPTY_COUNTER",
+  pig_gone: "V01_EMPTY_COUNTER",
+  fox_arrive: "V05_FOX_GAZE",
+  fox_enter: "V05_FOX_GAZE",
+  fox_camera: "V05_FOX_GAZE",
+  fox_smell: "V05_FOX_GAZE",
+  fox_tag_hidden: "V05_FOX_GAZE",
+  fox_tag_shown: "V05_FOX_GAZE",
+  fox_lie: "V05_FOX_GAZE",
+  fox_gave_pig: "V05_FOX_GAZE",
+  fox_partial: "V05_FOX_GAZE",
+  fox_gave_wait: "V05_FOX_GAZE",
+  fox_oleg: "V06_FOX_ACTION",
+  fox_deny_oleg: "V06_FOX_ACTION",
+  fox_why: "V06_FOX_ACTION",
+  fox_curtain: "V06_FOX_ACTION",
+  fox_level: "V06_FOX_ACTION",
+  fox_monopoly: "V06_FOX_ACTION",
+  fox_leave: "V06_FOX_ACTION",
+  dog_arrive: "V07_DOG_BLANK",
+  dog_where: "V07_DOG_BLANK",
+  dog_hospital: "V07_DOG_BLANK",
+  dog_costume: "V07_DOG_BLANK",
+  dog_water: "V08_DOG_SETTLED",
+  dog_coffee: "V08_DOG_SETTLED",
+  dog_player_name: "V08_DOG_SETTLED",
+  dog_ask_name: "V07_DOG_BLANK",
+  dog_settled: "V08_DOG_SETTLED",
+  dog_name_again: "V07_DOG_BLANK",
+  dog_after_name: "V07_DOG_BLANK",
+  dog_dreams: "V08_DOG_SETTLED",
+  dog_exception: "V08_DOG_SETTLED",
+  dog_dream_cafe: "V08_DOG_SETTLED",
+  dog_dream_forget: "V08_DOG_SETTLED",
+  dog_dream_raw: "V08_DOG_SETTLED",
+  dog_dream_reverse: "V08_DOG_SETTLED",
+  dog_call_fox: "V08_DOG_SETTLED",
+  dog_exit_hint: "V09_DOG_CURTAIN",
+  dog_phone: "V09_DOG_CURTAIN",
+  final_conflict: "V09_DOG_CURTAIN",
+  final_conflict_dog: "V09_DOG_CURTAIN",
+  pig_warns: "V09_DOG_CURTAIN",
+  end_leave: "V11_DOG_SLEEP",
+  end_leave_sleep: "V11_DOG_SLEEP",
+  end_give: "V10_FOX_DOG",
+  end_give_meet: "V10_FOX_DOG",
+  end_give_answer: "V10_FOX_DOG",
+  end_give_leave: "V01_EMPTY_COUNTER",
+  end_sea: "V09_DOG_CURTAIN",
+  end_sea_go: "V09_DOG_CURTAIN",
+  end_sea_sound: "V12_EMPTY_CURTAIN",
+  end_none: "V09_DOG_CURTAIN",
+  end_none_stay: "V09_DOG_CURTAIN",
+  end_none_morning: "V01_EMPTY_COUNTER",
+  aftermath: "V01_EMPTY_COUNTER",
+  aftermath_pig: "V01_EMPTY_COUNTER",
+  receipt_print: "V13_RECEIPT",
+  receipt_back: "V13_RECEIPT",
+  shift_done: "V13_RECEIPT",
+};
+const pigRevealedNodes = [
+  "pig_suit",
+  "pig_center",
+  "pig_test",
+  "pig_talk",
+  "pig_hide",
+  "pig_tag",
+];
+const pigRemaskNodes = [
+  "pig_wait",
+  "pig_tech",
+  "pig_tomorrow",
+  "pig_deny_leave",
+];
 const unknownVisuals = [];
+const mismatchedVisuals = [];
 ids.forEach((id) => {
   const node = nodes[id];
   [node.visual, ...(node.visualWhen || []).map((entry) => entry.visual)]
@@ -74,16 +181,44 @@ ids.forEach((id) => {
     .forEach((visual) => {
       if (!allowedVisuals.has(visual)) unknownVisuals.push(`${id}:${visual}`);
     });
+  if (expectedVisual[id] && node.visual !== expectedVisual[id]) {
+    mismatchedVisuals.push(`${id}:${node.visual || "none"}`);
+  }
+  if (!node.visual) mismatchedVisuals.push(`${id}:missing`);
+});
+const remaskErrors = pigRemaskNodes.filter((id) => {
+  const node = nodes[id];
+  return (
+    node.visual !== "V02_PIG_MASKED" ||
+    (node.visualWhen && node.visualWhen.length)
+  );
+});
+const revealWhenErrors = pigRevealedNodes.filter((id) => {
+  const revealedVisual = (nodes[id].visualWhen || []).find((entry) =>
+    (entry.require || []).includes("pigRevealed")
+  );
+  return (
+    nodes[id].visual !== "V02_PIG_MASKED" ||
+    revealedVisual?.visual !== "V04_PIG_UNMASKED"
+  );
 });
 const requiredAssets = [
+  "assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
+  "assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
   "assets/guest/red-room/lora/scenes/v03-pig-reveal.mp4",
   "assets/guest/red-room/lora/scenes/v03-pig-reveal-poster.webp",
+  "assets/guest/red-room/lora/scenes/v04-pig-unmasked.webp",
   "assets/guest/red-room/lora/scenes/v05-fox-gaze-idle.mp4",
   "assets/guest/red-room/lora/scenes/v05-fox-gaze.webp",
   "assets/guest/red-room/lora/scenes/v06-fox-action-idle.mp4",
   "assets/guest/red-room/lora/scenes/v06-fox-action.webp",
+  "assets/guest/red-room/lora/scenes/v07-dog-blank.webp",
+  "assets/guest/red-room/lora/scenes/v08-dog-settled.webp",
+  "assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
+  "assets/guest/red-room/lora/scenes/v10-fox-dog.webp",
   "assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
   "assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
+  "assets/guest/red-room/lora/scenes/v12-empty-curtain.webp",
 ];
 const missingAssets = requiredAssets.filter(
   (asset) => !fs.existsSync(path.join(__dirname, "..", asset))
@@ -92,13 +227,18 @@ const emptyChoices = ids.filter((id) => {
   const node = nodes[id];
   return !node.autoNext && !(node.choices && node.choices.length);
 });
+const unmappedNodes = ids.filter((id) => !expectedVisual[id]);
 
 if (
   missing.length ||
   absentRequired.length ||
   unknownVisuals.length ||
+  mismatchedVisuals.length ||
+  remaskErrors.length ||
+  revealWhenErrors.length ||
   missingAssets.length ||
-  emptyChoices.length
+  emptyChoices.length ||
+  unmappedNodes.length
 ) {
   if (missing.length) {
     console.error("Missing next targets:", missing.join(", "));
@@ -109,11 +249,23 @@ if (
   if (unknownVisuals.length) {
     console.error("Unknown visual ids:", unknownVisuals.join(", "));
   }
+  if (mismatchedVisuals.length) {
+    console.error("Visual mapping mismatches:", mismatchedVisuals.join(", "));
+  }
+  if (remaskErrors.length) {
+    console.error("Pig remask nodes must stay V02 without visualWhen:", remaskErrors.join(", "));
+  }
+  if (revealWhenErrors.length) {
+    console.error("Pig reveal continuation missing V02/V04 visualWhen:", revealWhenErrors.join(", "));
+  }
   if (missingAssets.length) {
     console.error("Required visual assets missing:", missingAssets.join(", "));
   }
   if (emptyChoices.length) {
     console.error("Nodes without exit:", emptyChoices.join(", "));
+  }
+  if (unmappedNodes.length) {
+    console.error("Nodes missing from visual matrix:", unmappedNodes.join(", "));
   }
   process.exit(1);
 }

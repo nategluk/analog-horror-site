@@ -97,11 +97,7 @@ if (
   "pig_test",
   "pig_talk",
   "pig_hide",
-  "pig_wait",
   "pig_tag",
-  "pig_tech",
-  "pig_tomorrow",
-  "pig_deny_leave",
 ].forEach((id) => {
   const revealedVisual = (nodes[id].visualWhen || []).find((entry) =>
     (entry.require || []).includes("pigRevealed")
@@ -111,6 +107,40 @@ if (
     revealedVisual?.visual !== "V04_PIG_UNMASKED"
   ) {
     throw new Error(`pig reveal: V02/V04 continuation is incomplete at ${id}`);
+  }
+});
+[
+  "pig_wait",
+  "pig_tech",
+  "pig_tomorrow",
+  "pig_deny_leave",
+].forEach((id) => {
+  if (
+    nodes[id].visual !== "V02_PIG_MASKED" ||
+    (nodes[id].visualWhen && nodes[id].visualWhen.length)
+  ) {
+    throw new Error(`pig remask: ${id} must use V02_PIG_MASKED without visualWhen`);
+  }
+});
+[
+  ["dog_arrive", "V07_DOG_BLANK"],
+  ["dog_settled", "V08_DOG_SETTLED"],
+  ["dog_ask_name", "V07_DOG_BLANK"],
+  ["dog_exit_hint", "V09_DOG_CURTAIN"],
+  ["dog_call_fox", "V08_DOG_SETTLED"],
+  ["pig_warns", "V09_DOG_CURTAIN"],
+  ["end_give", "V10_FOX_DOG"],
+  ["end_give_leave", "V01_EMPTY_COUNTER"],
+  ["end_sea", "V09_DOG_CURTAIN"],
+  ["end_sea_sound", "V12_EMPTY_CURTAIN"],
+  ["end_none", "V09_DOG_CURTAIN"],
+  ["end_none_morning", "V01_EMPTY_COUNTER"],
+  ["aftermath", "V01_EMPTY_COUNTER"],
+  ["receipt_print", "V13_RECEIPT"],
+  ["shift_done", "V13_RECEIPT"],
+].forEach(([id, visual]) => {
+  if (nodes[id].visual !== visual) {
+    throw new Error(`visual matrix: ${id} must use ${visual}`);
   }
 });
 
