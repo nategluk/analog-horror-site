@@ -95,9 +95,11 @@ if (
   "pig_suit",
   "pig_center",
   "pig_test",
+  "pig_bargain",
   "pig_talk",
   "pig_hide",
   "pig_tag",
+  "pig_toy_take",
 ].forEach((id) => {
   const revealedVisual = (nodes[id].visualWhen || []).find((entry) =>
     (entry.require || []).includes("pigRevealed")
@@ -114,6 +116,7 @@ if (
   "pig_tech",
   "pig_tomorrow",
   "pig_deny_leave",
+  "pig_key_given",
 ].forEach((id) => {
   if (
     nodes[id].visual !== "V02_PIG_MASKED" ||
@@ -330,5 +333,34 @@ walk(
   },
   "waiting-unassigned"
 );
+
+const toyTrade = walk(
+  {
+    pig_blue_key: "ask_how",
+    pig_camera_check: "disable_camera",
+    pig_talk: "take_toy",
+    fox_enter: "fox_no_smoke",
+    fox_smell: "fox_deny_guest",
+    fox_oleg_ask: "deny_oleg",
+    final_conflict_dog: "end_leave",
+  },
+  "toy-smoke-leave"
+);
+if (!toyTrade.flags.pigToyTaken || !toyTrade.flags.foxToldNoSmoke) {
+  throw new Error("toy/smoke: expected pigToyTaken and foxToldNoSmoke");
+}
+
+const keyTrade = walk(
+  {
+    pig_blue_key: "ask_how",
+    pig_talk: "give_key",
+    fox_smell: "fox_deny_guest",
+    final_conflict_dog: "end_none",
+  },
+  "key-trade-unassigned"
+);
+if (keyTrade.state.pigOutcome !== "traded" || !keyTrade.flags.pigToyTaken) {
+  throw new Error("key trade: expected traded pigOutcome and toy taken");
+}
 
 console.log("OK smoke-lora-red-room");

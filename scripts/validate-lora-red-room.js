@@ -78,7 +78,7 @@ const expectedVisual = {
   assign_notice: "V00_SYSTEM_VOID",
   shift_counter: "V01_EMPTY_COUNTER",
   note_read: "V01_EMPTY_COUNTER",
-  pig_arrive: "V02_PIG_MASKED",
+  pig_arrive: "V01_EMPTY_COUNTER",
   pig_enter: "V02_PIG_MASKED",
   pig_today: "V02_PIG_MASKED",
   pig_blue_key: "V02_PIG_MASKED",
@@ -91,6 +91,7 @@ const expectedVisual = {
   pig_suit: "V02_PIG_MASKED",
   pig_center: "V02_PIG_MASKED",
   pig_test: "V02_PIG_MASKED",
+  pig_bargain: "V02_PIG_MASKED",
   pig_talk: "V02_PIG_MASKED",
   pig_tag: "V02_PIG_MASKED",
   pig_hide: "V02_PIG_MASKED",
@@ -98,6 +99,8 @@ const expectedVisual = {
   pig_tech: "V02_PIG_MASKED",
   pig_tomorrow: "V02_PIG_MASKED",
   pig_deny_leave: "V02_PIG_MASKED",
+  pig_toy_take: "V02_PIG_MASKED",
+  pig_key_given: "V02_PIG_MASKED",
   pig_tech_run: "V01_EMPTY_COUNTER",
   pig_gone: "V01_EMPTY_COUNTER",
   fox_arrive: "V05_FOX_GAZE",
@@ -164,15 +167,18 @@ const pigRevealedNodes = [
   "pig_suit",
   "pig_center",
   "pig_test",
+  "pig_bargain",
   "pig_talk",
   "pig_hide",
   "pig_tag",
+  "pig_toy_take",
 ];
 const pigRemaskNodes = [
   "pig_wait",
   "pig_tech",
   "pig_tomorrow",
   "pig_deny_leave",
+  "pig_key_given",
 ];
 const unknownVisuals = [];
 const mismatchedVisuals = [];
@@ -206,6 +212,7 @@ const revealWhenErrors = pigRevealedNodes.filter((id) => {
 });
 const requiredAssets = [
   "assets/staff/personnel/oleg-record.webp",
+  "assets/staff/documents/adepts-nevalyashka.jpg",
   "assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
   "assets/guest/red-room/lora/scenes/v01-empty-idle.mp4",
   "assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
@@ -227,6 +234,8 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v14-fox-gum-pop-v1.mp4",
   "assets/guest/red-room/lora/scenes/v15-fox-candy-offer.png",
   "assets/guest/red-room/lora/scenes/v15-fox-candy-offer-v1.mp4",
+  "assets/guest/red-room/lora/scenes/v16-fox-cigarette.mp4",
+  "assets/guest/red-room/lora/scenes/v17-pig-toy-offer.mp4",
   "assets/guest/red-room/lora/scenes/v07-dog-blank.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-settled.webp",
   "assets/guest/red-room/lora/scenes/v08-dog-stand.webp",

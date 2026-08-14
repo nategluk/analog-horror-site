@@ -331,7 +331,11 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 .lora-room__stage[data-visual="V01_EMPTY_COUNTER"] .lora-room__prop[data-lora-prop="note"],
 .lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="note"],
 .lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"],
-.lora-room__stage[data-visual="V06_FOX_ACTION"] .lora-room__prop[data-lora-prop="photo"] {
+.lora-room__stage[data-visual="V06_FOX_ACTION"] .lora-room__prop[data-lora-prop="photo"],
+.lora-room__stage[data-visual="V02_PIG_MASKED"] .lora-room__prop[data-lora-prop="toy"],
+.lora-room__stage[data-visual="V04_PIG_UNMASKED"] .lora-room__prop[data-lora-prop="toy"],
+.lora-room__stage[data-visual="V05_FOX_GAZE"] .lora-room__prop[data-lora-prop="toy"],
+.lora-room__stage[data-visual="V06_FOX_ACTION"] .lora-room__prop[data-lora-prop="toy"] {
   visibility: visible;
   pointer-events: auto;
   z-index: 3;
@@ -375,6 +379,33 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   width: 100%;
   height: auto;
   border: 1px solid rgba(38, 20, 14, 0.35);
+}
+
+.lora-room__prop[data-lora-prop="toy"] {
+  left: 6%;
+  right: auto;
+  bottom: 11%;
+  width: min(24vw, 160px);
+  transform: rotate(4deg);
+  cursor: pointer;
+}
+
+.lora-room__stage[data-inspect="toy"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(8, 0, 0, 0.48);
+  pointer-events: none;
+}
+
+.lora-room__stage[data-inspect="toy"] .lora-room__prop[data-lora-prop="toy"] {
+  left: 50%;
+  right: auto;
+  bottom: 10%;
+  width: min(78vw, 280px);
+  transform: translateX(-50%) rotate(-2deg);
+  z-index: 4;
 }
 
 .lora-room__stage[data-visual="V13_RECEIPT"] .lora-room__prop[data-lora-prop="receipt"] {
@@ -703,6 +734,16 @@ body.lora-room-open .panel {
   }
 
   .lora-room__stage[data-inspect="photo"] .lora-room__prop[data-lora-prop="photo"] {
+    width: min(82vw, 260px);
+    bottom: 8%;
+  }
+
+  .lora-room__prop[data-lora-prop="toy"] {
+    width: min(32vw, 130px);
+    bottom: 9%;
+  }
+
+  .lora-room__stage[data-inspect="toy"] .lora-room__prop[data-lora-prop="toy"] {
     width: min(82vw, 260px);
     bottom: 8%;
   }

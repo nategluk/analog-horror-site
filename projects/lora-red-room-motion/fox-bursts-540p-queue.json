@@ -1,0 +1,20 @@
+{
+  "project": "lora-red-room-motion",
+  "tasks": [
+    {
+      "id": "v14-fox-gum-pop-540p",
+      "label": "V14 Fox gum burst 540p",
+      "cmd": "pixverse create video --model v6 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/analog-horror-site/assets/guest/red-room/lora/scenes/v06-fox-action.webp --no-audio --prompt /Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/prompts/v14-fox-gum-pop-540p.txt"
+    },
+    {
+      "id": "v15-fox-candy-offer-540p",
+      "label": "V15 Fox candy burst 540p",
+      "cmd": "pixverse create video --model v6 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/analog-horror-site/assets/guest/red-room/lora/scenes/v06-fox-action.webp --no-audio --prompt /Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/prompts/v15-fox-candy-offer-540p.txt"
+    },
+    {
+      "id": "v16-fox-cigarette-540p",
+      "label": "V16 Fox cigarette burst 540p",
+      "cmd": "pixverse create video --model v6 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/analog-horror-site/assets/guest/red-room/lora/scenes/v05-fox-gaze.webp --no-audio --prompt /Users/nateglukhov/analog-horror-site/projects/lora-red-room-motion/prompts/v16-fox-cigarette-540p.txt"
+    }
+  ]
+}

@@ -13,6 +13,7 @@
   const LORA_SAVE_KEY = "tyndex_lora_red_room_v1";
   const LORA_ASSIGN_KEY = "tyndex_lora_channel_v1";
   const LORA_RECEIPT_ID = "lora-night-receipt";
+  const LORA_TOY_ID = "lora-nevalyashka";
   const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
@@ -1598,6 +1599,17 @@
       description:
         "Чек временного замещения стойки. Оборот заполнен от руки.",
     },
+    [LORA_TOY_ID]: {
+      code: "AVD-312-C",
+      title: "Неваляшка с цепи",
+      type: "ИЗЪЯТЫЙ ПРЕДМЕТ",
+      source: "КАФЕ «КРАСНАЯ КОМНАТА» // НОЧНАЯ СМЕНА",
+      description:
+        "Тяжёлая металлическая неваляшка на ржавой цепи. Внутри пахнет жжёным сахаром и хлоркой. В протоколе адептов числится как кадило. Гость в костюме Свиньи отдал её за стойкой.",
+      src: "assets/staff/documents/adepts-nevalyashka.jpg",
+      alt: "Ржавая неваляшка на цепи в архивном кабинете",
+      downloadName: "AVD-312-C-NEVALYASHKA.jpg",
+    },
   });
   const curatorNodeArtifacts = {
     ...(irinaCallContent.nodeArtifacts || {}),
@@ -1735,30 +1747,47 @@
     }
   };
 
-  const claimLoraReceiptArtifact = (profile) => {
+  const claimLoraShiftArtifacts = (profile) => {
     if (!profile) return profile;
     const lora = readLoraSave();
-    if (!lora?.receiptVariant || !staffArtifacts[LORA_RECEIPT_ID]) return profile;
+    if (!lora) return profile;
     profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
     profile.removedArtifactIds = Array.isArray(profile.removedArtifactIds)
       ? profile.removedArtifactIds
       : [];
-    if (profile.removedArtifactIds.includes(LORA_RECEIPT_ID)) return profile;
-    const known = profile.artifacts.find((item) => item.id === LORA_RECEIPT_ID);
-    if (known) {
-      known.variant = lora.receiptVariant;
-      known.replay = Boolean(lora.playerFlags?.replayShift);
-      return profile;
+    let dirty = false;
+    const claim = (artifactId, extra = {}) => {
+      if (!staffArtifacts[artifactId]) return;
+      if (profile.removedArtifactIds.includes(artifactId)) return;
+      const known = profile.artifacts.find((item) => item.id === artifactId);
+      if (known) {
+        Object.assign(known, extra);
+        return;
+      }
+      profile.artifacts.push({
+        id: artifactId,
+        sessionNumber: lora.playerFlags?.replayShift ? 2 : 1,
+        obtainedAt: lora.updatedAt || Date.now(),
+        replay: Boolean(lora.playerFlags?.replayShift),
+        ...extra,
+      });
+      dirty = true;
+    };
+    if (lora.receiptVariant) {
+      claim(LORA_RECEIPT_ID, {
+        variant: lora.receiptVariant,
+        replay: Boolean(lora.playerFlags?.replayShift),
+      });
     }
-    profile.artifacts.push({
-      id: LORA_RECEIPT_ID,
-      sessionNumber: lora.playerFlags?.replayShift ? 2 : 1,
-      obtainedAt: lora.updatedAt || Date.now(),
-      variant: lora.receiptVariant,
-      replay: Boolean(lora.playerFlags?.replayShift),
-    });
-    profile.updatedAt = Date.now();
-    dossierStore.saveDossier(profile);
+    if (lora.playerFlags?.pigToyTaken) {
+      claim(LORA_TOY_ID, {
+        replay: Boolean(lora.playerFlags?.replayShift),
+      });
+    }
+    if (dirty) {
+      profile.updatedAt = Date.now();
+      dossierStore.saveDossier(profile);
+    }
     return profile;
   };
 
@@ -1769,7 +1798,7 @@
         return null;
       }
 
-      return claimLoraReceiptArtifact(seedStaffMessages(profile));
+      return claimLoraShiftArtifacts(seedStaffMessages(profile));
     } catch {
       return null;
     }
@@ -1918,7 +1947,7 @@
     });
     profile.artifacts = [...knownArtifacts.values()];
 
-    return saveStaffProfile(claimLoraReceiptArtifact(seedStaffMessages(profile)));
+    return saveStaffProfile(claimLoraShiftArtifacts(seedStaffMessages(profile)));
   };
 
   const getStaffProfile = () => {

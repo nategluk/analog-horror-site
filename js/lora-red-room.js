@@ -5,6 +5,7 @@
   const ASSIGN_KEY = "tyndex_lora_channel_v1";
   const ASSIGN_TTL_MS = 120000;
   const ARTIFACT_ID = "lora-night-receipt";
+  const TOY_ARTIFACT_ID = "lora-nevalyashka";
   const HIRING_HREF = "../hiring.html";
   const VISUAL_ASSETS = {
     V01_EMPTY_COUNTER: {
@@ -68,9 +69,17 @@
     pig_arrive: {
       mode: "transition",
       video: "v02-pig-arrive.mp4",
-      openWith: "v02-pig-arrive-far.webp",
-      frames: ["v02-pig-arrive-far.webp", "v02-pig-arrive-mid.webp"],
+      openWith: "v01-empty-counter-v1.webp",
+      frames: ["v01-empty-counter-v1.webp"],
       holdMs: 900,
+      restore: false,
+    },
+    pig_bargain: {
+      mode: "transition",
+      video: "v17-pig-toy-offer.mp4",
+      requireVisual: "V02_PIG_MASKED",
+      frames: ["v02-pig-masked.webp"],
+      holdMs: 800,
     },
     pig_escapes: {
       mode: "transition",
@@ -118,10 +127,18 @@
       holdMs: 800,
       restore: false,
     },
+    fox_camera: {
+      mode: "burst",
+      video: "v16-fox-cigarette.mp4",
+      frames: ["v05-fox-gaze.webp"],
+      requireVisual: "V05_FOX_GAZE",
+      delayMs: 900,
+      holdMs: 1800,
+    },
     fox_why: {
       mode: "burst",
       video: "v14-fox-gum-pop-v1.mp4",
-      frames: ["v14-fox-gum-bubble.png"],
+      frames: ["v06-fox-action.webp"],
       requireVisual: "V06_FOX_ACTION",
       delayMs: 900,
       holdMs: 1800,
@@ -129,7 +146,7 @@
     fox_monopoly: {
       mode: "burst",
       video: "v15-fox-candy-offer-v1.mp4",
-      frames: ["v15-fox-candy-offer.png"],
+      frames: ["v06-fox-action.webp"],
       requireVisual: "V06_FOX_ACTION",
       delayMs: 900,
       holdMs: 1800,
@@ -360,8 +377,14 @@
       if (save.pigOutcome === "hidden") return node.lineHidden || node.line;
       if (save.pigOutcome === "waiting") return node.lineWaiting || node.line;
       if (save.pigOutcome === "reported") return node.lineReported || node.line;
+      if (save.pigOutcome === "traded") return node.lineTraded || node.line;
       return node.lineDefault || node.line;
     }
+    const when = (node.lineWhen || []).find((entry) =>
+      (entry.require || []).every(hasFlag)
+    );
+    if (when?.line) return when.line;
+    if (hasFlag("pigRevealed") && node.lineRevealed) return node.lineRevealed;
     if (hasFlag("replayShift") && node.lineReplay) return node.lineReplay;
     let line = node.line || "";
     if (node.complete || save.currentNode === "receipt_print") {
@@ -372,8 +395,31 @@
     return line;
   };
 
+  const attachDossierItem = (profile, artifactId, extra = {}) => {
+    if (!artifactId) return false;
+    profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
+    profile.removedArtifactIds = Array.isArray(profile.removedArtifactIds)
+      ? profile.removedArtifactIds
+      : [];
+    if (profile.removedArtifactIds.includes(artifactId)) return false;
+    const known = profile.artifacts.find((item) => item.id === artifactId);
+    if (known) {
+      Object.assign(known, extra);
+      known.obtainedAt = known.obtainedAt || Date.now();
+      return true;
+    }
+    profile.artifacts.push({
+      id: artifactId,
+      sessionNumber: hasFlag("replayShift") ? 2 : 1,
+      obtainedAt: Date.now(),
+      replay: Boolean(hasFlag("replayShift")),
+      ...extra,
+    });
+    return true;
+  };
+
   const attachReceipt = () => {
-    if (!save?.receiptVariant) return;
+    if (!save?.receiptVariant && !hasFlag("pigToyTaken")) return;
     const store = window.TyndexDossierStore;
     const definitionId = content()?.artifactId || ARTIFACT_ID;
     if (!store?.readDossier || !store.saveDossier) {
@@ -387,26 +433,14 @@
       writeSave(save);
       return;
     }
-    profile.artifacts = Array.isArray(profile.artifacts) ? profile.artifacts : [];
-    profile.removedArtifactIds = Array.isArray(profile.removedArtifactIds)
-      ? profile.removedArtifactIds
-      : [];
-    if (profile.removedArtifactIds.includes(definitionId)) {
-      save.receiptPending = false;
-      writeSave(save);
-      return;
-    }
-    const known = profile.artifacts.find((item) => item.id === definitionId);
-    if (known) {
-      known.variant = save.receiptVariant;
-      known.replay = Boolean(hasFlag("replayShift"));
-      known.obtainedAt = known.obtainedAt || Date.now();
-    } else {
-      profile.artifacts.push({
-        id: definitionId,
-        sessionNumber: hasFlag("replayShift") ? 2 : 1,
-        obtainedAt: Date.now(),
+    if (save.receiptVariant) {
+      attachDossierItem(profile, definitionId, {
         variant: save.receiptVariant,
+        replay: Boolean(hasFlag("replayShift")),
+      });
+    }
+    if (hasFlag("pigToyTaken")) {
+      attachDossierItem(profile, TOY_ARTIFACT_ID, {
         replay: Boolean(hasFlag("replayShift")),
       });
     }
@@ -726,6 +760,14 @@
       props.add("tag");
     }
     if (hasFlag("foxLeftNumber")) props.add("phone");
+    const nodeId = String(save.currentNode || "");
+    if (
+      hasFlag("pigToyOffered") &&
+      !hasFlag("pigToyTaken") &&
+      (nodeId.startsWith("pig") || nodeId.startsWith("fox"))
+    ) {
+      props.add("toy");
+    }
     return props;
   };
 
@@ -797,6 +839,7 @@
       el.hidden = !visibleProps(node).has(name);
     });
     bindInspectedPhoto(root, node);
+    bindInspectedToy(root, node);
     root.querySelectorAll("[data-lora-guest]").forEach((el) => {
       el.hidden = (node.guest || "none") !== el.dataset.loraGuest;
     });
@@ -833,6 +876,41 @@
       photo.removeAttribute("role");
       photo.removeAttribute("tabindex");
       photo.removeAttribute("aria-label");
+    }
+  };
+
+  const bindInspectedToy = (root, node) => {
+    const toy = root.querySelector('[data-lora-prop="toy"]');
+    const stage = root.querySelector("[data-lora-stage]");
+    if (!toy) return;
+    const visible = visibleProps(node).has("toy") && !toy.hidden;
+    const inspecting = stage?.dataset.inspect === "toy";
+    toy.classList.toggle("is-inspect", inspecting);
+    const toggle = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!stage) return;
+      stage.dataset.inspect = inspecting ? "" : "toy";
+      toy.classList.toggle("is-inspect", stage.dataset.inspect === "toy");
+    };
+    toy.onclick = visible ? toggle : null;
+    toy.onkeydown = visible
+      ? (event) => {
+          if (!["Enter", " "].includes(event.key)) return;
+          toggle(event);
+        }
+      : null;
+    if (visible) {
+      toy.setAttribute("role", "button");
+      toy.tabIndex = 0;
+      toy.setAttribute(
+        "aria-label",
+        inspecting ? "Убрать неваляшку" : "Посмотреть неваляшку"
+      );
+    } else {
+      toy.removeAttribute("role");
+      toy.removeAttribute("tabindex");
+      toy.removeAttribute("aria-label");
     }
   };
 
@@ -1238,10 +1316,6 @@
     } else if (actionEl) {
       actionEl.textContent = "";
       actionEl.hidden = true;
-    }
-    if (hasAction && hasChoices) {
-      armChoiceReveal(root, node);
-      return;
     }
     if (hasChoices) renderChoices(root, node);
   };
