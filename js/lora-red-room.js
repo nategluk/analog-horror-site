@@ -182,6 +182,7 @@
     print: { file: "sfx-print.mp3", volume: 0.5 },
     paperUnfold: { file: "sfx-paper-unfold.mp3", volume: 0.52 },
     paperFold: { file: "sfx-paper-fold.mp3", volume: 0.5 },
+    paperCrumple: { file: "sfx-paper-crumple.mp3", volume: 0.5 },
     keyRing: { file: "sfx-key-ring.mp3", volume: 0.56 },
     keyCabinet: { file: "sfx-key-cabinet.mp3", volume: 0.58 },
   };
@@ -721,6 +722,7 @@
   const OBJECT_SOUNDS = new Set([
     "paperUnfold",
     "paperFold",
+    "paperCrumple",
     "keyRing",
     "keyCabinet",
   ]);
@@ -838,14 +840,6 @@
       props.add("tag");
     }
     if (hasFlag("foxLeftNumber")) props.add("phone");
-    const nodeId = String(save.currentNode || "");
-    if (
-      hasFlag("pigToyOffered") &&
-      !hasFlag("pigToyTaken") &&
-      (nodeId.startsWith("pig") || nodeId.startsWith("fox"))
-    ) {
-      props.add("toy");
-    }
     if ((node.props || []).includes("page") && content()?.quietSleepPageFor?.(receiptSnapshot())) {
       props.add("page");
     } else {
@@ -967,57 +961,56 @@
     const toy = root.querySelector('[data-lora-prop="toy"]');
     const stage = root.querySelector("[data-lora-stage]");
     if (!toy) return;
-    const visible = visibleProps(node).has("toy") && !toy.hidden;
-    if (!visible && stage?.dataset.inspect === "toy") {
-      stage.dataset.inspect = "";
-    }
-    const syncInspect = () => {
-      const inspecting = stage?.dataset.inspect === "toy";
-      toy.classList.toggle("is-inspect", inspecting);
-      if (!visible) return;
-      toy.setAttribute(
-        "aria-label",
-        inspecting ? "Убрать неваляшку" : "Посмотреть неваляшку"
-      );
+    const inspecting =
+      node.inspect === "toy" && visibleProps(node).has("toy") && !toy.hidden;
+    if (stage) stage.dataset.inspect = inspecting ? "toy" : "";
+    toy.classList.toggle("is-inspect", inspecting);
+    const dismiss = () => {
+      if (node.autoNext) {
+        goTo(root, node.autoNext);
+        return;
+      }
+      const choice = (node.choices || []).find(choiceVisible);
+      if (choice) handleChoice(root, choice);
     };
-    const setInspect = (on) => {
-      if (!stage) return;
-      stage.dataset.inspect = on ? "toy" : "";
-      syncInspect();
-    };
-    const toggle = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setInspect(stage?.dataset.inspect !== "toy");
-    };
-    toy.onclick = visible ? toggle : null;
-    toy.onkeydown = visible
+    toy.onclick = inspecting
+      ? (event) => {
+          event.preventDefault();
+          dismiss();
+        }
+      : null;
+    toy.onkeydown = inspecting
       ? (event) => {
           if (!["Enter", " "].includes(event.key)) return;
-          toggle(event);
+          event.preventDefault();
+          dismiss();
         }
       : null;
     if (stage) {
-      stage.onclick = (event) => {
-        if (stage.dataset.inspect !== "toy") return;
-        if (event.target.closest('[data-lora-prop="toy"]')) return;
-        setInspect(false);
-      };
+      stage.onclick = inspecting
+        ? (event) => {
+            if (event.target.closest('[data-lora-prop="toy"]')) return;
+            event.preventDefault();
+            dismiss();
+          }
+        : null;
     }
-    if (visible) {
+    if (inspecting) {
       toy.setAttribute("role", "button");
       toy.tabIndex = 0;
+      toy.setAttribute("aria-label", "Убрать неваляшку");
     } else {
       toy.removeAttribute("role");
       toy.removeAttribute("tabindex");
       toy.removeAttribute("aria-label");
     }
-    syncInspect();
   };
 
   const closePageViewer = (root) => {
     const viewer = root?.querySelector("[data-lora-page-viewer]");
-    if (viewer?.open) viewer.close();
+    if (!viewer?.open) return;
+    playSceneSound("paperCrumple");
+    viewer.close();
   };
 
   const openPageViewer = (root) => {
@@ -1041,7 +1034,10 @@
       stamp.textContent = page.stamp;
       copyBox.append(stamp);
     }
-    if (!viewer.open) viewer.showModal();
+    if (!viewer.open) {
+      playSceneSound("paperUnfold");
+      viewer.showModal();
+    }
   };
 
   const bindInspectedPage = (root, node) => {
@@ -1220,6 +1216,12 @@
     if (stage) {
       stage.dataset.videoState = "playing";
       stage.dataset.motion = "playing";
+      stage.dataset.inspect = "";
+    }
+    const toy = root.querySelector('[data-lora-prop="toy"]');
+    if (toy) {
+      toy.classList.remove("is-inspect");
+      toy.hidden = true;
     }
 
     let settled = false;
@@ -1272,7 +1274,15 @@
       motion.restore === false || !asset?.image ? [] : [assetUrl(asset.image)];
     const queue = motion.frames.map(motionUrl).concat(closing);
     let index = 0;
-    if (stage) stage.dataset.motion = "playing";
+    if (stage) {
+      stage.dataset.motion = "playing";
+      stage.dataset.inspect = "";
+    }
+    const toy = root.querySelector('[data-lora-prop="toy"]');
+    if (toy) {
+      toy.classList.remove("is-inspect");
+      toy.hidden = true;
+    }
 
     const showNext = () => {
       if (activeRoot !== root || save.currentNode !== scheduledNode) {
@@ -1791,7 +1801,10 @@
       note.addEventListener("click", () => {
         if (save?.currentNode === "shift_counter") {
           goTo(root, "note_read");
+          return;
         }
+        if (save?.currentNode === "note_read" || note.hidden) return;
+        playSceneSound("paperCrumple");
       });
     }
     const pageClose = root.querySelector("[data-lora-page-close]");

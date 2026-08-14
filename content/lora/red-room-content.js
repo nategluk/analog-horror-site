@@ -390,6 +390,7 @@
       line: "Слушай. У меня вот это.\nКлюч мне — кукла тебе. И я сразу уйду, честно.",
       guest: "pig",
       props: ["note", "toy"],
+      inspect: "toy",
       set: ["pigToyOffered"],
       autoNext: "pig_talk",
       delay: 500,

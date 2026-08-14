@@ -318,6 +318,51 @@ const foxPhotoContract =
   nodes.fox_oleg_photo.inspect !== "photo" ||
   !(nodes.fox_oleg.choices || []).some((choice) => choice.id === "look_photo") ||
   (nodes.fox_oleg_ask.choices || []).length !== 4;
+const toyInspectContract =
+  !nodes.pig_bargain?.props?.includes("toy") ||
+  nodes.pig_bargain.inspect !== "toy" ||
+  nodes.pig_talk?.inspect === "toy" ||
+  (nodes.pig_talk?.props || []).includes("toy") ||
+  ids.some(
+    (id) =>
+      id !== "pig_bargain" &&
+      ((nodes[id].props || []).includes("toy") || nodes[id].inspect === "toy")
+  );
+const knownSounds = new Set([
+  "cup",
+  "door",
+  "phone",
+  "buzz",
+  "print",
+  "paperUnfold",
+  "paperFold",
+  "paperCrumple",
+  "keyRing",
+  "keyCabinet",
+  "sea",
+]);
+const unknownSounds = [];
+ids.forEach((id) => {
+  const node = nodes[id];
+  if (node.sound && !knownSounds.has(node.sound)) {
+    unknownSounds.push(`${id}:${node.sound}`);
+  }
+  (node.choices || []).forEach((choice) => {
+    if (choice.sound && !knownSounds.has(choice.sound)) {
+      unknownSounds.push(`${id}.${choice.id}:${choice.sound}`);
+    }
+  });
+});
+const foleyContract =
+  nodes.note_read?.sound !== "paperUnfold" ||
+  !(nodes.note_read.choices || []).some(
+    (choice) => choice.id === "note_ack" && choice.sound === "paperFold"
+  ) ||
+  !(nodes.pig_talk.choices || []).some(
+    (choice) => choice.id === "give_key" && choice.sound === "keyRing"
+  ) ||
+  nodes.pig_key_cabinet?.sound !== "keyCabinet" ||
+  nodes.receipt_print?.sound !== "print";
 
 if (
   missing.length ||
@@ -331,7 +376,10 @@ if (
   unmappedNodes.length ||
   foxForbiddenText.length ||
   dogForbiddenText.length ||
-  foxPhotoContract
+  foxPhotoContract ||
+  toyInspectContract ||
+  unknownSounds.length ||
+  foleyContract
 ) {
   if (missing.length) {
     console.error("Missing next targets:", missing.join(", "));
@@ -368,6 +416,15 @@ if (
   }
   if (foxPhotoContract) {
     console.error("Fox photo contract is incomplete at fox_oleg.");
+  }
+  if (toyInspectContract) {
+    console.error("Pig toy inspect must open only on pig_bargain.");
+  }
+  if (unknownSounds.length) {
+    console.error("Unknown scene sounds:", unknownSounds.join(", "));
+  }
+  if (foleyContract) {
+    console.error("Generated Foley is missing from note/key/receipt beats.");
   }
   process.exit(1);
 }

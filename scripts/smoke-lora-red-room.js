@@ -261,6 +261,30 @@ if (
 ) {
   throw new Error("fox/dog investigation must remain implicit in dialogue");
 }
+if (
+  nodes.pig_bargain.inspect !== "toy" ||
+  !nodes.pig_bargain.props?.includes("toy") ||
+  nodes.pig_talk.inspect === "toy" ||
+  (nodes.pig_talk.props || []).includes("toy") ||
+  Object.entries(nodes).some(
+    ([id, node]) =>
+      id !== "pig_bargain" &&
+      ((node.props || []).includes("toy") || node.inspect === "toy")
+  )
+) {
+  throw new Error("nevalyashka photo must auto-close after pig_bargain");
+}
+const noteAck = (nodes.note_read.choices || []).find((choice) => choice.id === "note_ack");
+const giveKey = (nodes.pig_talk.choices || []).find((choice) => choice.id === "give_key");
+if (
+  nodes.note_read.sound !== "paperUnfold" ||
+  noteAck?.sound !== "paperFold" ||
+  giveKey?.sound !== "keyRing" ||
+  nodes.pig_key_cabinet.sound !== "keyCabinet" ||
+  nodes.receipt_print.sound !== "print"
+) {
+  throw new Error("generated Foley must stay on note, key, and receipt beats");
+}
 
 const revealRun = walk(
   {
