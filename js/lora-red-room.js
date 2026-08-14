@@ -1396,45 +1396,66 @@
     if (live) live.textContent = text;
   };
 
+  const appendChoiceButton = (box, root, choice) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "lora-room__choice";
+    button.textContent = choice.text;
+    button.dataset.choiceId = choice.id;
+    button.addEventListener("click", () => {
+      handleChoice(root, choice);
+    });
+    box.append(button);
+  };
+
   const renderChoices = (root, node, selectedGroup = null) => {
     const box = root.querySelector("[data-lora-choices]");
     if (!box) return;
     box.replaceChildren();
     const choices = (node.choices || []).filter(choiceVisible);
-    const groups = [...new Set(choices.map((choice) => choice.group).filter(Boolean))];
-    if (groups.length && !selectedGroup) {
-      groups.forEach((group) => {
+    const grouped = new Map();
+    const ungrouped = [];
+    choices.forEach((choice) => {
+      if (!choice.group) {
+        ungrouped.push(choice);
+        return;
+      }
+      const items = grouped.get(choice.group) || [];
+      items.push(choice);
+      grouped.set(choice.group, items);
+    });
+    if (grouped.size && !selectedGroup) {
+      grouped.forEach((items, group) => {
+        if (items.length === 1) {
+          appendChoiceButton(box, root, items[0]);
+          return;
+        }
         const button = document.createElement("button");
         button.type = "button";
         button.className = "lora-room__choice lora-room__choice--group";
         button.textContent = group;
         button.dataset.choiceGroup = group;
+        button.setAttribute("aria-haspopup", "true");
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", `${group}. Открыть варианты`);
         button.addEventListener("click", () => renderChoices(root, node, group));
         box.append(button);
       });
+      ungrouped.forEach((choice) => appendChoiceButton(box, root, choice));
       box.querySelector("button")?.focus();
       return;
     }
     const visibleChoices = selectedGroup
       ? choices.filter((choice) => choice.group === selectedGroup)
       : choices;
-    visibleChoices.forEach((choice) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "lora-room__choice";
-      button.textContent = choice.text;
-      button.dataset.choiceId = choice.id;
-      button.addEventListener("click", () => {
-        handleChoice(root, choice);
-      });
-      box.append(button);
-    });
+    visibleChoices.forEach((choice) => appendChoiceButton(box, root, choice));
     if (selectedGroup) {
       const back = document.createElement("button");
       back.type = "button";
       back.className = "lora-room__choice lora-room__choice--back";
       back.textContent = "← Назад";
       back.dataset.choiceBack = "true";
+      back.setAttribute("aria-label", `Назад к списку действий`);
       back.addEventListener("click", () => renderChoices(root, node));
       box.append(back);
     }

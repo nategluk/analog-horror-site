@@ -194,6 +194,30 @@ if (
   }
 });
 
+const menuEntries = (choices, flags) => {
+  const visibleChoices = choices.filter((choice) => visible(choice, flags));
+  const grouped = new Map();
+  const ungrouped = [];
+  visibleChoices.forEach((choice) => {
+    if (!choice.group) {
+      ungrouped.push({ kind: "action", text: choice.text, id: choice.id });
+      return;
+    }
+    const items = grouped.get(choice.group) || [];
+    items.push(choice);
+    grouped.set(choice.group, items);
+  });
+  const entries = [];
+  grouped.forEach((items, name) => {
+    if (items.length === 1) {
+      entries.push({ kind: "action", text: items[0].text, id: items[0].id });
+      return;
+    }
+    entries.push({ kind: "group", text: name, count: items.length });
+  });
+  return entries.concat(ungrouped);
+};
+
 ["pig_talk", "fox_smell", "final_conflict_dog"].forEach((id) => {
   const choices = nodes[id].choices || [];
   if (choices.some((choice) => !choice.group)) {
@@ -206,7 +230,27 @@ if (
   if (groups.size > 4 || [...groups.values()].some((count) => count > 3)) {
     throw new Error(`choice groups: ${id} exceeds the four-button mobile budget`);
   }
+  const emptyMenu = menuEntries(choices, {});
+  if (emptyMenu.length > 4) {
+    throw new Error(`choice groups: ${id} shows more than four top-level buttons`);
+  }
 });
+
+const foxEvidence = menuEntries(nodes.fox_smell.choices, { pigTagCopied: true });
+if (foxEvidence.some((entry) => entry.text === "Показать улику")) {
+  throw new Error("choice groups: a single-item folder must not look like an action");
+}
+if (!foxEvidence.some((entry) => entry.kind === "action" && entry.id === "fox_show_tag")) {
+  throw new Error("choice groups: Показать бирку must be a direct action when it is the only evidence");
+}
+
+const dogWarn = menuEntries(nodes.final_conflict_dog.choices, { pigHidden: true });
+if (dogWarn.some((entry) => entry.text === "Сначала проверить")) {
+  throw new Error("choice groups: Сначала проверить must flatten to Выслушать Хрюшу");
+}
+if (!dogWarn.some((entry) => entry.id === "warn_sea")) {
+  throw new Error("choice groups: Выслушать Хрюшу must remain reachable from the top-level menu");
+}
 
 if (!nodes.end_leave.action || nodes.pig_reveal.speaker !== "Я") {
   throw new Error("text roles: narration and mixed action are not separated");

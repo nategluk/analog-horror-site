@@ -312,6 +312,25 @@ async function main() {
   await clickChoice("Есть другие варианты.");
   await clickChoice("Спрятать его");
   await clickChoice("Чем могу помочь?");
+  await mobile.waitForFunction(
+    () =>
+      document.querySelector("[data-lora-room]")?.dataset.node === "fox_smell" &&
+      document.querySelector(".lora-room__choice"),
+    { timeout: 8000 }
+  );
+  const foxMenu = await mobile.evaluate(() =>
+    [...document.querySelectorAll(".lora-room__choice")].map((button) => ({
+      text: button.textContent.trim(),
+      group: button.classList.contains("lora-room__choice--group"),
+      id: button.dataset.choiceId || "",
+    }))
+  );
+  if (foxMenu.some((item) => item.text === "Показать улику")) {
+    throw new Error(`fox_smell still shows a single-item folder: ${JSON.stringify(foxMenu)}`);
+  }
+  if (!foxMenu.some((item) => item.id === "fox_show_tag" || item.text === "Показать бирку")) {
+    throw new Error(`fox_smell did not promote Показать бирку: ${JSON.stringify(foxMenu)}`);
+  }
   await clickChoice("Никого не было.");
   await clickChoice("Не знаю такого.");
   await clickChoice("Налить воды");

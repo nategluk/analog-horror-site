@@ -731,6 +731,26 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   text-decoration: none;
 }
 
+.lora-room__choice--group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.lora-room__choice--group::after {
+  content: "▸";
+  color: #ffb089;
+  opacity: 0.85;
+  font-size: 0.95em;
+  line-height: 1;
+}
+
+.lora-room__choice--back {
+  border-color: rgba(255, 210, 170, 0.22);
+  color: #f0c9a8;
+}
+
 .lora-room-assign {
   position: fixed;
   inset: 0;
