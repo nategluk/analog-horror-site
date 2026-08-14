@@ -69,6 +69,14 @@
 
   const MOTION_DIR = "../assets/guest/red-room/lora/scenes/";
   const PIG_LEAVE_FRAMES = ["v02-pig-arrive-mid.webp", "v02-pig-arrive-far.webp"];
+  const FOX_CIGARETTE = {
+    mode: "burst",
+    video: "v16-fox-cigarette.mp4",
+    frames: ["v05-fox-gaze.webp"],
+    requireVisual: "V05_FOX_GAZE",
+    delayMs: 900,
+    holdMs: 1800,
+  };
   const NODE_MOTIONS = {
     pig_arrive: {
       mode: "transition",
@@ -139,14 +147,8 @@
       holdMs: 800,
       restore: false,
     },
-    fox_camera: {
-      mode: "burst",
-      video: "v16-fox-cigarette.mp4",
-      frames: ["v05-fox-gaze.webp"],
-      requireVisual: "V05_FOX_GAZE",
-      delayMs: 900,
-      holdMs: 1800,
-    },
+    fox_camera: { ...FOX_CIGARETTE },
+    fox_lights_up: { ...FOX_CIGARETTE },
     fox_why: {
       mode: "burst",
       video: "v14-fox-gum-pop-v1.mp4",
@@ -1625,9 +1627,10 @@
     const panel = root.querySelector(".lora-room__panel");
     const live = root.querySelector("[data-lora-live]");
     const choices = root.querySelector("[data-lora-choices]");
-    if (speaker) speaker.textContent = node.speaker || "СМЕНА";
+    if (speaker) speaker.textContent = node.speaker || "Я";
     if (panel) {
-      panel.dataset.textKind = node.speaker === "СМЕНА" ? "narration" : "dialogue";
+      panel.dataset.textKind =
+        node.speaker === "Я" || node.speaker === "СМЕНА" ? "narration" : "dialogue";
     }
     if (actionEl) {
       actionEl.textContent = node.action || "";
@@ -1715,14 +1718,25 @@
         }
       }
       if (motion?.mode === "burst") {
+        playLoopSceneVideo(root, node);
+        if (node.action) {
+          const actionEl = root.querySelector("[data-lora-action]");
+          if (actionEl) {
+            actionEl.textContent = node.action;
+            actionEl.hidden = false;
+          }
+        }
         stillTimer = window.setTimeout(() => {
-          if (save.currentNode === root.dataset.node) {
-            const fallback = () => playStillSequence(root, node, motion);
-            if (!playNodeMotionVideo(root, node, motion, null, fallback)) {
-              fallback();
-            }
+          if (save.currentNode !== root.dataset.node) return;
+          const go = () => {
+            if (save.currentNode === root.dataset.node) goTo(root, node.autoNext);
+          };
+          const fallback = () => playStillSequence(root, node, motion, go);
+          if (!playNodeMotionVideo(root, node, motion, go, fallback)) {
+            fallback();
           }
         }, Number(motion.delayMs) || 1600);
+        return;
       }
       playLoopSceneVideo(root, node);
       if (node.action) {

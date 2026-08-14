@@ -156,6 +156,7 @@ if (
   "fox_laura",
   "fox_smoke",
   "fox_camera",
+  "fox_lights_up",
   "fox_heard",
   "fox_notice",
   "fox_smell",
@@ -207,8 +208,12 @@ if (
   }
 });
 
-if (!nodes.end_leave.action || nodes.pig_reveal.speaker !== "СМЕНА") {
+if (!nodes.end_leave.action || nodes.pig_reveal.speaker !== "Я") {
   throw new Error("text roles: narration and mixed action are not separated");
+}
+const allowSmoke = (nodes.fox_smoke.choices || []).find((item) => item.id === "fox_let_smoke");
+if (allowSmoke?.next !== "fox_lights_up" || nodes.fox_lights_up?.autoNext !== "fox_notice") {
+  throw new Error("cigarette: allowing smoke must play fox_lights_up before fox_notice");
 }
 
 const povContract = [

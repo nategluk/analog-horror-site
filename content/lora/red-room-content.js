@@ -159,8 +159,8 @@
     shift_counter: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Вы за стойкой Красной Комнаты. Кофемашина ещё тёплая. Рядом — сложенная вдвое записка.",
+      speaker: "Я",
+      line: "Кофемашина ещё тёплая. Записку сложили так, будто её нельзя не прочитать.",
       props: ["note"],
       sound: "cup",
       choices: [
@@ -187,8 +187,8 @@
     pig_arrive: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Дверь дёргается. В зал протискивается грязный костюм Свиньи. Пластиковая бирка бьётся о край стойки.",
+      speaker: "Я",
+      line: "Вот это костюмчик. Дверь его едва пропустила.",
       guest: "pig",
       props: ["note"],
       sound: "door",
@@ -198,7 +198,7 @@
     pig_enter: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Где официантка?",
       guest: "pig",
       props: ["note"],
@@ -209,7 +209,7 @@
     pig_today: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Сегодня?\nМне сказали, она никогда не берёт выходных.",
       lineReplay: "Опять сегодня?\nВ прошлый раз тоже был выходной. Так не бывает.",
       guest: "pig",
@@ -223,7 +223,7 @@
     pig_blue_key: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Один аниматор сказал: если доберёшься до Красной Комнаты, попроси у официантки синий ключ.",
       guest: "pig",
       props: ["note"],
@@ -235,7 +235,7 @@
     pig_secret: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Только у неё. Больше никому ничего не говори.",
       guest: "pig",
       props: ["note"],
@@ -249,7 +249,7 @@
     pig_source: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Грязный Заяц. Хотя может уже не Заяц. Там все одинаково воняют.",
       guest: "pig",
       props: ["note"],
@@ -261,7 +261,7 @@
     pig_source_warn: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Сказал: только официантка. Спросишь у системы — номер сожгут.",
       guest: "pig",
       props: ["note"],
@@ -273,7 +273,7 @@
     pig_deny: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Нет.\nЗначит, и этот совет был проверкой. Или ты просто боишься.",
       guest: "pig",
       props: ["note"],
@@ -285,7 +285,7 @@
     pig_follow_note: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Она и на выходной оставила тебе правила.\nЗначит, знала, что кто-нибудь придёт.",
       guest: "pig",
       props: ["note"],
@@ -298,7 +298,7 @@
     pig_escapes: {
       scene: "table",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Я уже выходил. Три раза. Каждый раз дверь открывалась в новый филиал.\nОдни и те же трубы. Другой запах хлора.",
       guest: "pig",
       props: ["note"],
@@ -309,8 +309,8 @@
     pig_camera_check: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СМЕНА",
-      line: "Свинья замолкает и смотрит на красный индикатор старой камеры под потолком.",
+      speaker: "Я",
+      line: "Он смотрит не на меня. На красный глазок под потолком.",
       guest: "pig",
       props: ["note"],
       choices: [
@@ -330,8 +330,8 @@
     pig_reveal: {
       scene: "counter",
       visual: "V03_PIG_REVEAL",
-      speaker: "СМЕНА",
-      line: "Красный огонёк гаснет. Свинья берётся за тяжёлую голову обеими руками и снимает её. Теперь на вас смотрит человек.",
+      speaker: "Я",
+      line: "Хм. А он ничего такой. Под головой Хрюши — человек.",
       guest: "pig",
       props: ["note"],
       set: ["pigRevealed"],
@@ -349,8 +349,8 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
-      line: "Мне даже имя не спрашивают. Лишь бы кто-то в этом ходил.\nБлядь. Я так устал уже.",
+      speaker: "ХРЮША",
+      line: "Меня давно уже никто не называет по имени. Лишь бы кто-то в этом ходил.\nБлядь. Я так устал уже.",
       lineRevealed: "Ключ. Мне правда нужен ключ. Дальше я сам.",
       guest: "pig",
       props: ["note"],
@@ -362,7 +362,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Завтра они придут. Ночью слышно: пластик, номера.\nЕсли останусь у стойки — заберут отсюда.",
       guest: "pig",
       props: ["note"],
@@ -374,7 +374,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "А если про Лору тебе тоже для проверки сказали?\nТогда я уже всё слил.",
       guest: "pig",
       props: ["note"],
@@ -386,7 +386,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Слушай. У меня вот это.\nКлюч мне — кукла тебе. И я сразу уйду, честно.",
       guest: "pig",
       props: ["note", "toy"],
@@ -401,7 +401,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Ну. Прячь, звони, посылай — только не оставляй меня у двери. Там видно.",
       guest: "pig",
       props: ["note"],
@@ -503,7 +503,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "В подсобку? Хорошо.\nУслышишь шаги — не открывай.",
       guest: "pig",
       props: ["note", "tag"],
@@ -517,7 +517,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Бирка застряла у стойки. Не поднимай её при гостях.",
       guest: "pig",
       props: ["note", "tag"],
@@ -529,7 +529,7 @@
     pig_wait: {
       scene: "table",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Подожду. Чашку ближе.\nЕсли Лора придёт — пусть сама решает.",
       guest: "pig",
       props: ["note"],
@@ -542,8 +542,8 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СМЕНА",
-      line: "На бирке выдавлено: ЛО-312-19. Имя размыло водой. Свинья не мешает вам переписать номер, только дышит чаще.",
+      speaker: "Я",
+      line: "ЛО-312-19. Имя смыло. Он дышит так, будто номер громче любого имени.",
       guest: "pig",
       props: ["note"],
       autoNext: "pig_talk",
@@ -552,7 +552,7 @@
     pig_tech: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Не звони.\nДля них я уже не человек. Просто костюм, который свалил.",
       guest: "pig",
       props: ["note", "tag"],
@@ -563,8 +563,8 @@
     pig_tech_run: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Он срывается к двери. Бирка остаётся на стойке, ещё тёплая.",
+      speaker: "Я",
+      line: "Бирка ещё тёплая. Его уже нет.",
       guest: "none",
       props: ["note", "tag"],
       sound: "door",
@@ -574,7 +574,7 @@
     pig_tomorrow: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Завтра они будут ближе.\nЛадно. Переночую где-нибудь ещё. Если будет где.",
       guest: "pig",
       props: ["note", "tag"],
@@ -585,7 +585,7 @@
     pig_deny_leave: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Значит, зря шёл.\nЛоре скажи: дверь была та.",
       guest: "pig",
       props: ["note", "tag"],
@@ -599,7 +599,7 @@
       visualWhen: [
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Забирай. Только ключ всё равно нужен.",
       guest: "pig",
       props: ["note"],
@@ -609,8 +609,8 @@
     pig_key_cabinet: {
       scene: "counter",
       visual: "V14_BLUE_KEY_CABINET",
-      speaker: "СМЕНА",
-      line: "Стеклянная дверца. Связка разных ключей. Один синий.",
+      speaker: "Я",
+      line: "Один синий. Остальные как будто для вида.",
       guest: "none",
       hideHtmlProps: true,
       sound: "keyCabinet",
@@ -620,7 +620,7 @@
     pig_key_given: {
       scene: "counter",
       visual: "V02_PIG_MASKED",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Серьёзно? Ладно. Я больше не вернусь.\nКуклу не теряй, она тяжёлая.",
       guest: "pig",
       props: ["note", "tag"],
@@ -631,8 +631,8 @@
     pig_gone: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Зал снова слишком тихий. От стойки пахнет мокрым костюмом.",
+      speaker: "Я",
+      line: "Пахнет мокрым костюмом. Как после утренника, который слишком затянулся.",
       props: ["note"],
       autoNext: "fox_arrive",
       delay: 800,
@@ -640,8 +640,8 @@
     fox_arrive: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "СМЕНА",
-      line: "Входит Лиса — сухая шуба, дорогие духи. Телефон уже снимает.",
+      speaker: "Я",
+      line: "Духи дороже этой стойки. Телефон уже работает.",
       guest: "fox",
       props: ["note"],
       sound: "door",
@@ -680,7 +680,7 @@
       guest: "fox",
       props: ["note"],
       choices: [
-        { id: "fox_let_smoke", text: "Не мешаю.", next: "fox_notice" },
+        { id: "fox_let_smoke", text: "Не мешаю.", next: "fox_lights_up" },
         { id: "fox_no_film", text: "Убрать камеру.", next: "fox_camera" },
         { id: "fox_no_smoke", text: "Здесь нельзя курить.", next: "fox_heard", set: ["foxToldNoSmoke"] },
       ],
@@ -690,11 +690,21 @@
       visual: "V05_FOX_GAZE",
       speaker: "ЛИСА",
       line: "Не уберу. На улице надо лицо держать. Тут можно не держать.",
-      action: "Она закуривает, не глядя на вас. Телефон всё ещё снимает.",
+      action: "Курит в камеру, как будто это тоже отчёт.",
       guest: "fox",
       props: ["note"],
       autoNext: "fox_notice",
       delay: 500,
+    },
+    fox_lights_up: {
+      scene: "counter",
+      visual: "V05_FOX_GAZE",
+      speaker: "Я",
+      line: "Значит, правило Лоры на сегодня не про сигареты.",
+      guest: "fox",
+      props: ["note"],
+      autoNext: "fox_notice",
+      delay: 700,
     },
     fox_heard: {
       scene: "counter",
@@ -764,8 +774,8 @@
         },
         {
           id: "fox_give_hidden",
-          text: "Выдать, где Свинья",
-          group: "Рассказать о Свинье",
+          text: "Выдать, где Хрюша",
+          group: "Рассказать о Хрюше",
           next: "fox_gave_pig",
           set: ["foxGavePig", "foxCooperated"],
           require: ["pigHidden"],
@@ -773,7 +783,7 @@
         {
           id: "fox_he_left",
           text: "Был. Уже ушёл.",
-          group: "Рассказать о Свинье",
+          group: "Рассказать о Хрюше",
           next: "fox_partial",
           set: ["foxPartial"],
           hideIf: ["pigWaiting", "pigHidden"],
@@ -781,7 +791,7 @@
         {
           id: "fox_he_waits",
           text: "Он ждёт Лору.",
-          group: "Рассказать о Свинье",
+          group: "Рассказать о Хрюше",
           next: "fox_gave_wait",
           set: ["foxGavePig", "foxCooperated"],
           require: ["pigWaiting"],
@@ -859,7 +869,7 @@
       visual: "V06_FOX_ACTION",
       speaker: "ЛИСА",
       line: "Аниматор самовольно покинул зоопарк «Лосиный Остров».",
-      action: "Лиса достаёт из сумки фотографию и медленно поворачивает её к вам.",
+      action: "Фото как из отдела кадров. Или из морга.",
       guest: "fox",
       props: ["note"],
       choices: [
@@ -869,8 +879,8 @@
     fox_oleg_photo: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "СМЕНА",
-      line: "Два казённых ракурса. Ростовая линейка.",
+      speaker: "Я",
+      line: "Кажется, его показывали в новостях. Или в ориентировке.",
       guest: "fox",
       props: ["note", "photo"],
       inspect: "photo",
@@ -907,7 +917,7 @@
       visual: "V06_FOX_ACTION",
       speaker: "ЛИСА",
       line: "Он нарушил маршрут.\nТеперь его хотят вернуть без лишних свидетелей.",
-      action: "Лиса надувает пузырь из жвачки. Пузырь лопается у самого рта.",
+      action: "Жвачка. В этом костюме. Ладно.",
       guest: "fox",
       props: ["note"],
       autoNext: "fox_monopoly",
@@ -939,7 +949,7 @@
       visual: "V06_FOX_ACTION",
       speaker: "ЛИСА",
       line: "Им люди как список. Мне — кто вопрос закроет.\nТы пока не список. Пока стойка. Сам понял?",
-      action: "Лиса ставит сумку на стол, достаёт конфету и протягивает её вам.",
+      action: "Конфету протягивает так, будто это не взятка. А угощение.",
       guest: "fox",
       props: ["note"],
       choices: [
@@ -961,8 +971,8 @@
     dog_arrive: {
       scene: "counter",
       visual: "V07_DOG_BLANK",
-      speaker: "СМЕНА",
-      line: "Последний гость едва стоит. Костюм порван. В кулаке зажата обломанная ручка микрофона.",
+      speaker: "Я",
+      line: "Последний. Костюм порван. В кулаке — обломок микрофона. Этот уже не играет.",
       guest: "dog",
       props: ["note", "phone", "mic"],
       sound: "door",
@@ -1198,8 +1208,8 @@
     dog_phone: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "СМЕНА",
-      line: "Звонит внутренний телефон. Пёс поворачивается к шторе, будто звук идёт оттуда.",
+      speaker: "Я",
+      line: "Звонок. Пёс поворачивается к шторе, будто трубку повесили туда.",
       guest: "dog",
       props: ["note", "phone", "mic"],
       sound: "phone",
@@ -1226,7 +1236,7 @@
       choices: [
         {
           id: "warn_sea",
-          text: "Выслушать Свинью",
+          text: "Выслушать Хрюшу",
           group: "Сначала проверить",
           next: "pig_warns",
           require: ["pigHidden"],
@@ -1269,7 +1279,7 @@
     pig_warns: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "СВИНЬЯ",
+      speaker: "ХРЮША",
       line: "Не отправляй Пса к морю.\nОттуда возвращаются только костюмы.",
       guest: "pig",
       props: ["note", "phone", "mic"],
@@ -1310,7 +1320,7 @@
       visual: "V11_DOG_SLEEP",
       speaker: "ПЁС",
       line: "Подождать… Да. Подождать можно.",
-      action: "Он кладёт голову на стол и почти сразу засыпает.",
+      action: "Уснул. Маска не снимается даже во сне.",
       guest: "dog",
       props: ["note"],
       autoNext: "end_leave_sleep",
@@ -1329,8 +1339,8 @@
     end_give: {
       scene: "counter",
       visual: "V10_FOX_DOG",
-      speaker: "СМЕНА",
-      line: "Лиса возвращается слишком быстро. Запах её духов первым входит в зал.",
+      speaker: "Я",
+      line: "Духи входят раньше неё. Слишком быстро для двери с улицы.",
       guest: "fox",
       props: ["note", "phone", "mic"],
       sound: "door",
@@ -1360,8 +1370,8 @@
     end_give_leave: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Лиса выводит Пса наружу. Камера кафе теряет их сразу за дверью.",
+      speaker: "Я",
+      line: "Камера теряет их сразу за порогом. Как будто дальше съёмка не оплачена.",
       guest: "none",
       props: ["note"],
       sound: "door",
@@ -1392,8 +1402,8 @@
     end_sea_sound: {
       scene: "curtain",
       visual: "V12_EMPTY_CURTAIN",
-      speaker: "СМЕНА",
-      line: "Сначала шум волн.\nПотом чайки.\nПотом пластиковый скрежет.\nПотом тяжёлый удар.",
+      speaker: "Я",
+      line: "Сначала волны.\nПотом чайки.\nПотом пластик.\nПотом удар — слишком тяжёлый для игрушки.",
       props: ["note"],
       sound: "sea",
       autoNext: "aftermath",
@@ -1422,8 +1432,8 @@
     end_none_morning: {
       scene: "curtain",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Утром его нет. Штора закрыта.",
+      speaker: "Я",
+      line: "Утром его нет. Штора делает вид, что так и было.",
       props: ["note"],
       autoNext: "aftermath",
       delay: 800,
@@ -1431,8 +1441,8 @@
     aftermath: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "Ночь заканчивается без объявления.",
+      speaker: "Я",
+      line: "Ночь кончилась без объявления. Никто не сказал спасибо.",
       props: ["note"],
       autoNext: "aftermath_pig",
       delay: 500,
@@ -1440,13 +1450,13 @@
     aftermath_pig: {
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
-      speaker: "СМЕНА",
-      line: "На стойке только записка Лоры.",
-      lineHidden: "Из подсобки больше не доносится дыхание. Свинья либо ушёл, либо научился молчать.",
-      lineWaiting: "Столик пуст. Чашка ещё тёплая.",
-      lineReported: "Бирка Лосиного Острова возвращается на стойку. Номер тот же. Имя по-прежнему смыто.",
-      lineTraded: "На стойке пусто. Только запах палёного сахара и ржавчины.",
-      lineDefault: "От первого гостя остаётся только запах мокрого костюма.",
+      speaker: "Я",
+      line: "Записка на месте. Как будто я тут и не стоял.",
+      lineHidden: "Из подсобки тихо. Хрюша либо ушёл, либо научился молчать.",
+      lineWaiting: "Столик пуст. Чашка ещё тёплая. Ждал до последнего.",
+      lineReported: "Бирка вернулась. Номер тот же. Имени по-прежнему нет.",
+      lineTraded: "Пахнет палёным сахаром и ржавчиной. Кукла своё отработала.",
+      lineDefault: "От первого гостя остался только запах мокрого костюма.",
       props: ["note"],
       autoNext: "receipt_print",
       delay: 800,

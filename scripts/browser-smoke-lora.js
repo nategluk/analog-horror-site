@@ -317,7 +317,7 @@ async function main() {
   await clickChoice("Налить воды");
   await clickChoice("Тебе снятся сны?");
   await clickChoice("Мне иногда снится это кафе.");
-  await clickChoice("Выслушать Свинью");
+  await clickChoice("Выслушать Хрюшу");
   await clickChoice("Предложить дождаться Лору");
   await clickChoice("Оставить квитанцию в деле");
   const doneLine = await mobile.$eval("[data-lora-line]", (el) => el.textContent);

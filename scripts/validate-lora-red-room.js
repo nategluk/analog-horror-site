@@ -114,6 +114,7 @@ const expectedVisual = {
   fox_laura: "V05_FOX_GAZE",
   fox_smoke: "V05_FOX_GAZE",
   fox_camera: "V05_FOX_GAZE",
+  fox_lights_up: "V05_FOX_GAZE",
   fox_heard: "V05_FOX_GAZE",
   fox_notice: "V05_FOX_GAZE",
   fox_smell: "V05_FOX_GAZE",

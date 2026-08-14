@@ -631,7 +631,9 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 }
 
 .lora-room__panel[data-text-kind="narration"] .lora-room__speaker {
-  color: #c78f72;
+  color: #b08978;
+  font-style: italic;
+  letter-spacing: 0.16em;
 }
 
 .lora-room__speaker {
