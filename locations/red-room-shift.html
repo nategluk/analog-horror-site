@@ -43,21 +43,49 @@
         >
           <header class="lora-room__top">
             <p class="lora-room__kicker">КРАСНАЯ КОМНАТА // НОЧНАЯ СМЕНА</p>
-            <div class="lora-room__music" data-lora-music-slot></div>
-            <button
-              class="lora-room__sound"
-              type="button"
-              data-lora-sound
-              aria-pressed="false"
-            >
-              ЗВУК: ВЫКЛ
-            </button>
-            <button class="lora-room__leave" type="button" data-lora-leave>
-              Покинуть смену
-            </button>
+            <div class="lora-room__music" data-lora-music-slot>
+              <button
+                class="lora-room__music-toggle"
+                type="button"
+                data-lora-music-toggle
+                aria-expanded="false"
+                aria-label="Развернуть эфир"
+              >
+                ▾
+              </button>
+            </div>
           </header>
 
           <div class="lora-room__stage-wrap">
+            <div class="lora-room__hud">
+              <button
+                class="lora-room__hud-btn lora-room__sound"
+                type="button"
+                data-lora-sound
+                aria-pressed="false"
+                aria-label="Включить звуки смены"
+                title="Включить звуки смены"
+              >
+                <svg class="lora-room__icon lora-room__icon--sound-on" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M16 9.5a4 4 0 0 1 0 5" fill="none" />
+                  <path d="M18.2 7.2a7 7 0 0 1 0 9.6" fill="none" />
+                </svg>
+                <svg class="lora-room__icon lora-room__icon--sound-off" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M17 10l4 4M21 10l-4 4" fill="none" />
+                </svg>
+              </button>
+              <button
+                class="lora-room__hud-btn lora-room__leave"
+                type="button"
+                data-lora-leave
+                aria-label="Покинуть смену"
+                title="Покинуть смену"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
             <div class="lora-room__stage" data-lora-stage data-scene="void" data-guest="none">
               <img
                 class="lora-room__media"

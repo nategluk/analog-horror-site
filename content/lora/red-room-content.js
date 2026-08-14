@@ -541,7 +541,30 @@
       line: "Аниматор самовольно покинул зоопарк «Лосиный Остров».",
       action: "Лиса достаёт из сумки фотографию и медленно поворачивает её к вам.",
       guest: "fox",
+      props: ["note"],
+      choices: [
+        { id: "look_photo", text: "Посмотреть фото", next: "fox_oleg_photo" },
+      ],
+    },
+    fox_oleg_photo: {
+      scene: "table",
+      visual: "V06_FOX_ACTION",
+      speaker: "СМЕНА",
+      line: "Два казённых ракурса. Ростовая линейка.",
+      guest: "fox",
       props: ["note", "photo"],
+      inspect: "photo",
+      choices: [
+        { id: "photo_seen", text: "Убрать фото", next: "fox_oleg_ask" },
+      ],
+    },
+    fox_oleg_ask: {
+      scene: "table",
+      visual: "V06_FOX_ACTION",
+      speaker: "ЛИСА",
+      line: "Узнаёшь?\nЕсли нет — так и скажи.",
+      guest: "fox",
+      props: ["note"],
       choices: [
         { id: "deny_oleg", text: "Не видел такого.", next: "fox_deny_oleg", set: ["foxDeniedOleg"] },
         { id: "ask_why", text: "Что с ним случилось?", next: "fox_why" },

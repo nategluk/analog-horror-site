@@ -666,10 +666,11 @@
     const button = root?.querySelector("[data-lora-sound]");
     if (!button) return;
     button.setAttribute("aria-pressed", String(soundEnabled));
-    button.textContent = soundEnabled ? "ЗВУК: ВКЛ" : "ЗВУК: ВЫКЛ";
-    button.title = soundEnabled
+    const label = soundEnabled
       ? "Отключить звуки смены"
       : "Включить звуки смены";
+    button.setAttribute("aria-label", label);
+    button.title = label;
   };
 
   const setSoundEnabled = (root, enabled) => {
@@ -697,8 +698,10 @@
   const clearAdvanceWait = (root) => {
     const panel = root?.querySelector(".lora-room__panel");
     const lineEl = root?.querySelector("[data-lora-line]");
+    const actionEl = root?.querySelector("[data-lora-action]");
     if (panel) {
       delete panel.dataset.waitingAdvance;
+      delete panel.dataset.choiceHold;
       if (panel._loraAdvance) {
         panel.removeEventListener("click", panel._loraAdvance);
         panel._loraAdvance = null;
@@ -709,6 +712,7 @@
       lineEl.onkeydown = null;
       lineEl.removeAttribute("aria-description");
     }
+    if (actionEl) actionEl.onclick = null;
   };
 
   const visibleProps = (node) => {
@@ -747,6 +751,7 @@
       stage.dataset.cameraOff = String(hasFlag("cameraDisabled"));
       stage.dataset.videoState = asset?.video ? "poster" : "none";
       stage.dataset.motion = "idle";
+      stage.dataset.inspect = node.inspect || "";
     }
     if (image) {
       image.onload = null;
@@ -791,9 +796,44 @@
       const name = el.dataset.loraProp;
       el.hidden = !visibleProps(node).has(name);
     });
+    bindInspectedPhoto(root, node);
     root.querySelectorAll("[data-lora-guest]").forEach((el) => {
       el.hidden = (node.guest || "none") !== el.dataset.loraGuest;
     });
+  };
+
+  const bindInspectedPhoto = (root, node) => {
+    const photo = root.querySelector('[data-lora-prop="photo"]');
+    if (!photo) return;
+    const inspecting =
+      node.inspect === "photo" && visibleProps(node).has("photo") && !photo.hidden;
+    photo.classList.toggle("is-inspect", inspecting);
+    const dismiss = () => {
+      const choice = (node.choices || []).find(choiceVisible);
+      if (choice) handleChoice(root, choice);
+    };
+    photo.onclick = inspecting
+      ? (event) => {
+          event.preventDefault();
+          dismiss();
+        }
+      : null;
+    photo.onkeydown = inspecting
+      ? (event) => {
+          if (!["Enter", " "].includes(event.key)) return;
+          event.preventDefault();
+          dismiss();
+        }
+      : null;
+    if (inspecting) {
+      photo.setAttribute("role", "button");
+      photo.tabIndex = 0;
+      photo.setAttribute("aria-label", "Убрать фото");
+    } else {
+      photo.removeAttribute("role");
+      photo.removeAttribute("tabindex");
+      photo.removeAttribute("aria-label");
+    }
   };
 
   const playRevealSceneVideo = (root, node) => {
@@ -834,7 +874,7 @@
       activeSceneVideo = null;
       applyFlags(["pigRevealPlayed"]);
       writeSave(save);
-      renderChoices(root, node);
+      presentChoices(root, node);
     };
 
     video.onended = settleOnPoster;
@@ -1154,6 +1194,58 @@
     first?.focus();
   };
 
+  const armChoiceReveal = (root, node) => {
+    const panel = root.querySelector(".lora-room__panel");
+    const lineEl = root.querySelector("[data-lora-line]");
+    const actionEl = root.querySelector("[data-lora-action]");
+    let revealed = false;
+    const reveal = (event) => {
+      if (revealed) return;
+      if (event?.target?.closest?.("[data-lora-choices]")) return;
+      if (event?.type === "keydown" && !["Enter", " "].includes(event.key)) return;
+      event?.preventDefault?.();
+      revealed = true;
+      clearAdvanceWait(root);
+      if (actionEl) actionEl.hidden = true;
+      renderChoices(root, node);
+    };
+    if (panel) {
+      panel.dataset.waitingAdvance = "true";
+      panel.dataset.choiceHold = "true";
+      panel._loraAdvance = (event) => reveal(event);
+      panel.addEventListener("click", panel._loraAdvance);
+    }
+    if (lineEl) {
+      lineEl.tabIndex = 0;
+      lineEl.setAttribute("aria-description", "Нажмите, чтобы ответить");
+    }
+    bindLineSkip(lineEl, reveal);
+    if (actionEl) {
+      actionEl.onclick = (event) => {
+        event.stopPropagation();
+        reveal(event);
+      };
+    }
+  };
+
+  const presentChoices = (root, node) => {
+    const actionEl = root.querySelector("[data-lora-action]");
+    const hasAction = Boolean(node.action);
+    const hasChoices = (node.choices || []).some(choiceVisible);
+    if (hasAction && actionEl) {
+      actionEl.textContent = node.action;
+      actionEl.hidden = false;
+    } else if (actionEl) {
+      actionEl.textContent = "";
+      actionEl.hidden = true;
+    }
+    if (hasAction && hasChoices) {
+      armChoiceReveal(root, node);
+      return;
+    }
+    if (hasChoices) renderChoices(root, node);
+  };
+
   const goTo = (root, nextId, extra = {}) => {
     const node = nodeById(nextId);
     if (!node) return;
@@ -1309,7 +1401,6 @@
         lineEl.onclick = null;
         lineEl.onkeydown = null;
       }
-      if (actionEl && node.action) actionEl.hidden = false;
       finishNode(root, node, fullText);
     };
     if (instant || fullText.length < 4) {
@@ -1391,6 +1482,13 @@
         }, Number(motion.delayMs) || 1600);
       }
       playLoopSceneVideo(root, node);
+      if (node.action) {
+        const actionEl = root.querySelector("[data-lora-action]");
+        if (actionEl) {
+          actionEl.textContent = node.action;
+          actionEl.hidden = false;
+        }
+      }
       armAutoAdvance(root, node, fullText);
       return;
     }
@@ -1402,7 +1500,7 @@
         return;
       }
     }
-    renderChoices(root, node);
+    presentChoices(root, node);
     if (motion?.mode === "burst") {
       stillTimer = window.setTimeout(() => {
         if (save.currentNode === root.dataset.node) {
@@ -1423,12 +1521,28 @@
     const player = document.querySelector(".music-player");
     if (!slot || !player || player.parentNode === slot) return;
     slot.dataset.home = "docked";
-    slot.append(player);
+    const toggle = slot.querySelector("[data-lora-music-toggle]");
+    if (toggle) slot.insertBefore(player, toggle);
+    else slot.append(player);
   };
 
   const bindChrome = (root) => {
     document.body.classList.add("lora-room-open");
     dockMusic(root);
+    const musicToggle = root.querySelector("[data-lora-music-toggle]");
+    if (musicToggle && musicToggle.dataset.ready !== "true") {
+      musicToggle.dataset.ready = "true";
+      musicToggle.addEventListener("click", () => {
+        const slot = root.querySelector("[data-lora-music-slot]");
+        if (!slot) return;
+        const expanded = slot.classList.toggle("is-expanded");
+        musicToggle.setAttribute("aria-expanded", String(expanded));
+        musicToggle.setAttribute(
+          "aria-label",
+          expanded ? "Свернуть эфир" : "Развернуть эфир"
+        );
+      });
+    }
     const leave = root.querySelector("[data-lora-leave]");
     if (leave && leave.dataset.ready !== "true") {
       leave.dataset.ready = "true";

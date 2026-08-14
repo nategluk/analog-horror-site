@@ -1,17 +1,11 @@
 .lora-room {
   --lora-choice-row: 2.75rem;
   --lora-choice-gap: 0.45rem;
-  --lora-choice-rows: 2;
-  --lora-choices-height: calc(
-    (var(--lora-choice-row) * var(--lora-choice-rows)) +
-      (var(--lora-choice-gap) * (var(--lora-choice-rows) - 1))
-  );
-  --lora-panel-height: 15.5rem;
   position: fixed;
   inset: 0;
   z-index: 80;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) var(--lora-panel-height);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   width: 100vw;
   height: 100dvh;
   color: #f3e4d2;
@@ -32,13 +26,66 @@
   display: none;
 }
 
+.lora-room__music {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
 .lora-room__music .music-player {
   margin: 0;
+  width: auto;
+  min-height: 2.35rem;
+  padding: 0.28rem 0.4rem;
   color: #f5eadc;
   border: 1px solid rgba(255, 196, 160, 0.28);
   border-radius: 3px;
   background: rgba(28, 10, 10, 0.94);
   box-shadow: inset 0 0 0 1px rgba(80, 24, 18, 0.85);
+}
+
+.lora-room__music:not(.is-expanded) .music-player {
+  grid-template-columns: auto auto;
+  gap: 0.35rem;
+}
+
+.lora-room__music:not(.is-expanded) .music-player button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.lora-room__music:not(.is-expanded) .music-player__track,
+.lora-room__music:not(.is-expanded) .music-player__next,
+.lora-room__music:not(.is-expanded) .music-player__download,
+.lora-room__music:not(.is-expanded) .music-player__progress {
+  display: none;
+}
+
+.lora-room__music.is-expanded {
+  grid-column: 1 / -1;
+}
+
+.lora-room__music.is-expanded .music-player {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.45rem;
+}
+
+.lora-room__music-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 210, 170, 0.35);
+  border-radius: 2px;
+  background: rgba(48, 14, 14, 0.86);
+  color: #ffe4c9;
+  font: 700 0.85rem/1 inherit;
+  cursor: pointer;
+}
+
+.lora-room__music.is-expanded .lora-room__music-toggle {
+  transform: rotate(180deg);
 }
 
 body.staff-mode .lora-room .music-player {
@@ -106,17 +153,17 @@ body.staff-mode .lora-room .music-player__progress::-moz-range-thumb {
 
 .lora-room__top {
   display: grid;
-  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.45rem 0.75rem;
-  min-height: 3.15rem;
-  padding: 0.55rem 0.9rem;
+  gap: 0.35rem 0.65rem;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.7rem;
   background: rgba(12, 4, 4, 0.72);
   border-bottom: 1px solid rgba(255, 196, 160, 0.18);
 }
 
-.lora-room__music {
-  min-width: 0;
+.lora-room__top:has(.lora-room__music.is-expanded) {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .lora-room__kicker {
@@ -131,8 +178,53 @@ body.staff-mode .lora-room .music-player__progress::-moz-range-thumb {
   color: #e7b089;
 }
 
-.lora-room__sound,
-.lora-room__leave,
+.lora-room__hud {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  z-index: 7;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.lora-room__hud-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid rgba(255, 210, 170, 0.4);
+  border-radius: 2px;
+  background: rgba(16, 4, 4, 0.78);
+  color: #ffe4c9;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.lora-room__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.lora-room__sound[aria-pressed="false"] .lora-room__icon--sound-on,
+.lora-room__sound[aria-pressed="true"] .lora-room__icon--sound-off {
+  display: none;
+}
+
+.lora-room__leave {
+  color: #ff7a6a;
+  font-size: 1.55rem;
+  line-height: 1;
+  font-weight: 400;
+}
+
 .lora-room__choice {
   min-height: 44px;
   min-width: 44px;
@@ -146,9 +238,12 @@ body.staff-mode .lora-room .music-player__progress::-moz-range-thumb {
 }
 
 body.staff-mode .site-wrapper .lora-room .lora-room__sound,
-body.staff-mode .site-wrapper .lora-room .lora-room__leave,
 body.staff-mode .site-wrapper .lora-room .lora-room__choice {
   color: #ffe4c9;
+}
+
+body.staff-mode .site-wrapper .lora-room .lora-room__leave {
+  color: #ff7a6a;
 }
 
 body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
@@ -157,6 +252,7 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 
 .lora-room__sound:focus-visible,
 .lora-room__leave:focus-visible,
+.lora-room__music-toggle:focus-visible,
 .lora-room__choice:focus-visible,
 .lora-room__line:focus-visible {
   outline: 2px solid #ffd7b0;
@@ -253,6 +349,25 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   border: 1px solid rgba(38, 20, 14, 0.55);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.48);
   transform: rotate(-3deg);
+}
+
+.lora-room__stage[data-inspect="photo"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(8, 0, 0, 0.48);
+  pointer-events: none;
+}
+
+.lora-room__stage[data-inspect="photo"] .lora-room__prop[data-lora-prop="photo"] {
+  right: auto;
+  left: 50%;
+  bottom: 10%;
+  width: min(78vw, 280px);
+  transform: translateX(-50%) rotate(-2deg);
+  z-index: 4;
+  cursor: pointer;
 }
 
 .lora-room__prop[data-lora-prop="photo"] img {
@@ -403,12 +518,13 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 .lora-room__panel {
   position: relative;
   display: grid;
-  grid-template-rows: auto minmax(4.2em, 1fr) auto var(--lora-choices-height);
-  gap: 0.55rem;
-  height: var(--lora-panel-height);
+  grid-template-rows: auto minmax(3.2em, auto) auto auto;
+  gap: 0.45rem;
+  height: auto;
+  max-height: min(42dvh, 22rem);
   min-height: 0;
   overflow: hidden;
-  padding: 0.75rem 0.95rem 0.85rem;
+  padding: 0.65rem 0.9rem 0.75rem;
   background: linear-gradient(180deg, rgba(18, 6, 6, 0.82), rgba(10, 3, 3, 0.96));
   border-top: 1px solid rgba(255, 196, 160, 0.2);
 }
@@ -438,13 +554,18 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   cursor: pointer;
 }
 
-.lora-room__panel[data-waiting-advance="true"] .lora-room__line::after {
+.lora-room__panel[data-waiting-advance="true"]:not([data-choice-hold="true"]) .lora-room__line::after,
+.lora-room__panel[data-choice-hold="true"] .lora-room__action:not([hidden])::after {
   content: "▾";
   display: inline-block;
   margin-left: 0.35em;
   color: #ffc49a;
   opacity: 0.75;
   animation: lora-advance-cue 1.2s ease-in-out infinite;
+}
+
+.lora-room__panel[data-choice-hold="true"] .lora-room__action:not([hidden]) {
+  cursor: pointer;
 }
 
 @keyframes lora-advance-cue {
@@ -460,7 +581,8 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lora-room__panel[data-waiting-advance="true"] .lora-room__line::after {
+  .lora-room__panel[data-waiting-advance="true"] .lora-room__line::after,
+  .lora-room__panel[data-choice-hold="true"] .lora-room__action:not([hidden])::after {
     animation: none;
     opacity: 0.8;
   }
@@ -490,12 +612,14 @@ body.staff-mode .site-wrapper .lora-room .lora-room__choice:disabled {
   display: grid;
   align-content: start;
   gap: var(--lora-choice-gap);
-  height: var(--lora-choices-height);
-  min-height: var(--lora-choices-height);
+  height: auto;
+  min-height: 0;
+  max-height: calc(
+    (var(--lora-choice-row) * 4) + (var(--lora-choice-gap) * 3)
+  );
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable;
 }
 
 .lora-room__choice--link {
@@ -544,19 +668,14 @@ body.lora-room-open .panel {
   .lora-room__choices {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .lora-room__choices:has(> :only-child) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 719px) {
-  .lora-room {
-    --lora-choice-rows: 3;
-    --lora-panel-height: 18.75rem;
-  }
-
-  .lora-room__top {
-    grid-template-columns: minmax(0, 1fr) auto auto;
-  }
-
-  .lora-room__music {
+  .lora-room__top:has(.lora-room__music.is-expanded) .lora-room__music {
     grid-column: 1 / -1;
   }
 }
@@ -583,15 +702,20 @@ body.lora-room-open .panel {
     width: min(42vw, 170px);
   }
 
+  .lora-room__stage[data-inspect="photo"] .lora-room__prop[data-lora-prop="photo"] {
+    width: min(82vw, 260px);
+    bottom: 8%;
+  }
+
   .lora-room__line {
     font-size: 0.98rem;
   }
 }
 
 @media (max-height: 560px) {
-  .lora-room {
-    --lora-choice-rows: 2;
-    --lora-panel-height: 13.25rem;
+  .lora-room__panel {
+    max-height: min(48dvh, 16rem);
+    padding: 0.45rem 0.75rem 0.55rem;
   }
 }
 

@@ -163,6 +163,8 @@ if (
 
 [
   "fox_oleg",
+  "fox_oleg_photo",
+  "fox_oleg_ask",
   "fox_deny_oleg",
   "fox_why",
   "fox_curtain",
@@ -240,7 +242,9 @@ const dogSpeech = Object.values(nodes)
   .map((node) => [node.line, node.lineReplay].filter(Boolean).join("\n"))
   .join("\n");
 if (
-  !nodes.fox_oleg.props?.includes("photo") ||
+  nodes.fox_oleg.props?.includes("photo") ||
+  !nodes.fox_oleg_photo.props?.includes("photo") ||
+  nodes.fox_oleg_photo.inspect !== "photo" ||
   nodes.fox_oleg.line !== "Аниматор самовольно покинул зоопарк «Лосиный Остров»." ||
   /олег|журналист|микрофон/i.test(foxSpeech) ||
   /олег/i.test(dogSpeech)
@@ -278,7 +282,7 @@ walk(
   {
     pig_talk: "hide_pig",
     fox_smell: "fox_deny_guest",
-    fox_oleg: "deny_oleg",
+    fox_oleg_ask: "deny_oleg",
     dog_costume: "pour_water",
     dog_settled: "ask_dreams",
     dog_exception: "dream_cafe",
@@ -292,7 +296,7 @@ walk(
   {
     pig_talk: "call_tech",
     fox_smell: "fox_show_tag",
-    fox_oleg: "ask_why",
+    fox_oleg_ask: "ask_why",
     dog_costume: "give_coffee",
     dog_settled: "ask_dreams",
     dog_exception: "dream_forget",
@@ -305,7 +309,7 @@ walk(
   {
     pig_talk: "hide_pig",
     fox_smell: "fox_give_hidden",
-    fox_oleg: "lie_curtain",
+    fox_oleg_ask: "lie_curtain",
     dog_costume: "ask_his_name",
     dog_settled: "ask_dreams",
     dog_exception: "dream_no_therapy",
@@ -319,7 +323,7 @@ walk(
   {
     pig_talk: "wait_laura",
     fox_smell: "fox_he_waits",
-    fox_oleg: "ask_level",
+    fox_oleg_ask: "ask_level",
     dog_costume: "say_name",
     dog_settled: "ask_exit_early",
     final_conflict_dog: "end_none",

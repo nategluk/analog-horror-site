@@ -111,6 +111,8 @@ const expectedVisual = {
   fox_partial: "V05_FOX_GAZE",
   fox_gave_wait: "V05_FOX_GAZE",
   fox_oleg: "V06_FOX_ACTION",
+  fox_oleg_photo: "V06_FOX_ACTION",
+  fox_oleg_ask: "V06_FOX_ACTION",
   fox_deny_oleg: "V06_FOX_ACTION",
   fox_why: "V06_FOX_ACTION",
   fox_curtain: "V06_FOX_ACTION",
@@ -282,8 +284,13 @@ const dogForbiddenText = ids
   .filter((id) => nodes[id].speaker === "ПЁС")
   .filter((id) => /олег/i.test(textFor(nodes[id])));
 const foxPhotoContract =
-  !nodes.fox_oleg?.props?.includes("photo") ||
-  nodes.fox_oleg.line !== "Аниматор самовольно покинул зоопарк «Лосиный Остров».";
+  nodes.fox_oleg?.props?.includes("photo") ||
+  nodes.fox_oleg.line !==
+    "Аниматор самовольно покинул зоопарк «Лосиный Остров»." ||
+  !nodes.fox_oleg_photo?.props?.includes("photo") ||
+  nodes.fox_oleg_photo.inspect !== "photo" ||
+  !(nodes.fox_oleg.choices || []).some((choice) => choice.id === "look_photo") ||
+  (nodes.fox_oleg_ask.choices || []).length !== 4;
 
 if (
   missing.length ||
