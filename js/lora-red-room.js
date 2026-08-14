@@ -884,14 +884,27 @@
     const stage = root.querySelector("[data-lora-stage]");
     if (!toy) return;
     const visible = visibleProps(node).has("toy") && !toy.hidden;
-    const inspecting = stage?.dataset.inspect === "toy";
-    toy.classList.toggle("is-inspect", inspecting);
+    if (!visible && stage?.dataset.inspect === "toy") {
+      stage.dataset.inspect = "";
+    }
+    const syncInspect = () => {
+      const inspecting = stage?.dataset.inspect === "toy";
+      toy.classList.toggle("is-inspect", inspecting);
+      if (!visible) return;
+      toy.setAttribute(
+        "aria-label",
+        inspecting ? "Убрать неваляшку" : "Посмотреть неваляшку"
+      );
+    };
+    const setInspect = (on) => {
+      if (!stage) return;
+      stage.dataset.inspect = on ? "toy" : "";
+      syncInspect();
+    };
     const toggle = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!stage) return;
-      stage.dataset.inspect = inspecting ? "" : "toy";
-      toy.classList.toggle("is-inspect", stage.dataset.inspect === "toy");
+      setInspect(stage?.dataset.inspect !== "toy");
     };
     toy.onclick = visible ? toggle : null;
     toy.onkeydown = visible
@@ -900,18 +913,22 @@
           toggle(event);
         }
       : null;
+    if (stage) {
+      stage.onclick = (event) => {
+        if (stage.dataset.inspect !== "toy") return;
+        if (event.target.closest('[data-lora-prop="toy"]')) return;
+        setInspect(false);
+      };
+    }
     if (visible) {
       toy.setAttribute("role", "button");
       toy.tabIndex = 0;
-      toy.setAttribute(
-        "aria-label",
-        inspecting ? "Убрать неваляшку" : "Посмотреть неваляшку"
-      );
     } else {
       toy.removeAttribute("role");
       toy.removeAttribute("tabindex");
       toy.removeAttribute("aria-label");
     }
+    syncInspect();
   };
 
   const playRevealSceneVideo = (root, node) => {
