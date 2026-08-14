@@ -62,9 +62,9 @@
                 class="lora-room__hud-btn lora-room__sound"
                 type="button"
                 data-lora-sound
-                aria-pressed="false"
-                aria-label="Включить звуки смены"
-                title="Включить звуки смены"
+                aria-pressed="true"
+                aria-label="Отключить звуки смены"
+                title="Отключить звуки смены"
               >
                 <svg class="lora-room__icon lora-room__icon--sound-on" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M4 10v4h3l5 4V6L7 10H4z" />
@@ -140,6 +140,9 @@
               <span class="lora-room__prop" data-lora-prop="phone" hidden>Телефон</span>
               <span class="lora-room__prop" data-lora-prop="mic" hidden>Обломок</span>
               <span class="lora-room__prop" data-lora-prop="receipt" hidden>Квитанция</span>
+              <button class="lora-room__prop lora-room__page" type="button" data-lora-prop="page" hidden>
+                Страница
+              </button>
             </div>
           </div>
 
@@ -152,6 +155,13 @@
             <div class="lora-room__choices" data-lora-choices></div>
             <p class="visually-hidden" data-lora-live aria-live="polite"></p>
           </section>
+          <dialog class="lora-room__page-viewer" data-lora-page-viewer aria-labelledby="lora-page-viewer-title">
+            <div class="lora-room__page-sheet">
+              <p class="lora-room__page-kicker" id="lora-page-viewer-title">СТРАНИЦА</p>
+              <div class="lora-room__page-copy" data-lora-page-copy></div>
+              <button class="lora-room__choice" type="button" data-lora-page-close>Закрыть</button>
+            </div>
+          </dialog>
         </section>
       </main>
 

@@ -14,6 +14,7 @@
   const LORA_ASSIGN_KEY = "tyndex_lora_channel_v1";
   const LORA_RECEIPT_ID = "lora-night-receipt";
   const LORA_TOY_ID = "lora-nevalyashka";
+  const LORA_PAGE_ID = "lora-quiet-sleep-page";
   const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
@@ -1564,30 +1565,86 @@
 
 
   const staffMessages = hydrateCatalog(irinaCallContent.staffMessages || {});
-  const loraReceiptVariants = {
-    left: "ГОСТЬ ОСТАВЛЕН ДО ВОЗВРАЩЕНИЯ КУРАТОРА",
-    given: "ПЕРЕДАН УПОЛНОМОЧЕННОМУ ВОЛОНТЁРУ",
-    sea: "НАПРАВЛЕН НА МАРШРУТ: МОРЕ / 07",
-    unassigned: "МАРШРУТ НЕ НАЗНАЧЕН",
-  };
+  const loraContent = () => window.TyndexLoraRedRoomContent || null;
 
-  const buildLoraReceiptCopy = (variant, replay) => ({
-    title: "КВИТАНЦИЯ ВРЕМЕННОГО ЗАМЕЩЕНИЯ",
-    lines: [
+  const buildLoraReceiptCopy = (snapshot = {}) => {
+    const parts =
+      loraContent()?.buildReceiptCopy?.(snapshot) || {
+        route:
+          {
+            left: "ГОСТЬ ОСТАВЛЕН ДО ВОЗВРАЩЕНИЯ КУРАТОРА",
+            given: "ПЕРЕДАН УПОЛНОМОЧЕННОМУ ВОЛОНТЁРУ",
+            sea: "НАПРАВЛЕН НА МАРШРУТ: МОРЕ / 07",
+            unassigned: "МАРШРУТ НЕ НАЗНАЧЕН",
+          }[snapshot.receiptVariant] || "—",
+        reaction: "",
+        loraLine: "",
+        stamp: "КАССА КК-312 // НОЧНАЯ СМЕНА",
+      };
+    const lines = [
       "Объект: Красная Комната",
       "Сотрудник: не установлен",
       "Посетителей принято: 3",
-      `Маршрутов назначено: ${loraReceiptVariants[variant] || "—"}`,
+      `Маршрутов назначено: ${parts.route}`,
       "Ответственность: принята",
-      "На обороте рукой Лоры:",
-      replay
-        ? "Я просила успокоить Пса. Не назначать его."
-        : "Когда вернусь, объяснишь.",
-      "Чек не выбрасывай.",
-      "Л.",
-    ],
-    stamp: "КАССА КК-312 // НОЧНАЯ СМЕНА",
-  });
+    ];
+    if (parts.reaction) lines.push(parts.reaction);
+    if (parts.loraLine) {
+      lines.push("На обороте рукой Лоры:", parts.loraLine);
+    }
+    return {
+      title: "КВИТАНЦИЯ ВРЕМЕННОГО ЗАМЕЩЕНИЯ",
+      lines,
+      stamp: parts.stamp,
+    };
+  };
+
+  const buildQuietSleepCopy = (snapshot = {}) => {
+    const page = loraContent()?.quietSleepPageFor?.(snapshot);
+    if (!page) return null;
+    return {
+      title: page.title || "СТРАНИЦА",
+      lines: page.lines,
+      stamp: page.stamp || "",
+    };
+  };
+
+  const getOperatorUsefulness = (profile, progress, lora) => {
+    if (!profile) return { id: "undefined", label: "НЕ ОПРЕДЕЛЕНА" };
+    if (profile.status === "screening" && !progress?.flags?.ageVerified) {
+      return { id: "undefined", label: "НЕ ОПРЕДЕЛЕНА" };
+    }
+    const loraFlags = lora?.playerFlags || {};
+    const pig = lora?.pigOutcome || null;
+    const fox = lora?.foxOutcome || null;
+    const dog = lora?.dogOutcome || null;
+    const completedShift = Boolean(lora?.completed);
+    const mixedShift =
+      (pig === "hidden" && fox === "cooperated") ||
+      (pig === "waiting" && fox === "cooperated") ||
+      (pig === "traded" && dog === "given") ||
+      Boolean(loraFlags.foxLied && loraFlags.foxCooperated);
+    if (
+      dog === "sea" ||
+      pig === "reported" ||
+      (completedShift && loraFlags.calledFoxEarly && dog === "given")
+    ) {
+      return { id: "watch", label: "ТРЕБУЕТ НАБЛЮДЕНИЯ" };
+    }
+    if (
+      profile.reclassificationActive ||
+      mixedShift ||
+      fox === "lied" ||
+      pig === "traded" ||
+      pig === "denied"
+    ) {
+      return { id: "unstable", label: "НЕСТАБИЛЬНАЯ" };
+    }
+    if (profile.status === "completed" && (completedShift || progress?.status === "completed")) {
+      return { id: "working", label: "РАБОЧАЯ" };
+    }
+    return { id: "forming", label: "ФОРМИРУЕТСЯ" };
+  };
 
   const staffArtifacts = hydrateCatalog({
     ...(irinaCallContent.staffArtifacts || {}),
@@ -1609,6 +1666,14 @@
       src: "assets/staff/documents/adepts-nevalyashka.jpg",
       alt: "Ржавая неваляшка на цепи в архивном кабинете",
       downloadName: "AVD-312-C-NEVALYASHKA.jpg",
+    },
+    [LORA_PAGE_ID]: {
+      code: "RR-0391-02",
+      title: "Страница Тихого сна",
+      type: "БУМАЖНЫЙ АРТЕФАКТ",
+      source: "КАФЕ «КРАСНАЯ КОМНАТА» // НОЧНАЯ СМЕНА",
+      description:
+        "Отдельная бумажная страница, оставленная после смены. Текст назначается по результату замещения.",
     },
   });
   const curatorNodeArtifacts = {
@@ -1723,6 +1788,10 @@
     if (artifactIds.has("ulybarych-broadcast")) {
       requested.push("ulybarych-after-broadcast");
     }
+    const lora = readLoraSave();
+    if (lora?.completed === true) {
+      requested.push("fox-after-shift", "lora-after-shift");
+    }
 
     requested.forEach((messageId, index) => {
       if (!staffMessages[messageId] || known.has(messageId) || removed.has(messageId)) {
@@ -1760,10 +1829,7 @@
       if (!staffArtifacts[artifactId]) return;
       if (profile.removedArtifactIds.includes(artifactId)) return;
       const known = profile.artifacts.find((item) => item.id === artifactId);
-      if (known) {
-        Object.assign(known, extra);
-        return;
-      }
+      if (known) return;
       profile.artifacts.push({
         id: artifactId,
         sessionNumber: lora.playerFlags?.replayShift ? 2 : 1,
@@ -1774,13 +1840,39 @@
       dirty = true;
     };
     if (lora.receiptVariant) {
+      const snapshot =
+        loraContent()?.buildReceiptCopy?.({
+          receiptVariant: lora.receiptVariant,
+          pigOutcome: lora.pigOutcome,
+          foxOutcome: lora.foxOutcome,
+          dogOutcome: lora.dogOutcome,
+          replay: Boolean(lora.playerFlags?.replayShift),
+        }) || {};
       claim(LORA_RECEIPT_ID, {
         variant: lora.receiptVariant,
+        copyVariant: snapshot.copyVariant || null,
+        pigOutcome: lora.pigOutcome || null,
+        foxOutcome: lora.foxOutcome || null,
+        dogOutcome: lora.dogOutcome || null,
         replay: Boolean(lora.playerFlags?.replayShift),
       });
     }
     if (lora.playerFlags?.pigToyTaken) {
       claim(LORA_TOY_ID, {
+        replay: Boolean(lora.playerFlags?.replayShift),
+      });
+    }
+    const giftPage = loraContent()?.quietSleepPageFor?.({
+      receiptVariant: lora.receiptVariant,
+      pigOutcome: lora.pigOutcome,
+      foxOutcome: lora.foxOutcome,
+      dogOutcome: lora.dogOutcome,
+      replay: Boolean(lora.playerFlags?.replayShift),
+    });
+    if (giftPage) {
+      claim(LORA_PAGE_ID, {
+        giftVariant: giftPage.variant,
+        copyVariant: giftPage.variant,
         replay: Boolean(lora.playerFlags?.replayShift),
       });
     }
@@ -3583,6 +3675,8 @@
     const dossierSignal = dossier.querySelector("[data-player-dossier-signal]");
     const dossierAvatar = dossier.querySelector("[data-player-dossier-avatar]");
     const dossierReviewBadge = dossier.querySelector("[data-player-review-badge]");
+    const dossierUsefulnessBadge = dossier.querySelector("[data-player-usefulness-badge]");
+    const dossierUsefulness = dossier.querySelector("[data-player-usefulness]");
     const dossierCuratorId = dossier.querySelector("[data-player-curator-id]");
     const dossierClearance = dossier.querySelector("[data-player-clearance]");
     const dossierLastRecord = dossier.querySelector("[data-player-last-record]");
@@ -3878,7 +3972,10 @@
       messageSubject.textContent = definition.subject;
       messageBody.textContent =
         typeof definition.body === "function"
-          ? definition.body(profile)
+          ? definition.body(profile, {
+              lora: readLoraSave() || {},
+              artifact: profile.artifacts.find((item) => item.id === LORA_RECEIPT_ID) || null,
+            })
           : definition.body;
       messageAttachment.hidden = !definition.attachmentArtifactId;
       if (definition.attachmentArtifactId) {
@@ -4005,6 +4102,9 @@
       dossierPlayerName.textContent = profileName;
       dossierRole.textContent = getProfileRole(profile);
       dossierStatus.textContent = primaryStatus;
+      const usefulness = getOperatorUsefulness(profile, getCuratorProgress(), readLoraSave());
+      if (dossierUsefulnessBadge) dossierUsefulnessBadge.hidden = false;
+      if (dossierUsefulness) dossierUsefulness.textContent = usefulness.label;
       dossierNameOpen.hidden = false;
       dossierMetadata.hidden = false;
       dossierVisual.hidden = false;
@@ -4117,6 +4217,7 @@
         dossierVisual.hidden = true;
         dossierSignal.hidden = true;
         dossierReviewBadge.hidden = true;
+        if (dossierUsefulnessBadge) dossierUsefulnessBadge.hidden = true;
         summaryTabs.hidden = true;
         settingsToggle.hidden = true;
         settingsPanel.hidden = true;
@@ -4177,15 +4278,25 @@
       const storedReceipt = readStaffProfile()?.artifacts?.find(
         (item) => item.id === artifactId
       );
+      const lora = readLoraSave();
+      const snapshot = {
+        receiptVariant:
+          storedReceipt?.variant || storedReceipt?.receiptVariant || lora?.receiptVariant,
+        pigOutcome: storedReceipt?.pigOutcome || lora?.pigOutcome,
+        foxOutcome: storedReceipt?.foxOutcome || lora?.foxOutcome,
+        dogOutcome: storedReceipt?.dogOutcome || lora?.dogOutcome,
+        replay: Boolean(storedReceipt?.replay || lora?.playerFlags?.replayShift),
+        giftVariant: storedReceipt?.giftVariant,
+      };
       const receiptCopy =
         artifactId === LORA_RECEIPT_ID
-          ? buildLoraReceiptCopy(
-              storedReceipt?.variant || readLoraSave()?.receiptVariant,
-              Boolean(
-                storedReceipt?.replay || readLoraSave()?.playerFlags?.replayShift
-              )
-            )
-          : definition.copy;
+          ? buildLoraReceiptCopy(snapshot)
+          : artifactId === LORA_PAGE_ID
+            ? buildQuietSleepCopy({
+                ...snapshot,
+                receiptVariant: snapshot.giftVariant || snapshot.receiptVariant,
+              })
+            : definition.copy;
       renderArtifactCopy(artifactCopy, receiptCopy);
       artifactDownload.hidden = !definition.downloadName || !definition.src;
       if (definition.downloadName && definition.src) {

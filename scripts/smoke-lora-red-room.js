@@ -127,6 +127,8 @@ if (
   }
 });
 [
+  ["pig_key_cabinet", "V14_BLUE_KEY_CABINET"],
+  ["pig_key_given", "V02_PIG_MASKED"],
   ["dog_arrive", "V07_DOG_BLANK"],
   ["dog_settled", "V08_DOG_SETTLED"],
   ["dog_ask_name", "V07_DOG_BLANK"],
@@ -366,6 +368,59 @@ const keyTrade = walk(
 );
 if (keyTrade.state.pigOutcome !== "traded" || !keyTrade.flags.pigToyTaken) {
   throw new Error("key trade: expected traded pigOutcome and toy taken");
+}
+if (!keyTrade.seen.includes("pig_key_cabinet") || !keyTrade.seen.includes("pig_key_given")) {
+  throw new Error("key trade: expected V14 cabinet one-shot before pig_key_given");
+}
+if (
+  nodes.pig_key_cabinet.visual !== "V14_BLUE_KEY_CABINET" ||
+  nodes.pig_key_cabinet.autoNext !== "pig_key_given" ||
+  nodes.pig_key_cabinet.hideHtmlProps !== true ||
+  (nodes.pig_key_cabinet.choices || []).length
+) {
+  throw new Error("key trade: pig_key_cabinet must be a choiceless V14 one-shot");
+}
+
+const engineSource = fs.readFileSync(
+  path.join(__dirname, "..", "js", "lora-red-room.js"),
+  "utf8"
+);
+if (
+  !engineSource.includes("pig_key_cabinet") ||
+  !engineSource.includes("v18-blue-key-cabinet.mp4")
+) {
+  throw new Error("key trade: V14 motion clip is not wired in lora-red-room.js");
+}
+
+const receiptCopy = sandbox.window.TyndexLoraRedRoomContent.buildReceiptCopy({
+  receiptVariant: "left",
+  pigOutcome: "hidden",
+  foxOutcome: "lied",
+  dogOutcome: "left",
+  replay: false,
+});
+if (
+  !receiptCopy.route ||
+  typeof receiptCopy.reaction !== "string" ||
+  typeof receiptCopy.loraLine !== "string" ||
+  !receiptCopy.stamp ||
+  !receiptCopy.copyVariant
+) {
+  throw new Error("receipt copy: builder must return route/reaction/loraLine/stamp/copyVariant");
+}
+if (sandbox.window.TyndexLoraRedRoomContent.quietSleepArtifactId !== "lora-quiet-sleep-page") {
+  throw new Error("gift hook: quiet sleep artifact id is missing");
+}
+const giftPages = sandbox.window.TyndexLoraRedRoomContent.quietSleepGift?.pages || {};
+["left", "given", "sea", "unassigned"].forEach((variant) => {
+  const page = giftPages[variant];
+  if (!page?.title || !Array.isArray(page.lines) || page.lines.length !== 4 || !page.stamp) {
+    throw new Error(`gift hook: missing Book of Sweet Sleep page for ${variant}`);
+  }
+});
+const hooks = sandbox.window.TyndexLoraRedRoomContent.receiptCopyHooks || {};
+if (!hooks.loraVoice?.left || !hooks.reactions?.sea?.traded || !hooks.stamps?.given) {
+  throw new Error("receipt copy: Codex receipt hooks are incomplete");
 }
 
 console.log("OK smoke-lora-red-room");

@@ -108,6 +108,49 @@
       body: (profile) =>
         `${profile.displayName || "Оператор"}, передача дошла до самого конца?\n\nНа твоём месте в студии пока никого нет. Я попросил не убирать стул.`,
       attachmentArtifactId: "ulybarych-broadcast"
+    },
+    "fox-after-shift": {
+      sender: "ЛИСА",
+      avatar: "assets/staff/player-avatars/avatar-03-fox.webp",
+      subject: "ТЫ НЕ НАПИСАЛ",
+      preview: "не дождалась от тебя сообщения. Решила написать первой",
+      body: (profile, context) => {
+        const lora = context?.lora || {};
+        const reactions = {
+          hidden: "Свинья не вышла через дверь. Ты назвал это сменой?",
+          waiting: "Ты оставил его ждать Лору. Не люблю решения, которые выглядят как пауза.",
+          reported: "Номер ты оставил. Номера возвращаются быстрее людей.",
+          tomorrow: "Ты сказал ему прийти завтра. Здесь это почти вежливое «никогда».",
+          denied: "Ты сказал, что ключей нет. Хороший ответ для человека, у которого ключ был.",
+          traded: "Ты отдал синий ключ. Не спрашиваю, что ты видел за стеклом.",
+        };
+        const name = profile?.displayName || "Оператор";
+        return [
+          `${name}, не дождалась от тебя сообщения. Решила написать первой.`,
+          reactions[lora.pigOutcome] || "В отметках осталось больше, чем ты сказал вслух.",
+        ].join("\n\n");
+      }
+    },
+    "lora-after-shift": {
+      sender: "ЛОРА П.",
+      avatar: "assets/staff/staff/lora-message-avatar.webp",
+      subject: "СПАСИБО ЗА СМЕНУ",
+      preview: "Спасибо, что подменил.",
+      attachmentArtifactId: "lora-quiet-sleep-page",
+      body: (profile, context) => {
+        const lora = context?.lora || {};
+        const reactions = {
+          left: "Пса можно было не торопить. Спасибо.",
+          given: "Про Пса потом поговорим. Не сегодня.",
+          sea: "Про море я ничего не спрашивала. Если он вернётся — не открывай сразу.",
+          unassigned: "Иногда не назначить маршрут — тоже решение. Я это запомню.",
+        };
+        const name = profile?.displayName || "Оператор";
+        return [
+          `${name}, спасибо, что подменил.`,
+          reactions[lora.dogOutcome] || "Я разберусь с остальным, когда вернусь.",
+        ].join("\n\n");
+      }
     }
   };
 

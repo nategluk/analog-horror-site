@@ -365,7 +365,7 @@ async function main() {
     save?.completed !== true ||
     !dossier?.artifacts?.some((item) => item.id === "lora-night-receipt") ||
     !hasReplayChoice ||
-    soundPressed !== "false" ||
+    soundPressed !== "true" ||
     expired !== "КАНАЛ НЕ НАЗНАЧЕН" ||
     !doneLine.includes("Смена закрыта");
   const revealFailed =

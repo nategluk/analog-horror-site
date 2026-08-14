@@ -40,8 +40,9 @@
 | `V11_DOG_SLEEP` | Пёс остаётся | Image | Пёс положил голову на стол, маска остаётся надетой | Ложное успокоение и реплика про Ирину |
 | `V12_EMPTY_CURTAIN` | После моря | Image | Закрытая штора без персонажа; тёплый зал остаётся позади, возле ткани возможен слабый холодный засвет | Оставляет след смертельного маршрута, не показывая пространство за шторой |
 | `V13_RECEIPT` | Квитанция | HTML/CSS | Бумага и динамический текст поверх `V01_EMPTY_COUNTER` | Финал остаётся читаемым и не зависит от генерации текста внутри изображения |
+| `V14_BLUE_KEY_CABINET` | Шкаф с ключами | Image | Стеклянная дверца шкафа, связка разных ключей, один синий | Короткий предметный one-shot при выдаче синего ключа; не объясняет маршрут |
 
-Новых сценических изображений требуется 11: `V01`, `V02`, `V04`–`V12`. Для `V03` нужен видеопереход и его постер. `V00` и `V13` не требуют генерации изображения.
+Новых сценических изображений требуется 11: `V01`, `V02`, `V04`–`V12`. Для `V03` нужен видеопереход и его постер. `V00` и `V13` не требуют генерации изображения. `V14` использует уже существующий still `v18-blue-key-cabinet.png` и не регенерируется.
 
 ## Reveal Свиньи
 
@@ -86,6 +87,8 @@ pig_escapes
 | `pig_suit`, `pig_center`, `pig_test` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Человеческое лицо появляется только после активного действия игрока |
 | `pig_talk`, `pig_tag`, `pig_hide`, `pig_hide_tag` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Разговор после исповеди выбирается по `pigRevealed`; в подсобку можно уйти с открытым лицом |
 | `pig_wait`, `pig_tech`, `pig_tomorrow`, `pig_deny_leave` | `V02_PIG_MASKED` | Перед публичным ожиданием или выходом Свинья всегда надевает голову обратно |
+| новый `pig_key_cabinet` | `V14_BLUE_KEY_CABINET` | Автоматический one-shot после `give_key`; still `v18-blue-key-cabinet.png`, motion `v18-blue-key-cabinet.mp4`; HTML-пропсы скрыты, чтобы Бирка и Записка не легли на шкаф |
+| `pig_key_given` | `V02_PIG_MASKED` | После шкафа Свинья снова в маске; `visualWhen` не используется |
 | `pig_tech_run` | `V01_EMPTY_COUNTER` | В кадре остаётся бирка; человек уже исчез |
 | `pig_gone` | `V01_EMPTY_COUNTER` | Пауза перед Лисой |
 | `pig_warns` | `V09_DOG_CURTAIN` | Голос Свиньи идёт из подсобки за кадром; отдельное возвращение маскота не требуется |
@@ -171,6 +174,16 @@ visualWhen: [
 
 Узлы публичного ухода `pig_wait`, `pig_tech`, `pig_tomorrow` и `pig_deny_leave` задают `V02_PIG_MASKED` напрямую и не используют `visualWhen`: перед залом или дверью голова снова надета.
 
+`pig_key_given` тоже остаётся в `V02_PIG_MASKED` без `visualWhen`. Выдача ключа идёт через короткий автоматический кадр шкафа:
+
+```text
+give_key
+  -> pig_key_cabinet
+       visual: V14_BLUE_KEY_CABINET
+  -> pig_key_given
+  -> pig_gone
+```
+
 Рекомендуемые пути:
 
 ```text
@@ -187,6 +200,8 @@ assets/guest/red-room/lora/scenes/v09-dog-curtain.webp
 assets/guest/red-room/lora/scenes/v10-fox-dog.webp
 assets/guest/red-room/lora/scenes/v11-dog-sleep.webp
 assets/guest/red-room/lora/scenes/v12-empty-curtain.webp
+assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png
+assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.mp4
 ```
 
 ## Производственный порядок

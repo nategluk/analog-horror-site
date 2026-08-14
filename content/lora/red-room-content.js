@@ -6,6 +6,147 @@
     unassigned: "МАРШРУТ НЕ НАЗНАЧЕН",
   };
 
+  const receiptCopyHooks = {
+    reactions: {
+      left: {
+        hidden: "ГОСТЬ В КОСТЮМЕ ОСТАВЛЕН В ПОДСОБНОМ ПОМЕЩЕНИИ",
+        waiting: "ДВОЕ ОСТАВЛЕНЫ ДО ВОЗВРАЩЕНИЯ КУРАТОРА",
+        reported: "БИРКА ПЕРЕДАНА. ГОСТЬ НЕ ПРИЛОЖЕН.",
+        tomorrow: "ПОВТОРНЫЙ ВХОД ОТЛОЖЕН ДО ЗАВТРА",
+        denied: "ВЫДАЧА ОТКЛОНЕНА БЕЗ ПРОВЕРКИ КЛЮЧЕЙ",
+        traded: "СИНИЙ КЛЮЧ СНЯТ С ХРАНЕНИЯ",
+        default: "ГОСТЬ ОСТАВЛЕН БЕЗ ДОПОЛНИТЕЛЬНОЙ ОТМЕТКИ",
+      },
+      given: {
+        hidden: "УКРЫТИЕ ПРЕКРАЩЕНО ДО ПРИБЫТИЯ ВОЛОНТЁРА",
+        waiting: "ОЖИДАНИЕ ПРЕКРАЩЕНО РАСПОРЯЖЕНИЕМ СМЕНЫ",
+        reported: "НОМЕР ГОСТЯ ПЕРЕДАН ПО СОПРОВОДИТЕЛЬНОМУ КАНАЛУ",
+        tomorrow: "ПЕРЕНОС НА ЗАВТРА НЕ ПОДТВЕРЖДЁН",
+        denied: "ОТКАЗ ЗАРЕГИСТРИРОВАН КАК ОТСУТСТВИЕ",
+        traded: "ПЕРЕДАЧА КЛЮЧА ПРИНЯТА БЕЗ ПОДПИСИ",
+        default: "ГОСТЬ ПЕРЕДАН УПОЛНОМОЧЕННОМУ ВОЛОНТЁРУ",
+      },
+      sea: {
+        hidden: "СКРЫТЫЙ ГОСТЬ НЕ ВНЕСЁН В МОРСКОЙ МАРШРУТ",
+        waiting: "ОЖИДАНИЕ ПРЕРВАНО ПЕРЕД ВЫДАЧЕЙ МАРШРУТА",
+        reported: "НОМЕР ОТМЕЧЕН ДО ПЕРЕДАЧИ МОРСКОМУ КАНАЛУ",
+        tomorrow: "МОРСКОЙ АДРЕС ВЫДАН БЕЗ ДАТЫ ВОЗВРАТА",
+        denied: "МАРШРУТ ОТКРЫТ ПОСЛЕ ОТКАЗА В ВЫДАЧЕ",
+        traded: "СИНИЙ КЛЮЧ СНЯТ. МОРСКОЙ АДРЕС ПРИНЯТ.",
+        default: "МОРСКОЙ МАРШРУТ НАЗНАЧЕН БЕЗ ПОДТВЕРЖДЕНИЯ ВОЗВРАТА",
+      },
+      unassigned: {
+        hidden: "ГОСТЬ В КОСТЮМЕ СКРЫТ. ВЫХОД НЕ НАЗНАЧЕН.",
+        waiting: "ОБА ГОСТЯ ОСТАВЛЕНЫ ВНУТРИ СМЕНЫ",
+        reported: "НОМЕР ПРИНЯТ. ВЫХОД НЕ НАЗНАЧЕН.",
+        tomorrow: "РЕШЕНИЕ ОТЛОЖЕНО ДО СЛЕДУЮЩЕЙ СМЕНЫ",
+        denied: "ОТКАЗ ЗАРЕГИСТРИРОВАН. ВЫХОД НЕ ПОДТВЕРЖДЁН.",
+        traded: "КЛЮЧ ПЕРЕДАН. МАРШРУТ НЕ НАЗНАЧЕН.",
+        default: "МАРШРУТ НЕ НАЗНАЧЕН. СМЕНА ЗАКРЫТА.",
+      },
+    },
+    loraVoice: {
+      left: "Спасибо, что подменил. Пса можно было не торопить. Ещё увидимся.",
+      given: "Спасибо, что подменил. Про Пса потом поговорим. Чек не выбрасывай.",
+      sea: "Спасибо, что подменил. Про море я ничего не спрашивала. Если он вернётся — не открывай сразу.",
+      unassigned: "Спасибо, что подменил. Иногда не назначить маршрут — тоже решение. Ещё увидимся.",
+    },
+    stamps: {
+      default: "КАССА КК-312 // НОЧНАЯ СМЕНА",
+      left: "КАССА КК-312 // ВОЗВРАТ НЕ ПОДТВЕРЖДЁН",
+      given: "КАССА КК-312 // ПЕРЕДАЧА БЕЗ ПОДПИСИ",
+      sea: "КАССА КК-312 // МОРЕ / 07",
+      unassigned: "КАССА КК-312 // БЕЗ МАРШРУТА",
+    },
+  };
+
+  const quietSleepGift = {
+    artifactId: "lora-quiet-sleep-page",
+    pages: {
+      left: {
+        title: "КНИГА СЛАДКОГО СНА // ЛИСТ 18-Б",
+        lines: [
+          "Сахарный Агнец спит в стекле.",
+          "Синий ключ звенит во сне.",
+          "Кто оставил дверь закрытой —",
+          "тот проснётся не в себе.",
+        ],
+        stamp: "ОТРЫВ // ТИХИЙ ЧАС // КРАЙ ОТОРВАН",
+      },
+      given: {
+        title: "КНИГА СЛАДКОГО СНА // ЛИСТ 18-Б",
+        lines: [
+          "Сахарный Агнец спит в стекле.",
+          "Синий ключ звенит во сне.",
+          "Кто отдал чужую тень —",
+          "тот получит имя в деле.",
+        ],
+        stamp: "ОТРЫВ // ПЕРЕДАНО БЕЗ ПОДПИСИ",
+      },
+      sea: {
+        title: "КНИГА СЛАДКОГО СНА // ЛИСТ 18-Б",
+        lines: [
+          "Сахарный Агнец спит в стекле.",
+          "Синий ключ звенит во сне.",
+          "Кто отправил сон к воде —",
+          "тот услышит море в теле.",
+        ],
+        stamp: "ОТРЫВ // ЗАПАХ ХЛОРКИ // МОРЕ / 07",
+      },
+      unassigned: {
+        title: "КНИГА СЛАДКОГО СНА // ЛИСТ 18-Б",
+        lines: [
+          "Сахарный Агнец спит в стекле.",
+          "Синий ключ звенит во сне.",
+          "Кто не знает, где здесь выход —",
+          "тот становится дверью.",
+        ],
+        stamp: "ОТРЫВ // ПОСЛЕДНЯЯ СТРОКА НЕПОЛНА",
+      },
+    },
+    select: (state = {}) => state.receiptVariant || state.dogOutcome || null,
+  };
+
+  const buildReceiptCopy = (input = {}) => {
+    const receiptVariant = input.receiptVariant || null;
+    const pigOutcome = input.pigOutcome || null;
+    const foxOutcome = input.foxOutcome || null;
+    const dogOutcome = input.dogOutcome || null;
+    const replay = Boolean(input.replay);
+    const route = receiptVariants[receiptVariant] || "—";
+    const reaction =
+      receiptCopyHooks.reactions[receiptVariant]?.[pigOutcome] ||
+      receiptCopyHooks.reactions[receiptVariant]?.default ||
+      "";
+    const loraLine =
+      receiptCopyHooks.loraVoice[receiptVariant]?.[dogOutcome] ||
+      receiptCopyHooks.loraVoice[receiptVariant] ||
+      receiptCopyHooks.loraVoice[replay ? "replay" : "default"] ||
+      "";
+    const stamp =
+      receiptCopyHooks.stamps[receiptVariant] || receiptCopyHooks.stamps.default;
+    return {
+      route,
+      reaction,
+      loraLine,
+      stamp,
+      copyVariant: [
+        receiptVariant || "none",
+        pigOutcome || "none",
+        foxOutcome || "none",
+        dogOutcome || "none",
+        replay ? "replay" : "first",
+      ].join(":"),
+    };
+  };
+
+  const quietSleepPageFor = (state = {}) => {
+    const variant = quietSleepGift.select(state);
+    const page = (variant && quietSleepGift.pages[variant]) || null;
+    if (!page || !Array.isArray(page.lines) || !page.lines.length) return null;
+    return { variant, ...page };
+  };
+
   const nodes = {
     assign_notice: {
       scene: "void",
@@ -33,8 +174,14 @@
       speaker: "ЗАПИСКА",
       line: "Кофе не жечь.\nСиние ключи без меня не выдавать.\nЕсли придёт Пёс — сначала успокой.\n\nЛ.",
       props: ["note"],
+      sound: "paperUnfold",
       choices: [
-        { id: "note_ack", text: "Положить записку на место", next: "pig_arrive" },
+        {
+          id: "note_ack",
+          text: "Положить записку на место",
+          next: "pig_arrive",
+          sound: "paperFold",
+        },
       ],
     },
     pig_arrive: {
@@ -341,10 +488,11 @@
           id: "give_key",
           text: "Отдать синий ключ",
           group: "Отправить прочь",
-          next: "pig_key_given",
+          next: "pig_key_cabinet",
           set: ["pigGaveKey", "pigToyTaken", "pigTagLeft"],
           require: ["pigToyOffered"],
           pigOutcome: "traded",
+          sound: "keyRing",
         },
       ],
     },
@@ -456,6 +604,17 @@
       props: ["note"],
       autoNext: "pig_talk",
       delay: 400,
+    },
+    pig_key_cabinet: {
+      scene: "counter",
+      visual: "V14_BLUE_KEY_CABINET",
+      speaker: "СМЕНА",
+      line: "Стеклянная дверца. Связка разных ключей. Один синий.",
+      guest: "none",
+      hideHtmlProps: true,
+      sound: "keyCabinet",
+      autoNext: "pig_key_given",
+      delay: 700,
     },
     pig_key_given: {
       scene: "counter",
@@ -1308,7 +1467,8 @@
       speaker: "ЛОРА П.",
       line: "Когда вернусь, объяснишь.\nЧек не выбрасывай.\n\nЛ.",
       lineReplay: "Я просила успокоить Пса. Не назначать его.\nЧек не выбрасывай.\n\nЛ.",
-      props: ["note", "receipt"],
+      props: ["note", "receipt", "page"],
+      inspect: "page",
       choices: [
         { id: "keep_receipt", text: "Оставить квитанцию в деле", next: "shift_done" },
       ],
@@ -1318,7 +1478,8 @@
       visual: "V13_RECEIPT",
       speaker: "СИСТЕМА",
       line: "Смена закрыта. Квитанция зарегистрирована как материал личного дела, если дело уже закреплено.\nЕсли нет — документ будет прикреплён позже.",
-      props: ["receipt"],
+      props: ["receipt", "page"],
+      inspect: "page",
       choices: [
         { id: "replay", text: "Начать новую смену", next: "assign_notice", restart: true },
         { id: "leave_shift", text: "Вернуться в технический раздел", next: "leave", leave: true },
@@ -1331,7 +1492,12 @@
     curatorId: "0391-L",
     startNode: "assign_notice",
     artifactId: "lora-night-receipt",
+    quietSleepArtifactId: quietSleepGift.artifactId,
     receiptVariants,
+    receiptCopyHooks,
+    quietSleepGift,
+    buildReceiptCopy,
+    quietSleepPageFor,
     nodes,
   });
 })();

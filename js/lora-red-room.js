@@ -6,6 +6,7 @@
   const ASSIGN_TTL_MS = 120000;
   const ARTIFACT_ID = "lora-night-receipt";
   const TOY_ARTIFACT_ID = "lora-nevalyashka";
+  const QUIET_SLEEP_ARTIFACT_ID = "lora-quiet-sleep-page";
   const HIRING_HREF = "../hiring.html";
   const VISUAL_ASSETS = {
     V01_EMPTY_COUNTER: {
@@ -61,6 +62,9 @@
     V13_RECEIPT: {
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
     },
+    V14_BLUE_KEY_CABINET: {
+      image: "../assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png",
+    },
   };
 
   const MOTION_DIR = "../assets/guest/red-room/lora/scenes/";
@@ -80,6 +84,14 @@
       requireVisual: "V02_PIG_MASKED",
       frames: ["v02-pig-masked.webp"],
       holdMs: 800,
+    },
+    pig_key_cabinet: {
+      mode: "transition",
+      video: "v18-blue-key-cabinet.mp4",
+      openWith: "v18-blue-key-cabinet.png",
+      frames: ["v18-blue-key-cabinet.png"],
+      holdMs: 900,
+      restore: false,
     },
     pig_escapes: {
       mode: "transition",
@@ -168,6 +180,10 @@
     phone: { file: "sfx-phone.mp3", volume: 0.58 },
     buzz: { file: "sfx-phone-buzz.mp3", volume: 0.52 },
     print: { file: "sfx-print.mp3", volume: 0.5 },
+    paperUnfold: { file: "sfx-paper-unfold.mp3", volume: 0.52 },
+    paperFold: { file: "sfx-paper-fold.mp3", volume: 0.5 },
+    keyRing: { file: "sfx-key-ring.mp3", volume: 0.56 },
+    keyCabinet: { file: "sfx-key-cabinet.mp3", volume: 0.58 },
   };
   const PRESENCE_SITS = {
     pig: { file: "sfx-sit-pig.mp3", volume: 0.46, delayMs: 520 },
@@ -203,7 +219,9 @@
   let autoTimer = 0;
   let ambientTimer = 0;
   let stillTimer = 0;
-  let soundEnabled = false;
+  let soundEnabled = true;
+  let audioUnlockBound = false;
+  let audioBlocked = false;
   let activeSceneVideo = null;
   let bedAudio = null;
   let bedName = "";
@@ -404,7 +422,6 @@
     if (profile.removedArtifactIds.includes(artifactId)) return false;
     const known = profile.artifacts.find((item) => item.id === artifactId);
     if (known) {
-      Object.assign(known, extra);
       known.obtainedAt = known.obtainedAt || Date.now();
       return true;
     }
@@ -416,6 +433,25 @@
       ...extra,
     });
     return true;
+  };
+
+  const receiptSnapshot = () => {
+    const parts =
+      content()?.buildReceiptCopy?.({
+        receiptVariant: save?.receiptVariant,
+        pigOutcome: save?.pigOutcome,
+        foxOutcome: save?.foxOutcome,
+        dogOutcome: save?.dogOutcome,
+        replay: Boolean(hasFlag("replayShift")),
+      }) || {};
+    return {
+      variant: save?.receiptVariant || null,
+      copyVariant: parts.copyVariant || null,
+      pigOutcome: save?.pigOutcome || null,
+      foxOutcome: save?.foxOutcome || null,
+      dogOutcome: save?.dogOutcome || null,
+      replay: Boolean(hasFlag("replayShift")),
+    };
   };
 
   const attachReceipt = () => {
@@ -434,13 +470,18 @@
       return;
     }
     if (save.receiptVariant) {
-      attachDossierItem(profile, definitionId, {
-        variant: save.receiptVariant,
-        replay: Boolean(hasFlag("replayShift")),
-      });
+      attachDossierItem(profile, definitionId, receiptSnapshot());
     }
     if (hasFlag("pigToyTaken")) {
       attachDossierItem(profile, TOY_ARTIFACT_ID, {
+        replay: Boolean(hasFlag("replayShift")),
+      });
+    }
+    const giftPage = content()?.quietSleepPageFor?.(receiptSnapshot());
+    if (giftPage) {
+      attachDossierItem(profile, content()?.quietSleepArtifactId || QUIET_SLEEP_ARTIFACT_ID, {
+        giftVariant: giftPage.variant,
+        copyVariant: giftPage.variant,
         replay: Boolean(hasFlag("replayShift")),
       });
     }
@@ -450,7 +491,35 @@
     writeSave(save);
   };
 
-  const shiftAudioUrl = (file) => assetUrl(`${SHIFT_AUDIO}${file}`);
+  const tryPlayAudio = (audio) => {
+    if (!audio) return;
+    const play = audio.play();
+    if (play && typeof play.catch === "function") {
+      play.catch(() => {
+        audioBlocked = true;
+      });
+    }
+  };
+
+  const restartShiftAudio = () => {
+    if (!soundEnabled) return;
+    const node = nodeById(save?.currentNode);
+    syncShiftAudio(node);
+    if (node?.sound) playSceneSound(node.sound);
+    syncPresence(node);
+  };
+
+  const bindAudioUnlock = () => {
+    if (audioUnlockBound) return;
+    audioUnlockBound = true;
+    const unlock = () => {
+      if (!soundEnabled || !audioBlocked) return;
+      audioBlocked = false;
+      restartShiftAudio();
+    };
+    document.addEventListener("pointerdown", unlock, true);
+    document.addEventListener("keydown", unlock, true);
+  };
 
   const stopElement = (audio) => {
     if (!audio) return;
@@ -539,8 +608,7 @@
         overlayAudios = overlayAudios.filter((item) => item !== audio);
       };
     }
-    const play = audio.play();
-    if (play && typeof play.catch === "function") play.catch(() => {});
+    tryPlayAudio(audio);
   };
 
   const presenceGuest = (node) => {
@@ -633,8 +701,7 @@
       if (cueAudio === audio) cueAudio = null;
       onEnded?.();
     };
-    const play = audio.play();
-    if (play && typeof play.catch === "function") play.catch(() => {});
+    tryPlayAudio(audio);
   };
 
   const playSeaChain = (index) => {
@@ -649,15 +716,27 @@
     });
   };
 
+  const OBJECT_SOUNDS = new Set([
+    "paperUnfold",
+    "paperFold",
+    "keyRing",
+    "keyCabinet",
+  ]);
+
   const playSceneSound = (name) => {
     if (!name || !soundEnabled) return;
-    stopCues();
     if (name === "sea") {
+      stopCues();
       playSeaChain(0);
       return;
     }
     const cue = SCENE_SOUNDS[name];
     if (!cue) return;
+    if (OBJECT_SOUNDS.has(name)) {
+      playOverlayFile(cue.file, cue.volume, false);
+      return;
+    }
+    stopCues();
     playCueFile(cue.file, cue.volume);
   };
 
@@ -680,8 +759,7 @@
     next.volume = 0;
     bedAudio = next;
     bedName = name;
-    const play = next.play();
-    if (play && typeof play.catch === "function") play.catch(() => {});
+    tryPlayAudio(next);
     fadeBedTo(next, BED_VOLUME);
     if (previous && previous !== next) {
       const outgoing = previous;
@@ -714,10 +792,8 @@
       stopShiftAudio();
       return;
     }
-    const node = nodeById(save?.currentNode);
-    syncShiftAudio(node);
-    if (node?.sound) playSceneSound(node.sound);
-    syncPresence(node);
+    bindAudioUnlock();
+    restartShiftAudio();
   };
 
   const readingHoldMs = (text, node) => {
@@ -767,6 +843,11 @@
       (nodeId.startsWith("pig") || nodeId.startsWith("fox"))
     ) {
       props.add("toy");
+    }
+    if ((node.props || []).includes("page") && content()?.quietSleepPageFor?.(receiptSnapshot())) {
+      props.add("page");
+    } else {
+      props.delete("page");
     }
     return props;
   };
@@ -836,10 +917,11 @@
     }
     root.querySelectorAll("[data-lora-prop]").forEach((el) => {
       const name = el.dataset.loraProp;
-      el.hidden = !visibleProps(node).has(name);
+      el.hidden = node.hideHtmlProps ? true : !visibleProps(node).has(name);
     });
     bindInspectedPhoto(root, node);
     bindInspectedToy(root, node);
+    bindInspectedPage(root, node);
     root.querySelectorAll("[data-lora-guest]").forEach((el) => {
       el.hidden = (node.guest || "none") !== el.dataset.loraGuest;
     });
@@ -929,6 +1011,63 @@
       toy.removeAttribute("aria-label");
     }
     syncInspect();
+  };
+
+  const closePageViewer = (root) => {
+    const viewer = root?.querySelector("[data-lora-page-viewer]");
+    if (viewer?.open) viewer.close();
+  };
+
+  const openPageViewer = (root) => {
+    const viewer = root.querySelector("[data-lora-page-viewer]");
+    const copyBox = root.querySelector("[data-lora-page-copy]");
+    const page = content()?.quietSleepPageFor?.(receiptSnapshot());
+    if (!viewer || !copyBox || !page) return;
+    copyBox.replaceChildren();
+    if (page.title) {
+      const heading = document.createElement("h3");
+      heading.textContent = page.title;
+      copyBox.append(heading);
+    }
+    page.lines.forEach((line) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = line;
+      copyBox.append(paragraph);
+    });
+    if (page.stamp) {
+      const stamp = document.createElement("footer");
+      stamp.textContent = page.stamp;
+      copyBox.append(stamp);
+    }
+    if (!viewer.open) viewer.showModal();
+  };
+
+  const bindInspectedPage = (root, node) => {
+    const pageEl = root.querySelector('[data-lora-prop="page"]');
+    if (!pageEl) return;
+    const visible = visibleProps(node).has("page") && !pageEl.hidden;
+    const open = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openPageViewer(root);
+    };
+    pageEl.onclick = visible ? open : null;
+    pageEl.onkeydown = visible
+      ? (event) => {
+          if (!["Enter", " "].includes(event.key)) return;
+          open(event);
+        }
+      : null;
+    if (visible) {
+      pageEl.setAttribute("role", "button");
+      pageEl.tabIndex = 0;
+      pageEl.setAttribute("aria-label", "Открыть страницу");
+    } else {
+      pageEl.removeAttribute("role");
+      pageEl.removeAttribute("tabindex");
+      pageEl.removeAttribute("aria-label");
+      closePageViewer(root);
+    }
   };
 
   const playRevealSceneVideo = (root, node) => {
@@ -1376,6 +1515,7 @@
       return;
     }
     applyFlags(choice.set || []);
+    if (choice.sound) playSceneSound(choice.sound);
     goTo(root, choice.next, choice);
   };
 
@@ -1652,6 +1792,11 @@
         }
       });
     }
+    const pageClose = root.querySelector("[data-lora-page-close]");
+    if (pageClose && pageClose.dataset.ready !== "true") {
+      pageClose.dataset.ready = "true";
+      pageClose.addEventListener("click", () => closePageViewer(root));
+    }
     const soundButton = root.querySelector("[data-lora-sound]");
     if (soundButton && soundButton.dataset.ready !== "true") {
       soundButton.dataset.ready = "true";
@@ -1660,6 +1805,7 @@
       });
     }
     updateSoundButton(root);
+    bindAudioUnlock();
   };
 
   const init = (root) => {
@@ -1681,10 +1827,12 @@
       save.currentNode = content().startNode;
     }
     writeSave(save);
+    bindAudioUnlock();
     renderNode(root, save.currentNode);
   };
 
   const destroy = () => {
+    closePageViewer(activeRoot);
     stopSceneVideo();
     stopShiftAudio();
     clearTimers(activeRoot);
