@@ -79,12 +79,12 @@ pig_escapes
 | Узлы | Visual | Условие или действие |
 | --- | --- | --- |
 | `pig_arrive` | `V01_EMPTY_COUNTER` | Зал ещё пустой; Свинья появляется движением, не заранее вклеенным кадром из прохода |
-| `pig_enter`, `pig_today`, `pig_blue_key`, `pig_source`, `pig_deny`, `pig_follow_note` | `V02_PIG_MASKED` | Игрок ещё не видел человека |
+| `pig_enter`, `pig_today`, `pig_blue_key`, `pig_secret`, `pig_source`, `pig_source_warn`, `pig_deny`, `pig_follow_note` | `V02_PIG_MASKED` | Игрок ещё не видел человека |
 | `pig_escapes` | `V02_PIG_MASKED` | Рассказ о побегах сам по себе ещё не заслуживает лица |
 | новый `pig_camera_check` | `V02_PIG_MASKED` | Игрок решает, отключать ли старую камеру над залом |
 | новый `pig_reveal` | `V03_PIG_REVEAL` | Только ветка отключённой камеры; устанавливает `pigRevealed` |
 | `pig_suit`, `pig_center`, `pig_test` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Человеческое лицо появляется только после активного действия игрока |
-| `pig_talk`, `pig_tag`, `pig_hide` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Разговор после исповеди выбирается по `pigRevealed`; в подсобку можно уйти с открытым лицом |
+| `pig_talk`, `pig_tag`, `pig_hide`, `pig_hide_tag` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Разговор после исповеди выбирается по `pigRevealed`; в подсобку можно уйти с открытым лицом |
 | `pig_wait`, `pig_tech`, `pig_tomorrow`, `pig_deny_leave` | `V02_PIG_MASKED` | Перед публичным ожиданием или выходом Свинья всегда надевает голову обратно |
 | `pig_tech_run` | `V01_EMPTY_COUNTER` | В кадре остаётся бирка; человек уже исчез |
 | `pig_gone` | `V01_EMPTY_COUNTER` | Пауза перед Лисой |
@@ -96,7 +96,7 @@ pig_escapes
 
 | Узлы | Visual | Действие |
 | --- | --- | --- |
-| `fox_arrive`, `fox_enter`, `fox_camera`, `fox_smell` | `V05_FOX_GAZE` | Она сразу записывает игрока и уверенно занимает пространство напротив стойки |
+| `fox_arrive`, `fox_enter`, `fox_laura`, `fox_smoke`, `fox_camera`, `fox_heard`, `fox_notice`, `fox_smell` | `V05_FOX_GAZE` | Она сразу записывает игрока и уверенно занимает пространство напротив стойки |
 | `fox_tag_hidden`, `fox_tag_shown`, `fox_lie`, `fox_gave_pig`, `fox_partial`, `fox_gave_wait` | `V05_FOX_GAZE` | Меняется только лёгкий цифровой crop/zoom, не изображение |
 | `fox_oleg`, `fox_deny_oleg`, `fox_why`, `fox_level`, `fox_monopoly` | `V06_FOX_ACTION` | Лиса показывает фотографию сбежавшего аниматора; наблюдение превращается в административную охоту через телефон |
 | `fox_curtain` | `V06_FOX_ACTION` | Она фотографирует маршрут и отправляет сообщение вместо буквального ухода к шторе |
@@ -110,7 +110,7 @@ pig_escapes
 
 | Узлы | Visual | Действие |
 | --- | --- | --- |
-| `dog_arrive`, `dog_where`, `dog_hospital`, `dog_costume` | `V07_DOG_BLANK` | Максимальная неподвижность и прямой взгляд пластиковых глаз |
+| `dog_arrive`, `dog_where`, `dog_hospital`, `dog_costume` | `V07_DOG_BLANK` | Максимальная неподвижность и прямой взгляд пластиковых глаз; успокоить можно уже на «Где я?» |
 | `dog_water`, `dog_coffee`, `dog_player_name`, `dog_settled` | `V08_DOG_SETTLED` | Чашка или стакан могут быть HTML/CSS-оверлеем |
 | `dog_ask_name`, `dog_name_again`, `dog_after_name` | `V07_DOG_BLANK` | Вопрос об имени не даёт ответа и возвращает Пса из успокоенной позы в пустую неподвижность |
 | `dog_dreams`, `dog_exception`, `dog_dream_cafe`, `dog_dream_forget`, `dog_dream_raw`, `dog_dream_reverse` | `V08_DOG_SETTLED` | Разговор о снах использует сдержанный программный push-in без нового изображения |

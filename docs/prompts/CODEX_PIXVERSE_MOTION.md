@@ -159,7 +159,7 @@ Keep V05/V06 as `playback: "loop"`. Do not change V03 reveal or V11 transition.
 | `pig_arrive` | `v02-pig-arrive.mp4` | transition, then settle on V02 |
 | `pig_escapes` | `v02-pig-wander.mp4` | transition, restore V02 |
 | `pig_talk` | `v02-pig-wander.mp4` | burst, only if visual is `V02_PIG_MASKED` |
-| `pig_hide`, `pig_tech_run`, `pig_tomorrow`, `pig_deny_leave` | `v02-pig-leave.mp4` | transition, no restore; next node is empty. Skip `pig_hide` when visual is `V04_PIG_UNMASKED` |
+| `pig_hide_tag`, `pig_tech_run`, `pig_tomorrow`, `pig_deny_leave` | `v02-pig-leave.mp4` | transition, no restore; next node is empty. Skip `pig_hide_tag` when visual is `V04_PIG_UNMASKED` |
 | `dog_dreams` | `v08-dog-wander.mp4` | transition, restore V08 |
 
 Reuse the existing `playTransitionSceneVideo` / `playLoopSceneVideo` / burst helpers. Do not break `prefers-reduced-motion` (stay on stills).

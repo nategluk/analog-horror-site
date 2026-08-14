@@ -95,7 +95,7 @@
       frames: ["v02-pig-wander.webp"],
       holdMs: 1800,
     },
-    pig_hide: {
+    pig_hide_tag: {
       mode: "transition",
       video: "v02-pig-leave.mp4",
       requireVisual: "V02_PIG_MASKED",

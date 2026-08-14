@@ -98,6 +98,7 @@ if (
   "pig_bargain",
   "pig_talk",
   "pig_hide",
+  "pig_hide_tag",
   "pig_tag",
   "pig_toy_take",
 ].forEach((id) => {
@@ -150,7 +151,11 @@ if (
 [
   "fox_arrive",
   "fox_enter",
+  "fox_laura",
+  "fox_smoke",
   "fox_camera",
+  "fox_heard",
+  "fox_notice",
   "fox_smell",
   "fox_tag_hidden",
   "fox_tag_shown",
@@ -257,7 +262,7 @@ if (
 
 const revealRun = walk(
   {
-    pig_blue_key: "ask_how",
+    pig_secret: "ask_how",
     pig_camera_check: "disable_camera",
     pig_talk: "hide_pig",
     final_conflict_dog: "end_leave",
@@ -270,7 +275,7 @@ if (!revealRun.flags.cameraDisabled || !revealRun.flags.pigRevealed) {
 
 const maskedRun = walk(
   {
-    pig_blue_key: "ask_how",
+    pig_secret: "ask_how",
     pig_camera_check: "leave_camera",
     pig_talk: "hide_pig",
     final_conflict_dog: "end_leave",
@@ -286,7 +291,7 @@ walk(
     pig_talk: "hide_pig",
     fox_smell: "fox_deny_guest",
     fox_oleg_ask: "deny_oleg",
-    dog_costume: "pour_water",
+    dog_where: "pour_water",
     dog_settled: "ask_dreams",
     dog_exception: "dream_cafe",
     final_conflict_dog: "end_leave",
@@ -300,7 +305,7 @@ walk(
     pig_talk: "call_tech",
     fox_smell: "fox_show_tag",
     fox_oleg_ask: "ask_why",
-    dog_costume: "give_coffee",
+    dog_where: "give_coffee",
     dog_settled: "ask_dreams",
     dog_exception: "dream_forget",
     final_conflict_dog: "end_give",
@@ -313,7 +318,7 @@ walk(
     pig_talk: "hide_pig",
     fox_smell: "fox_give_hidden",
     fox_oleg_ask: "lie_curtain",
-    dog_costume: "ask_his_name",
+    dog_where: "ask_his_name",
     dog_settled: "ask_dreams",
     dog_exception: "dream_no_therapy",
     final_conflict_dog: "warn_sea",
@@ -327,7 +332,7 @@ walk(
     pig_talk: "wait_laura",
     fox_smell: "fox_he_waits",
     fox_oleg_ask: "ask_level",
-    dog_costume: "say_name",
+    dog_where: "say_name",
     dog_settled: "ask_exit_early",
     final_conflict_dog: "end_none",
   },
@@ -336,10 +341,10 @@ walk(
 
 const toyTrade = walk(
   {
-    pig_blue_key: "ask_how",
+    pig_secret: "ask_how",
     pig_camera_check: "disable_camera",
     pig_talk: "take_toy",
-    fox_enter: "fox_no_smoke",
+    fox_smoke: "fox_no_smoke",
     fox_smell: "fox_deny_guest",
     fox_oleg_ask: "deny_oleg",
     final_conflict_dog: "end_leave",
@@ -352,7 +357,7 @@ if (!toyTrade.flags.pigToyTaken || !toyTrade.flags.foxToldNoSmoke) {
 
 const keyTrade = walk(
   {
-    pig_blue_key: "ask_how",
+    pig_secret: "ask_how",
     pig_talk: "give_key",
     fox_smell: "fox_deny_guest",
     final_conflict_dog: "end_none",
