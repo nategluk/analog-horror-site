@@ -122,6 +122,11 @@ async function main() {
   await desktop.click("[data-lora-line]");
   await desktop.waitForSelector('[data-choice-id="disable_camera"]');
   await desktop.click('[data-choice-id="disable_camera"]');
+  const revealOpening = await desktop.evaluate(() => ({
+    node: document.querySelector("[data-lora-room]")?.dataset.node,
+    image: document.querySelector("[data-lora-scene-image]")?.getAttribute("src"),
+    videoState: document.querySelector("[data-lora-stage]")?.dataset.videoState,
+  }));
   await desktop.click("[data-lora-line]");
   await desktop.waitForSelector("[data-lora-scene-video]:not([hidden])", {
     timeout: 4000,
@@ -153,7 +158,7 @@ async function main() {
     image: document.querySelector("[data-lora-scene-image]")?.getAttribute("src"),
   }));
   report.push(
-    `v03-reveal: playing=${revealPlaying.state} loop=${revealPlaying.loop} muted=${revealPlaying.muted} poster=${revealPoster.videoHidden} saved=${revealPoster.played} next=${revealContinuation.node}`
+    `v03-reveal: opening=${revealOpening.image} playing=${revealPlaying.state} loop=${revealPlaying.loop} muted=${revealPlaying.muted} poster=${revealPoster.videoHidden} saved=${revealPoster.played} next=${revealContinuation.node}`
   );
 
   const mobile = await browser.newPage();
@@ -367,6 +372,10 @@ async function main() {
     revealPlaying.loop ||
     !revealPlaying.muted ||
     revealPlaying.state !== "playing" ||
+    revealOpening.node !== "pig_reveal" ||
+    !String(revealOpening.image || "").includes("v02-pig-masked.webp") ||
+    String(revealOpening.image || "").includes("v03-pig-reveal-poster.webp") ||
+    revealOpening.videoState !== "poster" ||
     !revealPoster.videoHidden ||
     !revealPoster.image?.includes("v03-pig-reveal-poster.webp") ||
     !revealPoster.played ||

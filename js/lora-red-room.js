@@ -19,6 +19,7 @@
     },
     V03_PIG_REVEAL: {
       image: "../assets/guest/red-room/lora/scenes/v03-pig-reveal-poster.webp",
+      openWith: "../assets/guest/red-room/lora/scenes/v02-pig-masked.webp",
       video: "../assets/guest/red-room/lora/scenes/v03-pig-reveal.mp4",
       playback: "reveal",
     },
@@ -49,6 +50,7 @@
     },
     V11_DOG_SLEEP: {
       image: "../assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
+      openWith: "../assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
       video: "../assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
       playback: "transition",
     },
@@ -95,6 +97,7 @@
     pig_tech_run: {
       mode: "transition",
       video: "v02-pig-leave.mp4",
+      openWith: "v02-pig-masked.webp",
       frames: PIG_LEAVE_FRAMES,
       holdMs: 700,
       restore: false,
@@ -118,7 +121,6 @@
     fox_why: {
       mode: "burst",
       video: "v14-fox-gum-pop-v1.mp4",
-      poster: "v14-fox-gum-bubble.png",
       frames: ["v14-fox-gum-bubble.png"],
       requireVisual: "V06_FOX_ACTION",
       delayMs: 900,
@@ -127,7 +129,6 @@
     fox_monopoly: {
       mode: "burst",
       video: "v15-fox-candy-offer-v1.mp4",
-      poster: "v15-fox-candy-offer.png",
       frames: ["v15-fox-candy-offer.png"],
       requireVisual: "V06_FOX_ACTION",
       delayMs: 900,
@@ -233,6 +234,25 @@
   };
 
   const motionUrl = (file) => assetUrl(MOTION_DIR + file);
+
+  const openingStillSrc = (asset, motion) => {
+    if (motion?.openWith) return motionUrl(motion.openWith);
+    if (asset?.openWith) return assetUrl(asset.openWith);
+    return asset?.image ? assetUrl(asset.image) : "";
+  };
+
+  const settledStillSrc = (asset) =>
+    asset?.image ? assetUrl(asset.image) : "";
+
+  const holdOpeningStill = (asset, motion) => {
+    if (motion?.openWith) return true;
+    if (prefersReducedMotion()) return false;
+    if (asset?.playback === "reveal" && !hasFlag("pigRevealPlayed")) return true;
+    if (asset?.playback === "transition" && !hasFlag("dogSleepPlayed")) {
+      return true;
+    }
+    return false;
+  };
 
   const hiringUrl = () => {
     try {
@@ -739,9 +759,9 @@
           if (stage) stage.dataset.hasVisual = "false";
         };
         const motion = motionFor(save?.currentNode, node);
-        image.src = assetUrl(
-          motion?.openWith ? MOTION_DIR + motion.openWith : asset.image
-        );
+        image.src = holdOpeningStill(asset, motion)
+          ? openingStillSrc(asset, motion)
+          : settledStillSrc(asset);
         image.hidden = false;
       } else {
         image.removeAttribute("src");
@@ -756,8 +776,11 @@
       video.setAttribute("playsinline", "");
       video.setAttribute("muted", "");
       if (asset?.video) {
+        const motion = motionFor(save?.currentNode, node);
         video.src = assetUrl(asset.video);
-        video.poster = assetUrl(asset.image);
+        video.poster = holdOpeningStill(asset, motion)
+          ? openingStillSrc(asset, motion)
+          : settledStillSrc(asset);
       } else {
         video.removeAttribute("src");
         video.removeAttribute("poster");
@@ -788,6 +811,7 @@
     const video = root.querySelector("[data-lora-scene-video]");
     if (!video) return false;
 
+    video.poster = openingStillSrc(asset, null);
     activeSceneVideo = video;
     video.currentTime = 0;
     video.hidden = false;
@@ -802,7 +826,10 @@
       video.onended = null;
       video.onerror = null;
       video.hidden = true;
-      if (image) image.hidden = false;
+      if (image) {
+        image.src = settledStillSrc(asset);
+        image.hidden = false;
+      }
       if (stage) stage.dataset.videoState = "poster";
       activeSceneVideo = null;
       applyFlags(["pigRevealPlayed"]);
@@ -910,11 +937,7 @@
     video.setAttribute("playsinline", "");
     video.setAttribute("muted", "");
     video.src = motionUrl(motion.video);
-    video.poster = motion.poster
-      ? motionUrl(motion.poster)
-      : asset?.image
-        ? assetUrl(asset.image)
-        : "";
+    video.poster = openingStillSrc(asset, motion);
     video.currentTime = 0;
     video.hidden = false;
     if (image) image.hidden = true;
@@ -1021,6 +1044,7 @@
     const video = root.querySelector("[data-lora-scene-video]");
     if (!video) return false;
 
+    video.poster = openingStillSrc(asset, null);
     activeSceneVideo = video;
     video.currentTime = 0;
     video.hidden = false;
