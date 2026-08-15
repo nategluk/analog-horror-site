@@ -49,6 +49,7 @@ const walk = (picks, label) => {
       id = node.autoNext;
       continue;
     }
+    if (node.complete) break;
     const choices = (node.choices || []).filter((choice) => visible(choice, flags));
     if (!choices.length) throw new Error(`${label}: no choices at ${id}`);
     const pickId = picks[id];
@@ -65,7 +66,7 @@ const walk = (picks, label) => {
     id = choice.next;
   }
   if (!state.completed && !seen.includes("receipt_print")) {
-    throw new Error(`${label}: did not reach receipt`);
+    throw new Error(`${label}: did not reach a completed ending`);
   }
   console.log(
     `${label}: ${seen.length} nodes, pig=${state.pigOutcome}, fox=${state.foxOutcome}, dog=${state.dogOutcome}, receipt=${state.receiptVariant}`
@@ -193,6 +194,19 @@ if (
     throw new Error(`dog ambient: V11 mapping is missing at ${id}`);
   }
 });
+
+const sleepChoiceIds = (nodes.end_leave_sleep.choices || []).map((choice) => choice.id);
+if (
+  nodes.end_leave_sleep.line !==
+    "Я тут полежу пока.\nС закрытыми глазами.\nПоохраняешь меня?" ||
+  !nodes.end_leave_sleep.action?.includes("РАВНОЦЕННОЙ ЗАМЕНОЙ") ||
+  sleepChoiceIds.join(",") !== "stay_with_dog,exit_cafe" ||
+  !nodes.end_leave_guard.complete ||
+  !nodes.end_leave_replacement.complete ||
+  !nodes.end_leave_replacement.guestExit
+) {
+  throw new Error("dog finale: the wait-for-Lora branch must end in the stay/exit dilemma");
+}
 
 const menuEntries = (choices, flags) => {
   const visibleChoices = choices.filter((choice) => visible(choice, flags));
@@ -341,6 +355,7 @@ const revealRun = walk(
     pig_camera_check: "disable_camera",
     pig_talk: "hide_pig",
     final_conflict_dog: "end_leave",
+    end_leave_sleep: "stay_with_dog",
   },
   "pig-reveal-v03-v04"
 );
@@ -354,6 +369,7 @@ const maskedRun = walk(
     pig_camera_check: "leave_camera",
     pig_talk: "hide_pig",
     final_conflict_dog: "end_leave",
+    end_leave_sleep: "stay_with_dog",
   },
   "pig-camera-on-v02"
 );
@@ -370,7 +386,7 @@ walk(
     dog_settled: "ask_dreams",
     dog_exception: "dream_cafe",
     final_conflict_dog: "end_leave",
-    receipt_back: "keep_receipt",
+    end_leave_sleep: "stay_with_dog",
   },
   "hidden-lie-leave"
 );
@@ -423,6 +439,7 @@ const toyTrade = walk(
     fox_smell: "fox_deny_guest",
     fox_oleg_ask: "deny_oleg",
     final_conflict_dog: "end_leave",
+    end_leave_sleep: "exit_cafe",
   },
   "toy-smoke-leave"
 );
@@ -481,10 +498,10 @@ if (engineSource.includes("v11-dog-sleep-idle.mp4")) {
 }
 
 const receiptCopy = sandbox.window.TyndexLoraRedRoomContent.buildReceiptCopy({
-  receiptVariant: "left",
+  receiptVariant: "guarded",
   pigOutcome: "hidden",
   foxOutcome: "lied",
-  dogOutcome: "left",
+  dogOutcome: "guarded",
   replay: false,
 });
 if (
@@ -500,7 +517,7 @@ if (sandbox.window.TyndexLoraRedRoomContent.quietSleepArtifactId !== "lora-quiet
   throw new Error("gift hook: quiet sleep artifact id is missing");
 }
 const giftPages = sandbox.window.TyndexLoraRedRoomContent.quietSleepGift?.pages || {};
-["left", "given", "sea", "unassigned"].forEach((variant) => {
+["left", "given", "sea", "unassigned", "guarded", "replacement"].forEach((variant) => {
   const page = giftPages[variant];
   if (!page?.title || !Array.isArray(page.lines) || page.lines.length !== 4 || !page.stamp) {
     throw new Error(`gift hook: missing Book of Sweet Sleep page for ${variant}`);

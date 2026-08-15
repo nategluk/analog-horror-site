@@ -338,7 +338,11 @@ async function main() {
   await clickChoice("Мне иногда снится это кафе.");
   await clickChoice("Выслушать Хрюшу");
   await clickChoice("Предложить дождаться Лору");
-  await clickChoice("Оставить квитанцию в деле");
+  await clickChoice("Остаться с ним");
+  await mobile.waitForFunction(
+    () => document.querySelector("[data-lora-room]")?.dataset.node === "end_leave_guard",
+    { timeout: 8000 }
+  );
   const doneLine = await mobile.$eval("[data-lora-line]", (el) => el.textContent);
   const save = await mobile.evaluate(() =>
     JSON.parse(localStorage.getItem("tyndex_lora_red_room_v1") || "null")
@@ -349,17 +353,56 @@ async function main() {
   report.push(
     `playthrough: node=${save?.currentNode} completed=${save?.completed} pig=${save?.pigOutcome} dog=${save?.dogOutcome} receipt=${save?.receiptVariant}`
   );
-  const hasReplayChoice = await mobile.evaluate(() =>
-    [...document.querySelectorAll(".lora-room__choice")].some((button) =>
-      button.textContent.includes("новую смену")
-    )
+  const finalChoiceCount = await mobile.$eval(
+    "[data-lora-choices]",
+    (el) => el.children.length
   );
   const soundPressed = await mobile.$eval(
     "[data-lora-sound]",
     (el) => el.getAttribute("aria-pressed")
   );
   report.push(
-    `artifact: ${JSON.stringify(dossier?.artifacts || [])} doneHasReplay=${hasReplayChoice} soundArmed=${soundPressed}`
+    `artifact: ${JSON.stringify(dossier?.artifacts || [])} finalChoices=${finalChoiceCount} soundArmed=${soundPressed}`
+  );
+
+  await mobile.evaluate(() => {
+    sessionStorage.setItem(
+      "tyndex_lora_channel_v1",
+      JSON.stringify({ assigned: true, at: Date.now() })
+    );
+    localStorage.setItem("tyndex_mode", "staff");
+    localStorage.setItem(
+      "tyndex_lora_red_room_v1",
+      JSON.stringify({
+        version: 1,
+        currentNode: "end_leave_sleep",
+        completed: false,
+        seenNodes: ["end_leave", "end_leave_sleep"],
+        pigOutcome: "hidden",
+        foxOutcome: "lied",
+        dogOutcome: "left",
+        playerFlags: { pigHidden: true, dogSleepPlayed: true },
+        receiptVariant: "left",
+        updatedAt: Date.now(),
+      })
+    );
+  });
+  await mobile.goto(`${BASE}/locations/red-room-shift.html`, {
+    waitUntil: "domcontentloaded",
+  });
+  await clickChoice("Выйти из кафе");
+  await mobile.waitForFunction(
+    () => window.location.pathname.endsWith("/locations/red-room-cafe.html"),
+    { timeout: 10000 }
+  );
+  const guestExit = await mobile.evaluate(() => ({
+    path: window.location.pathname,
+    mode: localStorage.getItem("tyndex_mode"),
+    assignment: sessionStorage.getItem("tyndex_lora_channel_v1"),
+    save: JSON.parse(localStorage.getItem("tyndex_lora_red_room_v1") || "null"),
+  }));
+  report.push(
+    `guest-exit: path=${guestExit.path} mode=${guestExit.mode} assignment=${guestExit.assignment} node=${guestExit.save?.currentNode} dog=${guestExit.save?.dogOutcome}`
   );
 
   await mobile.evaluate(() => {
@@ -383,10 +426,15 @@ async function main() {
     !loraId.includes("0391-L") ||
     save?.completed !== true ||
     !dossier?.artifacts?.some((item) => item.id === "lora-night-receipt") ||
-    !hasReplayChoice ||
+    finalChoiceCount !== 0 ||
     soundPressed !== "true" ||
     expired !== "КАНАЛ НЕ НАЗНАЧЕН" ||
-    !doneLine.includes("Смена закрыта");
+    !doneLine.includes("СМЕНА НЕ ЗАКРЫТА") ||
+    guestExit.mode !== "guest" ||
+    guestExit.assignment !== null ||
+    guestExit.save?.completed !== true ||
+    guestExit.save?.dogOutcome !== "replacement" ||
+    !guestExit.path.endsWith("/locations/red-room-cafe.html");
   const revealFailed =
     revealPlaying.loop ||
     !revealPlaying.muted ||

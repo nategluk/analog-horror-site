@@ -52,6 +52,9 @@ const required = [
   "fox_enter",
   "dog_where",
   "end_leave",
+  "end_leave_guard",
+  "end_leave_exit",
+  "end_leave_replacement",
   "end_give",
   "end_sea",
   "end_none",
@@ -158,6 +161,9 @@ const expectedVisual = {
   pig_warns: "V09_DOG_CURTAIN",
   end_leave: "V11_DOG_SLEEP",
   end_leave_sleep: "V11_DOG_SLEEP",
+  end_leave_guard: "V11_DOG_SLEEP",
+  end_leave_exit: "V11_DOG_SLEEP",
+  end_leave_replacement: "V11_DOG_SLEEP",
   end_give: "V10_FOX_DOG",
   end_give_meet: "V10_FOX_DOG",
   end_give_answer: "V10_FOX_DOG",
@@ -294,7 +300,7 @@ const missingAssets = requiredAssets.filter(
 );
 const emptyChoices = ids.filter((id) => {
   const node = nodes[id];
-  return !node.autoNext && !(node.choices && node.choices.length);
+  return !node.complete && !node.autoNext && !(node.choices && node.choices.length);
 });
 const unmappedNodes = ids.filter((id) => !expectedVisual[id]);
 const textFor = (node) =>

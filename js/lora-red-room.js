@@ -7,7 +7,9 @@
   const ARTIFACT_ID = "lora-night-receipt";
   const TOY_ARTIFACT_ID = "lora-nevalyashka";
   const QUIET_SLEEP_ARTIFACT_ID = "lora-quiet-sleep-page";
+  const MODE_KEY = "tyndex_mode";
   const HIRING_HREF = "../hiring.html";
+  const GUEST_HREF = "../locations/red-room-cafe.html";
   const VISUAL_ASSETS = {
     V01_EMPTY_COUNTER: {
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
@@ -309,8 +311,23 @@
     }
   };
 
+  const guestUrl = () => {
+    try {
+      return new URL(GUEST_HREF, document.baseURI).href;
+    } catch {
+      return "/locations/red-room-cafe.html";
+    }
+  };
+
   const clearAssignment = () => {
     window.sessionStorage.removeItem(ASSIGN_KEY);
+  };
+
+  const exitToGuest = () => {
+    window.localStorage.setItem(MODE_KEY, "guest");
+    clearAssignment();
+    stopShiftAudio();
+    window.location.assign(guestUrl());
   };
 
   const readAssignment = () => {
@@ -1714,6 +1731,10 @@
       save.completed = true;
       writeSave(save);
       attachReceipt();
+    }
+    if (node.guestExit) {
+      autoTimer = window.setTimeout(exitToGuest, node.delay || 1800);
+      return;
     }
     const asset = visualAsset(node);
     const motion = motionFor(save.currentNode, node);
