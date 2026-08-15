@@ -464,6 +464,21 @@ if (
 ) {
   throw new Error("key trade: V14 motion clip is not wired in lora-red-room.js");
 }
+if (
+  !engineSource.includes("dog_coffee") ||
+  !engineSource.includes("dog-suit-coffee-v2.mp4") ||
+  !engineSource.includes("dog-suit-wander-v2.mp4") ||
+  !engineSource.includes("dog-suit-sleep-v2.mp4") ||
+  !engineSource.includes("dog-suit-sleep-start-v2.png")
+) {
+  throw new Error("dog costume: v2 motion clips are not wired in lora-red-room.js");
+}
+if (engineSource.includes('video: "v08-dog-wander.mp4"')) {
+  throw new Error("dog costume: dog_dreams still points at the old wander file");
+}
+if (engineSource.includes("v11-dog-sleep-idle.mp4")) {
+  throw new Error("dog costume: V11 still points at the old sleep idle file");
+}
 
 const receiptCopy = sandbox.window.TyndexLoraRedRoomContent.buildReceiptCopy({
   receiptVariant: "left",

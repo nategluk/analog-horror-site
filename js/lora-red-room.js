@@ -52,8 +52,8 @@
     },
     V11_DOG_SLEEP: {
       image: "../assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
-      openWith: "../assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
-      video: "../assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
+      openWith: "../assets/guest/red-room/lora/scenes/dog-suit-sleep-start-v2.png",
+      video: "../assets/guest/red-room/lora/scenes/dog-suit-sleep-v2.mp4",
       playback: "transition",
     },
     V12_EMPTY_CURTAIN: {
@@ -165,10 +165,19 @@
       delayMs: 900,
       holdMs: 1800,
     },
-    dog_dreams: {
+    dog_coffee: {
       mode: "transition",
-      video: "v08-dog-wander.mp4",
+      video: "dog-suit-coffee-v2.mp4",
+      openWith: "dog-suit-coffee-start-v2.png",
+      frames: ["v08-dog-settled.webp"],
+      holdMs: 900,
+    },
+    dog_dreams: {
+      mode: "burst",
+      video: "dog-suit-wander-v2.mp4",
+      requireVisual: "V08_DOG_SETTLED",
       frames: ["v08-dog-stand.webp", "v08-dog-aisle.webp"],
+      delayMs: 900,
       holdMs: 900,
     },
   };

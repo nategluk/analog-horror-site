@@ -1,0 +1,505 @@
+{
+  "generated_at": "2026-08-14",
+  "role": "release-preflight",
+  "staging_root": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/",
+  "release_candidate": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/",
+  "expected": {
+    "dog-suit-wander-v2.mp4": {
+      "duration_s": 8.0,
+      "aspect": "16:9",
+      "fps": 24,
+      "audio": false
+    },
+    "dog-suit-coffee-v2.mp4": {
+      "duration_s": 6.0,
+      "aspect": "16:9",
+      "fps": 24,
+      "audio": false
+    },
+    "dog-suit-sleep-v2.mp4": {
+      "duration_s": 4.0,
+      "aspect": "16:9",
+      "fps": 24,
+      "audio": false
+    }
+  },
+  "aspect_math": {
+    "native": "736x400",
+    "native_ratio": 1.84,
+    "sixteen_nine": 1.7777777777777777,
+    "crop_candidate": "712x400 (12px each side)",
+    "pad_candidate": "736x414 (7px top/bottom #140808)",
+    "note": "736/400 = 1.84; 16/9 = 1.777... Native is wider than 16:9. Not exact 16:9."
+  },
+  "clips": {
+    "wander_delivery": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/dog-suit-wander-v2.mp4",
+      "filename": "dog-suit-wander-v2.mp4",
+      "filesize_bytes": 1906524,
+      "format_duration_s": 8.0,
+      "format_bit_rate": 1906524,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 192,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1903332
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "coffee_delivery": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/dog-suit-coffee-v2.mp4",
+      "filename": "dog-suit-coffee-v2.mp4",
+      "filesize_bytes": 1386402,
+      "format_duration_s": 6.0,
+      "format_bit_rate": 1848536,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 144,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1845048
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "sleep_delivery": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/dog-suit-sleep-v2.mp4",
+      "filename": "dog-suit-sleep-v2.mp4",
+      "filesize_bytes": 1009743,
+      "format_duration_s": 4.0,
+      "format_bit_rate": 2019486,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 96,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 2015470
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "wander_raw": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/raw/dog-suit-wander-v2.raw.mp4",
+      "filename": "dog-suit-wander-v2.raw.mp4",
+      "filesize_bytes": 2720300,
+      "format_duration_s": 10.041667,
+      "format_bit_rate": 2167209,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 241,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1999949
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "bit_rate": 127693
+      },
+      "stream_count": 3,
+      "attached_pic_mjpeg": true
+    },
+    "coffee_raw": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/raw/dog-suit-coffee-v2.raw.mp4",
+      "filename": "dog-suit-coffee-v2.raw.mp4",
+      "filesize_bytes": 1745881,
+      "format_duration_s": 6.041667,
+      "format_bit_rate": 2311787,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 145,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 2120667
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "bit_rate": 128273
+      },
+      "stream_count": 3,
+      "attached_pic_mjpeg": true
+    },
+    "sleep_raw": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/raw/dog-suit-sleep-v2.raw.mp4",
+      "filename": "dog-suit-sleep-v2.raw.mp4",
+      "filesize_bytes": 1579358,
+      "format_duration_s": 6.041667,
+      "format_bit_rate": 2091287,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.84,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.062222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 145,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1900272
+      },
+      "audio": {
+        "codec": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "bit_rate": 128228
+      },
+      "stream_count": 3,
+      "attached_pic_mjpeg": true
+    },
+    "wander_crop_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-wander-v2.crop-16x9.mp4",
+      "filename": "dog-suit-wander-v2.crop-16x9.mp4",
+      "filesize_bytes": 1794032,
+      "format_duration_s": 8.0,
+      "format_bit_rate": 1794032,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 712,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.78,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.002222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 192,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1790839
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "wander_pad_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-wander-v2.pad-16x9.mp4",
+      "filename": "dog-suit-wander-v2.pad-16x9.mp4",
+      "filesize_bytes": 1834953,
+      "format_duration_s": 8.0,
+      "format_bit_rate": 1834953,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 414,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.777778,
+        "is_exact_16_9": true,
+        "delta_vs_16_9": 0.0,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 192,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1831769
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "coffee_crop_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-coffee-v2.crop-16x9.mp4",
+      "filename": "dog-suit-coffee-v2.crop-16x9.mp4",
+      "filesize_bytes": 1278471,
+      "format_duration_s": 6.0,
+      "format_bit_rate": 1704628,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 712,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.78,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.002222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 144,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1701138
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "coffee_pad_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-coffee-v2.pad-16x9.mp4",
+      "filename": "dog-suit-coffee-v2.pad-16x9.mp4",
+      "filesize_bytes": 1304620,
+      "format_duration_s": 6.0,
+      "format_bit_rate": 1739493,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 414,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.777778,
+        "is_exact_16_9": true,
+        "delta_vs_16_9": 0.0,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 144,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1736005
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "sleep_crop_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-sleep-v2.crop-16x9.mp4",
+      "filename": "dog-suit-sleep-v2.crop-16x9.mp4",
+      "filesize_bytes": 955605,
+      "format_duration_s": 4.0,
+      "format_bit_rate": 1911210,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 712,
+        "height": 400,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.78,
+        "is_exact_16_9": false,
+        "delta_vs_16_9": 0.002222,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 96,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1907192
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "sleep_pad_16x9": {
+      "path": "assets/guest/red-room/lora/scenes/staging/grok-dog-costume-v2/release-candidate/ratio-candidates/dog-suit-sleep-v2.pad-16x9.mp4",
+      "filename": "dog-suit-sleep-v2.pad-16x9.mp4",
+      "filesize_bytes": 975294,
+      "format_duration_s": 4.0,
+      "format_bit_rate": 1950588,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 736,
+        "height": 414,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.777778,
+        "is_exact_16_9": true,
+        "delta_vs_16_9": 0.0,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 96,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 1946572
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    }
+  },
+  "legacy_runtime_refs": {
+    "v08-dog-wander.mp4": {
+      "path": "assets/guest/red-room/lora/scenes/v08-dog-wander.mp4",
+      "filename": "v08-dog-wander.mp4",
+      "filesize_bytes": 3895331,
+      "format_duration_s": 8.0,
+      "format_bit_rate": 3895331,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 1280,
+        "height": 720,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.777778,
+        "is_exact_16_9": true,
+        "delta_vs_16_9": 0.0,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 192,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 3892132
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    },
+    "v11-dog-sleep-idle.mp4": {
+      "path": "assets/guest/red-room/lora/scenes/v11-dog-sleep-idle.mp4",
+      "filename": "v11-dog-sleep-idle.mp4",
+      "filesize_bytes": 1018779,
+      "format_duration_s": 4.041667,
+      "format_bit_rate": 2016552,
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "video": {
+        "codec": "h264",
+        "profile": "High",
+        "width": 1024,
+        "height": 576,
+        "sample_aspect_ratio": "N/A",
+        "display_aspect_ratio": "N/A",
+        "pixel_aspect_w_over_h": 1.777778,
+        "is_exact_16_9": true,
+        "delta_vs_16_9": 0.0,
+        "r_frame_rate": "24/1",
+        "avg_frame_rate": "24/1",
+        "fps": 24.0,
+        "nb_frames": 97,
+        "pix_fmt": "yuv420p",
+        "bit_rate": 2012508
+      },
+      "audio": null,
+      "stream_count": 1,
+      "attached_pic_mjpeg": false
+    }
+  },
+  "first_frame_stills": {
+    "v08-dog-aisle.webp": {
+      "width": 1024,
+      "height": 576,
+      "pixel_aspect_w_over_h": 1.777778
+    },
+    "dog-suit-coffee-start-v2.png": {
+      "width": 1672,
+      "height": 941,
+      "pixel_aspect_w_over_h": 1.776833
+    },
+    "v08-dog-stand.webp": {
+      "width": 1024,
+      "height": 576,
+      "pixel_aspect_w_over_h": 1.777778
+    },
+    "v11-dog-sleep.webp": {
+      "width": 1024,
+      "height": 576,
+      "pixel_aspect_w_over_h": 1.777778
+    },
+    "v08-dog-settled.webp": {
+      "width": 1024,
+      "height": 576,
+      "pixel_aspect_w_over_h": 1.777778
+    },
+    "dog-suit-sleep-start-v2.png": {
+      "width": 1672,
+      "height": 941,
+      "pixel_aspect_w_over_h": 1.776833
+    },
+    "v07-dog-blank.webp": {
+      "width": 1024,
+      "height": 576,
+      "pixel_aspect_w_over_h": 1.777778
+    }
+  },
+  "raw_versus_delivery": {
+    "wander": "Imagine 10.041667s AAC 736x400 → ffmpeg trim 8.000s silent h264",
+    "coffee": "Imagine 6.041667s AAC 736x400 → ffmpeg trim 6.000s silent h264",
+    "sleep": "Imagine 6.041667s AAC 736x400 → ffmpeg trim 4.000s silent h264"
+  },
+  "excluded_from_delivery": [
+    {
+      "file": "probe-zdr-off-480p.mp4",
+      "reason": "ZDR-unblock probe, not a costume card"
+    },
+    {
+      "file": "assets/guest/red-room/lora/scenes/concepts/cgi/",
+      "reason": "rejected CGI package"
+    },
+    {
+      "file": "docs/prompts/GROK_IMAGINE_DOG_CGI.md",
+      "reason": "rejected CGI package"
+    },
+    {
+      "file": "frames/*.jpg at staging root",
+      "reason": "working QA extracts, superseded by RC/frames"
+    }
+  ]
+}
