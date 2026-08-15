@@ -52,7 +52,7 @@
     },
     V11_DOG_SLEEP: {
       image: "../assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
-      openWith: "../assets/guest/red-room/lora/scenes/dog-suit-sleep-start-v2.png",
+      openWith: "../assets/guest/red-room/lora/scenes/dog-suit-sleep-start-v2.webp",
       video: "../assets/guest/red-room/lora/scenes/dog-suit-sleep-v2.mp4",
       playback: "transition",
     },
@@ -168,7 +168,7 @@
     dog_coffee: {
       mode: "transition",
       video: "dog-suit-coffee-v2.mp4",
-      openWith: "dog-suit-coffee-start-v2.png",
+      openWith: "dog-suit-coffee-start-v2.webp",
       frames: ["v08-dog-settled.webp"],
       holdMs: 900,
     },

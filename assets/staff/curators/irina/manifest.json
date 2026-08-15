@@ -95,11 +95,6 @@
       "playback": "once",
       "durationSeconds": 20
     },
-    "post-aroma-jelly": {
-      "video": "action-post-aroma-jelly.mp4",
-      "poster": "action-post-aroma-jelly-poster.webp",
-      "playback": "once-hold"
-    },
     "private-file": {
       "video": "action-private-file.mp4",
       "poster": "action-private-file-poster.webp",

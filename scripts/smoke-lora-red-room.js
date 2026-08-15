@@ -469,7 +469,7 @@ if (
   !engineSource.includes("dog-suit-coffee-v2.mp4") ||
   !engineSource.includes("dog-suit-wander-v2.mp4") ||
   !engineSource.includes("dog-suit-sleep-v2.mp4") ||
-  !engineSource.includes("dog-suit-sleep-start-v2.png")
+  !engineSource.includes("dog-suit-sleep-start-v2.webp")
 ) {
   throw new Error("dog costume: v2 motion clips are not wired in lora-red-room.js");
 }
