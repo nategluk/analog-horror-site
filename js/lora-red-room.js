@@ -10,6 +10,9 @@
   const MODE_KEY = "tyndex_mode";
   const HIRING_HREF = "../hiring.html";
   const GUEST_HREF = "../locations/red-room-cafe.html";
+  const DOG_WAIT_VIDEO = "../assets/guest/red-room/lora/scenes/dog-suit-sleep-idle-v1.mp4";
+  const LORA_REWARD_VIDEO = "../assets/guest/red-room/lora/scenes/lora-wait-reward-v1.mp4";
+  const DOG_WAIT_MS = 15000;
   const VISUAL_ASSETS = {
     V01_EMPTY_COUNTER: {
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
@@ -1580,6 +1583,133 @@
     goTo(root, choice.next, choice);
   };
 
+  const openRewardDialog = (dialog) => {
+    if (!dialog) return;
+    if (typeof dialog.showModal === "function") {
+      if (!dialog.open) dialog.showModal();
+      return;
+    }
+    dialog.setAttribute("open", "");
+  };
+
+  const closeRewardDialog = (dialog) => {
+    if (!dialog) return;
+    if (typeof dialog.close === "function" && dialog.open) dialog.close();
+    dialog.removeAttribute("open");
+  };
+
+  const showWakePrompt = (root, node) => {
+    const dialog = root.querySelector("[data-lora-wake-dialog]");
+    const ok = root.querySelector("[data-lora-wake-ok]");
+    if (!dialog || !ok || save.currentNode !== "end_leave_guard") return;
+    ok.onclick = () => {
+      closeRewardDialog(dialog);
+      goTo(root, node.rewardNext);
+    };
+    openRewardDialog(dialog);
+    ok.focus();
+  };
+
+  const playGuardWait = (root, node) => {
+    const stage = root.querySelector("[data-lora-stage]");
+    const image = root.querySelector("[data-lora-scene-image]");
+    const video = root.querySelector("[data-lora-scene-video]");
+    const waitMs = prefersReducedMotion() ? 1200 : DOG_WAIT_MS;
+
+    const restoreStill = () => {
+      if (video) {
+        video.pause();
+        video.onerror = null;
+        video.hidden = true;
+      }
+      if (image) image.hidden = false;
+      if (stage) stage.dataset.videoState = "poster";
+      if (activeSceneVideo === video) activeSceneVideo = null;
+    };
+
+    if (video && !prefersReducedMotion()) {
+      activeSceneVideo = video;
+      video.src = assetUrl(DOG_WAIT_VIDEO);
+      video.poster = assetUrl(VISUAL_ASSETS.V11_DOG_SLEEP.image);
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.currentTime = 0;
+      video.hidden = false;
+      video.onerror = restoreStill;
+      if (image) image.hidden = true;
+      if (stage) stage.dataset.videoState = "playing";
+      video.play()?.catch(restoreStill);
+    }
+
+    autoTimer = window.setTimeout(() => {
+      if (save.currentNode !== "end_leave_guard") return;
+      restoreStill();
+      showWakePrompt(root, node);
+    }, waitMs);
+  };
+
+  const openCoffeeReward = (root, node) => {
+    const dialog = root.querySelector("[data-lora-coffee-dialog]");
+    const machine = root.querySelector("[data-lora-espresso]");
+    if (!dialog || !machine || !window.TyndexRedRoomEspresso?.init) return;
+    window.TyndexRedRoomEspresso.init(machine, {
+      mode: "shift",
+      forceFresh: true,
+      persist: false,
+      onServe: () => {
+        closeRewardDialog(dialog);
+        goTo(root, node.rewardNext);
+      },
+    });
+    openRewardDialog(dialog);
+    machine.querySelector("[data-rr-act]")?.focus();
+  };
+
+  const playLoraReward = (root) => {
+    const stage = root.querySelector("[data-lora-stage]");
+    const image = root.querySelector("[data-lora-scene-image]");
+    const video = root.querySelector("[data-lora-scene-video]");
+    const thanks = root.querySelector("[data-lora-thanks]");
+    let settled = false;
+
+    const finishReward = (failed = false) => {
+      if (settled || save.currentNode !== "end_leave_lora") return;
+      settled = true;
+      if (video) {
+        video.onended = null;
+        video.onerror = null;
+        if (failed) {
+          video.hidden = true;
+          if (image) image.hidden = false;
+          if (stage) stage.dataset.videoState = "poster";
+        }
+      }
+      activeSceneVideo = null;
+      if (thanks) thanks.hidden = false;
+      autoTimer = window.setTimeout(exitToGuest, 2400);
+    };
+
+    if (!video || prefersReducedMotion()) {
+      finishReward(true);
+      return;
+    }
+
+    activeSceneVideo = video;
+    video.src = assetUrl(LORA_REWARD_VIDEO);
+    video.poster = assetUrl(VISUAL_ASSETS.V11_DOG_SLEEP.image);
+    video.loop = false;
+    video.muted = true;
+    video.playsInline = true;
+    video.currentTime = 0;
+    video.hidden = false;
+    video.onended = () => finishReward(false);
+    video.onerror = () => finishReward(true);
+    if (image) image.hidden = true;
+    if (stage) stage.dataset.videoState = "playing";
+    video.play()?.catch(() => finishReward(true));
+  };
+
   const renderDenied = (root) => {
     root.dataset.state = "denied";
     const speaker = root.querySelector("[data-lora-speaker]");
@@ -1659,6 +1789,8 @@
   const renderNode = (root, nodeId) => {
     const node = nodeById(nodeId);
     if (!node) return;
+    const thanks = root.querySelector("[data-lora-thanks]");
+    if (thanks) thanks.hidden = true;
     stopSceneVideo();
     clearTimers(root);
     stopCues();
@@ -1734,6 +1866,18 @@
     }
     if (node.guestExit) {
       autoTimer = window.setTimeout(exitToGuest, node.delay || 1800);
+      return;
+    }
+    if (node.waitReward) {
+      playGuardWait(root, node);
+      return;
+    }
+    if (node.coffeeReward) {
+      openCoffeeReward(root, node);
+      return;
+    }
+    if (node.rewardVideo) {
+      playLoraReward(root);
       return;
     }
     const asset = visualAsset(node);

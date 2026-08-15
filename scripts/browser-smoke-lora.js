@@ -214,7 +214,9 @@ async function main() {
       })
     );
   });
-  await mobile.reload({ waitUntil: "domcontentloaded" });
+  await mobile.goto(`${BASE}/locations/red-room-shift.html`, {
+    waitUntil: "domcontentloaded",
+  });
   const reducedReveal = await mobile.evaluate(() => ({
     videoHidden: document.querySelector("[data-lora-scene-video]")?.hidden,
     videoState: document.querySelector("[data-lora-stage]")?.dataset.videoState,
@@ -343,26 +345,42 @@ async function main() {
     () => document.querySelector("[data-lora-room]")?.dataset.node === "end_leave_guard",
     { timeout: 8000 }
   );
-  const doneLine = await mobile.$eval("[data-lora-line]", (el) => el.textContent);
-  const save = await mobile.evaluate(() =>
-    JSON.parse(localStorage.getItem("tyndex_lora_red_room_v1") || "null")
-  );
-  const dossier = await mobile.evaluate(() =>
-    JSON.parse(localStorage.getItem("tyndex_staff_profile_v1") || "null")
-  );
-  report.push(
-    `playthrough: node=${save?.currentNode} completed=${save?.completed} pig=${save?.pigOutcome} dog=${save?.dogOutcome} receipt=${save?.receiptVariant}`
-  );
-  const finalChoiceCount = await mobile.$eval(
-    "[data-lora-choices]",
-    (el) => el.children.length
+  await mobile.waitForSelector("[data-lora-wake-dialog][open]", { timeout: 8000 });
+  await mobile.click("[data-lora-wake-ok]");
+  await mobile.waitForSelector("[data-lora-coffee-dialog][open]", { timeout: 8000 });
+  const clickEspresso = async (act) => {
+    await mobile.waitForSelector(`[data-lora-espresso] [data-rr-act="${act}"]:not([disabled])`, {
+      timeout: 8000,
+    });
+    await mobile.click(`[data-lora-espresso] [data-rr-act="${act}"]`);
+  };
+  await clickEspresso("water");
+  await clickEspresso("beans");
+  await clickEspresso("brew");
+  await clickEspresso("serve");
+  await mobile.waitForFunction(
+    () =>
+      document.querySelector("[data-lora-room]")?.dataset.node === "end_leave_lora" &&
+      !document.querySelector("[data-lora-thanks]")?.hidden,
+    { timeout: 8000 }
   );
   const soundPressed = await mobile.$eval(
     "[data-lora-sound]",
     (el) => el.getAttribute("aria-pressed")
   );
+  const rewardVisible = await mobile.$eval("[data-lora-thanks]", (el) => !el.hidden);
+  await mobile.waitForFunction(
+    () => window.location.pathname.endsWith("/locations/red-room-cafe.html"),
+    { timeout: 8000 }
+  );
+  const stayExit = await mobile.evaluate(() => ({
+    path: window.location.pathname,
+    mode: localStorage.getItem("tyndex_mode"),
+    save: JSON.parse(localStorage.getItem("tyndex_lora_red_room_v1") || "null"),
+    dossier: JSON.parse(localStorage.getItem("tyndex_staff_profile_v1") || "null"),
+  }));
   report.push(
-    `artifact: ${JSON.stringify(dossier?.artifacts || [])} finalChoices=${finalChoiceCount} soundArmed=${soundPressed}`
+    `wait-reward: path=${stayExit.path} mode=${stayExit.mode} node=${stayExit.save?.currentNode} dog=${stayExit.save?.dogOutcome} thanks=${rewardVisible} soundArmed=${soundPressed}`
   );
 
   await mobile.evaluate(() => {
@@ -411,7 +429,9 @@ async function main() {
       JSON.stringify({ assigned: true, at: Date.now() - 10 * 60 * 1000 })
     );
   });
-  await mobile.reload({ waitUntil: "domcontentloaded" });
+  await mobile.goto(`${BASE}/locations/red-room-shift.html`, {
+    waitUntil: "domcontentloaded",
+  });
   const expired = await mobile.$eval("[data-lora-line]", (el) => el.textContent.trim());
   report.push(`expired-assign: ${expired}`);
 
@@ -424,12 +444,14 @@ async function main() {
     !irinaOpen ||
     denied !== "КАНАЛ НЕ НАЗНАЧЕН" ||
     !loraId.includes("0391-L") ||
-    save?.completed !== true ||
-    !dossier?.artifacts?.some((item) => item.id === "lora-night-receipt") ||
-    finalChoiceCount !== 0 ||
+    stayExit.save?.completed !== true ||
+    !stayExit.dossier?.artifacts?.some((item) => item.id === "lora-night-receipt") ||
+    stayExit.save?.dogOutcome !== "guarded" ||
+    stayExit.mode !== "guest" ||
+    !stayExit.path.endsWith("/locations/red-room-cafe.html") ||
+    !rewardVisible ||
     soundPressed !== "true" ||
     expired !== "КАНАЛ НЕ НАЗНАЧЕН" ||
-    !doneLine.includes("СМЕНА НЕ ЗАКРЫТА") ||
     guestExit.mode !== "guest" ||
     guestExit.assignment !== null ||
     guestExit.save?.completed !== true ||

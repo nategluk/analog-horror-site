@@ -39,6 +39,7 @@ visit(content.startNode);
 ids.forEach((id) => {
   const node = nodes[id];
   if (node.autoNext) visit(node.autoNext);
+  if (node.rewardNext) visit(node.rewardNext);
   (node.choices || []).forEach((choice) => {
     if (!choice.leave) visit(choice.next);
   });
@@ -53,6 +54,8 @@ const required = [
   "dog_where",
   "end_leave",
   "end_leave_guard",
+  "end_leave_coffee",
+  "end_leave_lora",
   "end_leave_exit",
   "end_leave_replacement",
   "end_give",
@@ -162,6 +165,8 @@ const expectedVisual = {
   end_leave: "V11_DOG_SLEEP",
   end_leave_sleep: "V11_DOG_SLEEP",
   end_leave_guard: "V11_DOG_SLEEP",
+  end_leave_coffee: "V11_DOG_SLEEP",
+  end_leave_lora: "V11_DOG_SLEEP",
   end_leave_exit: "V11_DOG_SLEEP",
   end_leave_replacement: "V11_DOG_SLEEP",
   end_give: "V10_FOX_DOG",
@@ -262,6 +267,8 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/dog-suit-coffee-v2.mp4",
   "assets/guest/red-room/lora/scenes/dog-suit-coffee-start-v2.webp",
   "assets/guest/red-room/lora/scenes/dog-suit-sleep-v2.mp4",
+  "assets/guest/red-room/lora/scenes/dog-suit-sleep-idle-v1.mp4",
+  "assets/guest/red-room/lora/scenes/lora-wait-reward-v1.mp4",
   "assets/guest/red-room/lora/scenes/dog-suit-sleep-start-v2.webp",
   "assets/guest/red-room/lora/scenes/v09-dog-curtain.webp",
   "assets/guest/red-room/lora/scenes/v10-fox-dog.webp",
@@ -300,7 +307,13 @@ const missingAssets = requiredAssets.filter(
 );
 const emptyChoices = ids.filter((id) => {
   const node = nodes[id];
-  return !node.complete && !node.autoNext && !(node.choices && node.choices.length);
+  return (
+    !node.complete &&
+    !node.autoNext &&
+    !node.waitReward &&
+    !node.coffeeReward &&
+    !(node.choices && node.choices.length)
+  );
 });
 const unmappedNodes = ids.filter((id) => !expectedVisual[id]);
 const textFor = (node) =>

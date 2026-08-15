@@ -127,7 +127,9 @@ pig_escapes
 | Узлы | Visual | Итог |
 | --- | --- | --- |
 | `end_leave`, `end_leave_sleep` | `V11_DOG_SLEEP` | В ветке ожидания Пёс просит игрока поохранять его; система сообщает правило равноценной замены |
-| `end_leave_guard` | `V11_DOG_SLEEP` | Игрок остаётся рядом; наблюдение продолжается, смена не закрывается |
+| `end_leave_guard` | `V11_DOG_SLEEP` | Игрок остаётся рядом; спящий idle продолжается 15 секунд, после чего система просит приготовить кофе |
+| `end_leave_coffee` | `V11_DOG_SLEEP` | Встроенная КК-312 проходит полный цикл независимо от публичной кофемашины |
+| `end_leave_lora` | `V11_DOG_SLEEP` + reward video | Лора выходит из-за шторы, подходит к Псу и благодарит игрока за ожидание |
 | `end_leave_exit`, `end_leave_replacement` | `V11_DOG_SLEEP` | Игрок выходит в гостевой режим сайта; Пёс остаётся назначенной заменой, не снимая маску |
 | `end_give`, `end_give_meet`, `end_give_answer` | `V10_FOX_DOG` | Лиса приходит лично только после подтверждения цели |
 | `end_give_leave` | `V01_EMPTY_COUNTER` | Оба вышли за предел камеры |
@@ -201,6 +203,8 @@ assets/guest/red-room/lora/scenes/v08-dog-settled.webp
 assets/guest/red-room/lora/scenes/v09-dog-curtain.webp
 assets/guest/red-room/lora/scenes/v10-fox-dog.webp
 assets/guest/red-room/lora/scenes/v11-dog-sleep.webp
+assets/guest/red-room/lora/scenes/dog-suit-sleep-idle-v1.mp4
+assets/guest/red-room/lora/scenes/lora-wait-reward-v1.mp4
 assets/guest/red-room/lora/scenes/v12-empty-curtain.webp
 assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png
 assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.mp4

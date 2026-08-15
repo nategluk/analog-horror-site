@@ -114,7 +114,7 @@
 
   const pressureLabel = (view) => view.pressureText || "0";
 
-  const renderCopy = (root, view) => {
+  const renderCopy = (root, view, options = {}) => {
     const title = root.querySelector("[data-rr-title]");
     const sub = root.querySelector("[data-rr-sub]");
     const status = root.querySelector("[data-rr-status]");
@@ -147,7 +147,8 @@
       );
     }
 
-    setHidden(receipt, view.phase !== "ready" && view.phase !== "reading");
+    const shiftMode = options.mode === "shift";
+    setHidden(receipt, shiftMode || (view.phase !== "ready" && view.phase !== "reading"));
     if (flavor) {
       flavor.textContent = view.flavor || "";
       setHidden(flavor, !view.flavor);
@@ -167,6 +168,8 @@
         buttons.push({ act: "brew", label: "Включить кофемашину" });
       } else if (view.phase === "brewing") {
         buttons.push({ act: "brew", label: "Готовится…", disabled: true });
+      } else if (view.phase === "ready" && shiftMode) {
+        buttons.push({ act: "serve", label: "Поставить кофе перед Псом" });
       } else if (view.phase === "ready") {
         buttons.push({ act: "take", label: "Забрать чек" });
       } else {
@@ -192,7 +195,7 @@
       const parts = [`${title ? title.textContent : "Кофемашина КК-312"}.`];
       if (sub && !sub.hidden) parts.push(sub.textContent);
       parts.push(`Вода: ${waterText}. Зерно: ${beansText}. Давление: ${pressureText}.`);
-      if (receipt && !receipt.hidden) {
+      if (!shiftMode && receipt && !receipt.hidden) {
         parts.push("Эспрессо готов. Служебный идентификатор куратора разблокирован. Проследуйте в раздел «Персонал».");
       }
       if (view.flavor) parts.push(view.flavor);
@@ -234,12 +237,12 @@
     return view;
   };
 
-  const paint = (root, view) => {
+  const paint = (root, view, options = {}) => {
     renderMachine(root, view);
-    renderCopy(root, view);
+    renderCopy(root, view, options);
   };
 
-  const init = (root) => {
+  const init = (root, options = {}) => {
     const target = root || document.querySelector("[data-red-room-espresso]");
     if (!target) return;
 
@@ -247,7 +250,7 @@
     const abort = new AbortController();
     target._rrEspressoAbort = abort;
 
-    const view = createView(readSave().completed);
+    const view = createView(options.forceFresh ? false : readSave().completed);
     let brewToken = 0;
     let currentAudio = null;
 
@@ -273,7 +276,9 @@
 
     abort.signal.addEventListener("abort", () => stopCue(), { once: true });
 
-    paint(target, view);
+    const paintView = () => paint(target, view, options);
+
+    paintView();
 
     const stillCurrent = (token) =>
       token === brewToken && target.isConnected && !abort.signal.aborted;
@@ -289,7 +294,7 @@
       view.flavor = "";
       view.replaying = replay;
       applySettledFx(view);
-      paint(target, view);
+      paintView();
     };
 
     const finishBrew = () => {
@@ -300,13 +305,13 @@
         view.flavor = pickFlavor();
         view.completed = true;
         view.replaying = false;
-        writeSave();
+        if (options.persist !== false) writeSave();
       } else {
         view.phase = "ready";
         view.flavor = "";
       }
       applySettledFx(view);
-      paint(target, view);
+      paintView();
     };
 
     const playModeGlitchSound = () => {
@@ -322,7 +327,7 @@
     const enterStaff = () => {
       stopCue();
       view.busy = true;
-      paint(target, view);
+      paintView();
       const href = new URL(
         target.getAttribute("data-staff-entry") || "../staff.html",
         window.location.href
@@ -354,25 +359,25 @@
       view.steam = false;
       view.pressureOn = false;
       view.pressureText = "нагрев";
-      paint(target, view);
+      paintView();
       playCue("pump");
 
       await wait(firstCup ? 400 : 280, abort.signal);
       if (!stillCurrent(token)) return;
       view.pressureOn = true;
       view.pressureText = "набор";
-      paint(target, view);
+      paintView();
 
       await wait(firstCup ? 400 : 220, abort.signal);
       if (!stillCurrent(token)) return;
       view.steam = true;
-      paint(target, view);
+      paintView();
 
       await wait(firstCup ? 1000 : 500, abort.signal);
       if (!stillCurrent(token)) return;
       view.cup = "full";
       view.pressureText = "рабочее";
-      paint(target, view);
+      paintView();
       playCue("pour");
 
       await wait(firstCup ? 1800 : 1200, abort.signal);
@@ -395,13 +400,13 @@
           const token = ++brewToken;
           view.busy = true;
           view.water = true;
-          paint(target, view);
+          paintView();
           playCue("water");
           await wait(PREP_WATER_MS, abort.signal);
           if (!stillCurrent(token)) return;
           view.phase = "water";
           view.busy = false;
-          paint(target, view);
+          paintView();
           return;
         }
 
@@ -409,13 +414,13 @@
           const token = ++brewToken;
           view.busy = true;
           view.beans = true;
-          paint(target, view);
+          paintView();
           playCue("beans");
           await wait(PREP_BEANS_MS, abort.signal);
           if (!stillCurrent(token)) return;
           view.phase = "beans";
           view.busy = false;
-          paint(target, view);
+          paintView();
           return;
         }
 
@@ -424,15 +429,23 @@
           return;
         }
 
+        if (act === "serve" && view.phase === "ready" && options.mode === "shift") {
+          view.completed = true;
+          view.busy = true;
+          paintView();
+          options.onServe?.();
+          return;
+        }
+
         if (act === "take" && view.phase === "ready") {
           view.completed = true;
-          writeSave();
+          if (options.persist !== false) writeSave();
           enterStaff();
           return;
         }
 
         if (act === "staff" && (view.phase === "warm" || view.phase === "reading")) {
-          writeSave();
+          if (options.persist !== false) writeSave();
           enterStaff();
           return;
         }
@@ -440,7 +453,7 @@
         if (act === "read" && (view.phase === "warm" || view.phase === "reading")) {
           view.phase = "reading";
           applySettledFx(view);
-          paint(target, view);
+          paintView();
           return;
         }
 

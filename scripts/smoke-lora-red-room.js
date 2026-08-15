@@ -49,6 +49,14 @@ const walk = (picks, label) => {
       id = node.autoNext;
       continue;
     }
+    if (node.waitReward) {
+      id = node.rewardNext;
+      continue;
+    }
+    if (node.coffeeReward) {
+      id = node.rewardNext;
+      continue;
+    }
     if (node.complete) break;
     const choices = (node.choices || []).filter((choice) => visible(choice, flags));
     if (!choices.length) throw new Error(`${label}: no choices at ${id}`);
@@ -201,7 +209,10 @@ if (
     "Я тут полежу пока.\nС закрытыми глазами.\nПоохраняешь меня?" ||
   !nodes.end_leave_sleep.action?.includes("РАВНОЦЕННОЙ ЗАМЕНОЙ") ||
   sleepChoiceIds.join(",") !== "stay_with_dog,exit_cafe" ||
-  !nodes.end_leave_guard.complete ||
+  !nodes.end_leave_guard.waitReward ||
+  !nodes.end_leave_coffee.coffeeReward ||
+  !nodes.end_leave_lora.rewardVideo ||
+  !nodes.end_leave_lora.complete ||
   !nodes.end_leave_replacement.complete ||
   !nodes.end_leave_replacement.guestExit
 ) {
@@ -489,6 +500,14 @@ if (
   !engineSource.includes("dog-suit-sleep-start-v2.webp")
 ) {
   throw new Error("dog costume: v2 motion clips are not wired in lora-red-room.js");
+}
+if (
+  !engineSource.includes("dog-suit-sleep-idle-v1.mp4") ||
+  !engineSource.includes("lora-wait-reward-v1.mp4") ||
+  !engineSource.includes("DOG_WAIT_MS = 15000") ||
+  !engineSource.includes('mode: "shift"')
+) {
+  throw new Error("dog wait reward: idle, coffee, and Laura video are not wired");
 }
 if (engineSource.includes('video: "v08-dog-wander.mp4"')) {
   throw new Error("dog costume: dog_dreams still points at the old wander file");

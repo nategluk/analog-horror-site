@@ -162,6 +162,73 @@
               <button class="lora-room__choice" type="button" data-lora-page-close>Закрыть</button>
             </div>
           </dialog>
+          <dialog class="lora-room__reward-dialog lora-room__wake-dialog" data-lora-wake-dialog aria-labelledby="lora-wake-title">
+            <div class="lora-room__reward-sheet">
+              <p class="lora-room__reward-kicker">СИСТЕМА</p>
+              <p class="lora-room__reward-copy" id="lora-wake-title">ВАМ ОБОИМ ПОРА ВЗБОДРИТЬСЯ.<br />ПРИГОТОВЬ КОФЕ.</p>
+              <button class="lora-room__choice" type="button" data-lora-wake-ok>ОК</button>
+            </div>
+          </dialog>
+          <dialog class="lora-room__coffee-dialog" data-lora-coffee-dialog aria-labelledby="lora-coffee-title">
+            <div class="lora-room__coffee-sheet">
+              <p class="lora-room__reward-kicker" id="lora-coffee-title">КОФЕМАШИНА КК-312</p>
+              <section class="rr-espresso" data-lora-espresso data-phase="idle" aria-label="Кофемашина КК-312">
+                <header class="rr-espresso-head">
+                  <p class="rr-espresso-kicker" data-rr-title>Кофемашина КК-312</p>
+                  <p class="rr-espresso-sub" data-rr-sub hidden></p>
+                </header>
+                <div class="rr-espresso-stage" aria-hidden="true">
+                  <div class="rr-espresso-machine">
+                    <div class="rr-espresso-hopper">
+                      <span class="rr-espresso-hopper__lid"></span>
+                      <span class="rr-espresso-hopper__glass"><span class="rr-espresso-beans"></span></span>
+                      <span class="rr-espresso-part-label">Зерно</span>
+                    </div>
+                    <div class="rr-espresso-chassis">
+                      <div class="rr-espresso-tank">
+                        <span class="rr-espresso-tank__water"></span>
+                        <span class="rr-espresso-part-label">Вода</span>
+                      </div>
+                      <div class="rr-espresso-core">
+                        <span class="rr-espresso-lamp"></span>
+                        <span class="rr-espresso-gauge">
+                          <span class="rr-espresso-gauge__face"></span>
+                          <span class="rr-espresso-gauge__needle"></span>
+                        </span>
+                        <span class="rr-espresso-group">
+                          <span class="rr-espresso-steam"></span>
+                          <span class="rr-espresso-portafilter"></span>
+                        </span>
+                      </div>
+                      <div class="rr-espresso-slot">
+                        <span class="rr-espresso-paper"></span>
+                        <span class="rr-espresso-part-label">Чек</span>
+                      </div>
+                    </div>
+                    <div class="rr-espresso-tray">
+                      <span class="rr-espresso-cup">
+                        <span class="rr-espresso-cup__bowl"><span class="rr-espresso-cup__fill"></span></span>
+                        <span class="rr-espresso-cup__handle"></span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p class="rr-espresso-status" data-rr-status>
+                  <span>Вода: не проверена</span>
+                  <span>Зерно: нет</span>
+                  <span>Давление: 0</span>
+                </p>
+                <p class="rr-espresso-flavor" data-rr-flavor hidden></p>
+                <div class="rr-espresso-actions" data-rr-actions>
+                  <button type="button" class="rr-espresso-btn" data-rr-act="water">Проверить воду</button>
+                </div>
+                <p class="visually-hidden" data-rr-live aria-live="polite"></p>
+              </section>
+            </div>
+          </dialog>
+          <div class="lora-room__thanks" data-lora-thanks hidden role="status" aria-live="assertive">
+            СПАСИБО, ЧТО ПОДОЖДАЛ.
+          </div>
         </section>
       </main>
 
@@ -181,6 +248,7 @@
     <script src="../js/dossier-store.js"></script>
     <script src="../content/irina/call-content.js"></script>
     <script src="../js/app.js"></script>
+    <script src="../js/red-room-espresso.js"></script>
     <script src="../content/lora/red-room-content.js"></script>
     <script src="../js/lora-red-room.js"></script>
   </body>
