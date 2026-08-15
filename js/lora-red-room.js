@@ -70,6 +70,12 @@
     V14_BLUE_KEY_CABINET: {
       image: "../assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png",
     },
+    V15_PIG_TAG: {
+      image: "../assets/guest/red-room/lora/scenes/v19-pig-tag.png",
+    },
+    V16_BACK_ROOM: {
+      image: "../assets/guest/red-room/lora/scenes/v20-back-room.png",
+    },
   };
 
   const MOTION_DIR = "../assets/guest/red-room/lora/scenes/";
@@ -103,6 +109,14 @@
       video: "v18-blue-key-cabinet.mp4",
       openWith: "v18-blue-key-cabinet.png",
       frames: ["v18-blue-key-cabinet.png"],
+      holdMs: 900,
+      restore: false,
+    },
+    shift_storage_live: {
+      mode: "transition",
+      video: "v20-back-room-live.mp4",
+      openWith: "v20-back-room.png",
+      frames: ["v20-back-room.png"],
       holdMs: 900,
       restore: false,
     },

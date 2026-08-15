@@ -287,7 +287,7 @@ if (allowSmoke?.next !== "fox_lights_up" || nodes.fox_lights_up?.autoNext !== "f
 
 const povContract = [
   ["pig_suit", "pig_suit_silent", "pig_center"],
-  ["fox_leave", "fox_take_number", "dog_arrive"],
+  ["fox_leave", "fox_take_number", "shift_storage"],
   ["dog_arrive", "dog_approach", "dog_where"],
 ];
 povContract.forEach(([id, choiceId, next]) => {
@@ -372,6 +372,12 @@ const revealRun = walk(
 );
 if (!revealRun.flags.cameraDisabled || !revealRun.flags.pigRevealed) {
   throw new Error("pig reveal: reveal path did not retain its state flags");
+}
+if (revealRun.seen.includes("shift_storage") || revealRun.seen.includes("shift_storage_live")) {
+  throw new Error("shift beats: hidden pig must not open the back room");
+}
+if (!revealRun.seen.includes("shift_wipe")) {
+  throw new Error("shift beats: table wipe must still run after a hidden pig");
 }
 
 const maskedRun = walk(
@@ -481,6 +487,27 @@ if (
 ) {
   throw new Error("key trade: pig_key_cabinet must be a choiceless V14 one-shot");
 }
+if (
+  !keyTrade.seen.includes("shift_wipe") ||
+  !keyTrade.seen.includes("shift_storage") ||
+  !keyTrade.seen.includes("shift_storage_live")
+) {
+  throw new Error("shift beats: tag wipe and back-room look must sit between guests");
+}
+if (
+  nodes.pig_gone.autoNext ||
+  !(nodes.pig_gone.choices || []).some((choice) => choice.id === "wipe_table" && choice.next === "shift_wipe") ||
+  nodes.shift_wipe.visual !== "V01_EMPTY_COUNTER" ||
+  nodes.shift_wipe.visualWhen?.[0]?.visual !== "V15_PIG_TAG" ||
+  nodes.shift_wipe.hideHtmlProps !== true ||
+  nodes.shift_storage.visual !== "V16_BACK_ROOM" ||
+  nodes.shift_storage_live.visual !== "V16_BACK_ROOM" ||
+  nodes.shift_storage_live.autoNext !== "dog_arrive" ||
+  nodes.shift_storage.hideHtmlProps !== true ||
+  nodes.shift_storage_live.hideHtmlProps !== true
+) {
+  throw new Error("shift beats: wipe/storage node contract is incomplete");
+}
 
 const engineSource = fs.readFileSync(
   path.join(__dirname, "..", "js", "lora-red-room.js"),
@@ -491,6 +518,13 @@ if (
   !engineSource.includes("v18-blue-key-cabinet.mp4")
 ) {
   throw new Error("key trade: V14 motion clip is not wired in lora-red-room.js");
+}
+if (
+  !engineSource.includes("shift_storage_live") ||
+  !engineSource.includes("v20-back-room-live.mp4") ||
+  !engineSource.includes("v19-pig-tag.png")
+) {
+  throw new Error("shift beats: tag still and back-room clip are not wired in lora-red-room.js");
 }
 if (
   !engineSource.includes("dog_coffee") ||

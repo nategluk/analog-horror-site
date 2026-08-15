@@ -678,8 +678,22 @@
       speaker: "Я",
       line: "Пахнет мокрым костюмом. Как после утренника, который слишком затянулся.",
       props: ["note"],
-      autoNext: "fox_arrive",
-      delay: 800,
+      choices: [{ id: "wipe_table", text: "Протереть стол", next: "shift_wipe" }],
+    },
+    shift_wipe: {
+      scene: "counter",
+      visual: "V01_EMPTY_COUNTER",
+      visualWhen: [{ require: ["pigTagLeft"], visual: "V15_PIG_TAG" }],
+      speaker: "Я",
+      line: "Салфетка берёт воду. Стол опять красный.",
+      lineWhen: [
+        {
+          require: ["pigTagLeft"],
+          line: "Застряла у стойки. Имя смыло. В окошке — не человек.",
+        },
+      ],
+      hideHtmlProps: true,
+      choices: [{ id: "wipe_done", text: "Ждать гостя", next: "fox_arrive" }],
     },
     fox_arrive: {
       scene: "counter",
@@ -1010,7 +1024,41 @@
       props: ["note", "phone"],
       set: ["foxLeftNumber"],
       sound: "door",
-      choices: [{ id: "fox_take_number", text: "Взять номер", next: "dog_arrive" }],
+      choices: [
+        {
+          id: "fox_take_number",
+          text: "Взять номер",
+          next: "shift_storage",
+          hideIf: ["pigHidden"],
+        },
+        {
+          id: "fox_take_number_skip",
+          text: "Взять номер",
+          next: "dog_arrive",
+          require: ["pigHidden"],
+        },
+      ],
+    },
+    shift_storage: {
+      scene: "counter",
+      visual: "V16_BACK_ROOM",
+      speaker: "Я",
+      line: "Манекен в фартуке. Сквозь бусы — красный зал.\nВ стене круглая дыра, как спуск.",
+      hideHtmlProps: true,
+      sound: "door",
+      choices: [
+        { id: "storage_again", text: "Ещё раз глянуть", next: "shift_storage_live" },
+        { id: "storage_back", text: "Вернуться к стойке", next: "dog_arrive" },
+      ],
+    },
+    shift_storage_live: {
+      scene: "counter",
+      visual: "V16_BACK_ROOM",
+      speaker: "Я",
+      line: "В трубе зажглось. Искусственно. Потом снова темно.",
+      hideHtmlProps: true,
+      autoNext: "dog_arrive",
+      delay: 700,
     },
     dog_arrive: {
       scene: "counter",
