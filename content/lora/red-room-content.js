@@ -894,7 +894,7 @@
       scene: "counter",
       visual: "V05_FOX_GAZE",
       speaker: "АЛИСА",
-      line: "В подсобке. Поняла. Я его не трону. Не бойся. Мы просто поговорим ",
+      line: "В подсобке. Как предсказуемо. \nАниматоры самые примитивные существа на свете ",
       guest: "fox",
       props: ["note"],
       foxOutcome: "cooperated",
