@@ -1596,7 +1596,7 @@
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
       speaker: "ВЫ",
-      line: "Олега здесь нет.\nЯ не знаю выхода.",
+      line: "ВЫХОДА НЕТ!",
       guest: "dog",
       props: ["note", "phone"],
       autoNext: "end_none_stay",
