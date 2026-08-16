@@ -261,6 +261,10 @@
     renderList();
     renderScript(id);
     history.replaceState(null, "", `#${gameId}/${encodeURIComponent(id)}`);
+    listEl.querySelector("button.active")?.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+    });
   };
 
   const loadGame = async (id) => {
