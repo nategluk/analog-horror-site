@@ -1341,19 +1341,14 @@
     const statusLabel = document.querySelector("[data-mode-label]");
     if (!statusLabel) return;
     statusLabel.textContent = isStaff
-      ? "Режим: Терминал персонала"
+      ? "НАЖМИ ЧТОБЫ ПРОСНУТЬСЯ!"
       : "Режим: Гостевая версия";
     statusLabel.classList.toggle("status-pill--exit", isStaff);
-    statusLabel.title = isStaff
-      ? "Вернуться в гостевую версию"
-      : "";
-    statusLabel.setAttribute(
-      "role",
-      isStaff ? "button" : "status"
-    );
+    statusLabel.title = isStaff ? "Вернуться в гостевую версию" : "";
+    statusLabel.setAttribute("role", isStaff ? "button" : "status");
     if (isStaff) {
       statusLabel.setAttribute("tabindex", "0");
-      statusLabel.setAttribute("aria-label", "Вернуться в гостевую версию");
+      statusLabel.setAttribute("aria-label", "Нажми чтобы проснуться");
     } else {
       statusLabel.removeAttribute("tabindex");
       statusLabel.removeAttribute("aria-label");
