@@ -214,7 +214,9 @@ if (
   !nodes.end_leave_lora.rewardVideo ||
   !nodes.end_leave_lora.complete ||
   !nodes.end_leave_replacement.complete ||
-  !nodes.end_leave_replacement.guestExit
+  !nodes.end_leave_replacement.guestExit ||
+  !(nodes.end_leave_lora.choices || []).some((choice) => choice.restart) ||
+  !(nodes.end_leave_replacement.choices || []).some((choice) => choice.restart)
 ) {
   throw new Error("dog finale: the wait-for-Lora branch must end in the stay/exit dilemma");
 }

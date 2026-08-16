@@ -323,6 +323,11 @@ const emptyChoices = ids.filter((id) => {
     !(node.choices && node.choices.length)
   );
 });
+const autoCloseMissingReplay = ids.filter((id) => {
+  const node = nodes[id];
+  if (!node.guestExit && !node.rewardVideo) return false;
+  return !(node.choices || []).some((choice) => choice.restart);
+});
 const unmappedNodes = ids.filter((id) => !expectedVisual[id]);
 const textFor = (node) =>
   [
@@ -404,6 +409,7 @@ if (
   revealWhenErrors.length ||
   missingAssets.length ||
   emptyChoices.length ||
+  autoCloseMissingReplay.length ||
   unmappedNodes.length ||
   foxForbiddenText.length ||
   dogForbiddenText.length ||
@@ -435,6 +441,12 @@ if (
   }
   if (emptyChoices.length) {
     console.error("Nodes without exit:", emptyChoices.join(", "));
+  }
+  if (autoCloseMissingReplay.length) {
+    console.error(
+      "Auto-close endings without replay choice:",
+      autoCloseMissingReplay.join(", ")
+    );
   }
   if (unmappedNodes.length) {
     console.error("Nodes missing from visual matrix:", unmappedNodes.join(", "));

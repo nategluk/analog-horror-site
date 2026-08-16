@@ -383,6 +383,47 @@ async function main() {
     `wait-reward: path=${stayExit.path} mode=${stayExit.mode} node=${stayExit.save?.currentNode} dog=${stayExit.save?.dogOutcome} thanks=${rewardVisible} soundArmed=${soundPressed}`
   );
 
+  const reopenClosedShift = async (label) => {
+    await mobile.evaluate(() => {
+      sessionStorage.setItem(
+        "tyndex_lora_channel_v1",
+        JSON.stringify({ assigned: true, at: Date.now() })
+      );
+      localStorage.setItem("tyndex_mode", "staff");
+    });
+    await mobile.goto(`${BASE}/locations/red-room-shift.html`, {
+      waitUntil: "domcontentloaded",
+    });
+    await mobile.waitForFunction(
+      () =>
+        [...document.querySelectorAll(".lora-room__choice")].some(
+          (el) => el.textContent.trim() === "Начать новую смену"
+        ),
+      { timeout: 8000 }
+    );
+    await sleep(2600);
+    return mobile.evaluate(() => ({
+      path: window.location.pathname,
+      node: document.querySelector("[data-lora-room]")?.dataset.node || "",
+      line: document.querySelector("[data-lora-line]")?.textContent.trim() || "",
+      choices: [...document.querySelectorAll(".lora-room__choice")].map((el) =>
+        el.textContent.trim()
+      ),
+      thanksHidden: Boolean(document.querySelector("[data-lora-thanks]")?.hidden),
+      save: JSON.parse(localStorage.getItem("tyndex_lora_red_room_v1") || "null"),
+    }));
+  };
+
+  const stayReopen = await reopenClosedShift("wait-reward");
+  report.push(
+    `wait-reopen: path=${stayReopen.path} node=${stayReopen.node} choices=${stayReopen.choices.join("|")}`
+  );
+  await clickChoice("Начать новую смену");
+  await mobile.waitForFunction(
+    () => document.querySelector("[data-lora-room]")?.dataset.node === "assign_notice",
+    { timeout: 8000 }
+  );
+
   await mobile.evaluate(() => {
     sessionStorage.setItem(
       "tyndex_lora_channel_v1",
@@ -423,6 +464,38 @@ async function main() {
     `guest-exit: path=${guestExit.path} mode=${guestExit.mode} assignment=${guestExit.assignment} node=${guestExit.save?.currentNode} dog=${guestExit.save?.dogOutcome}`
   );
 
+  const guestReopen = await reopenClosedShift("guest-exit");
+  report.push(
+    `guest-reopen: path=${guestReopen.path} node=${guestReopen.node} choices=${guestReopen.choices.join("|")}`
+  );
+
+  await mobile.evaluate(() => {
+    sessionStorage.setItem(
+      "tyndex_lora_channel_v1",
+      JSON.stringify({ assigned: true, at: Date.now() })
+    );
+    localStorage.setItem("tyndex_mode", "staff");
+    localStorage.setItem(
+      "tyndex_lora_red_room_v1",
+      JSON.stringify({
+        version: 1,
+        currentNode: "end_leave_lora",
+        completed: true,
+        seenNodes: ["end_leave_lora"],
+        pigOutcome: "hidden",
+        foxOutcome: "lied",
+        dogOutcome: "guarded",
+        playerFlags: { pigHidden: true, dogSleepPlayed: true },
+        receiptVariant: "guarded",
+        updatedAt: Date.now(),
+      })
+    );
+  });
+  const legacyReopen = await reopenClosedShift("legacy-exit");
+  report.push(
+    `legacy-reopen: path=${legacyReopen.path} node=${legacyReopen.node} choices=${legacyReopen.choices.join("|")}`
+  );
+
   await mobile.evaluate(() => {
     sessionStorage.setItem(
       "tyndex_lora_channel_v1",
@@ -456,7 +529,19 @@ async function main() {
     guestExit.assignment !== null ||
     guestExit.save?.completed !== true ||
     guestExit.save?.dogOutcome !== "replacement" ||
-    !guestExit.path.endsWith("/locations/red-room-cafe.html");
+    !guestExit.path.endsWith("/locations/red-room-cafe.html") ||
+    !stayExit.save?.playerFlags?.shiftExitSeen ||
+    !stayReopen.path.endsWith("/locations/red-room-shift.html") ||
+    stayReopen.node !== "end_leave_lora" ||
+    !stayReopen.choices.includes("Начать новую смену") ||
+    !stayReopen.thanksHidden ||
+    !guestExit.save?.playerFlags?.shiftExitSeen ||
+    !guestReopen.path.endsWith("/locations/red-room-shift.html") ||
+    guestReopen.node !== "end_leave_replacement" ||
+    !guestReopen.choices.includes("Начать новую смену") ||
+    !legacyReopen.path.endsWith("/locations/red-room-shift.html") ||
+    legacyReopen.node !== "end_leave_lora" ||
+    !legacyReopen.choices.includes("Начать новую смену");
   const revealFailed =
     revealPlaying.loop ||
     !revealPlaying.muted ||

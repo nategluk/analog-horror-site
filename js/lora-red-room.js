@@ -4,6 +4,7 @@
   const SAVE_KEY = "tyndex_lora_red_room_v1";
   const ASSIGN_KEY = "tyndex_lora_channel_v1";
   const ASSIGN_TTL_MS = 120000;
+  const SHIFT_EXIT_SEEN = "shiftExitSeen";
   const ARTIFACT_ID = "lora-night-receipt";
   const TOY_ARTIFACT_ID = "lora-nevalyashka";
   const QUIET_SLEEP_ARTIFACT_ID = "lora-quiet-sleep-page";
@@ -416,6 +417,25 @@
   });
 
   const hasFlag = (flag) => Boolean(save?.playerFlags?.[flag]);
+
+  const isAutoCloseNode = (node) => Boolean(node?.guestExit || node?.rewardVideo);
+
+  const CLOSED_SHIFT_CHOICES = Object.freeze([
+    { id: "replay", text: "Начать новую смену", next: "assign_notice", restart: true },
+    { id: "leave_shift", text: "Вернуться в технический раздел", next: "leave", leave: true },
+  ]);
+
+  const markShiftExitSeen = () => {
+    if (hasFlag(SHIFT_EXIT_SEEN)) return;
+    applyFlags([SHIFT_EXIT_SEEN]);
+    writeSave(save);
+  };
+
+  const prepareClosedShiftResume = () => {
+    const node = nodeById(save?.currentNode);
+    if (!save?.completed || !isAutoCloseNode(node)) return;
+    markShiftExitSeen();
+  };
 
   const applyFlags = (flags = []) => {
     flags.forEach((flag) => {
@@ -1600,6 +1620,18 @@
     if (hasChoices) renderChoices(root, node);
   };
 
+  const presentClosedShiftChoices = (root, node) => {
+    hideActionSlot(root);
+    const hasReplay = (node.choices || []).some(
+      (choice) => choice.restart && choiceVisible(choice)
+    );
+    if (hasReplay) {
+      renderChoices(root, node);
+      return;
+    }
+    renderChoices(root, { ...node, choices: CLOSED_SHIFT_CHOICES });
+  };
+
   const goTo = (root, nextId, extra = {}) => {
     const node = nodeById(nextId);
     if (!node) return;
@@ -1885,7 +1917,7 @@
         lineEl.onclick = null;
         lineEl.onkeydown = null;
       }
-      if (node.action) {
+      if (node.action && !(isAutoCloseNode(node) && hasFlag(SHIFT_EXIT_SEEN))) {
         armHold(root, readingHoldMs(fullText, node), () => {
           const follow = presentActionBeat(root, node);
           finishNode(root, node, follow?.text || fullText);
@@ -1928,9 +1960,23 @@
       writeSave(save);
       attachReceipt();
     }
-    if (node.guestExit) {
-      autoTimer = window.setTimeout(exitToGuest, node.delay || 1800);
-      return;
+    if (isAutoCloseNode(node)) {
+      if (hasFlag(SHIFT_EXIT_SEEN)) {
+        presentClosedShiftChoices(root, node);
+        if (!playLoopSceneVideo(root, node)) {
+          scheduleAmbientSceneVideo(root, node);
+        }
+        return;
+      }
+      markShiftExitSeen();
+      if (node.guestExit) {
+        autoTimer = window.setTimeout(exitToGuest, node.delay || 1800);
+        return;
+      }
+      if (node.rewardVideo) {
+        playLoraReward(root);
+        return;
+      }
     }
     if (node.waitReward) {
       playGuardWait(root, node);
@@ -1938,10 +1984,6 @@
     }
     if (node.coffeeReward) {
       openCoffeeReward(root, node);
-      return;
-    }
-    if (node.rewardVideo) {
-      playLoraReward(root);
       return;
     }
     const asset = visualAsset(node);
@@ -2100,6 +2142,7 @@
     if (!nodeById(save.currentNode)) {
       save.currentNode = content().startNode;
     }
+    prepareClosedShiftResume();
     writeSave(save);
     bindAudioUnlock();
     renderNode(root, save.currentNode);

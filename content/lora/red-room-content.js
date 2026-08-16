@@ -1471,10 +1471,20 @@
       visual: "V11_DOG_SLEEP",
       speaker: "СМЕНА",
       line: "КОФЕ ПЕРЕДАН",
+      lineWhen: [
+        {
+          require: ["shiftExitSeen"],
+          line: "Лора уже вышла. Смена закрыта.",
+        },
+      ],
       guest: "dog",
       props: ["note"],
       rewardVideo: true,
       complete: true,
+      choices: [
+        { id: "replay", text: "Начать новую смену", next: "assign_notice", restart: true },
+        { id: "leave_shift", text: "Вернуться в технический раздел", next: "leave", leave: true },
+      ],
     },
     end_leave_exit: {
       scene: "table",
@@ -1492,12 +1502,22 @@
       visual: "V11_DOG_SLEEP",
       speaker: "СИСТЕМА",
       line: "СМЕНА ПЕРЕДАНА\nРАВНОЦЕННАЯ ЗАМЕНА ПРИНЯТА",
+      lineWhen: [
+        {
+          require: ["shiftExitSeen"],
+          line: "Смена уже передана. Канал сохранён.",
+        },
+      ],
       action: "Аниматор не сможет покинуть территорию Центра.",
       guest: "dog",
       props: ["note"],
       complete: true,
       guestExit: true,
       delay: 1800,
+      choices: [
+        { id: "replay", text: "Начать новую смену", next: "assign_notice", restart: true },
+        { id: "leave_shift", text: "Вернуться в технический раздел", next: "leave", leave: true },
+      ],
     },
     end_give: {
       scene: "counter",
