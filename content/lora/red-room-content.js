@@ -216,7 +216,7 @@
       scene: "counter",
       visual: "V01_EMPTY_COUNTER",
       speaker: "ЗАПИСКА",
-      line: "Добро пожаловать в кафе Красная Комната.  Если будут спрашивать про ключи, игнорируй. \nК концу смены придет дружок. Не обижай его\n\nЛ.",
+      line: "Привет. И добро пожаловать в кафе Красная Комната.  Если будут спрашивать про ключи, игнорируй. К концу смены придет дружок. Не обижай его\n\nЛ.",
       props: ["note"],
       sound: "paperUnfold",
       choices: [
@@ -280,7 +280,7 @@
       scene: "counter",
       visual: "V02_PIG_MASKED",
       speaker: "ХРЮША",
-      line: "Только у неё. Больше никому ничего не говори.",
+      line: "Ты же не Лора. Ты вообще кто?",
       guest: "pig",
       props: ["note"],
       choices: [
@@ -407,7 +407,7 @@
         { require: ["pigRevealed"], visual: "V04_PIG_UNMASKED" },
       ],
       speaker: "ХРЮША",
-      line: "Завтра они придут. Ночью слышно: пластик, номера.\nЕсли останусь у стойки — заберут отсюда.",
+      line: "Завтра они придут. Ночью слышно: пластик, номера.\nЕсли я останусь у стойки — меня опять отправят в детскую комнату",
       guest: "pig",
       props: ["note"],
       choices: [{ id: "pig_center_next", text: "Я слушаю.", next: "pig_test" }],
@@ -709,7 +709,7 @@
     fox_enter: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Водочки мне налей",
       guest: "fox",
       props: ["note"],
@@ -721,7 +721,7 @@
     fox_laura: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Лоры нет? Норм. С ней вечно эти правила.",
       guest: "fox",
       props: ["note"],
@@ -733,7 +733,7 @@
     fox_smoke: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Можно закурить? ",
       guest: "fox",
       props: ["note"],
@@ -746,7 +746,7 @@
     fox_camera: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Расслабься. У меня разрешение от Проводницы",
       action: "Надеюсь, она скоро уйдет ",
       guest: "fox",
@@ -767,7 +767,7 @@
     fox_heard: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Я тебя услышала. ",
       guest: "fox",
       props: ["note"],
@@ -778,7 +778,7 @@
     fox_notice: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Здесь пахнет сыростью",
       lineReplay: "Снова пахнет зоопарком.",
       lineWhen: [
@@ -800,7 +800,7 @@
     fox_smell: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "К тебе приходил кто-то из Лосиного Острова?",
       lineReplay: "От того, врешь ты мне или нет, зависит встретимся мы снова. Или нет. ",
       guest: "fox",
@@ -859,7 +859,7 @@
     fox_tag_hidden: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "У тебя рука дрогнула. На записи видно.\nНичего. Врать здесь учатся быстро.",
       guest: "fox",
       props: ["note"],
@@ -870,7 +870,7 @@
     fox_tag_shown: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "ЛО-312-19. А имя водой смыло. Это очередной из Зоопарка. Мне хватит номера.",
       guest: "fox",
       props: ["note", "tag"],
@@ -881,7 +881,7 @@
     fox_lie: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Ладно. Продолжай делать вид, что здесь никого не было.",
       lineReplay: "Опять врёшь. Даже голос тот же.",
       guest: "fox",
@@ -893,7 +893,7 @@
     fox_gave_pig: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "В подсобке. Поняла. Я его не трону. Не бойся. Мы просто поговорим ",
       guest: "fox",
       props: ["note"],
@@ -904,7 +904,7 @@
     fox_partial: {
       scene: "counter",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Ушёл? Куда бы он ни пошёл, инспектор по сырью найдет его первым",
       guest: "fox",
       props: ["note"],
@@ -914,7 +914,7 @@
     fox_gave_wait: {
       scene: "table",
       visual: "V05_FOX_GAZE",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Сидит и пьёт. Как настоящий гость.\nПри тебе не трону. Но стол я уже сняла.",
       guest: "fox",
       props: ["note"],
@@ -925,7 +925,7 @@
     fox_oleg: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Посмотри на этого кадра",
       action: "Фото как из отдела кадров. Или из морга.",
       guest: "fox",
@@ -949,7 +949,7 @@
     fox_oleg_ask: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Узнаёшь?\nЕсли нет — так и скажи.",
       guest: "fox",
       props: ["note"],
@@ -963,7 +963,7 @@
     fox_deny_oleg: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Когда малыш найдется, я выясню, видел ли он тебя",
       guest: "fox",
       props: ["note"],
@@ -973,7 +973,7 @@
     fox_why: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Он нарушил маршрут.\nТеперь его хотят вернуть без лишних свидетелей.",
       action: "Господи, как малое дите",
       guest: "fox",
@@ -984,7 +984,7 @@
     fox_curtain: {
       scene: "curtain",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "За штору? Смело.\nСфотографирую на всякий случай. Пусть Главврач проверит.",
       guest: "fox",
       props: ["note"],
@@ -994,7 +994,7 @@
     fox_level: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Новый уровень невозможно пересказать. Его нужно почувствовать. ",
       guest: "fox",
       props: ["note"],
@@ -1005,7 +1005,7 @@
     fox_monopoly: {
       scene: "table",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Им люди как список. Мне — кто вопрос закроет.\nТы пока не список. Пока стойка. Сам понял?",
       action: "Конфету протягивает так, будто это не взятка. А угощение.",
       guest: "fox",
@@ -1018,7 +1018,7 @@
     fox_leave: {
       scene: "counter",
       visual: "V06_FOX_ACTION",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Запиши мой номер. Если будут какие-то проблемы, на связи",
       guest: "fox",
       props: ["note", "phone"],
@@ -1073,7 +1073,7 @@
     dog_where: {
       scene: "counter",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Где я?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1088,7 +1088,7 @@
     dog_hospital: {
       scene: "counter",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Это больница?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1103,7 +1103,7 @@
     dog_costume: {
       scene: "counter",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Почему я в костюме?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1117,7 +1117,7 @@
     dog_water: {
       scene: "counter",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Вода тёплая.\nНичего. Руки хотя бы перестали трястись.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1128,7 +1128,7 @@
     dog_coffee: {
       scene: "counter",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Горький. Мне больше нравится с молоком и сахаром. ",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1139,7 +1139,7 @@
     dog_player_name: {
       scene: "counter",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Имя… Хорошо. Теперь я хотя бы знаю, к кому обращаться.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1149,7 +1149,7 @@
     dog_ask_name: {
       scene: "counter",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Не знаю. Но все зовут меня Дружок. \n",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1160,7 +1160,7 @@
     dog_settled: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Теперь тише. Можно ещё один вопрос? Короткий.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1185,7 +1185,7 @@
     dog_name_again: {
       scene: "table",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Не спрашивай ещё раз.\nВо рту металл.\nСлово не приходит.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1196,7 +1196,7 @@
     dog_after_name: {
       scene: "table",
       visual: "V07_DOG_BLANK",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Не называй меня.\nОт этого сводит зубы.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1215,7 +1215,7 @@
     dog_dreams: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Сны?\nПосле Терапии никому ничего не снится.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1224,7 +1224,7 @@
     dog_exception: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "А тебе снятся?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1238,7 +1238,7 @@
     dog_dream_cafe: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Мне тоже снилось кафе. Только стойка была с другой стороны.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1248,7 +1248,7 @@
     dog_dream_forget: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Повезло. Я бы тоже хотел не помнить.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1258,7 +1258,7 @@
     dog_dream_raw: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Только им не говори.\nВ Центре за сны снова отправляют на Терапию.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1268,7 +1268,7 @@
     dog_dream_reverse: {
       scene: "table",
       visual: "V08_DOG_SETTLED",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Спрашивай. Только тихо. Здесь всё слышно.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1278,7 +1278,7 @@
     dog_call_fox: {
       scene: "counter",
       visual: "V08_DOG_SETTLED",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Уже?\nЕсли это он — не вешай. Я еду.",
       guest: "fox-phone",
       props: ["note", "phone", "mic"],
@@ -1290,7 +1290,7 @@
     dog_exit_hint: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Выход… За шторой?\nКто-то говорил про море. Или про горку. Не помню.",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1311,7 +1311,7 @@
     final_conflict: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Ну что? Он здесь?",
       guest: "fox-phone",
       props: ["note", "phone", "mic"],
@@ -1321,7 +1321,7 @@
     final_conflict_dog: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Ты знаешь, как отсюда выйти?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1410,7 +1410,7 @@
     end_leave: {
       scene: "table",
       visual: "V11_DOG_SLEEP",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Подождать… Да. Подождать можно.",
       action: "Он тяжело опускает голову на стол. Маска остаётся на нём.",
       guest: "dog",
@@ -1421,7 +1421,7 @@
     end_leave_sleep: {
       scene: "table",
       visual: "V11_DOG_SLEEP",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Я тут полежу пока.\nС закрытыми глазами.\nПоохраняешь меня?",
       action: "СИСТЕМА: ПРИ ВЫХОДЕ ИЗ КАФЕ АНИМАТОР В ЗАЛЕ БУДЕТ НАЗНАЧЕН РАВНОЦЕННОЙ ЗАМЕНОЙ. ПОКИНУТЬ ЦЕНТР ОН НЕ СМОЖЕТ.",
       guest: "dog",
@@ -1513,7 +1513,7 @@
     end_give_meet: {
       scene: "counter",
       visual: "V10_FOX_DOG",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Мы знакомы?",
       guest: "dog",
       props: ["note", "phone", "mic"],
@@ -1523,7 +1523,7 @@
     end_give_answer: {
       scene: "counter",
       visual: "V10_FOX_DOG",
-      speaker: "ЛИСА",
+      speaker: "АЛИСА",
       line: "Пока нет.",
       guest: "fox",
       props: ["note", "phone", "mic"],
@@ -1554,7 +1554,7 @@
     end_sea_go: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Море. Хорошо. Если это слово настоящее, я дойду.",
       guest: "dog",
       props: ["note"],
@@ -1585,7 +1585,7 @@
     end_none_stay: {
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
-      speaker: "ПЁС",
+      speaker: "ДРУЖОК",
       line: "Тогда я постою здесь. Штора теплее двери.",
       guest: "dog",
       props: ["note"],
