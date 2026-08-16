@@ -138,10 +138,11 @@ pig_escapes
 | `end_leave_exit`, `end_leave_replacement` | `V11_DOG_SLEEP` | Игрок выходит в гостевой режим сайта; Пёс остаётся назначенной заменой, не снимая маску |
 | `end_give`, `end_give_meet`, `end_give_answer` | `V10_FOX_DOG` | Лиса приходит лично только после подтверждения цели |
 | `end_give_leave` | `V01_EMPTY_COUNTER` | Оба вышли за предел камеры |
-| `end_sea`, `end_sea_go` | `V09_DOG_CURTAIN` | Пёс касается шторы, но пространство за ней не показывается |
-| `end_sea_sound` | `V12_EMPTY_CURTAIN` | Только звук и видимый текст описывают море, чаек и удар |
-| `end_none`, `end_none_stay` | `V09_DOG_CURTAIN` | Пёс остаётся рядом со шторой |
-| `end_none_morning` | `V01_EMPTY_COUNTER` | Утром Красная Комната снова выглядит обычной; причина исчезновения не объясняется |
+| `end_give_album` | `V17_FOX_ALBUM` | Transition `v23-fox-album-dog.mp4`: в альбом вклеивают полароид Дружка |
+| `end_sea`, `end_sea_go` | `V09_DOG_CURTAIN` | Диалог у шторы; после реплики Пса играет transition `v21-dog-sea-slide.mp4` в подсобке |
+| `end_sea_sound` | `V16_BACK_ROOM` | Пустая подсобка + цепочка моря; пространство за шторой и внутри трубы не показывается |
+| `end_none`, `end_none_stay` | `V09_DOG_CURTAIN` | После «постою здесь» играет transition `v22-dog-curtain-wait.mp4`: Пёс уходит за штору |
+| `end_none_morning` | `V12_EMPTY_CURTAIN` | Пустая штора; пространство за ней не показывается |
 | `aftermath`, `aftermath_pig` | `V01_EMPTY_COUNTER` | Возвращение к исходной географии |
 | `receipt_print`, `receipt_back`, `shift_done` | `V13_RECEIPT` | Квитанция рисуется интерфейсом, а не изображением |
 

@@ -83,6 +83,7 @@ const allowedVisuals = new Set([
   "V14_BLUE_KEY_CABINET",
   "V15_PIG_TAG",
   "V16_BACK_ROOM",
+  "V17_FOX_ALBUM",
 ]);
 const expectedVisual = {
   assign_notice: "V00_SYSTEM_VOID",
@@ -178,12 +179,13 @@ const expectedVisual = {
   end_give_meet: "V10_FOX_DOG",
   end_give_answer: "V10_FOX_DOG",
   end_give_leave: "V01_EMPTY_COUNTER",
+  end_give_album: "V17_FOX_ALBUM",
   end_sea: "V09_DOG_CURTAIN",
   end_sea_go: "V09_DOG_CURTAIN",
-  end_sea_sound: "V12_EMPTY_CURTAIN",
+  end_sea_sound: "V16_BACK_ROOM",
   end_none: "V09_DOG_CURTAIN",
   end_none_stay: "V09_DOG_CURTAIN",
-  end_none_morning: "V01_EMPTY_COUNTER",
+  end_none_morning: "V12_EMPTY_CURTAIN",
   aftermath: "V01_EMPTY_COUNTER",
   aftermath_pig: "V01_EMPTY_COUNTER",
   receipt_print: "V13_RECEIPT",
@@ -284,6 +286,10 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v19-pig-tag.png",
   "assets/guest/red-room/lora/scenes/v20-back-room.png",
   "assets/guest/red-room/lora/scenes/v20-back-room-live.mp4",
+  "assets/guest/red-room/lora/scenes/v21-dog-sea-slide.mp4",
+  "assets/guest/red-room/lora/scenes/v22-dog-curtain-wait.mp4",
+  "assets/guest/red-room/lora/scenes/v23-fox-album-dog.mp4",
+  "assets/guest/red-room/lora/scenes/v23-fox-album-start.png",
   "assets/audio/guest/red-room/shift/bed-empty.mp3",
   "assets/audio/guest/red-room/shift/bed-pig.mp3",
   "assets/audio/guest/red-room/shift/bed-fox.mp3",
@@ -348,8 +354,7 @@ const dogForbiddenText = ids
   .filter((id) => /олег/i.test(textFor(nodes[id])));
 const foxPhotoContract =
   nodes.fox_oleg?.props?.includes("photo") ||
-  nodes.fox_oleg.line !==
-    "Аниматор самовольно покинул зоопарк «Лосиный Остров»." ||
+  nodes.fox_oleg.line !== "Посмотри на этого малыша" ||
   !nodes.fox_oleg_photo?.props?.includes("photo") ||
   nodes.fox_oleg_photo.inspect !== "photo" ||
   !(nodes.fox_oleg.choices || []).some((choice) => choice.id === "look_photo") ||

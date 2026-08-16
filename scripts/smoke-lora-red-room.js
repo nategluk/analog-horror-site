@@ -146,10 +146,11 @@ if (
   ["pig_warns", "V09_DOG_CURTAIN"],
   ["end_give", "V10_FOX_DOG"],
   ["end_give_leave", "V01_EMPTY_COUNTER"],
+  ["end_give_album", "V17_FOX_ALBUM"],
   ["end_sea", "V09_DOG_CURTAIN"],
-  ["end_sea_sound", "V12_EMPTY_CURTAIN"],
+  ["end_sea_sound", "V16_BACK_ROOM"],
   ["end_none", "V09_DOG_CURTAIN"],
-  ["end_none_morning", "V01_EMPTY_COUNTER"],
+  ["end_none_morning", "V12_EMPTY_CURTAIN"],
   ["aftermath", "V01_EMPTY_COUNTER"],
   ["receipt_print", "V13_RECEIPT"],
   ["shift_done", "V13_RECEIPT"],
@@ -331,7 +332,7 @@ if (
   nodes.fox_oleg.props?.includes("photo") ||
   !nodes.fox_oleg_photo.props?.includes("photo") ||
   nodes.fox_oleg_photo.inspect !== "photo" ||
-  nodes.fox_oleg.line !== "Аниматор самовольно покинул зоопарк «Лосиный Остров»." ||
+  nodes.fox_oleg.line !== "Посмотри на этого малыша" ||
   /олег|журналист|микрофон/i.test(foxSpeech) ||
   /олег/i.test(dogSpeech)
 ) {
@@ -533,6 +534,25 @@ if (
   !engineSource.includes("v19-pig-tag.png")
 ) {
   throw new Error("shift beats: tag still and back-room clip are not wired in lora-red-room.js");
+}
+if (
+  !engineSource.includes("end_sea_go") ||
+  !engineSource.includes("v21-dog-sea-slide.mp4")
+) {
+  throw new Error("sea finale: dog slide cutscene is not wired in lora-red-room.js");
+}
+if (
+  !engineSource.includes("end_none_stay") ||
+  !engineSource.includes("v22-dog-curtain-wait.mp4")
+) {
+  throw new Error("unassigned finale: curtain wait cutscene is not wired in lora-red-room.js");
+}
+if (
+  !engineSource.includes("end_give_album") ||
+  !engineSource.includes("v23-fox-album-dog.mp4") ||
+  !engineSource.includes("V17_FOX_ALBUM")
+) {
+  throw new Error("given finale: album cutscene is not wired in lora-red-room.js");
 }
 if (
   !engineSource.includes("dog_coffee") ||

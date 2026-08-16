@@ -77,6 +77,9 @@
     V16_BACK_ROOM: {
       image: "../assets/guest/red-room/lora/scenes/v20-back-room.png",
     },
+    V17_FOX_ALBUM: {
+      image: "../assets/guest/red-room/lora/scenes/v23-fox-album-start.png",
+    },
   };
 
   const MOTION_DIR = "../assets/guest/red-room/lora/scenes/";
@@ -118,6 +121,30 @@
       video: "v20-back-room-live.mp4",
       openWith: "v20-back-room.png",
       frames: ["v20-back-room.png"],
+      holdMs: 900,
+      restore: false,
+    },
+    end_sea_go: {
+      mode: "transition",
+      video: "v21-dog-sea-slide.mp4",
+      openWith: "v20-back-room.png",
+      frames: ["v20-back-room.png"],
+      holdMs: 900,
+      restore: false,
+    },
+    end_none_stay: {
+      mode: "transition",
+      video: "v22-dog-curtain-wait.mp4",
+      openWith: "v09-dog-curtain.webp",
+      frames: ["v09-dog-curtain.webp", "v12-empty-curtain.webp"],
+      holdMs: 900,
+      restore: false,
+    },
+    end_give_album: {
+      mode: "transition",
+      video: "v23-fox-album-dog.mp4",
+      openWith: "v23-fox-album-start.png",
+      frames: ["v23-fox-album-start.png"],
       holdMs: 900,
       restore: false,
     },
