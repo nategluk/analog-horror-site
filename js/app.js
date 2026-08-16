@@ -4393,13 +4393,19 @@
       activeTrigger?.focus?.();
     });
 
-    requestIdButton.addEventListener("click", () => {
+    requestIdButton.addEventListener("click", async () => {
       const record = staffDirectory[activePersonnelKey];
       if (!record || requestIdButton.disabled) return;
 
       if (record.curatorId) {
-        idResponse.textContent =
-          `СЛУЖЕБНЫЙ ID: ${record.curatorId} // КАНАЛ ДОСТУПЕН`;
+        try {
+          await copyText(record.curatorId);
+          idResponse.textContent =
+            `СЛУЖЕБНЫЙ ID: ${record.curatorId} // СКОПИРОВАН В БУФЕР`;
+        } catch {
+          idResponse.textContent =
+            `СЛУЖЕБНЫЙ ID: ${record.curatorId} // КОПИРОВАНИЕ НЕДОСТУПНО`;
+        }
         useIdLink.hidden = false;
         return;
       }
