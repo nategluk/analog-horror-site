@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Детский ЖИР // Node inspector (local)</title>
+    <link rel="stylesheet" href="/admin/nodes.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div>
+        <p class="eyebrow">LOCAL ONLY · NODE INSPECTOR</p>
+        <h1>Irina nodes</h1>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="btn-validate">Validate</button>
+        <button type="button" id="btn-export">Export MD</button>
+        <a class="button-link" href="/admin/">Copy Desk</a>
+        <a class="button-link" href="/hiring.html" target="_blank" rel="noreferrer">Open hiring</a>
+      </div>
+    </header>
+
+    <section class="status" id="status" role="status" aria-live="polite">
+      Loading…
+    </section>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <h2>Nodes <span id="node-count"></span></h2>
+          <input
+            id="search"
+            type="search"
+            placeholder="Поиск id / step / speaker"
+            autocomplete="off"
+          />
+        </div>
+        <div class="create-box">
+          <input id="new-id" type="text" placeholder="new-node-id" />
+          <button type="button" id="btn-create">Create</button>
+        </div>
+        <ul id="node-list" class="node-list"></ul>
+      </aside>
+
+      <section class="editor" id="editor">
+        <p class="empty">Выберите узел слева.</p>
+      </section>
+
+      <aside class="graph-panel">
+        <h2>Edges from node</h2>
+        <ul id="edge-list" class="edge-list"></ul>
+        <h2>Inbound</h2>
+        <ul id="inbound-list" class="edge-list"></ul>
+      </aside>
+    </main>
+
+    <script src="/admin/nodes.js"></script>
+  </body>
+</html>

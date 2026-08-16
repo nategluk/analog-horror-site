@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+"use strict";
+
+const fs = require("node:fs");
+const path = require("node:path");
+const { indexGame, patchLine } = require("./lib/copydesk-core");
+
+const irina = indexGame("irina");
+const lora = indexGame("lora");
+
+if (irina.nodes.length < 100) throw new Error("irina nodes missing");
+if (lora.nodes.length < 80) throw new Error("lora nodes missing");
+if (!irina.lines.some((line) => line.id === "node:intro:text")) {
+  throw new Error("intro text not indexed");
+}
+if (!lora.lines.some((line) => line.kind === "thought")) {
+  throw new Error("lora thoughts not indexed");
+}
+if (!irina.characters.some((hero) => hero.name === "ИРИНА В.")) {
+  throw new Error("irina character roster missing");
+}
+if (!lora.characters.some((hero) => hero.name === "ХРЮША" && !hero.locked)) {
+  throw new Error("hryusha should be renameable");
+}
+if (!lora.characters.some((hero) => hero.name === "Я" && hero.locked)) {
+  throw new Error("player thought role should be locked");
+}
+
+const intro = irina.lines.find((line) => line.id === "node:intro:text");
+const file = path.join(__dirname, "..", "content", "irina", "call-content.js");
+const before = fs.readFileSync(file, "utf8");
+try {
+  patchLine("irina", intro.id, intro.text, `${intro.text} `);
+  patchLine("irina", intro.id, `${intro.text} `, intro.text);
+} finally {
+  const after = fs.readFileSync(file, "utf8");
+  if (after !== before) {
+    fs.writeFileSync(file, before, "utf8");
+    throw new Error("copydesk patch did not roundtrip");
+  }
+}
+
+console.log("OK smoke-copydesk");

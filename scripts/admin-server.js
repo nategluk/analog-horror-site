@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Local Stage-1 admin for Irina call content.
+ * Local Copy Desk + Irina node inspector.
  *
  *   node scripts/admin-server.js
- *   open http://127.0.0.1:8787/admin/
+ *   open http://127.0.0.1:8787/admin/          writer UI (both games)
+ *   open http://127.0.0.1:8787/admin/nodes.html node inspector (Irina)
  *
- * Serves the site + /api/* for reading/writing content/irina/call-content.js.
  * Bind is localhost only. Not for production deploy.
  */
 
@@ -18,6 +18,7 @@ const path = require("node:path");
 const { URL } = require("node:url");
 const { spawnSync } = require("node:child_process");
 const vm = require("node:vm");
+const copydesk = require("./lib/copydesk-core");
 
 const projectRoot = path.resolve(__dirname, "..");
 const contentPath = path.join(projectRoot, "content", "irina", "call-content.js");
@@ -859,8 +860,85 @@ const serveStatic = (req, res, urlPath) => {
   fs.createReadStream(full).pipe(res);
 };
 
+const publicCopydeskIndex = (index) => ({
+  game: index.game,
+  nodes: index.nodes,
+  characters: index.characters,
+  lines: index.lines.map((line) => ({
+    id: line.id,
+    game: line.game,
+    nodeId: line.nodeId,
+    bucket: line.bucket,
+    field: line.field,
+    speaker: line.speaker,
+    kind: line.kind,
+    text: line.text,
+    fn: line.fn,
+    unique: line.unique,
+    occurrences: line.occurrences,
+  })),
+});
+
 const handleApi = async (req, res, url) => {
   const { pathname } = url;
+
+  if (req.method === "GET" && pathname === "/api/copydesk/games") {
+    return sendJson(res, 200, { games: copydesk.listGames() });
+  }
+
+  if (req.method === "GET" && pathname.startsWith("/api/copydesk/") && pathname.endsWith("/script")) {
+    const gameId = decodeURIComponent(pathname.slice("/api/copydesk/".length, -"/script".length));
+    try {
+      return sendJson(res, 200, publicCopydeskIndex(copydesk.indexGame(gameId)));
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  if (req.method === "PUT" && pathname.startsWith("/api/copydesk/") && pathname.endsWith("/line")) {
+    const gameId = decodeURIComponent(pathname.slice("/api/copydesk/".length, -"/line".length));
+    const raw = await readBody(req);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON" });
+    }
+    try {
+      const index = copydesk.patchLine(
+        gameId,
+        payload.id,
+        payload.expected,
+        payload.text
+      );
+      return sendJson(res, 200, publicCopydeskIndex(index));
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  if (req.method === "POST" && pathname.startsWith("/api/copydesk/") && pathname.endsWith("/rename")) {
+    const gameId = decodeURIComponent(pathname.slice("/api/copydesk/".length, -"/rename".length));
+    const raw = await readBody(req);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON" });
+    }
+    try {
+      const result = copydesk.renameCharacter(gameId, payload.from, payload.to);
+      return sendJson(res, 200, {
+        from: result.from,
+        to: result.to,
+        contentReplacements: result.contentReplacements,
+        extras: result.extras,
+        ...publicCopydeskIndex(result.index),
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
 
   if (req.method === "GET" && pathname === "/api/health") {
     return sendJson(res, 200, { ok: true, contentPath: "content/irina/call-content.js" });
@@ -1067,7 +1145,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`Irina admin listening on http://${HOST}:${PORT}/admin/`);
-  console.log(`Site preview:          http://${HOST}:${PORT}/hiring.html`);
-  console.log(`Content file:          ${path.relative(projectRoot, contentPath)}`);
+  console.log(`Copy Desk:     http://${HOST}:${PORT}/admin/`);
+  console.log(`Node inspector: http://${HOST}:${PORT}/admin/nodes.html`);
+  console.log(`Site preview:   http://${HOST}:${PORT}/hiring.html`);
 });

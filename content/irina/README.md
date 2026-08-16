@@ -17,7 +17,8 @@
 ```sh
 # from repo root
 node scripts/admin-server.js
-# open http://127.0.0.1:8787/admin/
+# open http://127.0.0.1:8787/admin/  Copy Desk
+# nodes inspector: http://127.0.0.1:8787/admin/nodes.html
 # playtest: http://127.0.0.1:8787/hiring.html  (staff mode + ID 0091-A)
 ```
 

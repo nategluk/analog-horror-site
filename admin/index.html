@@ -3,55 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Детский ЖИР // Dialogue Admin (local)</title>
+    <title>Детский ЖИР // Copy Desk</title>
     <link rel="stylesheet" href="/admin/admin.css" />
   </head>
   <body>
     <header class="top">
       <div>
-        <p class="eyebrow">LOCAL ONLY · STAGE 1 MVP</p>
-        <h1>Irina Call Admin</h1>
+        <p class="eyebrow">LOCAL ONLY · COPY DESK</p>
+        <h1>Стол реплик</h1>
       </div>
+      <nav class="game-tabs" id="game-tabs" aria-label="Игры"></nav>
       <div class="top-actions">
-        <button type="button" id="btn-validate">Validate</button>
-        <button type="button" id="btn-export">Export MD</button>
-        <a class="button-link" href="/hiring.html" target="_blank" rel="noreferrer">Open hiring</a>
+        <button type="button" id="btn-characters">Герои</button>
+        <a class="button-link" href="/admin/nodes.html">Узлы Ирины</a>
+        <a class="button-link" href="/hiring.html" target="_blank" rel="noreferrer">Сайт</a>
       </div>
     </header>
 
     <section class="status" id="status" role="status" aria-live="polite">
-      Loading…
+      Загрузка…
     </section>
 
-    <main class="layout">
+    <main class="desk">
       <aside class="sidebar">
         <div class="sidebar-head">
-          <h2>Nodes <span id="node-count"></span></h2>
+          <h2>Ветки <span id="node-count"></span></h2>
           <input
             id="search"
             type="search"
-            placeholder="Поиск id / step / speaker"
+            placeholder="Найти фразу, героя, узел"
             autocomplete="off"
           />
-        </div>
-        <div class="create-box">
-          <input id="new-id" type="text" placeholder="new-node-id" />
-          <button type="button" id="btn-create">Create</button>
         </div>
         <ul id="node-list" class="node-list"></ul>
       </aside>
 
-      <section class="editor" id="editor">
-        <p class="empty">Выберите узел слева.</p>
+      <section class="script" id="script">
+        <p class="empty">Выберите ветку слева.</p>
       </section>
-
-      <aside class="graph-panel">
-        <h2>Edges from node</h2>
-        <ul id="edge-list" class="edge-list"></ul>
-        <h2>Inbound</h2>
-        <ul id="inbound-list" class="edge-list"></ul>
-      </aside>
     </main>
+
+    <dialog id="characters" class="sheet">
+      <form method="dialog" class="sheet-head">
+        <h2>Герои</h2>
+        <button type="submit" value="close">Закрыть</button>
+      </form>
+      <p class="hint">
+        Смена имени переписывает подпись говорящего во всём сценарии этой игры.
+        Роли панели (мысль, система) заблокированы — они держат вёрстку, а не персонажа.
+      </p>
+      <div id="character-list"></div>
+    </dialog>
 
     <script src="/admin/admin.js"></script>
   </body>

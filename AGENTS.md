@@ -62,8 +62,9 @@
   node scripts/smoke-irina-call.js
   ```
 
-- Локальная админка запускается командой `node scripts/admin-server.js` и
-  доступна только на `http://127.0.0.1:8787/admin/`.
+- Локальный Copy Desk запускается командой `node scripts/admin-server.js`
+  и доступен только на `http://127.0.0.1:8787/admin/`. Инспектор узлов
+  Ирины: `http://127.0.0.1:8787/admin/nodes.html`.
 - Сохранение через админку должно быть surgical: не форматировать весь
   `call-content.js`, не трогать соседние узлы и сохранять неизвестные поля
   choice, включая `image` и `imageAlt`.
