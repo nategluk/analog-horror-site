@@ -70,7 +70,8 @@ const GAMES = {
     file: "content/irina/call-content.js",
     globalName: "TyndexIrinaCallContent",
     startNode: "intro",
-    catalogs: ["staffMessages", "rewardCopy", "files"],
+    catalogs: ["rewardCopy", "files"],
+    inbox: "staffMessages",
     lockedSpeakers: ["СИСТЕМА"],
     extraNameFiles: ["js/app.js", "hiring.html", "staff.html"],
   },
@@ -81,6 +82,7 @@ const GAMES = {
     globalName: "TyndexLoraRedRoomContent",
     startNode: "assign_notice",
     catalogs: ["receiptVariants", "receiptCopyHooks", "quietSleepGift"],
+    inbox: null,
     lockedSpeakers: ["Я", "ВЫ", "СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА"],
     extraNameFiles: ["js/app.js"],
   },
@@ -378,14 +380,30 @@ const parseObjectEntries = (source, open, close) => {
     }
     scanner.index += 1;
     const value = scanner.readValueEnd();
+    let entryEnd = value.end;
     scanner.skipWsAndComments();
-    if (source[scanner.index] === ",") scanner.index += 1;
+    let trailingComma = false;
+    if (source[scanner.index] === ",") {
+      trailingComma = true;
+      scanner.index += 1;
+      entryEnd = scanner.index;
+    }
+
+    let lineStart = source.lastIndexOf("\n", keyInfo.start - 1) + 1;
+    if (!/^\s*$/.test(source.slice(lineStart, keyInfo.start))) {
+      lineStart = keyInfo.start;
+    }
+
     entries.push({
       key: keyInfo.key,
+      keyRaw: keyInfo.raw,
       keyStart: keyInfo.start,
       keyEnd: keyInfo.end,
       valueStart: value.start,
       valueEnd: value.end,
+      entryStart: lineStart,
+      entryEnd,
+      trailingComma,
     });
   }
   return entries;
@@ -674,6 +692,59 @@ const indexGame = (gameId) => {
     collectFromValue(ctx, source, range.open, range.close + 1, `catalog:${name}`, "");
   });
 
+  const messages = [];
+  if (game.inbox) {
+    const range = findConstObject(source, game.inbox);
+    if (range) {
+      const messageEntries = parseObjectEntries(source, range.open, range.close);
+      messageEntries.forEach((entry) => {
+        let close = entry.valueEnd - 1;
+        while (close > entry.valueStart && source[close] !== "}") close -= 1;
+        const props = parseObjectEntries(source, entry.valueStart, close);
+        let sender = "";
+        const senderProp = props.find((prop) => prop.key === "sender");
+        if (senderProp) {
+          const lit = collectLiterals(
+            source,
+            senderProp.valueStart,
+            senderProp.valueEnd
+          )[0];
+          sender = lit ? lit.value : "";
+        }
+        const ctx = {
+          gameId,
+          bucket: "inbox",
+          nodeId: entry.key,
+          lines,
+          scanner: createScanner(source),
+        };
+        props.forEach((prop) => {
+          if (SKIP_KEYS.has(prop.key)) return;
+          collectFromValue(
+            ctx,
+            source,
+            prop.valueStart,
+            prop.valueEnd,
+            prop.key,
+            sender
+          );
+        });
+        const subjectLine = lines.find(
+          (line) => line.bucket === "inbox" && line.nodeId === entry.key && line.field === "subject"
+        );
+        const previewLine = lines.find(
+          (line) => line.bucket === "inbox" && line.nodeId === entry.key && line.field === "preview"
+        );
+        messages.push({
+          id: entry.key,
+          sender,
+          subject: subjectLine ? subjectLine.text : "",
+          preview: previewLine ? previewLine.text : "",
+        });
+      });
+    }
+  }
+
   const counts = {};
   lines.forEach((line) => {
     counts[line.text] = (counts[line.text] || 0) + 1;
@@ -747,7 +818,7 @@ const indexGame = (gameId) => {
 
   const speakers = {};
   lines
-    .filter((line) => line.field === "speaker")
+    .filter((line) => line.field === "speaker" || line.field === "sender")
     .forEach((line) => {
       speakers[line.text] = (speakers[line.text] || 0) + 1;
     });
@@ -764,6 +835,7 @@ const indexGame = (gameId) => {
     source,
     lines,
     nodes,
+    messages,
     characters: Object.entries(speakers).map(([name, nodeCount]) => ({
       name,
       nodeCount,
@@ -771,6 +843,7 @@ const indexGame = (gameId) => {
       mentions: lines.filter(
         (line) =>
           line.field !== "speaker" &&
+          line.field !== "sender" &&
           typeof line.text === "string" &&
           line.text.includes(name)
       ).length,
@@ -903,11 +976,36 @@ const renameCharacter = (gameId, from, to) => {
   };
 };
 
+const deleteInboxMessage = (gameId, messageId) => {
+  const game = GAMES[gameId];
+  if (!game) throw new Error(`Unknown game: ${gameId}`);
+  if (!game.inbox) throw new Error("В этой игре нет писем личного кабинета");
+  const id = String(messageId || "").trim();
+  if (!id) throw new Error("Нужен id сообщения");
+
+  const { source } = loadGameSource(gameId);
+  const range = findConstObject(source, game.inbox);
+  if (!range) throw new Error(`Не найден каталог ${game.inbox}`);
+  const entries = parseObjectEntries(source, range.open, range.close);
+  const index = entries.findIndex((entry) => entry.key === id);
+  if (index === -1) throw new Error(`Сообщение «${id}» не найдено`);
+
+  const entry = entries[index];
+  let start = entry.entryStart;
+  let end = entry.entryEnd;
+  if (start > 0 && source[start - 1] === "\n") start -= 1;
+
+  const nextSource = source.slice(0, start) + source.slice(end);
+  writeGameSource(gameId, nextSource);
+  return indexGame(gameId);
+};
+
 module.exports = {
   GAMES,
   listGames,
   indexGame,
   patchLine,
   renameCharacter,
+  deleteInboxMessage,
   projectRoot,
 };

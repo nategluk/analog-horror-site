@@ -864,6 +864,7 @@ const publicCopydeskIndex = (index) => ({
   game: index.game,
   nodes: index.nodes,
   characters: index.characters,
+  messages: index.messages || [],
   lines: index.lines.map((line) => ({
     id: line.id,
     game: line.game,
@@ -935,6 +936,17 @@ const handleApi = async (req, res, url) => {
         extras: result.extras,
         ...publicCopydeskIndex(result.index),
       });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  const inboxDelete = pathname.match(/^\/api\/copydesk\/([^/]+)\/message\/([^/]+)$/);
+  if (req.method === "DELETE" && inboxDelete) {
+    const gameId = decodeURIComponent(inboxDelete[1]);
+    const messageId = decodeURIComponent(inboxDelete[2]);
+    try {
+      return sendJson(res, 200, publicCopydeskIndex(copydesk.deleteInboxMessage(gameId, messageId)));
     } catch (error) {
       return sendJson(res, 400, { error: error.message || String(error) });
     }
