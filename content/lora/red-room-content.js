@@ -1372,7 +1372,7 @@
       scene: "curtain",
       visual: "V09_DOG_CURTAIN",
       speaker: "ХРЮША",
-      line: "*шепот из подсобки* \nНе отправляй его туда!",
+      line: "*шепот из подсобки* \nНе отправляй его в горку!",
       guest: "pig",
       props: ["note", "phone", "mic"],
       set: ["heardPigWarning"],
