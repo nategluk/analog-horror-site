@@ -111,7 +111,7 @@
     },
     "fox-after-shift": {
       sender: "АЛИСА",
-      avatar: "assets/staff/player-avatars/avatar-03-fox.webp",
+      avatar: "assets/staff/staff/alice-message-avatar.webp",
       subject: "ТЫ НЕ НАПИСАЛ",
       preview: "не дождалась от тебя сообщения. Решила написать первой",
       body: (profile, context) => {

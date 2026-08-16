@@ -31,10 +31,10 @@ if ((irina.messages || []).length < 5) {
 if (lora.messages && lora.messages.length) {
   throw new Error("lora should not expose cabinet inbox templates");
 }
-if (!irina.messages.some((item) => item.id === "fox-after-shift" && item.sender === "ЛИСА")) {
+if (!irina.messages.some((item) => item.id === "fox-after-shift" && item.sender === "АЛИСА")) {
   throw new Error("fox cabinet message not indexed");
 }
-if (!irina.characters.some((hero) => hero.name === "ЛИСА" && !hero.locked)) {
+if (!irina.characters.some((hero) => hero.name === "АЛИСА" && !hero.locked)) {
   throw new Error("inbox senders should appear in character roster");
 }
 if (!irina.lines.some((line) => line.id === "inbox:fox-after-shift:subject")) {
@@ -49,12 +49,12 @@ try {
   patchLine("irina", intro.id, `${intro.text} `, intro.text);
 
   const sender = irina.lines.find((line) => line.id === "inbox:fox-after-shift:sender");
-  patchLine("irina", sender.id, sender.text, "ЛИСА-ТЕСТ");
+  patchLine("irina", sender.id, sender.text, "АЛИСА-ТЕСТ");
   const renamed = indexGame("irina");
-  if (!renamed.messages.some((item) => item.id === "fox-after-shift" && item.sender === "ЛИСА-ТЕСТ")) {
+  if (!renamed.messages.some((item) => item.id === "fox-after-shift" && item.sender === "АЛИСА-ТЕСТ")) {
     throw new Error("inbox sender patch failed");
   }
-  patchLine("irina", sender.id, "ЛИСА-ТЕСТ", sender.text);
+  patchLine("irina", sender.id, "АЛИСА-ТЕСТ", sender.text);
 
   deleteInboxMessage("irina", "lora-red-room");
   const afterDelete = indexGame("irina");
