@@ -520,6 +520,12 @@ if (
   throw new Error("key trade: V14 motion clip is not wired in lora-red-room.js");
 }
 if (
+  !engineSource.includes('kind === "thought"') ||
+  !engineSource.includes("presentActionBeat")
+) {
+  throw new Error("text roles: player thoughts must use a separate panel kind");
+}
+if (
   !engineSource.includes("shift_storage_live") ||
   !engineSource.includes("v20-back-room-live.mp4") ||
   !engineSource.includes("v19-pig-tag.png")

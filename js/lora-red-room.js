@@ -1432,11 +1432,65 @@
     if (root) clearAdvanceWait(root);
   };
 
-  const setLine = (root, text, live) => {
+  const setLine = (root, text, live, kind = "") => {
     const line = root.querySelector("[data-lora-line]");
-    const speaker = root.querySelector("[data-lora-speaker]");
     if (line) line.textContent = text;
-    if (live) live.textContent = text;
+    if (live) {
+      live.textContent = kind === "thought" && text ? `Мысль. ${text}` : text;
+    }
+  };
+
+  const SYSTEM_SPEAKERS = new Set(["СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА"]);
+
+  const kindForSpeaker = (speaker) => {
+    const name = speaker || "Я";
+    if (name === "Я") return "thought";
+    if (SYSTEM_SPEAKERS.has(name)) return "system";
+    return "dialogue";
+  };
+
+  const applyPanelKind = (root, kind, speakerName = "") => {
+    const panel = root.querySelector(".lora-room__panel");
+    const speaker = root.querySelector("[data-lora-speaker]");
+    const bubble = root.querySelector("[data-lora-bubble]");
+    if (panel) panel.dataset.textKind = kind;
+    if (bubble) {
+      if (kind === "thought") {
+        bubble.setAttribute("aria-label", "Мысль");
+      } else if (speakerName) {
+        bubble.setAttribute("aria-label", speakerName);
+      } else {
+        bubble.removeAttribute("aria-label");
+      }
+    }
+    if (!speaker) return;
+    if (kind === "thought") {
+      speaker.hidden = true;
+      speaker.textContent = "";
+    } else {
+      speaker.hidden = false;
+      speaker.textContent = speakerName;
+    }
+  };
+
+  const hideActionSlot = (root) => {
+    const actionEl = root.querySelector("[data-lora-action]");
+    if (!actionEl) return;
+    actionEl.textContent = "";
+    actionEl.hidden = true;
+  };
+
+  const presentActionBeat = (root, node) => {
+    const raw = String(node.action || "").trim();
+    if (!raw) return null;
+    hideActionSlot(root);
+    const system = /^СИСТЕМА\s*:/u.test(raw);
+    const kind = system || SYSTEM_SPEAKERS.has(node.speaker) ? "system" : "thought";
+    const speakerName = system ? "СИСТЕМА" : kind === "system" ? node.speaker : "";
+    const text = system ? raw.replace(/^СИСТЕМА\s*:\s*/u, "") : raw;
+    applyPanelKind(root, kind, speakerName);
+    setLine(root, text, root.querySelector("[data-lora-live]"), kind);
+    return { kind, text };
   };
 
   const appendChoiceButton = (box, root, choice) => {
@@ -1541,16 +1595,8 @@
   };
 
   const presentChoices = (root, node) => {
-    const actionEl = root.querySelector("[data-lora-action]");
-    const hasAction = Boolean(node.action);
+    hideActionSlot(root);
     const hasChoices = (node.choices || []).some(choiceVisible);
-    if (hasAction && actionEl) {
-      actionEl.textContent = node.action;
-      actionEl.hidden = false;
-    } else if (actionEl) {
-      actionEl.textContent = "";
-      actionEl.hidden = true;
-    }
     if (hasChoices) renderChoices(root, node);
   };
 
@@ -1732,6 +1778,7 @@
     const live = root.querySelector("[data-lora-live]");
     const choices = root.querySelector("[data-lora-choices]");
     if (speaker) speaker.textContent = "СИСТЕМА";
+    applyPanelKind(root, "system", "СИСТЕМА");
     if (line) line.textContent = "КАНАЛ НЕ НАЗНАЧЕН";
     if (action) {
       action.textContent = "";
@@ -1764,7 +1811,7 @@
     };
   };
 
-  const armAutoAdvance = (root, node, fullText) => {
+  const armHold = (root, holdMs, onAdvance) => {
     const panel = root.querySelector(".lora-room__panel");
     const lineEl = root.querySelector("[data-lora-line]");
     let advanced = false;
@@ -1774,7 +1821,10 @@
       if (event?.type === "keydown" && !["Enter", " "].includes(event.key)) return;
       event?.preventDefault?.();
       advanced = true;
-      goTo(root, node.autoNext);
+      window.clearTimeout(autoTimer);
+      autoTimer = 0;
+      clearAdvanceWait(root);
+      onAdvance();
     };
     if (panel) {
       panel.dataset.waitingAdvance = "true";
@@ -1797,7 +1847,11 @@
     }
     autoTimer = window.setTimeout(() => {
       advance();
-    }, readingHoldMs(fullText, node));
+    }, holdMs);
+  };
+
+  const armAutoAdvance = (root, node, fullText) => {
+    armHold(root, readingHoldMs(fullText, node), () => goTo(root, node.autoNext));
   };
 
   const renderNode = (root, nodeId) => {
@@ -1814,21 +1868,12 @@
     root.dataset.state = "play";
     root.dataset.node = nodeId;
     renderScene(root, { ...node, id: nodeId });
-    const speaker = root.querySelector("[data-lora-speaker]");
     const lineEl = root.querySelector("[data-lora-line]");
-    const actionEl = root.querySelector("[data-lora-action]");
-    const panel = root.querySelector(".lora-room__panel");
     const live = root.querySelector("[data-lora-live]");
     const choices = root.querySelector("[data-lora-choices]");
-    if (speaker) speaker.textContent = node.speaker || "Я";
-    if (panel) {
-      panel.dataset.textKind =
-        node.speaker === "Я" || node.speaker === "СМЕНА" ? "narration" : "dialogue";
-    }
-    if (actionEl) {
-      actionEl.textContent = node.action || "";
-      actionEl.hidden = true;
-    }
+    const kind = kindForSpeaker(node.speaker);
+    applyPanelKind(root, kind, node.speaker || "Я");
+    hideActionSlot(root);
     if (choices) choices.replaceChildren();
     const fullText = resolveLine({ ...node, id: nodeId });
     const instant = prefersReducedMotion();
@@ -1840,22 +1885,28 @@
         lineEl.onclick = null;
         lineEl.onkeydown = null;
       }
+      if (node.action) {
+        armHold(root, readingHoldMs(fullText, node), () => {
+          const follow = presentActionBeat(root, node);
+          finishNode(root, node, follow?.text || fullText);
+        });
+        return;
+      }
       finishNode(root, node, fullText);
     };
     if (instant || fullText.length < 4) {
-      setLine(root, fullText, live);
-      if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
+      setLine(root, fullText, live, kind);
       finish();
       return;
     }
     let index = 0;
-    setLine(root, "", live);
+    setLine(root, "", live, kind);
     const tick = () => {
       index += 1;
       const slice = fullText.slice(0, index);
       if (lineEl) lineEl.textContent = slice;
       if (index >= fullText.length) {
-        if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
+        setLine(root, fullText, live, kind);
         finish();
         return;
       }
@@ -1864,8 +1915,7 @@
     const skip = () => {
       window.clearTimeout(revealTimer);
       revealTimer = 0;
-      setLine(root, fullText, live);
-      if (live) live.textContent = [fullText, node.action].filter(Boolean).join(" ");
+      setLine(root, fullText, live, kind);
       finish();
     };
     bindLineSkip(lineEl, skip);
@@ -1928,13 +1978,6 @@
       }
       if (motion?.mode === "burst") {
         playLoopSceneVideo(root, node);
-        if (node.action) {
-          const actionEl = root.querySelector("[data-lora-action]");
-          if (actionEl) {
-            actionEl.textContent = node.action;
-            actionEl.hidden = false;
-          }
-        }
         stillTimer = window.setTimeout(() => {
           if (save.currentNode !== root.dataset.node) return;
           const go = () => {
@@ -1948,13 +1991,6 @@
         return;
       }
       playLoopSceneVideo(root, node);
-      if (node.action) {
-        const actionEl = root.querySelector("[data-lora-action]");
-        if (actionEl) {
-          actionEl.textContent = node.action;
-          actionEl.hidden = false;
-        }
-      }
       armAutoAdvance(root, node, fullText);
       return;
     }
