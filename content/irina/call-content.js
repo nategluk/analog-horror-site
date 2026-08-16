@@ -95,8 +95,8 @@
     "lora-red-room": {
       sender: "ЛОРА П.",
       avatar: "assets/staff/staff/lora-message-avatar.webp",
-      subject: "НЕ ОТКРЫВАЙТЕ ВСЁ СРАЗУ",
-      preview: "Некоторые материалы лучше оставлять внутри сообщения.",
+      subject: "АРТЕФАКТЫ",
+      preview: "Проверяй периодически личные сообщения. Не забывай, некоторые артефакты - ключи к новому уровню ",
       body: (profile) =>
         `${profile.displayName || "Привет"}. Если вам пришлют что-нибудь из Красной Комнаты, не сохраняйте все файлы подряд.\n\nЯ серьёзно. Иногда важнее помнить, кто прислал фотографию, чем саму фотографию.`
     },
@@ -110,7 +110,7 @@
       attachmentArtifactId: "ulybarych-broadcast"
     },
     "fox-after-shift": {
-      sender: "ЛИСА",
+      sender: "АЛИСА",
       avatar: "assets/staff/player-avatars/avatar-03-fox.webp",
       subject: "ТЫ НЕ НАПИСАЛ",
       preview: "не дождалась от тебя сообщения. Решила написать первой",
