@@ -338,6 +338,7 @@
       }
       try {
         window.localStorage.setItem("tyndex_mode", "staff");
+        window.sessionStorage.setItem("tyndex_staff_session", "1");
       } catch (error) {
         /* mode persistence is optional */
       }

@@ -1,5 +1,6 @@
 (() => {
   const MODE_KEY = "tyndex_mode";
+  const STAFF_SESSION_KEY = "tyndex_staff_session";
   const MUSIC_PLAYING_KEY = "tyndex_music_playing";
   const CINEMA_TICKET_KEY = "tyndex_cinema_ticket_issued";
   const STAFF_INTRUSION_KEY = "tyndex_staff_intrusion_v1";
@@ -1313,15 +1314,59 @@
     }
   };
 
+  const setStaffSession = (active) => {
+    try {
+      if (active) {
+        window.sessionStorage.setItem(STAFF_SESSION_KEY, "1");
+      } else {
+        window.sessionStorage.removeItem(STAFF_SESSION_KEY);
+      }
+    } catch (error) {
+      /* session gate is best-effort */
+    }
+  };
+
+  const hasStaffSession = () => {
+    try {
+      return window.sessionStorage.getItem(STAFF_SESSION_KEY) === "1";
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const resolveStaffMode = () =>
+    localStorage.getItem(MODE_KEY) === "staff" && hasStaffSession();
+
+  const syncModeLabel = (isStaff) => {
+    const statusLabel = document.querySelector("[data-mode-label]");
+    if (!statusLabel) return;
+    statusLabel.textContent = isStaff
+      ? "Режим: Терминал персонала"
+      : "Режим: Гостевая версия";
+    statusLabel.classList.toggle("status-pill--exit", isStaff);
+    statusLabel.title = isStaff
+      ? "Вернуться в гостевую версию"
+      : "";
+    statusLabel.setAttribute(
+      "role",
+      isStaff ? "button" : "status"
+    );
+    if (isStaff) {
+      statusLabel.setAttribute("tabindex", "0");
+      statusLabel.setAttribute("aria-label", "Вернуться в гостевую версию");
+    } else {
+      statusLabel.removeAttribute("tabindex");
+      statusLabel.removeAttribute("aria-label");
+    }
+  };
+
   const applyMode = (isStaff) => {
     body.classList.toggle("staff-mode", isStaff);
-    const statusLabel = document.querySelector("[data-mode-label]");
-    if (statusLabel) {
-      statusLabel.textContent = isStaff ? "Режим: Терминал персонала" : "Режим: Гостевая версия";
-    }
+    syncModeLabel(isStaff);
     setMusicMode(isStaff);
     updateCctvVideos(isStaff);
     localStorage.setItem(MODE_KEY, isStaff ? "staff" : "guest");
+    setStaffSession(isStaff);
     initStaffHomeNotice();
   };
 
@@ -1347,6 +1392,14 @@
     return true;
   };
 
+  const exitStaffToGuest = () => {
+    if (!body.classList.contains("staff-mode")) return;
+    runModeGlitch({
+      sound: false,
+      onDone: () => applyMode(false),
+    });
+  };
+
   const enterStaffWithGlitch = (href) => {
     const started = runModeGlitch({
       sound: true,
@@ -1360,7 +1413,11 @@
     window.location.assign(href);
   };
 
-  window.TyndexSiteFx = { enterStaff: enterStaffWithGlitch };
+  window.TyndexSiteFx = {
+    enterStaff: enterStaffWithGlitch,
+    exitStaff: () => applyMode(false),
+    staffSessionKey: STAFF_SESSION_KEY,
+  };
 
   const runGlitchAndToggle = () => {
     const nextIsStaff = !body.classList.contains("staff-mode");
@@ -2537,7 +2594,11 @@
     getAssignmentCallbacks: null, // filled below
     isCloseClassification,
   };
-  window.TyndexSiteFx = { enterStaff: enterStaffWithGlitch };
+  window.TyndexSiteFx = {
+    enterStaff: enterStaffWithGlitch,
+    exitStaff: () => applyMode(false),
+    staffSessionKey: STAFF_SESSION_KEY,
+  };
 
   const getAssignmentCallbacks = (progress, role) => {
     const animatorCallbacks = [
@@ -4958,11 +5019,18 @@
     initStaffHomeNotice();
     initLoraRedRoom();
     updateCctvVideos(body.classList.contains("staff-mode"));
+    syncModeLabel(body.classList.contains("staff-mode"));
 
-    const savedMode = localStorage.getItem(MODE_KEY);
-    
-    if (statusLabel) {
-      statusLabel.textContent = (savedMode === "staff") ? "Режим: Терминал персонала" : "Режим: Гостевая версия";
+    if (statusLabel && statusLabel.dataset.modeExitReady !== "true") {
+      statusLabel.dataset.modeExitReady = "true";
+      statusLabel.addEventListener("click", () => {
+        exitStaffToGuest();
+      });
+      statusLabel.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        exitStaffToGuest();
+      });
     }
 
     if (homeHeroes.length > 1) {
@@ -5136,10 +5204,7 @@
   const init = () => {
     initMusicPlayer();
     getNavigationAnnouncer();
-    
-    const savedMode = localStorage.getItem(MODE_KEY);
-    applyMode(savedMode === "staff");
-    
+    applyMode(resolveStaffMode());
     initDOMListeners();
   };
 

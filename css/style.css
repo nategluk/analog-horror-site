@@ -1168,6 +1168,18 @@ body.staff-mode .staff-logo-image {
   color: var(--muted);
 }
 
+body.staff-mode .status-pill.status-pill--exit {
+  cursor: pointer;
+  user-select: none;
+}
+
+body.staff-mode .status-pill.status-pill--exit:hover,
+body.staff-mode .status-pill.status-pill--exit:focus-visible {
+  color: var(--text);
+  border-style: solid;
+  outline: none;
+}
+
 .muted {
   color: var(--muted);
   font-size: 0.92rem;

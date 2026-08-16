@@ -8,6 +8,7 @@
   const AUTH_SESSION_KEY = "tyndex_auth_session_v1";
   const PENDING_CLAIM_KEY = "tyndex_pending_claim_v1";
   const MODE_KEY = "tyndex_mode";
+  const STAFF_SESSION_KEY = "tyndex_staff_session";
   const PENDING_TTL_MS = 15 * 60 * 1000;
 
   const title = document.querySelector("[data-auth-title]");
@@ -166,6 +167,11 @@
     );
     store.saveDossier(dossier);
     window.localStorage.setItem(MODE_KEY, "staff");
+    try {
+      window.sessionStorage.setItem(STAFF_SESSION_KEY, "1");
+    } catch (error) {
+      /* session gate is best-effort */
+    }
 
     if (result.currentSession) {
       const current = store.readCurrentSession();

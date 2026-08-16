@@ -16,6 +16,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const staffInit = () => {
   localStorage.setItem("tyndex_mode", "staff");
+  sessionStorage.setItem("tyndex_staff_session", "1");
 };
 
 async function collectErrors(page) {
@@ -390,6 +391,7 @@ async function main() {
         JSON.stringify({ assigned: true, at: Date.now() })
       );
       localStorage.setItem("tyndex_mode", "staff");
+      sessionStorage.setItem("tyndex_staff_session", "1");
     });
     await mobile.goto(`${BASE}/locations/red-room-shift.html`, {
       waitUntil: "domcontentloaded",
@@ -430,6 +432,7 @@ async function main() {
       JSON.stringify({ assigned: true, at: Date.now() })
     );
     localStorage.setItem("tyndex_mode", "staff");
+    sessionStorage.setItem("tyndex_staff_session", "1");
     localStorage.setItem(
       "tyndex_lora_red_room_v1",
       JSON.stringify({
@@ -475,6 +478,7 @@ async function main() {
       JSON.stringify({ assigned: true, at: Date.now() })
     );
     localStorage.setItem("tyndex_mode", "staff");
+    sessionStorage.setItem("tyndex_staff_session", "1");
     localStorage.setItem(
       "tyndex_lora_red_room_v1",
       JSON.stringify({

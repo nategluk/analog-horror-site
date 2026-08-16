@@ -9,6 +9,7 @@
   const TOY_ARTIFACT_ID = "lora-nevalyashka";
   const QUIET_SLEEP_ARTIFACT_ID = "lora-quiet-sleep-page";
   const MODE_KEY = "tyndex_mode";
+  const STAFF_SESSION_KEY = "tyndex_staff_session";
   const HIRING_HREF = "../hiring.html";
   const GUEST_HREF = "../locations/red-room-cafe.html";
   const DOG_WAIT_VIDEO = "../assets/guest/red-room/lora/scenes/dog-suit-sleep-idle-v1.mp4";
@@ -369,7 +370,16 @@
   };
 
   const exitToGuest = () => {
-    window.localStorage.setItem(MODE_KEY, "guest");
+    if (typeof window.TyndexSiteFx?.exitStaff === "function") {
+      window.TyndexSiteFx.exitStaff();
+    } else {
+      window.localStorage.setItem(MODE_KEY, "guest");
+      try {
+        window.sessionStorage.removeItem(STAFF_SESSION_KEY);
+      } catch (error) {
+        /* session gate is best-effort */
+      }
+    }
     clearAssignment();
     stopShiftAudio();
     window.location.assign(guestUrl());
