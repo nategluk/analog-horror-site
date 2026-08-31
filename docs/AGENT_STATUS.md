@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-08-31 |
 | Ветка / HEAD | `main` / `bbdc3e4` |
-| Дерево | dirty: park mobile video (kit + gate remux); не commit/push |
+| Дерево | dirty: park mobile video (kit + gate remux) + Pavel iOS media lifecycle fix; не commit/push |
 | Активная линия | Cloudflare Pages: production публикует `public/` |
-| Последний этап | мобильные видео парка: poster до кадра; с роликов ворот снята MJPEG-обложка |
+| Последний этап | Pavel iOS media lifecycle: `loadedmetadata` + explicit `load()`; WebKit iPhone 15 и `390x844` прошли |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский listen bed + пяти cue |
 

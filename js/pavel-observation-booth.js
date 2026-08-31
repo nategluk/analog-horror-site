@@ -934,8 +934,10 @@
       video.hidden = true;
       if (node.choicesAfterClip) revealChoicesForNode(nodeId, token);
     };
+    let playbackRequested = false;
     const play = () => {
-      if (token !== mediaToken) return;
+      if (token !== mediaToken || playbackRequested) return;
+      playbackRequested = true;
       const attempt = video.play();
       if (attempt && typeof attempt.catch === "function") {
         attempt.catch(() => {
@@ -952,9 +954,10 @@
         });
       }
     };
-    if (video.readyState >= 2) play();
-    else video.addEventListener("loadeddata", play, { once: true });
+    video.addEventListener("loadedmetadata", play, { once: true });
     video.addEventListener("error", fail, { once: true });
+    video.load();
+    if (video.readyState >= 1) play();
     if (node.choicesAfterClip) {
       choiceRevealTimer = window.setTimeout(() => {
         revealChoicesForNode(nodeId, token);
