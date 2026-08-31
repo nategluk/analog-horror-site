@@ -122,6 +122,12 @@ Deno.serve(async (request) => {
 
     const secretHash = await sha256(body.transfer);
     const emailHash = await sha256(user.email.trim().toLowerCase());
+    const { data: claimRow, error: claimReadError } = await supabaseAdmin
+      .from("dossier_claims")
+      .select("payload")
+      .eq("id", body.claim)
+      .maybeSingle();
+    if (claimReadError) throw claimReadError;
     const { data, error } = await supabaseAdmin.rpc("consume_dossier_claim", {
       p_claim_id: body.claim,
       p_secret_hash: secretHash,
@@ -131,6 +137,39 @@ Deno.serve(async (request) => {
 
     if (error) throw error;
     const result = isRecord(data) ? data : {};
+    const backupPayload = isRecord(claimRow?.payload) ? claimRow.payload : null;
+    if (
+      backupPayload &&
+      (result.status === "claimed" || result.status === "already_claimed")
+    ) {
+      const dossier = isRecord(backupPayload.dossier)
+        ? backupPayload.dossier
+        : {};
+      const games = isRecord(backupPayload.gameSaves)
+        ? Object.values(backupPayload.gameSaves).filter(isRecord)
+        : [];
+      const clientUpdatedAt = Math.max(
+        Number(dossier.updatedAt) || 0,
+        ...games.map((game) => Number(game.updatedAt) || 0),
+      );
+      const { data: knownBackup, error: backupReadError } = await supabaseAdmin
+        .from("dossier_backups")
+        .select("client_updated_at")
+        .eq("owner_user_id", user.id)
+        .maybeSingle();
+      if (backupReadError) throw backupReadError;
+      if (clientUpdatedAt >= Number(knownBackup?.client_updated_at || 0)) {
+        const { error: backupError } = await supabaseAdmin
+          .from("dossier_backups")
+          .upsert({
+            owner_user_id: user.id,
+            schema_version: Number(backupPayload.schemaVersion) || 1,
+            payload: backupPayload,
+            client_updated_at: clientUpdatedAt,
+          }, { onConflict: "owner_user_id" });
+        if (backupError) throw backupError;
+      }
+    }
 
     switch (result.status) {
       case "claimed":

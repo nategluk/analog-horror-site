@@ -72,6 +72,9 @@ export default {
             status: 401,
           });
         }
+        // Database types are generated only after the remote migration is linked.
+        // deno-lint-ignore no-explicit-any
+        const supabase = context.supabase as any;
 
         const { data: dossier, error: dossierError } = await context.supabase
           .from("dossiers")
@@ -90,6 +93,7 @@ export default {
         const [
           { data: sessions, error: sessionsError },
           { data: artifacts, error: artifactsError },
+          { data: backup, error: backupError },
         ] = await Promise.all([
           context.supabase
             .from("dossier_sessions")
@@ -103,9 +107,36 @@ export default {
             .select("artifact_id,session_id,acquisition,obtained_at")
             .eq("owner_user_id", ownerUserId)
             .order("obtained_at", { ascending: true }),
+          supabase
+            .from("dossier_backups")
+            .select("schema_version,payload,updated_at")
+            .eq("owner_user_id", ownerUserId)
+            .maybeSingle(),
         ]);
         if (sessionsError) throw sessionsError;
         if (artifactsError) throw artifactsError;
+        if (backupError) throw backupError;
+
+        const backupPayload = isRecord(backup?.payload) ? backup.payload : null;
+        const backupDossier = backupPayload && isRecord(backupPayload.dossier)
+          ? backupPayload.dossier
+          : null;
+        if (backupDossier) {
+          return Response.json({
+            ok: true,
+            backupSchemaVersion: Number(backupPayload?.schemaVersion) || 1,
+            dossier: {
+              ...backupDossier,
+              serverRestoredAt: Date.now(),
+            },
+            currentSession: isRecord(backupPayload?.currentSession)
+              ? backupPayload.currentSession
+              : null,
+            gameSaves: isRecord(backupPayload?.gameSaves)
+              ? backupPayload.gameSaves
+              : {},
+          });
+        }
 
         const dossierRow = dossier as DossierRow;
         const sessionRows = (sessions || []) as SessionRow[];

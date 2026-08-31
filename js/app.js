@@ -2617,6 +2617,7 @@
             email: emailInput.value.trim(),
             dossier,
             currentSession,
+            gameSaves: dossierStore.readGameSaves?.() || {},
           }),
         });
         const result = await response.json().catch(() => ({}));
@@ -4588,9 +4589,6 @@
 
     const prepareIdRequest = (personnelKey) => {
       const record = staffDirectory[personnelKey];
-      if (personnelKey === "pavel" && boothLink) {
-        boothLink.hidden = false;
-      }
       const state = readIntrusionState();
       if (state.key !== personnelKey) {
         state.key = personnelKey;

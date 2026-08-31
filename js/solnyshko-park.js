@@ -167,6 +167,7 @@
 
   const writeSave = (next) => {
     save = saveApi.write(next);
+    window.TyndexDossierStore?.queueSync?.();
     return save;
   };
 

@@ -165,6 +165,7 @@
       store.readDossier(),
       result.dossier,
     );
+    store.mergeGameSaves?.(result.gameSaves || {});
     store.saveDossier(dossier);
     window.localStorage.setItem(MODE_KEY, "staff");
     try {

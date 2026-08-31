@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-08-31 |
-| Ветка / HEAD | `main` / `bbdc3e4` |
-| Дерево | dirty: park mobile video (kit + gate remux) + Pavel iOS media lifecycle fix; не commit/push |
-| Активная линия | Cloudflare Pages: production публикует `public/` |
-| Последний этап | Pavel iOS media lifecycle: `loadedmetadata` + explicit `load()`; WebKit iPhone 15 и `390x844` прошли |
+| Ветка / HEAD | `main` / `63b34b9` |
+| Дерево | dirty: Pavel staff shortcut hidden + dossier cloud sync; не commit/push |
+| Активная линия | Backend backup v2 развёрнут; frontend собран, но ещё не опубликован |
+| Последний этап | Supabase migration + 4 function deploys + safe production smoke passed |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский listen bed + пяти cue |
+| Следующий gate | пользовательский push через GitHub Desktop → Cloudflare rebuild → live QA |
 
 ## Write-замок
 
@@ -96,6 +96,21 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Dossier backup v2: новый `dossier_backups`, allowlist 20 материалов и
+  authenticated `sync-dossier`. В backup входят профиль, текущий сеанс Ирины и
+  три сейва: Лора, Павел, ночное «Солнышко». Клиент обновляет истёкший access
+  token, отправляет debounce 900ms, а конфликт с более свежим сервером сначала
+  merge-ит по `updatedAt`. Browser mock подтвердил 3/3 keys, outcome-aware чек,
+  refresh-token rotation, server-newer/local-newer merge и один sync из runtime
+  Красной комнаты. Deno/Node checks, server contract `116/81/20/11`, backup
+  contract `4/3`, все три целевых validator/smoke, public build/verify и
+  `git diff --check` прошли. Docker отсутствует. Миграция
+  `20260831010000_add_dossier_backups.sql` применена в связанном Supabase;
+  `begin-dossier-claim`, `consume-dossier-claim`, `restore-dossier` обновлены,
+  `sync-dossier` развёрнут. Удалённый lint чист; unauthenticated smoke вернул
+  ожидаемые `401`, пустой begin — `400`, CORS preflight — `204`. Публичный
+  frontend пока старый: публикация `public/` и live Auth-сценарий не выполнены.
 
 - Park mobile video: `gate-closed-loop.mp4` / `gate-refuse.mp4` без attached MJPEG;
   Game UI Kit не прячет still до `playing`, `play()` не ждёт только `loadeddata`.

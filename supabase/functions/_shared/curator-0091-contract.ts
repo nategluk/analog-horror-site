@@ -19,6 +19,10 @@ export const ARTIFACT_IDS = new Set([
   "volunteer-leaflet",
   "biometric-record",
   "assignment",
+  "lora-night-receipt",
+  "lora-nevalyashka",
+  "lora-quiet-sleep-page",
+  "pavel-lora-cassette",
 ]);
 
 export const FILE_IDS = new Set([
@@ -52,6 +56,8 @@ export const NODE_IDS = new Set([
   "minor-inspector-check",
   "adult-ack",
   "adult-reason",
+  "name-prompt",
+  "name-ack",
   "orientation-one",
   "orientation-two",
   "orientation-three",
@@ -204,6 +210,7 @@ export const FLAG_IDS = new Set([
   "leftFileInChannel",
   "lookedBehindIrina",
   "minorDoctorContract",
+  "nameProvided",
   "noticedDrawingBear",
   "noticedEmptyChair",
   "obeyedNoise",

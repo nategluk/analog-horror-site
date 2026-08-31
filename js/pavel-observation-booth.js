@@ -429,6 +429,7 @@
   const writeSave = (next) => {
     next.updatedAt = Date.now();
     window.localStorage.setItem(SAVE_KEY, JSON.stringify(next));
+    window.TyndexDossierStore?.queueSync?.();
     return next;
   };
 

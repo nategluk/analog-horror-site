@@ -10,9 +10,12 @@ import {
   PROGRESS_VERSION,
   ROUTE_MARK_IDS,
 } from "../_shared/curator-0091-contract.ts";
+import {
+  MAX_BACKUP_BYTES,
+  normalizeBackupPayload,
+} from "../_shared/dossier-backup-contract.ts";
 
-const MAX_REQUEST_BYTES = 131072;
-const MAX_NORMALIZED_BYTES = 98304;
+const MAX_REQUEST_BYTES = 262144;
 const MAX_CLAIMS_PER_EMAIL_PER_HOUR = 3;
 const CLAIM_TTL_SECONDS = 24 * 60 * 60;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -301,16 +304,14 @@ export default {
         if (!isRecord(body)) throw new RequestError("invalid request");
 
         const email = normalizeEmail(body.email);
-        const dossier = normalizeDossier(body.dossier);
-        const currentSession = normalizeCurrentSession(body.currentSession);
-        const payload = {
-          schemaVersion: 1,
-          dossier,
-          currentSession,
-        };
+        const payload = normalizeBackupPayload({
+          dossier: body.dossier,
+          currentSession: body.currentSession,
+          gameSaves: body.gameSaves,
+        });
         const normalizedSize =
           encoder.encode(JSON.stringify(payload)).byteLength;
-        if (normalizedSize > MAX_NORMALIZED_BYTES) {
+        if (normalizedSize > MAX_BACKUP_BYTES) {
           throw new RequestError("request too large", 413);
         }
 

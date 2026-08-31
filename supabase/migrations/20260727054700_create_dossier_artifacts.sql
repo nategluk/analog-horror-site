@@ -26,7 +26,11 @@ values
   ('animator-postcard'),
   ('volunteer-leaflet'),
   ('biometric-record'),
-  ('assignment');
+  ('assignment'),
+  ('lora-night-receipt'),
+  ('lora-nevalyashka'),
+  ('lora-quiet-sleep-page'),
+  ('pavel-lora-cassette');
 
 alter table public.artifact_catalog enable row level security;
 
@@ -114,4 +118,3 @@ for update
 to authenticated
 using ((select auth.uid()) = owner_user_id)
 with check ((select auth.uid()) = owner_user_id);
-

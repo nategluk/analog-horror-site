@@ -8,6 +8,9 @@ import {
 const appSource = await Deno.readTextFile(
   new URL("../js/app.js", import.meta.url),
 );
+const contentSource = await Deno.readTextFile(
+  new URL("../content/irina/call-content.js", import.meta.url),
+);
 const artifactMigration = await Deno.readTextFile(
   new URL(
     "../supabase/migrations/20260727054700_create_dossier_artifacts.sql",
@@ -15,13 +18,13 @@ const artifactMigration = await Deno.readTextFile(
   ),
 );
 
-const getSection = (start: string, end: string) => {
-  const startIndex = appSource.indexOf(start);
-  const endIndex = appSource.indexOf(end, startIndex);
+const getSection = (source: string, start: string, end: string) => {
+  const startIndex = source.indexOf(start);
+  const endIndex = source.indexOf(end, startIndex);
   if (startIndex < 0 || endIndex < 0) {
     throw new Error(`Cannot find app.js section: ${start} ... ${end}`);
   }
-  return appSource.slice(startIndex, endIndex);
+  return source.slice(startIndex, endIndex);
 };
 
 const collect = (source: string, pattern: RegExp) => {
@@ -34,12 +37,14 @@ const collect = (source: string, pattern: RegExp) => {
 };
 
 const curatorNodesSource = getSection(
-  "const curatorNodes = {",
-  "const applyCuratorEffect",
+  contentSource,
+  "  const nodes = {",
+  "  window.TyndexIrinaCallContent",
 );
 const staffArtifactsSource = getSection(
-  "const staffArtifacts = {",
-  "const curatorNodeArtifacts",
+  contentSource,
+  "  const staffArtifacts = {",
+  "  const nodeArtifacts",
 );
 
 const appNodeIds = collect(
@@ -50,12 +55,14 @@ const appArtifactIds = collect(
   staffArtifactsSource,
   /^    (?:"([^"]+)"|([A-Za-z][A-Za-z0-9_-]*)): \{/gm,
 );
+collect(appSource, /const [A-Z0-9_]+_ID = "([a-z0-9-]+)"/g)
+  .forEach((value) => appArtifactIds.add(value));
 const appFlagIds = collect(
-  appSource,
+  `${contentSource}\n${appSource}`,
   /flags(?:\?)?\.([A-Za-z0-9_]+)/g,
 );
 const appRouteMarkIds = collect(
-  appSource,
+  contentSource,
   /routeMark:\s*"([^"]+)"/g,
 );
 const migrationArtifactIds = collect(

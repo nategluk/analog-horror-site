@@ -81,3 +81,7 @@ entrypoint = "./functions/begin-dossier-access/index.ts"
 [functions.restore-dossier]
 enabled = true
 entrypoint = "./functions/restore-dossier/index.ts"
+
+[functions.sync-dossier]
+enabled = true
+entrypoint = "./functions/sync-dossier/index.ts"

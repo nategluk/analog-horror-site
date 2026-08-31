@@ -1,6 +1,19 @@
 (() => {
   const DOSSIER_KEY = "tyndex_staff_profile_v1";
   const CURRENT_SESSION_KEY = "tyndex_curator_call_v4";
+  const AUTH_SESSION_KEY = "tyndex_auth_session_v1";
+  const SYNC_ENDPOINT =
+    "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/sync-dossier";
+  const TOKEN_ENDPOINT =
+    "https://edoqmjtqkqnksxjsjqcg.supabase.co/auth/v1/token?grant_type=refresh_token";
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_zIWow9PlLu6B63FKWLiBrA_jllbCKhI";
+  const GAME_SAVE_KEYS = Object.freeze([
+    "tyndex_lora_red_room_v1",
+    "tyndex_pavel_observation_booth_v1",
+    "tyndex_irina_solnyshko_v1",
+  ]);
+  const SYNC_DELAY_MS = 900;
   const CHANGE_EVENT = "tyndex:dossier-store-change";
   const watchedKeys = new Set([DOSSIER_KEY, CURRENT_SESSION_KEY]);
 
@@ -38,6 +51,142 @@
   const removeJson = (key, record) => {
     window.localStorage.removeItem(key);
     notify(record, "remove");
+  };
+
+  const readGameSaves = () =>
+    Object.fromEntries(
+      GAME_SAVE_KEYS.flatMap((key) => {
+        const value = readJson(key);
+        return value?.version === 1 ? [[key, value]] : [];
+      })
+    );
+
+  const mergeGameSaves = (incoming) => {
+    if (!incoming || typeof incoming !== "object" || Array.isArray(incoming)) {
+      return readGameSaves();
+    }
+    GAME_SAVE_KEYS.forEach((key) => {
+      const restored = incoming[key];
+      if (!restored || restored.version !== 1) return;
+      const current = readJson(key);
+      const currentTime = Number(current?.updatedAt || 0);
+      const restoredTime = Number(restored.updatedAt || 0);
+      if (!current || restoredTime >= currentTime) {
+        window.localStorage.setItem(key, JSON.stringify(restored));
+      }
+    });
+    return readGameSaves();
+  };
+
+  const readAuthSession = () => {
+    const session = readJson(AUTH_SESSION_KEY);
+    if (
+      !session ||
+      session.version !== 1 ||
+      typeof session.accessToken !== "string" ||
+      typeof session.refreshToken !== "string"
+    ) return null;
+    return session;
+  };
+
+  const refreshAuthSession = async (session) => {
+    if (!session?.refreshToken) return null;
+    try {
+      const response = await window.fetch(TOKEN_ENDPOINT, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh_token: session.refreshToken }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.access_token || !result.refresh_token) return null;
+      const refreshed = {
+        version: 1,
+        accessToken: result.access_token,
+        refreshToken: result.refresh_token,
+        expiresAt: Date.now() + (Number(result.expires_in) || 3600) * 1000,
+        updatedAt: Date.now(),
+      };
+      window.localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(refreshed));
+      return refreshed;
+    } catch {
+      return null;
+    }
+  };
+
+  const getUsableAuthSession = async ({ forceRefresh = false } = {}) => {
+    const session = readAuthSession();
+    if (!session) return null;
+    if (!forceRefresh && Number(session.expiresAt) > Date.now() + 60_000) {
+      return session;
+    }
+    return refreshAuthSession(session);
+  };
+
+  const buildBackupPayload = () => ({
+    schemaVersion: 2,
+    dossier: readJson(DOSSIER_KEY),
+    currentSession: readJson(CURRENT_SESSION_KEY),
+    gameSaves: readGameSaves(),
+  });
+
+  let syncTimer = 0;
+  let syncPromise = null;
+  let syncRequested = false;
+
+  const syncNow = async () => {
+    const payload = buildBackupPayload();
+    if (payload.dossier?.status !== "completed") return false;
+    if (syncPromise) {
+      syncRequested = true;
+      return syncPromise;
+    }
+    syncPromise = (async () => {
+      let session = await getUsableAuthSession();
+      if (!session) return false;
+      const send = (accessToken) => window.fetch(SYNC_ENDPOINT, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_PUBLISHABLE_KEY,
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(buildBackupPayload()),
+      });
+      try {
+        let response = await send(session.accessToken);
+        if (response.status === 401) {
+          session = await getUsableAuthSession({ forceRefresh: true });
+          if (!session) return false;
+          response = await send(session.accessToken);
+        }
+        const result = await response.json().catch(() => ({}));
+        if (result.error === "server_newer") {
+          if (!result.backup) return false;
+          mergeBackup(result.backup);
+          response = await send(session.accessToken);
+          const retryResult = await response.json().catch(() => ({}));
+          return response.ok && retryResult.ok === true;
+        }
+        return response.ok && result.ok === true;
+      } catch {
+        return false;
+      }
+    })().finally(() => {
+      syncPromise = null;
+      if (syncRequested) {
+        syncRequested = false;
+        queueSync();
+      }
+    });
+    return syncPromise;
+  };
+
+  const queueSync = () => {
+    window.clearTimeout(syncTimer);
+    syncTimer = window.setTimeout(syncNow, SYNC_DELAY_MS);
   };
 
   const getTimestamp = (value) => {
@@ -115,7 +264,10 @@
     merged.artifacts = mergeById(
       current.artifacts,
       incoming.artifacts,
-      (known) => known
+      (known, next) => ({
+        ...clone(next),
+        ...clone(known),
+      })
     );
     merged.sessions = mergeById(
       current.sessions,
@@ -173,6 +325,25 @@
     return merged;
   };
 
+  const mergeBackup = (incoming) => {
+    if (!incoming || typeof incoming !== "object" || Array.isArray(incoming)) {
+      return buildBackupPayload();
+    }
+    if (incoming.dossier) {
+      const dossier = mergeDossiers(readJson(DOSSIER_KEY), incoming.dossier);
+      window.localStorage.setItem(DOSSIER_KEY, JSON.stringify(dossier));
+    }
+    if (incoming.currentSession) {
+      const session = chooseSession(
+        readJson(CURRENT_SESSION_KEY),
+        incoming.currentSession
+      );
+      window.localStorage.setItem(CURRENT_SESSION_KEY, JSON.stringify(session));
+    }
+    mergeGameSaves(incoming.gameSaves);
+    return buildBackupPayload();
+  };
+
   const subscribeToDossierChanges = (callback) => {
     if (typeof callback !== "function") return () => {};
 
@@ -201,20 +372,36 @@
   };
 
   window.TyndexDossierStore = Object.freeze({
-    mode: "local",
+    mode: "local-with-cloud-backup",
     keys: Object.freeze({
       dossier: DOSSIER_KEY,
       currentSession: CURRENT_SESSION_KEY,
     }),
     readDossier: () => readJson(DOSSIER_KEY),
-    saveDossier: (dossier) => writeJson(DOSSIER_KEY, "dossier", dossier),
+    saveDossier: (dossier) => {
+      const saved = writeJson(DOSSIER_KEY, "dossier", dossier);
+      queueSync();
+      return saved;
+    },
     removeDossier: () => removeJson(DOSSIER_KEY, "dossier"),
     readCurrentSession: () => readJson(CURRENT_SESSION_KEY),
-    saveCurrentSession: (session) =>
-      writeJson(CURRENT_SESSION_KEY, "currentSession", session),
+    saveCurrentSession: (session) => {
+      const saved = writeJson(CURRENT_SESSION_KEY, "currentSession", session);
+      queueSync();
+      return saved;
+    },
     removeCurrentSession: () =>
       removeJson(CURRENT_SESSION_KEY, "currentSession"),
     mergeDossiers,
+    readGameSaves,
+    mergeGameSaves,
+    mergeBackup,
+    buildBackupPayload,
+    queueSync,
+    syncNow,
     subscribeToDossierChanges,
   });
+
+  window.addEventListener("online", queueSync);
+  window.setTimeout(queueSync, 0);
 })();
