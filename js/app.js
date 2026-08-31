@@ -20,7 +20,7 @@
   const LORA_TOY_ID = "lora-nevalyashka";
   const LORA_PAGE_ID = "lora-quiet-sleep-page";
   const PAVEL_CASSETTE_ID = "pavel-lora-cassette";
-  const PAVEL_CASSETTE_VIDEO = "assets/staff/tv/pavel-cassette.mp4";
+  const PAVEL_CASSETTE_VIDEO = "assets/staff/tv/pavel-cassette-450p.mp4";
   const PAVEL_CASSETTE_POSTER = "assets/staff/tv/pavel-cassette-poster.webp";
   const VHS_CATALOG = Object.freeze({
     [PAVEL_CASSETTE_ID]: Object.freeze({

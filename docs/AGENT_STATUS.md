@@ -8,10 +8,10 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-08-31 |
-| Ветка / HEAD | `main` / `14bba88` |
-| Дерево | большое dirty tree; изменения Павла, «Солнышка» и досье не в HEAD |
-| Активная линия | After-hours «Солнышко»: cotton wait/offer reshoot |
-| Последний этап | Новые `irina-cotton-wait/offer/lookaway` из `tmp/` в runtime |
+| Ветка / HEAD | `main` / `e289244` |
+| Дерево | dirty: производная Pavel cassette 450p и две runtime-ссылки; commit/push pending |
+| Активная линия | Cloudflare Pages: Pavel cassette 450p ≤25 MiB |
+| Последний этап | `pavel-cassette-450p.mp4` создана и подключена; исходный master сохранён |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский listen bed + пяти cue |
 
