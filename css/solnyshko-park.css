@@ -1,0 +1,215 @@
+.solnyshko-hours__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+[data-solnyshko-sound][aria-pressed="false"] .solnyshko-hours__icon--sound-on,
+[data-solnyshko-sound][aria-pressed="true"] .solnyshko-hours__icon--sound-off {
+  display: none;
+}
+
+.solnyshko-hours__fallback {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  background: linear-gradient(transparent, rgba(12, 8, 4, 0.92));
+  color: #f6e7cc;
+  font-size: 0.92rem;
+}
+
+.solnyshko-hours__fallback:empty {
+  display: none;
+}
+
+.solnyshko-hours__input {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem 0.65rem;
+  align-items: end;
+}
+
+.solnyshko-hours__input[hidden] {
+  display: none !important;
+}
+
+.solnyshko-hours__input label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.solnyshko-hours__input input {
+  min-height: 44px;
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--game-ui-line, #8a6a3a);
+  border-radius: 2px;
+  background: #fffaf0;
+  color: #2a1c12;
+  font: inherit;
+}
+
+.solnyshko-hours__input button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--game-ui-line, #8a6a3a);
+  border-radius: 2px;
+  background: var(--game-ui-panel, #2a1c12);
+  color: var(--game-ui-ink, #f3e6d2);
+  font: inherit;
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.solnyshko-postcard-dialog,
+.solnyshko-unlock-dialog {
+  z-index: 120;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  max-width: min(28rem, 92vw);
+}
+
+.solnyshko-postcard-dialog::backdrop,
+.solnyshko-unlock-dialog::backdrop {
+  background: rgba(10, 6, 2, 0.78);
+}
+
+.solnyshko-postcard-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1.1rem;
+  border: 1px solid #c4a36a;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #fff4dc 0 1.6rem,
+      #f7e7c4 1.6rem 1.65rem
+    );
+  color: #3a2818;
+}
+
+.solnyshko-postcard-card img {
+  display: block;
+  width: 100%;
+  max-height: min(48vh, 28rem);
+  object-fit: contain;
+  border: 1px solid rgba(58, 40, 24, 0.35);
+  background: #e4d1ac;
+}
+
+.solnyshko-postcard-card [data-solnyshko-artifact-lines] {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.solnyshko-postcard-card [data-solnyshko-artifact-lines] p,
+.solnyshko-postcard-card [data-solnyshko-artifact-title] {
+  margin: 0;
+}
+
+.solnyshko-postcard-card__kicker,
+.solnyshko-postcard-card__back {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.solnyshko-postcard-card__back {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.solnyshko-postcard-card button {
+  min-height: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #8a6a3a;
+  border-radius: 4px;
+  background: #2a1c12;
+  color: #fff4d8;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.solnyshko-unlock-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.2rem;
+  border: 1px solid #8a6a3a;
+  background: #1a120c;
+  color: #fff4d8;
+}
+
+.solnyshko-unlock-card__kicker {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+.solnyshko-unlock-card p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.solnyshko-unlock-card button {
+  min-height: 44px;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid #8a6a3a;
+  border-radius: 4px;
+  background: #714c23;
+  color: #fff8df;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+body.staff-mode .site-wrapper [data-solnyshko-hours] [data-game-ui-sound],
+body.staff-mode .site-wrapper [data-solnyshko-hours] [data-game-ui-choices] button,
+body.staff-mode .site-wrapper [data-solnyshko-hours] .solnyshko-hours__input button {
+  color: var(--game-ui-ink, #f3e6d2);
+}
+
+body.staff-mode .site-wrapper [data-solnyshko-hours] [data-game-ui-leave] {
+  color: var(--game-ui-danger, #ff7a6a);
+}
+
+@media (min-width: 720px) {
+  .solnyshko-hours__input {
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .solnyshko-hours__input {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .solnyshko-hours__input button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-solnyshko-hours] [data-game-ui-still],
+  [data-solnyshko-hours] [data-game-ui-video] {
+    filter: saturate(0.7);
+  }
+}

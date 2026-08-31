@@ -1,0 +1,13 @@
+Use case: compositing
+Asset type: exact 16:9 first-frame plate for an analog-horror CCTV game video
+Primary request: Edit Image 1. Keep the abandoned two-monitor observation booth, locked camera, desk, empty chair, left CRT, right CRT, walls, window, console, lighting, grime, framing, and all geometry unchanged. Composite the remote surveillance scene from Image 2 only onto the glass screen area of the RIGHT CRT in Image 1.
+Input images: Image 1 is the edit target and spatial master. Image 2 is the supporting insert for the right CRT screen only.
+Scene/backdrop: preserve Image 1 exactly outside the right CRT glass.
+Subject: Pavel in the complete worn grey Cat mascot head and suit from Image 2 remains clearly visible inside the right monitor signal, looking toward the remote CCTV camera.
+Style/medium: photorealistic late-Soviet institutional observation booth, authentic curved CRT display, analog surveillance feed.
+Composition/framing: preserve the exact wide 16:9 composition of Image 1. The left CRT continues showing its existing dim empty corridor. Fit and perspective-warp Image 2 into the right CRT screen boundaries; crop naturally to the CRT aspect ratio without spilling outside the glass.
+Lighting/mood: keep the booth dark and unchanged; the right CRT emits restrained cold green-grey light consistent with the inserted feed.
+Materials/textures: curved CRT glass reflections, slight bloom, scanlines, low-resolution analog signal, subtle barrel distortion. Preserve the recognizable mascot and the wall-mounted camera with its red indicator when possible within the crop.
+Text: none.
+Constraints: change only the content and glow of the right CRT screen. The chair remains empty. No person appears in the booth. Keep every control, cable, monitor housing, wall mark, window reflection, left CRT image, camera position, and crop unchanged. No camera move, no zoom, no new props.
+Avoid: fullscreen replacement, split-screen graphic, floating image, readable text, subtitles, logos, watermark, extra monitors, altered room geometry, altered left CRT, Pavel outside the right CRT, clean modern equipment.

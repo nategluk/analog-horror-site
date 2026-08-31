@@ -1,0 +1,15 @@
+{
+  "project": "pavel-observation-booth",
+  "tasks": [
+    {
+      "id": "hatch-dessert-delivery",
+      "label": "F14 dessert tray delivery",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04ac7-8651-7801-ac55-bae19f1d079a/exec-fd24e519-1d9a-4894-b64d-be02c6ca6d14.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/hatch-dessert-delivery.txt"
+    },
+    {
+      "id": "hatch-gasmask-delivery",
+      "label": "F14 gas-mask tray delivery",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04ac7-8651-7801-ac55-bae19f1d079a/exec-fd24e519-1d9a-4894-b64d-be02c6ca6d14.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/hatch-gasmask-delivery.txt"
+    }
+  ]
+}

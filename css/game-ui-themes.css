@@ -1,0 +1,39 @@
+[data-game-ui-theme="default"] {
+  --game-ui-ink: #f3e6d2;
+  --game-ui-muted: #c4a36a;
+  --game-ui-line: rgba(196, 163, 106, 0.45);
+  --game-ui-panel: #241810;
+  --game-ui-fill: #100c08;
+  --game-ui-accent: #e7d9aa;
+  --game-ui-danger: #ff7a6a;
+}
+
+[data-game-ui-theme="amber"] {
+  --game-ui-ink: #f3e6d2;
+  --game-ui-muted: #c4a36a;
+  --game-ui-line: rgba(138, 106, 58, 0.55);
+  --game-ui-panel: #2a1c12;
+  --game-ui-fill: #0f0b08;
+  --game-ui-accent: #fff4d8;
+  --game-ui-danger: #ff7a6a;
+}
+
+[data-game-ui-theme="phosphor"] {
+  --game-ui-ink: #d7ead0;
+  --game-ui-muted: #8fa88a;
+  --game-ui-line: rgba(130, 176, 118, 0.45);
+  --game-ui-panel: #1a2318;
+  --game-ui-fill: #10160f;
+  --game-ui-accent: #c5e8b8;
+  --game-ui-danger: #ff7a6a;
+}
+
+[data-game-ui-theme="velvet"] {
+  --game-ui-ink: #f3e4d2;
+  --game-ui-muted: #e7b089;
+  --game-ui-line: rgba(255, 196, 160, 0.28);
+  --game-ui-panel: rgba(48, 14, 14, 0.86);
+  --game-ui-fill: #140808;
+  --game-ui-accent: #ffc49a;
+  --game-ui-danger: #ff7a6a;
+}

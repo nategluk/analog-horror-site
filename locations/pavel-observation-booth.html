@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <title>Развлекательный Комплекс «Детский ЖИР» — Кабинка обозрения</title>
+    <meta name="description" content="Служебный контур кабинки обозрения." />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/pavel-observation-booth.css" />
+  </head>
+  <body>
+    <div class="vhs-noise" aria-hidden="true"></div>
+    <div class="site-wrapper glitch-target">
+      <header class="site-header">
+        <div class="logo-area">
+          <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
+            <img class="logo-image" src="../assets/guest/logo.svg" alt="Детский Жир" />
+            <img class="staff-logo-image" src="../assets/staff/logo.png" alt="Детский Жир" />
+          </h1>
+          <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
+        </div>
+      </header>
+
+      <nav class="site-nav" aria-label="Основная навигация">
+        <ul>
+          <li><a href="/">Главная</a></li>
+          <li><a href="../about">О компании</a></li>
+          <li><a href="../staff">Персонал</a></li>
+          <li><a href="../hiring">Работа</a></li>
+          <li><a href="../faq">FAQ</a></li>
+          <li><a href="../donate">Связь и поддержка</a></li>
+          <li><a href="../archive" rel="nofollow">Архив</a></li>
+        </ul>
+      </nav>
+
+      <main class="panel">
+        <section class="pavel-booth" data-pavel-booth aria-label="Кабинка обозрения">
+          <header class="pavel-booth__top">
+            <p class="pavel-booth__kicker">КАБИНКА ОБОЗРЕНИЯ</p>
+            <p class="pavel-booth__room" data-booth-room>МОНИТОРНАЯ</p>
+          </header>
+
+          <div class="pavel-booth__stage-wrap">
+            <div class="pavel-booth__hud">
+              <button
+                class="pavel-booth__hud-btn pavel-booth__sound"
+                type="button"
+                data-booth-sound
+                aria-pressed="false"
+                aria-label="Включить звук смены"
+                title="Звук"
+              >
+                <svg class="pavel-booth__icon pavel-booth__icon--sound-on" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M16 9.5a4 4 0 0 1 0 5" fill="none" />
+                  <path d="M18.2 7.2a7 7 0 0 1 0 9.6" fill="none" />
+                </svg>
+                <svg class="pavel-booth__icon pavel-booth__icon--sound-off" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M17 10l4 4M21 10l-4 4" fill="none" />
+                </svg>
+              </button>
+              <button
+                class="pavel-booth__hud-btn pavel-booth__leave"
+                type="button"
+                data-booth-leave
+                aria-label="Покинуть кабинку"
+                title="Покинуть кабинку"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <figure class="pavel-booth__stage" data-booth-stage data-visual="CONTROL_PAVEL_PRESENT">
+              <img
+                class="pavel-booth__still"
+                data-booth-still
+                src="../assets/guest/locations/pavel/tour-control-start.webp"
+                alt="Павел у пульта в кабинке обозрения"
+              />
+              <video
+                class="pavel-booth__video"
+                data-booth-video
+                playsinline
+                muted
+                preload="metadata"
+                hidden
+              ></video>
+            </figure>
+          </div>
+
+          <section class="pavel-booth__panel">
+            <div class="pavel-booth__bubble" data-booth-bubble>
+              <p class="pavel-booth__speaker" data-booth-speaker>ПАВЕЛ</p>
+              <p class="pavel-booth__text" id="pavel-booth-line" data-booth-text tabindex="0"></p>
+            </div>
+            <div class="pavel-booth__choices" data-booth-choices></div>
+            <p class="pavel-booth__reward" data-booth-reward role="status" aria-live="polite" hidden></p>
+            <p class="visually-hidden" data-booth-live aria-live="polite"></p>
+          </section>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p class="guest-content">Служебный контур наблюдения.</p>
+        <p class="staff-content">OBSERVATION BOOTH // OPERATOR HOLD</p>
+        <nav class="social-links" aria-label="Социальные сети">
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
+          <a href="https://www.tiktok.com/@ai_visions_lab/" target="_blank" rel="noopener noreferrer">TikTok</a>
+        </nav>
+        <div class="footer-trigger" title="service point" aria-hidden="true"></div>
+      </footer>
+    </div>
+    <script src="../js/dossier-store.js"></script>
+    <script src="../content/irina/call-content.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../content/pavel/observation-booth-content.js"></script>
+    <script src="../js/pavel-observation-booth.js"></script>
+  </body>
+</html>

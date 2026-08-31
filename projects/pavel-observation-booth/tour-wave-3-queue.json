@@ -1,0 +1,30 @@
+{
+  "project": "pavel-observation-booth",
+  "tasks": [
+    {
+      "id": "v09-tour-control",
+      "label": "V09 tour control, 8s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 8 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04e61-b1f3-77f3-b42e-5882ebc41a66/exec-c438cae0-1de5-453b-a17f-46426691e8e0.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v09-tour-control.txt"
+    },
+    {
+      "id": "v10-tour-bedroom",
+      "label": "V10 tour bedroom, 10s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 10 --aspect-ratio 16:9 --image /Users/nateglukhov/.cursor/projects/Users-nateglukhov-analog-horror-site/assets/grok-image-7b03dc20-4b55-4e03-91f5-ae199443803e-785b16e6-c806-48ca-8017-78e65b4f64c7.jpg --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v10-tour-bedroom.txt"
+    },
+    {
+      "id": "v11-tour-bathroom",
+      "label": "V11 tour bathroom, 7s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 7 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04e61-b1f3-77f3-b42e-5882ebc41a66/exec-cc676738-1bec-49a0-a6e8-0c74b36ecca6.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v11-tour-bathroom.txt"
+    },
+    {
+      "id": "v12-tour-storage",
+      "label": "V12 tour storage, 8s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 8 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04e61-b1f3-77f3-b42e-5882ebc41a66/exec-a8284281-a2fb-4249-9922-d85bc6d8c968.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v12-tour-storage.txt"
+    },
+    {
+      "id": "v13-tour-hatch",
+      "label": "V13 tour hatch, 5s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/.codex/generated_images/01a04ac7-8651-7801-ac55-bae19f1d079a/exec-fd24e519-1d9a-4894-b64d-be02c6ca6d14.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v13-tour-hatch.txt"
+    }
+  ]
+}

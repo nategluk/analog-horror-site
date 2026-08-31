@@ -641,6 +641,24 @@ body.staff-mode .site-wrapper::after {
   animation: scanline-roll 6s linear infinite;
 }
 
+body.pavel-booth-open,
+body.lora-room-open {
+  animation: none;
+  text-shadow: none;
+}
+
+body.pavel-booth-open::before,
+body.lora-room-open::before,
+body.pavel-booth-open::after,
+body.lora-room-open::after {
+  display: none;
+}
+
+body.pavel-booth-open .site-wrapper::after,
+body.lora-room-open .site-wrapper::after {
+  display: none;
+}
+
 body::before {
   content: "";
   position: fixed;
@@ -6027,6 +6045,11 @@ body.staff-mode .vhs-noise {
   z-index: 3;
 }
 
+body.pavel-booth-open .vhs-noise,
+body.lora-room-open .vhs-noise {
+  display: none;
+}
+
 /* iOS и часть Android: fixed background даёт рывки — на узких экранах отключаем */
 @media (max-width: 768px) {
   body:not(.staff-mode) {
@@ -7290,6 +7313,10 @@ body.staff-mode .protocol-footage img {
   filter: contrast(1.12) saturate(0.82);
 }
 
+body.staff-mode .protocol-footage--widescreen img {
+  aspect-ratio: 16 / 9;
+}
+
 body.staff-mode .protocol-footage figcaption {
   position: relative;
   z-index: 1;
@@ -8412,6 +8439,110 @@ body.staff-mode .broadcast-shell-page .cctv-source-screen[hidden] {
   display: none;
 }
 
+body.staff-mode .broadcast-shell-page .cctv-source-screen__body {
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.5rem, 1.8vw, 1rem);
+  min-height: 0;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__library {
+  display: grid;
+  align-content: center;
+  gap: clamp(0.45rem, 1.5vw, 0.8rem);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__library[hidden] {
+  display: none;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__library-heading {
+  margin: 0;
+  color: var(--broadcast-cyan);
+  font-size: clamp(0.62rem, 1.55vw, 0.86rem);
+  letter-spacing: 0.11em;
+  text-align: center;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs {
+  display: grid;
+  gap: 0.2rem;
+  width: 100%;
+  min-height: 4.1rem;
+  padding: clamp(0.55rem, 1.5vw, 0.85rem);
+  border: 1px solid rgba(110, 208, 139, 0.56);
+  color: #dfe9d1;
+  background: rgba(12, 29, 20, 0.86);
+  font: inherit;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: inset 0 0 12px rgba(110, 208, 139, 0.08);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs:hover,
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs:focus-visible {
+  border-color: var(--broadcast-yellow);
+  color: #fff4c4;
+  background: rgba(34, 45, 19, 0.96);
+  outline: 1px solid var(--broadcast-yellow);
+  outline-offset: 2px;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs > span {
+  color: var(--broadcast-yellow);
+  font-size: clamp(0.56rem, 1.3vw, 0.72rem);
+  letter-spacing: 0.1em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs > strong {
+  color: #f4f1df;
+  font-size: clamp(0.76rem, 2vw, 1.08rem);
+  letter-spacing: 0.05em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs > small {
+  overflow: hidden;
+  color: #aeb5bf;
+  font-size: clamp(0.48rem, 1.15vw, 0.64rem);
+  letter-spacing: 0.07em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__vhs > em {
+  color: var(--broadcast-green);
+  font-size: clamp(0.52rem, 1.35vw, 0.7rem);
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__video {
+  grid-row: 1;
+  align-self: stretch;
+  justify-self: stretch;
+  width: 100%;
+  min-height: 0;
+  border: 1px solid rgba(110, 208, 139, 0.42);
+  background: #020304;
+  object-fit: cover;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.8);
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__video[hidden] {
+  display: none;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__video.is-media-fallback {
+  border-color: var(--broadcast-yellow);
+}
+
 body.staff-mode .broadcast-shell-page .cctv-source-screen__header {
   display: flex;
   justify-content: space-between;
@@ -8451,6 +8582,34 @@ body.staff-mode .broadcast-shell-page .cctv-source-screen__slot span {
   height: 2px;
   background: #111820;
   box-shadow: 0 -1px #020305;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__back {
+  grid-row: 2;
+  justify-self: center;
+  min-height: 2.25rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid rgba(110, 208, 139, 0.56);
+  color: var(--broadcast-green);
+  background: rgba(2, 10, 7, 0.78);
+  font: inherit;
+  font-size: clamp(0.52rem, 1.3vw, 0.7rem);
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__back:hover,
+body.staff-mode .broadcast-shell-page .cctv-source-screen__back:focus-visible {
+  border-color: var(--broadcast-yellow);
+  color: var(--broadcast-yellow);
+  outline: 1px solid var(--broadcast-yellow);
+  outline-offset: 2px;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-source-screen__back[hidden] {
+  display: none;
 }
 
 body.staff-mode .broadcast-shell-page .cctv-source-screen__message {
@@ -8732,6 +8891,17 @@ body.staff-mode .broadcast-shell-page .cctv-remote button strong {
   font-family: var(--font-display);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button small {
+  color: #c7cbd0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+}
+
+body.staff-mode .broadcast-shell-page .cctv-remote button small[hidden] {
+  display: none;
 }
 
 body.staff-mode .broadcast-shell-page .cctv-remote button[data-cctv-mute] span {

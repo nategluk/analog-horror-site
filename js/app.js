@@ -9,13 +9,34 @@
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
+  const IRINA_SOLNYSHKO_KEY = "tyndex_irina_solnyshko_v1";
+  const PAVEL_BOOTH_KEY = "tyndex_pavel_observation_booth_v1";
   const STAFF_DISPLAY_NAME_MAX = 20;
   const LORA_CURATOR_ID = "0391-L";
+  const PAVEL_CURATOR_ID = "0274-P";
   const LORA_SAVE_KEY = "tyndex_lora_red_room_v1";
   const LORA_ASSIGN_KEY = "tyndex_lora_channel_v1";
   const LORA_RECEIPT_ID = "lora-night-receipt";
   const LORA_TOY_ID = "lora-nevalyashka";
   const LORA_PAGE_ID = "lora-quiet-sleep-page";
+  const PAVEL_CASSETTE_ID = "pavel-lora-cassette";
+  const PAVEL_CASSETTE_VIDEO = "assets/staff/tv/pavel-cassette.mp4";
+  const PAVEL_CASSETTE_POSTER = "assets/staff/tv/pavel-cassette-poster.webp";
+  const VHS_CATALOG = Object.freeze({
+    [PAVEL_CASSETTE_ID]: Object.freeze({
+      id: PAVEL_CASSETTE_ID,
+      code: "OB-0274-P-01",
+      title: "Кассета из кабинки обозрения",
+      type: "ВИДЕОНОСИТЕЛЬ",
+      source: "КАБИНКА ОБОЗРЕНИЯ // ЯЩИК ТУМБОЧКИ",
+      description:
+        "Старая видеокассета, найденная в верхнем ящике тумбочки. Проигрыватель в кабинке отсутствует.",
+      video: PAVEL_CASSETTE_VIDEO,
+      poster: PAVEL_CASSETTE_POSTER,
+      alt: "Кадр с видеокассеты из кабинки обозрения Павла",
+      durationLabel: "25 СЕК.",
+    }),
+  });
   const CCTV_HAUNT_DELAY = 60000;
   const DOSSIER_CLAIM_ENDPOINT =
     "https://edoqmjtqkqnksxjsjqcg.supabase.co/functions/v1/begin-dossier-claim";
@@ -456,6 +477,8 @@
 
     state.audioMuted = isMuted;
     video.muted = isMuted;
+    const cassetteVideo = consoleElement.querySelector("[data-cctv-cassette-video]");
+    if (cassetteVideo) cassetteVideo.muted = isMuted;
     muteButton.setAttribute("aria-pressed", String(isMuted));
     muteButton.setAttribute(
       "aria-label",
@@ -482,19 +505,166 @@
     }
   };
 
+  const resetCctvCassetteVideo = (consoleElement) => {
+    const cassetteVideo = consoleElement.querySelector("[data-cctv-cassette-video]");
+    if (!cassetteVideo) return;
+
+    cassetteVideo.pause();
+    cassetteVideo.onended = null;
+    cassetteVideo.onerror = null;
+    cassetteVideo.onclick = null;
+    cassetteVideo.hidden = true;
+    cassetteVideo.classList.remove("is-media-fallback");
+    cassetteVideo.removeAttribute("src");
+    try {
+      cassetteVideo.currentTime = 0;
+    } catch {
+      /* media may not have loaded metadata yet */
+    }
+    cassetteVideo.load();
+  };
+
+  const updateCctvVhsButton = (consoleElement, ownedCount = getOwnedVhs().length) => {
+    const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const sourceLabel = consoleElement.querySelector("[data-cctv-source-label]");
+    const sourceCount = consoleElement.querySelector("[data-cctv-vhs-count]");
+    if (!sourceButton) return;
+
+    const hasVhs = ownedCount > 0;
+    if (sourceLabel) sourceLabel.textContent = hasVhs ? `VCR // ${ownedCount}` : "SOURCE";
+    if (sourceCount) {
+      sourceCount.hidden = !hasVhs;
+      sourceCount.textContent = hasVhs ? `${ownedCount} VHS` : "";
+    }
+    if (!consoleElement.classList.contains("is-source")) {
+      sourceButton.setAttribute(
+        "aria-label",
+        hasVhs
+          ? `Открыть VCR: доступно кассет — ${ownedCount}`
+          : "Открыть внешний источник"
+      );
+    }
+  };
+
+  const updateCctvVhsAccess = () => {
+    const ownedCount = getOwnedVhs().length;
+    document.querySelectorAll("[data-cctv-console]").forEach((consoleElement) => {
+      updateCctvVhsButton(consoleElement, ownedCount);
+    });
+  };
+
+  const playCctvVhs = (consoleElement, vhsId) => {
+    const record = getOwnedVhs().find((item) => item.id === vhsId);
+    const cassetteVideo = consoleElement.querySelector("[data-cctv-cassette-video]");
+    const emptySlot = consoleElement.querySelector("[data-cctv-cassette-empty]");
+    const library = consoleElement.querySelector("[data-cctv-vhs-library]");
+    const backButton = consoleElement.querySelector("[data-cctv-vhs-back]");
+    const message = consoleElement.querySelector("[data-cctv-source-message]");
+    const status = consoleElement.querySelector("[data-cctv-source-status]");
+    const state = consoleElement._cctvState;
+    if (!record || !cassetteVideo || !emptySlot || !library || !message || !status) {
+      return false;
+    }
+
+    resetCctvCassetteVideo(consoleElement);
+    emptySlot.hidden = true;
+    library.hidden = true;
+    if (backButton) backButton.hidden = false;
+    cassetteVideo.src = audioAsset(record.video);
+    cassetteVideo.poster = audioAsset(record.poster);
+    cassetteVideo.loop = false;
+    cassetteVideo.muted = state?.audioMuted === true;
+    cassetteVideo.hidden = false;
+    cassetteVideo.classList.remove("is-media-fallback");
+    if (state) state.selectedVhsId = record.id;
+    message.textContent = `${record.code} // ${record.title}`;
+    status.textContent = `СТЕРЕО // ${record.durationLabel || "ЗАПИСЬ"} // СИГНАЛ ПРИНЯТ`;
+    cassetteVideo.onerror = () => {
+      cassetteVideo.classList.add("is-media-fallback");
+      status.textContent = "СИГНАЛ НЕ ЧИТАЕТСЯ // ПОКАЗАН КАДР";
+    };
+    cassetteVideo.onended = () => {
+      status.textContent = `ВОСПРОИЗВЕДЕНИЕ ЗАВЕРШЕНО // ${record.code} СОХРАНЕНА`;
+    };
+    cassetteVideo.onclick = () => {
+      if (cassetteVideo.ended) return;
+      cassetteVideo.play().catch(() => {
+        status.textContent = "НАЖМИТЕ НА КАДР ДЛЯ ЗАПУСКА";
+      });
+    };
+    cassetteVideo.play().catch(() => {
+      status.textContent = "НАЖМИТЕ НА КАДР ДЛЯ ЗАПУСКА";
+    });
+    return true;
+  };
+
+  const renderCctvVhsLibrary = (consoleElement) => {
+    const cassetteVideo = consoleElement.querySelector("[data-cctv-cassette-video]");
+    const emptySlot = consoleElement.querySelector("[data-cctv-cassette-empty]");
+    const library = consoleElement.querySelector("[data-cctv-vhs-library]");
+    const backButton = consoleElement.querySelector("[data-cctv-vhs-back]");
+    const message = consoleElement.querySelector("[data-cctv-source-message]");
+    const status = consoleElement.querySelector("[data-cctv-source-status]");
+    if (!cassetteVideo || !emptySlot || !library || !message || !status) return false;
+
+    const ownedVhs = getOwnedVhs();
+    const state = consoleElement._cctvState;
+    if (state) state.selectedVhsId = null;
+    resetCctvCassetteVideo(consoleElement);
+    library.replaceChildren();
+    library.hidden = ownedVhs.length === 0;
+    emptySlot.hidden = ownedVhs.length > 0;
+    if (backButton) backButton.hidden = true;
+
+    if (!ownedVhs.length) {
+      message.textContent = "ВСТАВЬТЕ ВИДЕОКАССЕТУ";
+      status.textContent = "НОСИТЕЛЬ НЕ ОБНАРУЖЕН";
+      return false;
+    }
+
+    const heading = document.createElement("p");
+    heading.className = "cctv-source-screen__library-heading";
+    heading.textContent = `ДОСТУПНЫЕ VHS // ${ownedVhs.length}`;
+    library.append(heading);
+
+    ownedVhs.forEach((record) => {
+      const button = document.createElement("button");
+      const code = document.createElement("span");
+      const title = document.createElement("strong");
+      const source = document.createElement("small");
+      const action = document.createElement("em");
+      button.type = "button";
+      button.className = "cctv-source-screen__vhs";
+      button.dataset.cctvVhsSelect = record.id;
+      code.textContent = record.code;
+      title.textContent = record.title;
+      source.textContent = record.source;
+      action.textContent = "ВСТАВИТЬ И ПРОИГРАТЬ";
+      button.append(code, title, source, action);
+      button.addEventListener("click", () => {
+        playCctvVhs(consoleElement, record.id);
+      });
+      library.append(button);
+    });
+
+    message.textContent = "ВЫБЕРИТЕ ЗАПИСЬ";
+    status.textContent = "VCR READY // ВОСПРОИЗВЕДЕНИЕ ПО ЗАПРОСУ";
+    return true;
+  };
+
   const closeCctvSourceScreen = (consoleElement, { restoreDisplay = false } = {}) => {
     const sourceScreen = consoleElement.querySelector("[data-cctv-source-screen]");
     const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const video = consoleElement.querySelector("[data-cctv-video]");
     const remoteStatus = consoleElement.querySelector("[data-cctv-remote-state]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     const state = consoleElement._cctvState;
 
+    resetCctvCassetteVideo(consoleElement);
     if (sourceScreen) sourceScreen.hidden = true;
     consoleElement.classList.remove("is-source");
-    if (sourceButton) {
-      sourceButton.setAttribute("aria-pressed", "false");
-      sourceButton.setAttribute("aria-label", "Открыть внешний источник");
-    }
+    if (sourceButton) sourceButton.setAttribute("aria-pressed", "false");
+    updateCctvVhsButton(consoleElement);
 
     if (!restoreDisplay || !state?.sources.length) return;
 
@@ -503,11 +673,15 @@
     const channelName = source.dataset.channelName || "ИСТОЧНИК НЕ ОПРЕДЕЛЁН";
     if (remoteStatus) remoteStatus.textContent = channelCode;
     if (label) label.textContent = `${channelCode} // ${channelName}`;
+    if (video && consoleElement.dataset.cctvPowered === "true") {
+      video.play().catch(() => {});
+    }
   };
 
   const toggleCctvSourceScreen = (consoleElement) => {
     const sourceScreen = consoleElement.querySelector("[data-cctv-source-screen]");
     const sourceButton = consoleElement.querySelector("[data-cctv-source-button]");
+    const video = consoleElement.querySelector("[data-cctv-video]");
     const remoteStatus = consoleElement.querySelector("[data-cctv-remote-state]");
     const label = consoleElement.querySelector("[data-cctv-channel-label]");
     if (!sourceScreen || !sourceButton) return;
@@ -523,12 +697,14 @@
     }
 
     closeCctvTeletext(consoleElement);
+    video?.pause();
     sourceScreen.hidden = false;
     consoleElement.classList.add("is-source");
     sourceButton.setAttribute("aria-pressed", "true");
     sourceButton.setAttribute("aria-label", "Вернуться к телевизионному эфиру");
     if (remoteStatus) remoteStatus.textContent = "SOURCE";
     if (label) label.textContent = "SRC // ВНЕШНИЙ ВХОД";
+    renderCctvVhsLibrary(consoleElement);
   };
 
   const showNextCctvTeletextPage = (consoleElement) => {
@@ -758,6 +934,7 @@
       teletextDeck: [],
       lastTeletextPage: "",
       audioMuted: false,
+      selectedVhsId: null,
       sounds: createCctvSoundRack(),
     };
     setCctvMuted(consoleElement, false);
@@ -801,6 +978,13 @@
       toggleCctvSourceScreen(consoleElement);
     });
 
+    consoleElement
+      .querySelector("[data-cctv-vhs-back]")
+      ?.addEventListener("click", () => {
+        playCctvSound(consoleElement, "click");
+        renderCctvVhsLibrary(consoleElement);
+      });
+
     muteButton.addEventListener("click", () => {
       playCctvSound(consoleElement, "click");
       setCctvMuted(consoleElement, !consoleElement._cctvState.audioMuted);
@@ -819,6 +1003,7 @@
     stopCctvConsole(consoleElement, {
       playStatic: body.classList.contains("staff-mode"),
     });
+    updateCctvVhsButton(consoleElement);
   };
 
   const updateCctvVideos = (isStaff) => {
@@ -1221,6 +1406,37 @@
     window.TyndexLoraRedRoom?.init(root);
   };
 
+  const ensurePavelBoothStyles = () => {
+    if (document.querySelector("link[data-pavel-booth-css]")) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = new URL("../css/pavel-observation-booth.css", scriptUrl).href;
+    link.dataset.pavelBoothCss = "true";
+    document.head.append(link);
+  };
+
+  const initPavelObservationBooth = async () => {
+    const root = document.querySelector("[data-pavel-booth]");
+    if (!root) {
+      document.body.classList.remove("pavel-booth-open");
+      window.TyndexPavelObservationBooth?.destroy?.();
+      return;
+    }
+
+    ensurePavelBoothStyles();
+    const appScript = [...document.scripts].find((script) =>
+      /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
+    );
+    const base = appScript?.src || window.location.href;
+    if (!window.TyndexPavelObservationBoothContent) {
+      await loadPageScript(new URL("../content/pavel/observation-booth-content.js", base).href);
+    }
+    if (typeof window.TyndexPavelObservationBooth?.init !== "function") {
+      await loadPageScript(new URL("pavel-observation-booth.js", base).href);
+    }
+    window.TyndexPavelObservationBooth?.init(root);
+  };
+
   const launchLoraShift = () => {
     ensureLoraRoomStyles();
     window.sessionStorage.setItem(
@@ -1243,6 +1459,20 @@
     window.setTimeout(() => {
       window.location.assign(target);
     }, reducedMotion ? 280 : 1700);
+  };
+
+  const launchPavelBooth = () => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const veil = document.createElement("div");
+    veil.className = "lora-room-assign";
+    veil.setAttribute("role", "status");
+    veil.innerHTML =
+      "<div><p>КАНАЛ НАЗНАЧЕН</p><p>МЕСТО НАЗНАЧЕНИЯ: КАБИНКА ОБОЗРЕНИЯ</p></div>";
+    document.body.append(veil);
+    const target = new URL("../locations/pavel-observation-booth.html", scriptUrl).href;
+    window.setTimeout(() => {
+      window.location.assign(target);
+    }, reducedMotion ? 280 : 900);
   };
 
   const initMusicPlayer = () => {
@@ -1336,6 +1566,15 @@
 
   const resolveStaffMode = () =>
     localStorage.getItem(MODE_KEY) === "staff" && hasStaffSession();
+
+  const hasPavelBridgeAccess = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(IRINA_SOLNYSHKO_KEY));
+      return saved?.version === 1 && saved?.status === "completed" && saved?.pavelAccessUnlocked === true;
+    } catch {
+      return false;
+    }
+  };
 
   const syncModeLabel = (isStaff) => {
     const statusLabel = document.querySelector("[data-mode-label]");
@@ -1562,6 +1801,8 @@
       note: "Запросил увольнение трижды. Текущее место регистрации не раскрывается.",
       image: audioAsset("assets/staff/staff/pavel_sad.jpg"),
       headerImage: audioAsset("assets/staff/personnel/pavel-record.webp"),
+      dossier: "documents/dossier-pavel.html",
+      curatorId: PAVEL_CURATOR_ID,
     },
     oleg: {
       name: "ОЛЕГ Ж.",
@@ -1729,6 +1970,20 @@
       description:
         "Отдельная бумажная страница, оставленная после смены. Текст назначается по результату замещения.",
     },
+    ...Object.fromEntries(
+      Object.entries(VHS_CATALOG).map(([id, record]) => [
+        id,
+        {
+          code: record.code,
+          title: record.title,
+          type: record.type,
+          source: record.source,
+          description: record.description,
+          src: record.poster,
+          alt: record.alt,
+        },
+      ])
+    ),
   });
   const curatorNodeArtifacts = {
     ...(irinaCallContent.nodeArtifacts || {}),
@@ -1830,6 +2085,33 @@
       (message) => !removedMessages.has(message.id)
     );
     return profile;
+  };
+
+  const claimVhsArtifacts = (profile, artifactIds = [], { obtainedAt } = {}) => {
+    if (!profile) return [];
+
+    normalizeStaffProfile(profile);
+    const removed = new Set(profile.removedArtifactIds);
+    const known = new Set(profile.artifacts.map((artifact) => artifact.id));
+    const timestamp = Number.isFinite(obtainedAt) ? obtainedAt : Date.now();
+    const claimed = [];
+
+    [...new Set(Array.isArray(artifactIds) ? artifactIds : [])].forEach((artifactId) => {
+      if (!VHS_CATALOG[artifactId] || !staffArtifacts[artifactId]) return;
+      if (removed.has(artifactId) || known.has(artifactId)) return;
+      profile.artifacts.push({
+        id: artifactId,
+        obtainedAt: timestamp,
+      });
+      known.add(artifactId);
+      claimed.push(artifactId);
+    });
+
+    if (claimed.length) {
+      profile.updatedAt = Date.now();
+      dossierStore.saveDossier(profile);
+    }
+    return claimed;
   };
 
   const seedStaffMessages = (profile) => {
@@ -1937,6 +2219,42 @@
     return profile;
   };
 
+  const readPavelBoothSave = () => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(PAVEL_BOOTH_KEY));
+      if (!saved || saved.version !== 1) return null;
+      return saved;
+    } catch {
+      return null;
+    }
+  };
+
+  const claimPavelCassette = (profile) => {
+    if (!profile) return profile;
+    const booth = readPavelBoothSave();
+    const cassetteIds = [
+      ...(Array.isArray(booth?.cassetteIds) ? booth.cassetteIds : []),
+      ...(booth?.cassetteFound ? [PAVEL_CASSETTE_ID] : []),
+    ];
+    claimVhsArtifacts(profile, cassetteIds, {
+      obtainedAt: booth?.updatedAt,
+    });
+    return profile;
+  };
+
+  const getOwnedVhs = (profile = readStaffProfile()) => {
+    if (!profile) return [];
+    normalizeStaffProfile(profile);
+    const stored = new Map(profile.artifacts.map((artifact) => [artifact.id, artifact]));
+    const removed = new Set(profile.removedArtifactIds);
+    return Object.values(VHS_CATALOG)
+      .filter((record) => stored.has(record.id) && !removed.has(record.id))
+      .map((record) => ({
+        ...record,
+        obtainedAt: stored.get(record.id)?.obtainedAt || null,
+      }));
+  };
+
   const readStaffProfile = () => {
     try {
       const profile = dossierStore.readDossier();
@@ -1944,7 +2262,7 @@
         return null;
       }
 
-      return claimLoraShiftArtifacts(seedStaffMessages(profile));
+      return claimPavelCassette(claimLoraShiftArtifacts(seedStaffMessages(profile)));
     } catch {
       return null;
     }
@@ -2093,7 +2411,7 @@
     });
     profile.artifacts = [...knownArtifacts.values()];
 
-    return saveStaffProfile(claimLoraShiftArtifacts(seedStaffMessages(profile)));
+    return saveStaffProfile(claimPavelCassette(claimLoraShiftArtifacts(seedStaffMessages(profile))));
   };
 
   const getStaffProfile = () => {
@@ -2594,6 +2912,31 @@
     exitStaff: () => applyMode(false),
     staffSessionKey: STAFF_SESSION_KEY,
   };
+
+  const claimVhsFromDossier = (artifactId, options = {}) => {
+    let profile = null;
+    try {
+      profile = dossierStore.readDossier();
+    } catch {
+      return false;
+    }
+    if (!profile) {
+      profile = createStaffProfile();
+    }
+    if (profile.version !== 1 || profile.curatorId !== "0091-A") {
+      return false;
+    }
+
+    const claimed = claimVhsArtifacts(profile, [artifactId], options);
+    if (claimed.length) updateCctvVhsAccess();
+    return claimed.length > 0;
+  };
+
+  window.TyndexVhs = Object.freeze({
+    catalog: VHS_CATALOG,
+    getOwned: () => getOwnedVhs(),
+    claim: claimVhsFromDossier,
+  });
 
   const getAssignmentCallbacks = (progress, role) => {
     const animatorCallbacks = [
@@ -3587,6 +3930,13 @@
         return;
       }
 
+      if (curatorId === PAVEL_CURATOR_ID) {
+        result.style.whiteSpace = "pre-line";
+        result.textContent = "КАНАЛ НАЗНАЧЕН\nМЕСТО НАЗНАЧЕНИЯ: КАБИНКА ОБОЗРЕНИЯ";
+        launchPavelBooth();
+        return;
+      }
+
       const knownResponses = {
         "0144-C": "КАНАЛ 0144-C ПЕРЕМЕЩЁН // АДРЕС НЕ РАЗГЛАШАЕТСЯ",
         "0192-D": "КАНАЛ 0192-D НЕ НАЙДЕН // ПОИСК СОТРУДНИКА ПРОДОЛЖАЕТСЯ",
@@ -3753,6 +4103,7 @@
     const requestIdButton = dossier.querySelector("[data-personnel-request-id]");
     const idResponse = dossier.querySelector("[data-personnel-id-response]");
     const useIdLink = dossier.querySelector("[data-personnel-use-id]");
+    const boothLink = dossier.querySelector("[data-personnel-booth-link]");
     const resumeLink = dossier.querySelector("[data-player-resume]");
     const reclassifyLink = dossier.querySelector("[data-player-reclassify]");
     const claimButton = dossier.querySelector("[data-player-claim]");
@@ -4237,6 +4588,9 @@
 
     const prepareIdRequest = (personnelKey) => {
       const record = staffDirectory[personnelKey];
+      if (personnelKey === "pavel" && boothLink) {
+        boothLink.hidden = false;
+      }
       const state = readIntrusionState();
       if (state.key !== personnelKey) {
         state.key = personnelKey;
@@ -4263,6 +4617,7 @@
       settingsOpen = false;
       intrusion.hidden = true;
       useIdLink.hidden = true;
+      if (boothLink) boothLink.hidden = true;
       idResponse.textContent = "";
 
       if (profile) {
@@ -4493,6 +4848,12 @@
       idResponse.textContent = "ЗАПРОС ВРЕМЕННО ЗАБЛОКИРОВАН";
       requestIdButton.focus();
     });
+
+    const requestedPersonnel = new URLSearchParams(window.location.search).get("personnel");
+    if (requestedPersonnel === "pavel" && hasPavelBridgeAccess()) {
+      const pavelCard = grid.querySelector('[data-personnel-open="pavel"]');
+      window.setTimeout(() => openPersonnelDossier("pavel", pavelCard), 0);
+    }
 
     materials.addEventListener("click", (event) => {
       const remove = event.target.closest("[data-artifact-delete]");
@@ -5013,6 +5374,7 @@
     initHiringThreshold();
     initStaffHomeNotice();
     initLoraRedRoom();
+    initPavelObservationBooth();
     updateCctvVideos(body.classList.contains("staff-mode"));
     syncModeLabel(body.classList.contains("staff-mode"));
 
@@ -5148,6 +5510,7 @@
         await initEpisodeCatalogPage(response.url || url);
         await initRedRoomEspresso();
         await initLoraRedRoom();
+        await initPavelObservationBooth();
         initDOMListeners();
         announceNavigationChange();
         return true;
@@ -5199,8 +5562,18 @@
   const init = () => {
     initMusicPlayer();
     getNavigationAnnouncer();
+    const requestedPersonnel = new URLSearchParams(window.location.search).get("personnel");
+    if (requestedPersonnel === "pavel" && hasPavelBridgeAccess()) {
+      localStorage.setItem(MODE_KEY, "staff");
+      setStaffSession(true);
+    }
     applyMode(resolveStaffMode());
     initDOMListeners();
+    const pavelSave = readPavelBoothSave();
+    if (pavelSave?.cassetteFound || pavelSave?.cassetteIds?.length) {
+      claimPavelCassette(readStaffProfile() || createStaffProfile());
+    }
+    updateCctvVhsAccess();
   };
 
   init();

@@ -17,6 +17,9 @@ const SKIP_KEYS = new Set([
   "delay",
   "visual",
   "scene",
+  "room",
+  "artifact",
+  "artifacts",
   "guest",
   "props",
   "sound",
@@ -59,9 +62,16 @@ const SKIP_KEYS = new Set([
   "requireAny",
   "dogOutcome",
   "receiptVariant",
+  "showFor",
+  "hideFor",
+  "inspect",
+  "loop",
+  "href",
+  "exit",
+  "popup",
 ]);
 
-const SYSTEM_SPEAKERS = new Set(["СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА"]);
+const SYSTEM_SPEAKERS = new Set(["СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА", "ЗАПИСЬ"]);
 
 const GAMES = {
   irina: {
@@ -85,6 +95,28 @@ const GAMES = {
     inbox: null,
     lockedSpeakers: ["Я", "ВЫ", "СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА"],
     extraNameFiles: ["js/app.js"],
+  },
+  pavel: {
+    id: "pavel",
+    title: "Кабинка обозрения",
+    file: "content/pavel/observation-booth-content.js",
+    globalName: "TyndexPavelObservationBoothContent",
+    startNode: "booth-intro",
+    catalogs: [],
+    inbox: null,
+    lockedSpeakers: ["СИСТЕМА", "ВЫ", "Я", "ГОЛОС ИЗ СЛИВА", "ПРОВОДНИЦА", "ЗАПИСКА"],
+    extraNameFiles: [],
+  },
+  solnyshko: {
+    id: "solnyshko",
+    title: "Парк Солнышко после закрытия",
+    file: "content/irina/solnyshko-park-content.js",
+    globalName: "TyndexIrinaSolnyshkoContent",
+    startNode: "gate-night",
+    catalogs: [],
+    inbox: null,
+    lockedSpeakers: ["СИСТЕМА", "ВЫ", "Я"],
+    extraNameFiles: [],
   },
 };
 
@@ -513,7 +545,7 @@ const lineKind = (gameId, { speaker, field }) => {
     return "popup";
   }
   if (field === "action") return speaker && SYSTEM_SPEAKERS.has(speaker) ? "system" : "thought";
-  if (gameId === "lora") {
+  if (gameId === "lora" || gameId === "pavel" || gameId === "solnyshko") {
     if (speaker === "Я" || speaker === "ВЫ") return "thought";
     if (SYSTEM_SPEAKERS.has(speaker)) return "system";
     return "dialogue";

@@ -1,0 +1,10 @@
+{
+  "project": "pavel-observation-booth",
+  "tasks": [
+    {
+      "id": "storage-slide-light-on",
+      "label": "Storage slide light turns on",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 5 --aspect-ratio 16:9 --image /Users/nateglukhov/analog-horror-site/assets/guest/locations/pavel/storage-slide.webp --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/storage-slide-light-on.txt"
+    }
+  ]
+}

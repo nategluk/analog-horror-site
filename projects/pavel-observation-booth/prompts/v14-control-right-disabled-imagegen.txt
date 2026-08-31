@@ -1,0 +1,11 @@
+Use case: precise-object-edit
+Asset type: pixel-matched disabled-channel hold plate for an analog-horror CCTV game
+Primary request: Edit Image 1. Turn OFF only the RIGHT CRT screen. Remove the surveillance image of Pavel from that screen and make the right CRT glass naturally black and unpowered.
+Input images: Image 1 is the sole edit target and exact spatial master.
+Scene/backdrop: preserve the observation booth exactly.
+Style/medium: photorealistic late-Soviet institutional observation booth.
+Composition/framing: preserve the exact 16:9 framing, camera position, crop, perspective, and every object placement.
+Lighting/mood: preserve all existing room lighting and the working left CRT illumination. Remove only the light emitted by the right CRT; retain subtle ambient reflections on its curved dark glass.
+Text: none.
+Constraints: change only the pixels needed to make the right CRT screen black and powered off. Keep the right monitor housing, buttons, glass curvature, desk, console, joystick, cables, empty chair, window, walls, grime, shadows, and LEFT CRT image unchanged. The left CRT must remain on with the same empty corridor feed. No person in the booth.
+Avoid: changing the left CRT, changing room exposure, changing geometry, moving objects, replacing equipment, adding text, adding static, adding a bright standby symbol, adding people, camera move, zoom, watermark.

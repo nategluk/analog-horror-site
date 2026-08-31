@@ -1,0 +1,10 @@
+{
+  "project": "pavel-observation-booth",
+  "tasks": [
+    {
+      "id": "v14-right-crt-request",
+      "label": "V14 Pavel on right CRT, 8s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 8 --aspect-ratio 16:9 --image /Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/assets/images/control-pavel-on-right-v1.png --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/v14-right-crt-request.txt"
+    }
+  ]
+}

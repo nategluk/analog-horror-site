@@ -286,13 +286,39 @@
                     <strong>VIDEO INPUT</strong>
                     <span>VCR</span>
                   </div>
-                  <div class="cctv-source-screen__slot" aria-hidden="true">
-                    <span></span>
+                  <div class="cctv-source-screen__body">
+                    <div
+                      class="cctv-source-screen__library"
+                      data-cctv-vhs-library
+                      aria-live="polite"
+                      hidden
+                    ></div>
+                    <video
+                      class="cctv-source-screen__video"
+                      data-cctv-cassette-video
+                      src="assets/staff/tv/pavel-cassette.mp4"
+                      poster="assets/staff/tv/pavel-cassette-poster.webp"
+                      aria-label="Кассета из кабинки обозрения Павла"
+                      playsinline
+                      preload="none"
+                      hidden
+                    ></video>
+                    <div class="cctv-source-screen__slot" data-cctv-cassette-empty aria-hidden="true">
+                      <span></span>
+                    </div>
+                    <button
+                      class="cctv-source-screen__back"
+                      type="button"
+                      data-cctv-vhs-back
+                      hidden
+                    >
+                      ВЫБРАТЬ ДРУГУЮ КАССЕТУ
+                    </button>
                   </div>
-                  <p class="cctv-source-screen__message">
+                  <p class="cctv-source-screen__message" data-cctv-source-message>
                     ВСТАВЬТЕ ВИДЕОКАССЕТУ
                   </p>
-                  <p class="cctv-source-screen__status">
+                  <p class="cctv-source-screen__status" data-cctv-source-status>
                     НОСИТЕЛЬ НЕ ОБНАРУЖЕН
                   </p>
                   <p class="cctv-source-screen__footer">
@@ -340,7 +366,8 @@
                   aria-label="Открыть внешний источник"
                 >
                   <span aria-hidden="true">SRC</span>
-                  <strong>SOURCE</strong>
+                  <strong data-cctv-source-label>SOURCE</strong>
+                  <small data-cctv-vhs-count hidden></small>
                 </button>
                 <button
                   type="button"
@@ -539,6 +566,6 @@
     </div>
     <script src="js/dossier-store.js"></script>
     <script src="content/irina/call-content.js"></script>
-    <script src="js/app.js?v=cctv-playlist-1"></script>
+    <script src="js/app.js?v=pavel-vhs-reward-1"></script>
   </body>
 </html>

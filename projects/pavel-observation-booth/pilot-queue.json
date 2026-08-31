@@ -1,0 +1,20 @@
+{
+  "project": "pavel-observation-booth",
+  "tasks": [
+    {
+      "id": "m01-control-handoff",
+      "label": "M01 control handoff, 8s",
+      "cmd": "pixverse create reference --model pixverse-c1 --quality 540p --duration 8 --aspect-ratio 16:9 --no-audio --images assets/staff/curators/irina/cctv-pavel-observation-booth-poster.webp assets/staff/documents/pavel-personnel-portrait.webp assets/staff/documents/pavel-observation-booth.webp --prompt projects/pavel-observation-booth/prompts/m01-control-handoff.txt"
+    },
+    {
+      "id": "m03-drain-beckon",
+      "label": "M03 drain beckon, 7s",
+      "cmd": "pixverse create video --model pixverse-c1 --quality 540p --duration 7 --aspect-ratio 16:9 --no-audio --no-multi-shot --prompt projects/pavel-observation-booth/prompts/m03-drain-beckon.txt"
+    },
+    {
+      "id": "m09-hatch-escape",
+      "label": "M09 hatch escape, 5s",
+      "cmd": "pixverse create reference --model pixverse-c1 --quality 540p --duration 5 --aspect-ratio 16:9 --no-audio --images assets/staff/documents/pavel-personnel-portrait.webp assets/staff/documents/pavel-observation-booth.webp --prompt projects/pavel-observation-booth/prompts/m09-hatch-escape.txt"
+    }
+  ]
+}

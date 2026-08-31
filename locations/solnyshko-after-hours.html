@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <title>Развлекательный Комплекс «Детский ЖИР» — После закрытия</title>
+    <meta name="description" content="Служебный контур парка после закрытия." />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/game-ui.css" />
+    <link rel="stylesheet" href="../css/game-ui-themes.css" />
+    <link rel="stylesheet" href="../css/solnyshko-park.css" />
+  </head>
+  <body>
+    <div class="vhs-noise" aria-hidden="true"></div>
+    <div class="site-wrapper glitch-target">
+      <header class="site-header">
+        <div class="logo-area">
+          <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
+            <img class="logo-image" src="../assets/guest/logo.svg" alt="Детский Жир" />
+            <img class="staff-logo-image" src="../assets/staff/logo.png" alt="Детский Жир" />
+          </h1>
+          <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
+        </div>
+      </header>
+
+      <nav class="site-nav" aria-label="Основная навигация">
+        <ul>
+          <li><a href="/">Главная</a></li>
+          <li><a href="../about">О компании</a></li>
+          <li><a href="../staff">Персонал</a></li>
+          <li><a href="../hiring">Работа</a></li>
+          <li><a href="../faq">FAQ</a></li>
+          <li><a href="../donate">Связь и поддержка</a></li>
+          <li><a href="../archive" rel="nofollow">Архив</a></li>
+        </ul>
+      </nav>
+
+      <main class="panel game-ui-host">
+        <section
+          data-game-ui
+          data-game-ui-theme="amber"
+          data-solnyshko-hours
+          aria-label="Парк после закрытия"
+        >
+          <header data-game-ui-top>
+            <p>ПАРК «СОЛНЫШКО» // ПОСЛЕ ЗАКРЫТИЯ</p>
+            <p data-game-ui-room data-solnyshko-channel>КАНАЛ: ВОРОТА</p>
+          </header>
+
+          <div data-game-ui-stage-wrap>
+            <div data-game-ui-hud>
+              <button
+                type="button"
+                data-game-ui-sound
+                data-solnyshko-sound
+                aria-pressed="false"
+                aria-label="Включить звук смены"
+                title="Звук"
+              >
+                <svg class="solnyshko-hours__icon solnyshko-hours__icon--sound-on" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M16 9.5a4 4 0 0 1 0 5" fill="none" />
+                  <path d="M18.2 7.2a7 7 0 0 1 0 9.6" fill="none" />
+                </svg>
+                <svg class="solnyshko-hours__icon solnyshko-hours__icon--sound-off" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 10v4h3l5 4V6L7 10H4z" />
+                  <path d="M17 10l4 4M21 10l-4 4" fill="none" />
+                </svg>
+              </button>
+              <a
+                data-game-ui-leave
+                href="solnyshko-park.html"
+                data-full-navigation
+                aria-label="К дневной рекламе парка"
+                title="К рекламе"
+              >
+                <span aria-hidden="true">×</span>
+              </a>
+            </div>
+            <figure data-game-ui-stage>
+              <img
+                data-game-ui-still
+                src="../assets/guest/locations/solnyshko-park.webp"
+                alt="Ночные ворота парка Солнышко"
+              />
+              <video data-game-ui-video playsinline muted preload="metadata" hidden></video>
+              <figcaption class="solnyshko-hours__fallback" data-solnyshko-fallback></figcaption>
+            </figure>
+          </div>
+
+          <section data-game-ui-panel data-text-kind="dialogue">
+            <div data-game-ui-bubble>
+              <p data-game-ui-speaker></p>
+              <p data-game-ui-line tabindex="0"></p>
+            </div>
+            <p data-game-ui-action></p>
+            <p data-game-ui-live data-solnyshko-notice role="status" aria-live="polite"></p>
+            <form class="solnyshko-hours__input" data-solnyshko-input hidden>
+              <label for="solnyshko-gate-date" data-solnyshko-input-label>Дата</label>
+              <input id="solnyshko-gate-date" name="date" inputmode="numeric" autocomplete="off" data-solnyshko-date />
+              <button type="submit" data-solnyshko-input-submit>ПРОВЕРИТЬ</button>
+            </form>
+            <div data-game-ui-choices></div>
+          </section>
+        </section>
+      </main>
+
+      <dialog class="solnyshko-unlock-dialog" data-game-ui-modal data-solnyshko-unlock-dialog hidden>
+        <article class="solnyshko-unlock-card">
+          <p class="solnyshko-unlock-card__kicker" data-solnyshko-unlock-title></p>
+          <p data-solnyshko-unlock-body></p>
+          <button type="button" data-solnyshko-unlock-ok>ОКЕЙ</button>
+        </article>
+      </dialog>
+
+      <dialog class="solnyshko-postcard-dialog" data-game-ui-modal data-solnyshko-artifact-dialog hidden>
+        <article class="solnyshko-postcard-card">
+          <p class="solnyshko-postcard-card__kicker" data-solnyshko-artifact-kicker>ЛИЧНОЕ ВЛОЖЕНИЕ</p>
+          <img data-solnyshko-artifact-image alt="" />
+          <p data-solnyshko-artifact-title></p>
+          <div data-solnyshko-artifact-lines></div>
+          <p class="solnyshko-postcard-card__back" data-solnyshko-artifact-stamp></p>
+          <button type="button" data-solnyshko-artifact-close>ЗАКРЫТЬ АРТЕФАКТ</button>
+        </article>
+      </dialog>
+
+      <footer class="site-footer">
+        <p class="guest-content">После закрытия вход считается отдельной сменой.</p>
+        <p class="staff-content">SOLNYSHKO // AFTER HOURS GATE</p>
+        <nav class="social-links" aria-label="Социальные сети">
+          <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Telegram</a>
+          <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://www.youtube.com/@sunrules" target="_blank" rel="noopener noreferrer">YouTube</a>
+          <a href="https://vk.com/horror_rules" target="_blank" rel="noopener noreferrer">VK</a>
+          <a href="https://www.tiktok.com/@ai_visions_lab" target="_blank" rel="noopener noreferrer">TikTok</a>
+        </nav>
+        <div class="footer-trigger" title="service point" aria-hidden="true"></div>
+      </footer>
+    </div>
+    <script src="../js/dossier-store.js"></script>
+    <script src="../content/irina/call-content.js"></script>
+    <script src="../content/irina/solnyshko-park-content.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/game-ui-kit.js"></script>
+    <script src="../js/game-ui-audio-library.js"></script>
+    <script src="../js/solnyshko-park.js"></script>
+  </body>
+</html>

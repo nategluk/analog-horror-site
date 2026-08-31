@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <title>Game UI Kit — fixture</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/game-ui.css" />
+    <link rel="stylesheet" href="../css/game-ui-themes.css" />
+  </head>
+  <body>
+    <div class="vhs-noise" aria-hidden="true"></div>
+    <div class="site-wrapper">
+      <main class="panel game-ui-host">
+        <section
+          class="game-ui"
+          data-game-ui
+          data-game-ui-theme="amber"
+          aria-label="Kitchen fixture игровой оболочки"
+        >
+          <header data-game-ui-top>
+            <p>GAME UI KIT // FIXTURE</p>
+            <p data-game-ui-room>КАНАЛ: СТЕНД</p>
+          </header>
+          <div data-game-ui-stage-wrap>
+            <div data-game-ui-hud>
+              <button type="button" data-game-ui-sound aria-pressed="false" aria-label="Включить звук стенда" title="Звук">♪</button>
+              <a data-game-ui-leave href="solnyshko-park.html" aria-label="Выйти со стенда">×</a>
+            </div>
+            <figure data-game-ui-stage>
+              <img data-game-ui-still alt="" />
+              <video data-game-ui-video playsinline muted preload="metadata" hidden></video>
+            </figure>
+          </div>
+          <section data-game-ui-panel data-text-kind="dialogue">
+            <div data-game-ui-bubble>
+              <p data-game-ui-speaker></p>
+              <p data-game-ui-line tabindex="0"></p>
+            </div>
+            <p data-game-ui-action></p>
+            <p data-game-ui-live role="status" aria-live="polite"></p>
+            <div data-game-ui-choices></div>
+          </section>
+        </section>
+      </main>
+    </div>
+    <script src="../js/game-ui-audio-library.js"></script>
+    <script src="../js/game-ui-kit.js"></script>
+    <script src="../content/game-ui/fixture-content.js"></script>
+    <script src="../js/game-ui-fixture.js"></script>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+{
+  "project": "pavel-observation-booth",
+  "project_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth",
+  "checked_at": "2026-08-30T03:47:30+00:00",
+  "scope": "latest_run",
+  "runs_in_scope": 1,
+  "ok": false,
+  "summary": {
+    "assets_in_scope": 1,
+    "assets_checked": 1,
+    "assets_passed": 0,
+    "assets_with_issues": 1
+  },
+  "reports": [
+    {
+      "target": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/assets/videos/421763570300045/pixverse_video_421763570300045_1788061631428.mp4",
+      "checked_at": "2026-08-30T03:47:30+00:00",
+      "exists": true,
+      "kind": "video",
+      "issues": [
+        "aspect_ratio_mismatch"
+      ],
+      "metadata": {
+        "path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/assets/videos/421763570300045/pixverse_video_421763570300045_1788061631428.mp4",
+        "bytes": 609724,
+        "mime_guess": "video/mp4",
+        "ffprobe": {
+          "streams": [
+            {
+              "index": 0,
+              "codec_name": "h264",
+              "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+              "profile": "High",
+              "codec_type": "video",
+              "codec_tag_string": "avc1",
+              "codec_tag": "0x31637661",
+              "width": 1024,
+              "height": 592,
+              "coded_width": 1024,
+              "coded_height": 592,
+              "closed_captions": 0,
+              "film_grain": 0,
+              "has_b_frames": 2,
+              "pix_fmt": "yuv420p",
+              "level": 31,
+              "color_range": "tv",
+              "color_space": "bt709",
+              "color_transfer": "bt709",
+              "color_primaries": "bt709",
+              "chroma_location": "left",
+              "field_order": "progressive",
+              "refs": 1,
+              "is_avc": "true",
+              "nal_length_size": "4",
+              "id": "0x1",
+              "r_frame_rate": "24/1",
+              "avg_frame_rate": "24/1",
+              "time_base": "1/12288",
+              "start_pts": 0,
+              "start_time": "0.000000",
+              "duration_ts": 61952,
+              "duration": "5.041667",
+              "bit_rate": "963801",
+              "bits_per_raw_sample": "8",
+              "nb_frames": "121",
+              "extradata_size": 48,
+              "disposition": {
+                "default": 1,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+              },
+              "tags": {
+                "language": "und",
+                "handler_name": "VideoHandler",
+                "vendor_id": "[0][0][0][0]"
+              }
+            }
+          ],
+          "format": {
+            "filename": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/assets/videos/421763570300045/pixverse_video_421763570300045_1788061631428.mp4",
+            "nb_streams": 1,
+            "nb_programs": 0,
+            "nb_stream_groups": 0,
+            "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+            "format_long_name": "QuickTime / MOV",
+            "start_time": "0.000000",
+            "duration": "5.041667",
+            "size": "609724",
+            "bit_rate": "967495",
+            "probe_score": 100,
+            "tags": {
+              "major_brand": "isom",
+              "minor_version": "512",
+              "compatible_brands": "isomiso2avc1mp41",
+              "encoder": "Lavf60.16.100"
+            }
+          }
+        },
+        "video_stream_count": 1,
+        "audio_stream_count": 0,
+        "has_audio": false,
+        "duration_seconds": 5.041667,
+        "width": 1024,
+        "height": 592,
+        "expected_duration_seconds": 5.0,
+        "duration_tolerance_seconds": 0.75,
+        "expected_aspect_ratio": "16:9",
+        "actual_aspect_ratio": 1.7297
+      },
+      "report_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/pixverse_video_421763570300045_1788061631428-qa.json",
+      "latest_report_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/qa-report.json",
+      "id": "storage-slide-light-on",
+      "role": "Storage slide light turns on",
+      "task_id": "421763570300045",
+      "model": "pixverse-c1",
+      "generation_status": "success",
+      "run_at": "2026-08-30T03:47:13+00:00",
+      "checked": true,
+      "sample_frames": [
+        "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/frames-pixverse_video_421763570300045_1788061631428/frame-001.jpg",
+        "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/frames-pixverse_video_421763570300045_1788061631428/frame-002.jpg",
+        "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/frames-pixverse_video_421763570300045_1788061631428/frame-003.jpg",
+        "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/frames-pixverse_video_421763570300045_1788061631428/frame-004.jpg"
+      ]
+    }
+  ],
+  "asset_ledger": [
+    {
+      "actual_credit_source": "submit.cost_credits",
+      "actual_credits": 30,
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F99a6f8e3-4fe0-49cd-85ae-28f587ea9a4e.jpg",
+      "id": "storage-slide-light-on",
+      "kind": "video",
+      "local_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/assets/videos/421763570300045/pixverse_video_421763570300045_1788061631428.mp4",
+      "local_preview_error": "",
+      "local_preview_status": "ready",
+      "media_type": "video",
+      "model": "pixverse-c1",
+      "path": "pixverse/mp4/media/web/ori/e2f70234-2a7b-4411-aa66-1b4de73b55de_seed0.mp4",
+      "role": "Storage slide light turns on",
+      "status": "success",
+      "task_id": "421763570300045",
+      "url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2Fe2f70234-2a7b-4411-aa66-1b4de73b55de_seed0.mp4"
+    }
+  ],
+  "invoice": {
+    "generated_assets": 1,
+    "matched_actual_credit_items": 1,
+    "observed_credit_delta": 30,
+    "post_credits_total": 782,
+    "pre_credits_total": 812,
+    "source": "asset_ledger actual_credits from create/status/asset info/account usage; observed delta from account balance snapshots",
+    "total_actual_credits": 30
+  },
+  "project_totals": {
+    "generated_assets": 1,
+    "successful_assets": 1,
+    "total_attributable_credits": 30,
+    "assets_with_unknown_credits": 0
+  },
+  "generation_timing": {
+    "deadline_seconds": 1500,
+    "finished_at": "2026-08-30T03:47:12+00:00",
+    "poll_interval_seconds": 15.0,
+    "started_at": "2026-08-30T03:46:33+00:00",
+    "status_interval_seconds": 30.0,
+    "wall_seconds": 38.398
+  },
+  "qa_wall_seconds": 0.366,
+  "report_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/latest-run-qa.json",
+  "latest_report_path": "/Users/nateglukhov/analog-horror-site/projects/pavel-observation-booth/quality/qa-report.json"
+}
