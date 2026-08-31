@@ -1,0 +1,55 @@
+{
+  "project": "solnyshko-cotton-visual",
+  "route": {
+    "valid": true,
+    "kind": "video",
+    "intent": "final",
+    "control_layer": "reference",
+    "model": "seedance-2.0-standard",
+    "quality": "1080p",
+    "detail_level": "",
+    "aspect_ratio": "1:1",
+    "duration": 6.0,
+    "reference_count": 1,
+    "membership_tier": "premium",
+    "reasons": [
+      "Seedance 2.0 Standard is the serious final/reference spine.",
+      "The user explicitly selected board-to-video, so create a GPT Image 2 control plate before motion."
+    ],
+    "issues": [],
+    "chain": [
+      {
+        "role": "explicit user-approved visual control plate",
+        "mode": "create image --detail-level medium",
+        "model": "gpt-image-2.0",
+        "quality": "1080p",
+        "command_template": "pixverse create image --model gpt-image-2.0 --quality 1080p --aspect-ratio 1:1 --detail-level medium --prompt <board-prompt>"
+      },
+      {
+        "role": "final motion render",
+        "mode": "create reference",
+        "model": "seedance-2.0-standard",
+        "quality": "1080p",
+        "command_template": "pixverse create reference --model seedance-2.0-standard --quality 1080p --duration 6 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>"
+      }
+    ],
+    "alternatives": [],
+    "command_template": "pixverse create reference --model seedance-2.0-standard --quality 1080p --duration 6 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>",
+    "capability_source": "PixVerse CLI video/reference help and supported-model table"
+  },
+  "tasks": [
+    {
+      "id": "board",
+      "label": "explicit user-approved visual control plate",
+      "cmd": "pixverse create image --model gpt-image-2.0 --quality 1080p --aspect-ratio 1:1 --detail-level medium --prompt 'Use case: stylized-concept. Asset type: locked opening still for a browser game prop. Scene/backdrop: an empty after-hours amusement-park service nook, dark warm burgundy-to-amber gradient, no visible architecture competing with the object. Subject: a single late-1980s cotton-candy machine, front three-quarter view, centered and fully visible, compact cream enamel body with deep burgundy lower trim, brushed aluminum bowl, dark inner spinner, small amber pilot lamp, transparent sugar hopper with a little pink sugar, simple wooden serving stick resting at the front. Style/medium: tactile practical product plate, cinematic analog-horror game art, believable worn materials, not glossy modern 3D. Composition/framing: square 1:1, eye-level, generous breathing room around the full machine, stable silhouette suitable for a responsive web card. Lighting/mood: warm carnival bulbs outside frame, faint cold dusk edge light, quiet and slightly wrong. Color palette: aged ivory, oxidized aluminum, burgundy, tobacco brown, faded cotton-candy pink, amber. Materials/textures: scuffed enamel, fine brushed metal, translucent glass, small dust and use marks. Text (verbatim): none. Constraints: no people, hands, faces, mascots, animals, logos, readable labels, UI, watermark; keep the whole machine inside the frame and the bowl horizontal. Avoid: floating parts, melted geometry, giant cotton candy, candy-store styling, sterile showroom gloss.'"
+    },
+    {
+      "id": "film",
+      "label": "final motion render",
+      "cmd": "pixverse create reference --model seedance-2.0-standard --quality 1080p --duration 6 --aspect-ratio 1:1 --images {{board.path}} --no-audio --prompt 'Use the reference still as the exact opening composition and preserve the machine silhouette, camera position, lighting, and materials. Create one restrained six-second seamless-feeling object-only loop for a browser game: the amber pilot lamp wakes, the inner spinner rotates with subtle mechanical vibration, fine pink sugar threads begin collecting around the wooden stick and gradually become a small airy cotton-candy puff. Keep the camera locked; no zoom, pan, or reframing. End on a stable full-cotton state that remains readable as the same machine. No people, hands, faces, mascots, animals, logos, readable text, UI, watermark, sparks, smoke, dramatic effects, or background music. Silent picture; existing website SFX will supply the machine sound.'",
+      "depends_on": [
+        "board"
+      ]
+    }
+  ]
+}

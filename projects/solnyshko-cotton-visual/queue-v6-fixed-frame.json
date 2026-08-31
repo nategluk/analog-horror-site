@@ -1,0 +1,39 @@
+{
+  "project": "solnyshko-cotton-visual",
+  "route": {
+    "valid": true,
+    "kind": "video",
+    "intent": "final",
+    "control_layer": "reference",
+    "model": "v6",
+    "quality": "720p",
+    "detail_level": "",
+    "aspect_ratio": "1:1",
+    "duration": 4.0,
+    "reference_count": 1,
+    "membership_tier": "basic",
+    "reasons": [
+      "Basic/Free membership detected, so video generation uses PixVerse v6 instead of a premium video model."
+    ],
+    "issues": [],
+    "chain": [
+      {
+        "role": "final motion render",
+        "mode": "create reference",
+        "model": "v6",
+        "quality": "720p",
+        "command_template": "pixverse create reference --model v6 --quality 720p --duration 4 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>"
+      }
+    ],
+    "alternatives": [],
+    "command_template": "pixverse create reference --model v6 --quality 720p --duration 4 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>",
+    "capability_source": "PixVerse CLI video/reference help and supported-model table"
+  },
+  "tasks": [
+    {
+      "id": "film",
+      "label": "final motion render",
+      "cmd": "pixverse create reference --model v6 --quality 720p --duration 4 --aspect-ratio 1:1 --images /Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/assets/images/422078286949799/pixverse_image_422078286949799_1788215320245.png --no-audio --prompt 'Use the attached reference image as the exact first frame and as the visual anchor for the entire clip. This is a restrained motion texture for a browser game, not a cinematic sequence. Use one continuous locked tripod/product shot: keep the complete cotton-candy machine, including the full bowl, body, sugar hopper, lamp, and front wooden rod, visible and in the same position from first frame to last frame. The wooden rod remains fixed in its metal supports; no person ever touches it. Animate only subtle local motion: the amber pilot lamp gently flickers, the dark spinner rotates in place inside the bowl, and a few fine pink sugar fibers gather low in the bowl into a modest airy pink tuft. Keep the same machine design, scale, perspective, lighting, and background throughout. No cuts, no close-up, no zoom, no pan, no reframing, no camera shake, no new objects, no hands, no people, no faces, no mascots, no animals, no logos, no readable text, no UI, no watermark, no sparks, no smoke, no dramatic effects, and no background music. Silent picture; the website supplies the machine sound.'"
+    }
+  ]
+}

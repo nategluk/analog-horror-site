@@ -243,6 +243,19 @@ function harvestEspresso(files) {
   }
 }
 
+function harvestSolnyshkoCotton(files) {
+  const rel = "js/solnyshko-cotton.js";
+  const text = read(rel);
+  add(files, rel);
+  MEDIA_NAME.lastIndex = 0;
+  let match;
+  while ((match = MEDIA_NAME.exec(text))) {
+    const name = match[1];
+    if (name.startsWith("assets/") || name.includes("/")) continue;
+    add(files, normalizeFrom(rel, `../assets/audio/guest/solnyshko/${name}`));
+  }
+}
+
 function collectAllowlist() {
   const files = new Set();
   const queue = { list: [], seen: new Set() };
@@ -257,6 +270,7 @@ function collectAllowlist() {
   harvestIrina(files);
   harvestLora(files);
   harvestEspresso(files);
+  harvestSolnyshkoCotton(files);
 
   while (queue.list.length) {
     const rel = queue.list.shift();

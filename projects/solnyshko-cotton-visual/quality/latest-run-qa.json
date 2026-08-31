@@ -1,0 +1,163 @@
+{
+  "project": "solnyshko-cotton-visual",
+  "project_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual",
+  "checked_at": "2026-08-31T22:29:33+00:00",
+  "scope": "latest_run",
+  "runs_in_scope": 1,
+  "ok": false,
+  "summary": {
+    "assets_in_scope": 2,
+    "assets_checked": 1,
+    "assets_passed": 1,
+    "assets_with_issues": 1
+  },
+  "reports": [
+    {
+      "target": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/assets/images/422078286949799/pixverse_image_422078286949799_1788215320245.png",
+      "checked_at": "2026-08-31T22:29:33+00:00",
+      "exists": true,
+      "kind": "image",
+      "issues": [],
+      "metadata": {
+        "path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/assets/images/422078286949799/pixverse_image_422078286949799_1788215320245.png",
+        "bytes": 1771733,
+        "mime_guess": "image/png",
+        "ffprobe": {
+          "streams": [
+            {
+              "index": 0,
+              "codec_name": "png",
+              "codec_long_name": "PNG (Portable Network Graphics) image",
+              "codec_type": "video",
+              "codec_tag_string": "[0][0][0][0]",
+              "codec_tag": "0x0000",
+              "width": 1024,
+              "height": 1024,
+              "coded_width": 1024,
+              "coded_height": 1024,
+              "closed_captions": 0,
+              "film_grain": 0,
+              "has_b_frames": 0,
+              "pix_fmt": "rgb24",
+              "level": -99,
+              "color_range": "pc",
+              "color_space": "gbr",
+              "refs": 1,
+              "r_frame_rate": "25/1",
+              "avg_frame_rate": "25/1",
+              "time_base": "1/25",
+              "disposition": {
+                "default": 0,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+              }
+            }
+          ]
+        },
+        "width": 1024,
+        "height": 1024,
+        "expected_aspect_ratio": "1:1",
+        "actual_aspect_ratio": 1.0
+      },
+      "report_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/quality/pixverse_image_422078286949799_1788215320245-qa.json",
+      "latest_report_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/quality/qa-report.json",
+      "id": "board",
+      "role": "explicit user-approved visual control plate",
+      "task_id": "422078286949799",
+      "model": "gpt-image-2.0",
+      "generation_status": "success",
+      "run_at": "2026-08-31T22:28:43+00:00",
+      "checked": true
+    },
+    {
+      "id": "film",
+      "role": "final motion render",
+      "task_id": "",
+      "model": "seedance-2.0-standard",
+      "generation_status": "failed",
+      "run_at": "2026-08-31T22:28:43+00:00",
+      "checked": false,
+      "issues": [
+        "generation_status_failed"
+      ]
+    }
+  ],
+  "asset_ledger": [
+    {
+      "actual_credit_source": "submit.cost_credits",
+      "actual_credits": 30,
+      "cover_url": "",
+      "id": "board",
+      "kind": "image",
+      "local_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/assets/images/422078286949799/pixverse_image_422078286949799_1788215320245.png",
+      "local_preview_error": "",
+      "local_preview_status": "ready",
+      "media_type": "image",
+      "model": "gpt-image-2.0",
+      "path": "pixverse/t2i/ori/e413bab9-5298-4982-83dd-db3287c0addf.png",
+      "role": "explicit user-approved visual control plate",
+      "status": "success",
+      "task_id": "422078286949799",
+      "url": "https://media.pixverse.ai/pixverse%2Ft2i%2Fori%2Fe413bab9-5298-4982-83dd-db3287c0addf.png"
+    },
+    {
+      "actual_credit_source": "",
+      "actual_credits": null,
+      "cover_url": "",
+      "id": "film",
+      "kind": "reference",
+      "local_path": "",
+      "local_preview_error": "",
+      "local_preview_status": "",
+      "media_type": "video",
+      "model": "seedance-2.0-standard",
+      "path": "",
+      "role": "final motion render",
+      "status": "failed",
+      "task_id": "",
+      "url": ""
+    }
+  ],
+  "invoice": {
+    "generated_assets": 2,
+    "matched_actual_credit_items": 1,
+    "observed_credit_delta": 30,
+    "post_credits_total": 428,
+    "pre_credits_total": 458,
+    "source": "asset_ledger actual_credits from create/status/asset info/account usage; observed delta from account balance snapshots",
+    "total_actual_credits": 30
+  },
+  "project_totals": {
+    "generated_assets": 2,
+    "successful_assets": 1,
+    "total_attributable_credits": 30,
+    "assets_with_unknown_credits": 1
+  },
+  "generation_timing": {
+    "deadline_seconds": 1500,
+    "finished_at": "2026-08-31T22:28:42+00:00",
+    "poll_interval_seconds": 15.0,
+    "started_at": "2026-08-31T22:27:41+00:00",
+    "status_interval_seconds": 30.0,
+    "wall_seconds": 60.324
+  },
+  "qa_wall_seconds": 0.179,
+  "report_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/quality/latest-run-qa.json",
+  "latest_report_path": "/Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/quality/qa-report.json"
+}

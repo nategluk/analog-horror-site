@@ -1,0 +1,39 @@
+{
+  "project": "solnyshko-cotton-visual",
+  "route": {
+    "valid": true,
+    "kind": "video",
+    "intent": "final",
+    "control_layer": "reference",
+    "model": "v6",
+    "quality": "720p",
+    "detail_level": "",
+    "aspect_ratio": "1:1",
+    "duration": 6.0,
+    "reference_count": 1,
+    "membership_tier": "basic",
+    "reasons": [
+      "Basic/Free membership detected, so video generation uses PixVerse v6 instead of a premium video model."
+    ],
+    "issues": [],
+    "chain": [
+      {
+        "role": "final motion render",
+        "mode": "create reference",
+        "model": "v6",
+        "quality": "720p",
+        "command_template": "pixverse create reference --model v6 --quality 720p --duration 6 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>"
+      }
+    ],
+    "alternatives": [],
+    "command_template": "pixverse create reference --model v6 --quality 720p --duration 6 --aspect-ratio 1:1 --images <reference-image> --prompt <prompt>",
+    "capability_source": "PixVerse CLI video/reference help and supported-model table"
+  },
+  "tasks": [
+    {
+      "id": "film",
+      "label": "final motion render",
+      "cmd": "pixverse create reference --model v6 --quality 720p --duration 6 --aspect-ratio 1:1 --images /Users/nateglukhov/analog-horror-site/projects/solnyshko-cotton-visual/assets/images/422078286949799/pixverse_image_422078286949799_1788215320245.png --no-audio --prompt 'Use the attached reference image as the exact opening composition and preserve the same late-1980s cotton-candy machine silhouette, camera position, warm burgundy-to-amber background, aged cream enamel, brushed aluminum bowl, dark spinner, side sugar hopper, amber pilot lamp, and wooden serving stick. Create one restrained six-second object-only motion clip for a browser game: the amber lamp wakes, the inner spinner rotates with subtle mechanical vibration, fine pink sugar threads collect around the wooden stick and gradually become a small airy cotton-candy puff. Keep the camera completely locked with no zoom, pan, reframing, or object redesign. End on a stable full-cotton state readable as the same machine. No people, hands, faces, mascots, animals, logos, readable text, UI, watermark, sparks, smoke, dramatic effects, or background music. Silent picture; the website supplies the machine sound.'"
+    }
+  ]
+}

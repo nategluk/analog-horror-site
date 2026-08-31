@@ -12017,3 +12017,571 @@ body.staff-mode .episode-source:focus-visible {
     opacity: 0.8;
   }
 }
+
+.sp-cotton {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  margin: 0.85rem 0 1.1rem;
+  padding: 0.8rem 0.75rem 0.9rem;
+  color: #f6ead4;
+  border: 1px solid #8a5a28;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(255, 142, 200, 0.18), transparent 34%),
+    linear-gradient(180deg, #4a2c14 0%, #1c1008 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 160, 0.08),
+    0 12px 28px rgba(28, 14, 6, 0.22);
+}
+
+.sp-cotton-head {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.sp-cotton-kicker,
+.sp-cotton-sub {
+  margin: 0;
+}
+
+.sp-cotton-kicker {
+  color: #f0b15a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sp-cotton-sub {
+  color: #f7e6d4;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.sp-cotton-machine {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 auto;
+  padding: 0.2rem 0.35rem 0.4rem;
+}
+
+.sp-cotton-part-label {
+  position: absolute;
+  z-index: 3;
+  color: #f3e2c0;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.sp-cotton-hopper {
+  position: relative;
+  z-index: 2;
+  width: 5.6rem;
+  height: 3.6rem;
+}
+
+.sp-cotton-hopper .sp-cotton-part-label {
+  right: 0;
+  bottom: 0.1rem;
+  left: 0;
+  text-align: center;
+}
+
+.sp-cotton-hopper__lid {
+  position: absolute;
+  top: 0;
+  right: 10%;
+  left: 10%;
+  height: 0.5rem;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #ece4d4, #8a7464);
+}
+
+.sp-cotton-hopper__glass {
+  position: absolute;
+  top: 0.45rem;
+  right: 18%;
+  bottom: 0;
+  left: 18%;
+  overflow: hidden;
+  border: 2px solid #e8d2b0;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.28), transparent 28%),
+    rgba(70, 32, 16, 0.28);
+}
+
+.sp-cotton-sugar {
+  position: absolute;
+  right: 8%;
+  bottom: -60%;
+  left: 8%;
+  height: 70%;
+  border-radius: 40% 40% 6px 6px;
+  background:
+    radial-gradient(circle at 24% 40%, #fff6f0 0 5px, transparent 6px),
+    radial-gradient(circle at 62% 30%, #ffd0e8 0 6px, transparent 7px),
+    radial-gradient(circle at 80% 62%, #ffe8c8 0 5px, transparent 6px),
+    #f4b8c8;
+  opacity: 0;
+  transition: bottom 0.35s ease, opacity 0.25s ease;
+}
+
+.sp-cotton.is-sugar .sp-cotton-sugar {
+  bottom: 0;
+  opacity: 1;
+}
+
+.sp-cotton-chassis {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 9.2rem;
+  padding: 0.75rem 0.65rem 1.4rem;
+  border: 1px solid #c4b49c;
+  border-radius: 12px 12px 4px 4px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.28)),
+    linear-gradient(180deg, #d8c8b4 0%, #8a7a6c 46%, #4e443c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 236, 0.55),
+    0 12px 0 #231410;
+}
+
+.sp-cotton-bowl {
+  position: relative;
+  overflow: hidden;
+  min-height: 7.4rem;
+  border: 3px solid #2c1c16;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 0deg, #3a2418 0 12deg, #1a100c 12deg 24deg),
+    #1a100c;
+  box-shadow: inset 0 0 0 8px #c4a878;
+}
+
+.sp-cotton-bowl .sp-cotton-part-label {
+  right: 0;
+  bottom: 0.55rem;
+  left: 0;
+  text-align: center;
+}
+
+.sp-cotton-drum {
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  border: 2px dashed rgba(244, 184, 200, 0.35);
+  background: radial-gradient(circle at 50% 50%, #2a1810 0 42%, #120a08 43% 100%);
+}
+
+.sp-cotton.is-spinning .sp-cotton-drum {
+  animation: sp-cotton-spin 0.7s linear infinite;
+}
+
+.sp-cotton-cloud {
+  position: absolute;
+  inset: 46%;
+  border-radius: 46% 54% 48% 52%;
+  background:
+    radial-gradient(circle at 35% 35%, #fff8f4 0 18%, transparent 20%),
+    #ff8ec8;
+  opacity: 0;
+  transform: scale(0.2);
+  transition: inset 0.7s ease, opacity 0.35s ease, transform 0.7s ease;
+}
+
+.sp-cotton.is-cotton .sp-cotton-cloud,
+.sp-cotton.is-cotton-growing .sp-cotton-cloud {
+  inset: 14%;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sp-cotton-lamp {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.15rem;
+  border: 2px solid #2a1210;
+  border-radius: 50%;
+  background: #4a201c;
+  box-shadow: inset 0 0 0 2px #7a3a34;
+  justify-self: center;
+}
+
+.sp-cotton-lamp-wrap {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.sp-cotton.is-lamp .sp-cotton-lamp {
+  background: #ffd060;
+  box-shadow:
+    inset 0 0 0 2px #7a4a10,
+    0 0 12px #ffb040;
+}
+
+.sp-cotton-slot {
+  position: relative;
+  width: 100%;
+  min-height: 2.4rem;
+  overflow: hidden;
+  border: 2px solid #1a100c;
+  border-radius: 4px;
+  background: #12080a;
+}
+
+.sp-cotton-slot .sp-cotton-part-label {
+  right: 0;
+  bottom: 0.25rem;
+  left: 0;
+  text-align: center;
+}
+
+.sp-cotton-paper {
+  position: absolute;
+  top: 100%;
+  right: 10%;
+  left: 10%;
+  height: 78%;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 7px,
+      rgba(90, 58, 28, 0.16) 7px 8px
+    ),
+    #f7ead0;
+  transition: top 0.45s ease;
+}
+
+.sp-cotton-paper::after {
+              content: "ГОСТЬ";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #8a3a58;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.sp-cotton.is-band .sp-cotton-paper {
+  top: 8%;
+}
+
+.sp-cotton-tray {
+  position: relative;
+  width: calc(100% - 0.5rem);
+  height: 1.7rem;
+  margin-top: -0.85rem;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(180deg, #5a3a32, #1c1010);
+  box-shadow: inset 0 8px 0 rgba(0, 0, 0, 0.28);
+}
+
+.sp-cotton-status {
+  min-width: 0;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  color: #f7e6d4;
+  border: 1px solid rgba(232, 176, 114, 0.32);
+  border-radius: 8px;
+  background: rgba(20, 10, 6, 0.42);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.sp-cotton-status span {
+  display: block;
+}
+
+.sp-cotton-receipt {
+  min-width: 0;
+  padding: 0.8rem 0.75rem;
+  color: #4a3018;
+  border: 1px dashed #8a6a3a;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 11px,
+      rgba(90, 58, 28, 0.12) 11px 12px
+    ),
+    #f4e4c4;
+}
+
+.sp-cotton-receipt p {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.sp-cotton-receipt__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sp-cotton-flavor {
+  margin: 0;
+  color: #f0b15a;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.sp-cotton-actions {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.sp-cotton-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  color: #2a1408;
+  border: 0;
+  border-radius: 8px;
+  background: #f0b15a;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 0 #b47a2c;
+  cursor: pointer;
+}
+
+.sp-cotton-btn:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.sp-cotton-btn:focus-visible {
+  outline: 2px solid #ffe1a8;
+  outline-offset: 3px;
+}
+
+.sp-cotton.is-busy .sp-cotton-btn {
+  pointer-events: none;
+}
+
+.sp-cotton-assign {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(8, 4, 0, 0.92);
+  color: #f4d8c0;
+  text-align: center;
+}
+
+.sp-cotton-assign p {
+  margin: 0.35rem 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@keyframes sp-cotton-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 640px) {
+  .sp-cotton-machine {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-cotton-sugar,
+  .sp-cotton-cloud,
+  .sp-cotton-paper {
+    transition: none;
+  }
+
+  .sp-cotton.is-spinning .sp-cotton-drum {
+    animation: none;
+  }
+}
+
+/* --- PixVerse plate for the Solnyshko cotton clicker --- */
+.sp-cotton-stage {
+  min-width: 0;
+  overflow: visible;
+  padding: 0.05rem 0 0.15rem;
+}
+
+.sp-cotton-machine {
+  position: relative;
+  display: block;
+  width: min(100%, 25rem);
+  max-width: 25rem;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.sp-cotton-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(240, 177, 90, 0.42);
+  border-radius: 12px;
+  background: #170908;
+  box-shadow:
+    0 0 0 1px rgba(255, 231, 194, 0.1),
+    0 14px 24px rgba(26, 8, 5, 0.36);
+  isolation: isolate;
+}
+
+.sp-cotton-media::before,
+.sp-cotton-media::after {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  content: "";
+}
+
+.sp-cotton-media::before {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255, 225, 188, 0.08) 0 1px,
+      transparent 1px 4px
+    ),
+    linear-gradient(90deg, rgba(255, 205, 139, 0.08), transparent 18%, transparent 82%, rgba(20, 4, 4, 0.14));
+  mix-blend-mode: screen;
+  opacity: 0.58;
+}
+
+.sp-cotton-media::after {
+  background: linear-gradient(180deg, transparent 72%, rgba(10, 2, 2, 0.24));
+  box-shadow: inset 0 0 32px rgba(5, 1, 1, 0.2);
+}
+
+.sp-cotton-art,
+.sp-cotton-video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sp-cotton-art {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.sp-cotton-art--idle {
+  opacity: 1;
+}
+
+.sp-cotton-art--ready {
+  z-index: 2;
+}
+
+.sp-cotton[data-phase="ready"] .sp-cotton-art--idle,
+.sp-cotton[data-phase="warm"] .sp-cotton-art--idle,
+.sp-cotton[data-phase="reading"] .sp-cotton-art--idle {
+  opacity: 0;
+}
+
+.sp-cotton[data-phase="ready"] .sp-cotton-art--ready,
+.sp-cotton[data-phase="warm"] .sp-cotton-art--ready,
+.sp-cotton[data-phase="reading"] .sp-cotton-art--ready {
+  opacity: 1;
+}
+
+.sp-cotton-video {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.sp-cotton.is-spinning .sp-cotton-art {
+  opacity: 0;
+}
+
+.sp-cotton.is-spinning:not(.is-video-ready) .sp-cotton-art--idle,
+.sp-cotton.is-spinning.is-media-fallback .sp-cotton-art--idle {
+  opacity: 1;
+}
+
+.sp-cotton.is-spinning.is-video-ready .sp-cotton-video {
+  opacity: 1;
+}
+
+.sp-cotton.is-spinning:not(.is-video-ready) .sp-cotton-media {
+  animation: sp-cotton-media-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes sp-cotton-media-pulse {
+  from {
+    box-shadow:
+      0 0 0 1px rgba(255, 231, 194, 0.1),
+      0 14px 24px rgba(26, 8, 5, 0.36);
+  }
+
+  to {
+    box-shadow:
+      0 0 0 1px rgba(255, 188, 113, 0.24),
+      0 14px 28px rgba(68, 15, 8, 0.5),
+      0 0 22px rgba(238, 122, 62, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-cotton-art,
+  .sp-cotton-video {
+    transition: none;
+  }
+
+  .sp-cotton.is-spinning:not(.is-video-ready) .sp-cotton-media {
+    animation: none;
+  }
+}
+
+.location-intro--cotton {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.location-intro--cotton > div {
+  width: 100%;
+  max-width: 58rem;
+  margin-inline: auto;
+}

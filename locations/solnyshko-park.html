@@ -53,10 +53,75 @@
 
       <main class="panel">
         <section class="guest-content location-page">
-          <div class="location-intro">
+          <div class="location-intro location-intro--cotton">
             <div>
               <p class="location-kicker">Вечные сумерки</p>
               <h2>Лучшие моменты жизни снова рядом</h2>
+              <section
+                class="sp-cotton"
+                data-solnyshko-cotton
+                data-hours-entry="solnyshko-after-hours.html"
+                data-phase="idle"
+                aria-label="Аппарат ваты СВ-312"
+              >
+                <header class="sp-cotton-head">
+                  <p class="sp-cotton-kicker" data-sp-title>Аппарат ваты СВ-312</p>
+                  <p class="sp-cotton-sub" data-sp-sub hidden></p>
+                </header>
+
+                <div class="sp-cotton-stage" aria-hidden="true">
+                  <div class="sp-cotton-machine">
+                    <div class="sp-cotton-media">
+                      <img
+                        class="sp-cotton-art sp-cotton-art--idle"
+                        src="../assets/guest/solnyshko/game/cotton-machine-idle.webp"
+                        alt=""
+                        width="1024"
+                        height="1024"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <img
+                        class="sp-cotton-art sp-cotton-art--ready"
+                        src="../assets/guest/solnyshko/game/cotton-machine-ready.webp"
+                        alt=""
+                        width="960"
+                        height="960"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <video
+                        class="sp-cotton-video"
+                        data-sp-video
+                        muted
+                        playsinline
+                        preload="metadata"
+                        poster="../assets/guest/solnyshko/game/cotton-machine-idle.webp"
+                        aria-hidden="true"
+                      >
+                        <source src="../assets/guest/solnyshko/game/cotton-machine-spin.mp4" type="video/mp4" />
+                      </video>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="sp-cotton-status" data-sp-status>
+                  <span>Сахар: нет</span>
+                  <span>Барабан: стоп</span>
+                  <span>Вата: нет</span>
+                </p>
+
+                <aside class="sp-cotton-receipt" data-sp-receipt hidden>
+                  <p class="sp-cotton-receipt__title">Гость до закрытия</p>
+                  <p>Парк не выключает огни.</p>
+                  <p>Пройдите к воротам.</p>
+                </aside>
+                <p class="sp-cotton-flavor" data-sp-flavor hidden></p>
+                <div class="sp-cotton-actions" data-sp-actions>
+                  <button type="button" class="sp-cotton-btn" data-sp-act="sugar">Засыпать сахар</button>
+                </div>
+                <p class="visually-hidden" data-sp-live aria-live="polite"></p>
+              </section>
               <p>
                 Помните то чувство, когда родители впервые привели вас в парк аттракционов?
                 Запах сладкой ваты, огни каруселей в сумерках и абсолютное счастье.
@@ -68,16 +133,6 @@
                 там, где радость не просит уходить домой.
               </p>
             </div>
-            <figure class="location-poster">
-              <img
-                src="../assets/guest/locations/solnyshko-park-poster.webp"
-                alt="Вечерний парк аттракционов Солнышко с каруселью и сладкой ватой"
-                width="960"
-                height="1200"
-                loading="eager"
-                decoding="async"
-              />
-            </figure>
           </div>
 
           <section class="location-section">
@@ -147,5 +202,6 @@
     <script src="../js/dossier-store.js"></script>
     <script src="../content/irina/call-content.js"></script>
     <script src="../js/app.js"></script>
+    <script src="../js/solnyshko-cotton.js"></script>
   </body>
 </html>

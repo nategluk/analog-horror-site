@@ -1376,6 +1376,21 @@
     window.TyndexRedRoomEspresso?.init(root);
   };
 
+  const initSolnyshkoCotton = async () => {
+    const root = document.querySelector("[data-solnyshko-cotton]");
+    if (!root) return;
+
+    if (typeof window.TyndexSolnyshkoCotton?.init !== "function") {
+      const appScript = [...document.scripts].find((script) =>
+        /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
+      );
+      const src = new URL("solnyshko-cotton.js", appScript?.src || window.location.href).href;
+      await loadPageScript(src);
+    }
+
+    window.TyndexSolnyshkoCotton?.init(root);
+  };
+
   const ensureLoraRoomStyles = () => {
     if (document.querySelector("link[data-lora-room-css]")) return;
     const link = document.createElement("link");
@@ -5507,6 +5522,7 @@
 
         await initEpisodeCatalogPage(response.url || url);
         await initRedRoomEspresso();
+        await initSolnyshkoCotton();
         await initLoraRedRoom();
         await initPavelObservationBooth();
         initDOMListeners();
