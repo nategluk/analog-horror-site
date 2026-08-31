@@ -87,7 +87,7 @@
     "booth-intro": {
       room: "control",
       speaker: "ПАВЕЛ",
-      text: "Я никого не ждал сегодня. ",
+      text: "Хммм...Я никого не ждал сегодня. ",
       visual: "CONTROL_PAVEL_PRESENT",
       sound: "test-channel-static",
       choicesAfterClip: true,
@@ -107,7 +107,7 @@
       sound: "pavel-hm-question",
       choices: [
         {
-          label: "Аниматор Ирина в костюме медведя",
+          label: "Аниматор Ирина из парка Солнышко. \nВ костюме медведя",
           kind: "speech",
           next: "booth-intro-know-you"
         }
@@ -338,7 +338,7 @@
     "tour-storage-cans": {
       room: "storage",
       speaker: "ПАВЕЛ",
-      text: "Когда я был ребёнком, меня кормили через трубку.  \nС заботой не спорят.",
+      text: "Меня в детстве ими пичкали. Постоянно. \nМама говорила, что худое тело плохо удерживает сны. ",
       visual: "STORAGE_PROVISIONS",
       imageAlt: "Банка с сухими шариками и бутылки воды на металлической полке",
       choices: [
