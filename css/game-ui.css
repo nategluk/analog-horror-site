@@ -131,6 +131,11 @@ main.panel.game-ui-host {
 
 [data-game-ui-video] {
   z-index: 1;
+  opacity: 0;
+}
+
+[data-game-ui-video].is-playing {
+  opacity: 1;
 }
 
 [data-game-ui-panel] {

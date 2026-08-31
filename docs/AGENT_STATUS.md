@@ -8,10 +8,10 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-08-31 |
-| Ветка / HEAD | `main` / `e289244` |
-| Дерево | dirty: производная Pavel cassette 450p и две runtime-ссылки; commit/push pending |
-| Активная линия | Cloudflare Pages: Pavel cassette 450p ≤25 MiB |
-| Последний этап | `pavel-cassette-450p.mp4` создана и подключена; исходный master сохранён |
+| Ветка / HEAD | `main` / `bbdc3e4` |
+| Дерево | dirty: park mobile video (kit + gate remux); не commit/push |
+| Активная линия | Cloudflare Pages: production публикует `public/` |
+| Последний этап | мобильные видео парка: poster до кадра; с роликов ворот снята MJPEG-обложка |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский listen bed + пяти cue |
 
@@ -96,6 +96,13 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Park mobile video: `gate-closed-loop.mp4` / `gate-refuse.mp4` без attached MJPEG;
+  Game UI Kit не прячет still до `playing`, `play()` не ждёт только `loadeddata`.
+  Chromium `390×844`: loop `readyState` 4, `is-playing`, 1280×720; burst
+  `gate-refuse.mp4` тоже играет. Настоящий iOS Safari не прогонялся.
+  Validator `12/12`, kit `6/39`, `node --check`, `git diff --check`.
+
 
 - Pavel VHS reward UX: `assets/staff/tv/pavel-cassette.mp4` подключён к каталогу
   `VHS_CATALOG`; сохранение поддерживает `cassetteIds`, а `SOURCE` только открывает

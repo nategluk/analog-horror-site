@@ -168,22 +168,39 @@
 
     let muted = true;
 
+    const hideVideoFrame = () => {
+      if (!video) return;
+      video.classList.remove("is-playing");
+    };
+
+    const armInline = () => {
+      if (!video) return;
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
+      video.preload = "auto";
+      video.muted = muted;
+      video.defaultMuted = muted;
+      if (muted) video.setAttribute("muted", "");
+      else video.removeAttribute("muted");
+    };
+
     const showStill = (src, alt) => {
+      hideVideoFrame();
       if (still && src) {
         still.src = src;
         still.alt = alt || "";
         still.hidden = false;
       }
-      if (video) video.hidden = true;
     };
 
     const stopVideo = () => {
       window.clearTimeout(watchdog);
       if (!video) return;
+      hideVideoFrame();
       video.pause();
       video.removeAttribute("src");
       video.load();
-      video.hidden = true;
     };
 
     const fail = (src, context) => {
@@ -213,25 +230,47 @@
         return { role, token: run };
       }
 
-      showStill(clip.startStill || clip.still || fallbackStill, alt);
-      video.muted = muted;
+      const plate = clip.startStill || clip.still || fallbackStill;
+      showStill(plate, alt);
+      armInline();
       video.loop = role === "neutral" || role === "active";
-      video.src = clip.src;
+      if (plate) video.poster = plate;
+      else video.removeAttribute("poster");
       video.hidden = false;
-      if (still) still.hidden = true;
+      video.src = clip.src;
 
       const settleError = () => {
         if (run !== token) return;
         window.clearTimeout(watchdog);
         fail(stillFrom(clip, fallbackStill), { clip, role, flags, token: run });
       };
+      const reveal = () => {
+        if (run !== token) return;
+        video.classList.add("is-playing");
+      };
       video.addEventListener("error", settleError, { once: true });
+      video.addEventListener("playing", reveal, { once: true });
       const play = () => {
         if (run !== token) return;
-        video.play().catch(settleError);
+        const attempt = video.play();
+        if (!attempt || typeof attempt.catch !== "function") return;
+        attempt.catch(() => {
+          if (run !== token) return;
+          if (!video.muted) {
+            video.muted = true;
+            video.defaultMuted = true;
+            video.setAttribute("muted", "");
+            video.play().catch(settleError);
+            return;
+          }
+          settleError();
+        });
       };
-      if (video.readyState >= 2) play();
-      else video.addEventListener("loadeddata", play, { once: true });
+      play();
+      if (video.readyState < 2) {
+        video.addEventListener("loadeddata", play, { once: true });
+        video.addEventListener("canplay", play, { once: true });
+      }
 
       if (role === "transition" || role === "burst" || clip.playback === "one-shot") {
         video.loop = false;
@@ -249,7 +288,11 @@
 
     const setMuted = (next) => {
       muted = Boolean(next);
-      if (video) video.muted = muted;
+      if (!video) return;
+      video.muted = muted;
+      video.defaultMuted = muted;
+      if (muted) video.setAttribute("muted", "");
+      else video.removeAttribute("muted");
     };
 
     return { apply, stop: stopVideo, showStill, setMuted };
