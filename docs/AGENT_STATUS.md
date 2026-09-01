@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-08-31 20:03 CDT |
+| Обновлено | 2026-08-31 22:52 CDT |
 | Ветка / HEAD | `main` / `63b34b9` |
-| Дерево | dirty: Pavel staff shortcut hidden + dossier cloud sync + impostor dossier class; не commit/push |
-| Активная линия | Класс `impostor` реализован локально; migration применена в Supabase, frontend и Edge Functions ещё не опубликованы |
-| Последний этап | Impostor gate/profile, cabinet labels, backup allowlist, restore path and forward-only SQL migration |
+| Дерево | dirty: Pavel button UX 1–3 (wait autoNext, finale HUD, exhausted hide); не commit/push |
+| Активная линия | Кабинка обозрения: три UX-пункта кнопок локально готовы |
+| Последний этап | Исчерпанный «КАКУЮ КНОПКУ?» скрывается после первого отказа |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский push через GitHub Desktop → Cloudflare rebuild → live QA |
 
@@ -58,9 +58,18 @@ FREE
 - До ухода узлы мониторной используют `CONTROL_PAVEL_PRESENT`; утверждённого
   neutral-loop нет. `booth-intro` снимает голову Кота, а реакции на Ирину,
   узнавание, улыбку и усталость работают как отдельные one-shot clips с hold.
-- После кассеты добавлен маршрут `control-screens-glitch → control-camera →
+- После кассеты маршрут `control-screens-glitch → control-camera →
   control-camera-ask → control-camera-press → hatch-escape`: сбой не повторяется
-  после reload, POV-нажатие заканчивается устойчивым кадром коридора.
+  после reload. Нажатие F6 — one-shot `control-channel-switch.mp4` без кнопки
+  ожидания; по `ended`/ошибке/15s watchdog/`prefers-reduced-motion` узел
+  `autoNext` на `hatch-escape`. Reload с `clipControlChannelSwitch` сразу туда.
+- Финал: `slide-guest-light` смотрит `senior-guide-slide-exit.mp4` без choices;
+  `autoNext` на `slide-guest-exit` (glitch → guest). HUD × `disabled`, пока
+  узел `autoNext`/`guestExit` или смена закрыта; staff-CSS не перекрашивает
+  locked-выход в живой коралл.
+- Исчерпанный диалог: self-loop «КАКУЮ КНОПКУ?» после первого отказа
+  `hideIf: cameraRefused`; повторный клик больше не no-op. Склад/тур уже
+  прятали one-shot через `hideIf`.
 - `storage-pavel-escape.mp4` подключён к `slide-farewell-left` как one-shot;
   после `ended` остаётся новый `storage-slide-loop.webp`, reload клип не повторяет.
 - После ухода узлы мониторной используют `CONTROL_EMPTY`; `control-empty.mp4`
@@ -99,6 +108,27 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Pavel exhausted choice: «КАКУЮ КНОПКУ?» один раз меняет реплику на отказ
+  и исчезает; остаётся «ОКЕЙ», дальше channel-switch без wait-кнопки.
+  Validator ловит self-loop без `hideIf`+`refusalText`. `94/94`, Copy Desk
+  smoke, `node --check`, `git diff --check`.
+
+
+- Pavel finale HUD: `slide-guest-light` без «ВЫЙТИ», клип играет, leave
+  `disabled` + `Выход закрыт`. По `ended` → `slide-guest-exit` → guest
+  `index.html`, `seniorGuideExit`. Staff-CSS больше не красит locked × как
+  живую. Validator `94/94`, Copy Desk smoke, `node --check`, `git diff --check`.
+  Пункт 3 (exhausted choices) не трогался.
+
+
+- Pavel wait-button: «ЖДАТЬ ДЕСЯТЬ СЕКУНД» удалена. Desktop jump на
+  `control-camera-ask` → «ОКЕЙ» → мысль «Где находится F6?» без choices →
+  клип ~6s → `hatch-escape` «КАНАЛ НЕДОСТУПЕН.» + «Где Павел?». Reload с
+  spent clip flag сразу на `hatch-escape`, overflow 0. Validator `94/94`,
+  Copy Desk smoke, `node --check`, `git diff --check`. Полный route QA не
+  запускался. Пункты 2–3 (inactive HUD / exhausted choices) не трогались.
+
 
 - Cotton clicker: bracelet notice, «Прочитать браслет» and veil «БРАСЛЕТ» removed. After cotton is ready, «Снять вату» opens `solnyshko-after-hours.html` (`gate-night`). Desktop route confirmed. `node --check`, `git diff --check`.
 

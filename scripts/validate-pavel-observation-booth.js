@@ -206,6 +206,13 @@ Object.entries(nodes).forEach(([id, node]) => {
       errors.push(`Node ${id}: unknown artifact "${node.artifact}"`);
     }
   }
+  if (node.autoNext != null) {
+    if (!isNonEmptyString(node.autoNext)) {
+      errors.push(`Node ${id}: autoNext must be a non-empty string when present`);
+    } else if (!nodeIds.has(node.autoNext)) {
+      errors.push(`Node ${id}: autoNext → missing node "${node.autoNext}"`);
+    }
+  }
 
   if (node.choices == null) return;
   if (!Array.isArray(node.choices)) {
@@ -275,7 +282,11 @@ while (queue.length) {
   if (reachable.has(id)) continue;
   reachable.add(id);
   const node = nodes[id];
-  if (!node || !Array.isArray(node.choices)) continue;
+  if (!node) continue;
+  if (node.autoNext && nodeIds.has(node.autoNext) && !reachable.has(node.autoNext)) {
+    queue.push(node.autoNext);
+  }
+  if (!Array.isArray(node.choices)) continue;
   node.choices.forEach((choice) => {
     if (choice?.next && nodeIds.has(choice.next) && !reachable.has(choice.next)) {
       queue.push(choice.next);
@@ -361,14 +372,23 @@ if (nodes["control-screens-glitch"]?.choices?.[0]?.next !== "control-camera") {
 if (nodes["control-camera-ask"]?.choices?.[0]?.next !== "control-camera-press") {
   errors.push("accepting Pavel's request must show the operator press the channel control");
 }
-if (nodes["control-camera-press"]?.choices?.[0]?.next !== "hatch-escape") {
+if (nodes["control-camera-press"]?.autoNext !== "hatch-escape") {
   errors.push("the channel-switch beat must lead to the disabled right channel");
+}
+if (Array.isArray(nodes["control-camera-press"]?.choices) && nodes["control-camera-press"].choices.length) {
+  errors.push("channel-switch must auto-advance without a wait button");
 }
 if (nodes["senior-guide-route"]?.choices?.[0]?.next !== "slide-guest-light") {
   errors.push("senior guide must send the player through the lit slide");
 }
 if (nodes["slide-guest-light"]?.visual !== "SLIDE_ESCAPE") {
   errors.push("accepted guide exit clip must own slide-guest-light");
+}
+if (nodes["slide-guest-light"]?.autoNext !== "slide-guest-exit") {
+  errors.push("finale cutscene must auto-advance without an exit button");
+}
+if (Array.isArray(nodes["slide-guest-light"]?.choices) && nodes["slide-guest-light"].choices.length) {
+  errors.push("finale cutscene must not show story choices");
 }
 if (!nodes["slide-guest-exit"]?.guestExit) {
   errors.push("player slide exit must glitch to guest");
@@ -379,6 +399,23 @@ const cansChoice = nodes["tour-storage"]?.choices?.find(
 if (!cansChoice?.hideIf?.includes("tourAskedCans")) {
   errors.push("tour cans memory must remain optional and one-shot");
 }
+
+Object.entries(nodes).forEach(([id, node]) => {
+  const list = Array.isArray(node?.choices) ? node.choices : [];
+  list.forEach((choice, index) => {
+    if (!choice || choice.next !== id) return;
+    const setFlags = Array.isArray(choice.set) ? choice.set : [];
+    const hideIf = Array.isArray(choice.hideIf) ? choice.hideIf : [];
+    if (!setFlags.some((flag) => hideIf.includes(flag))) {
+      errors.push(
+        `Node ${id}.choices[${index}]: self-loop must hideIf a flag it sets so a second click is not a no-op`
+      );
+    }
+    if (!isNonEmptyString(node.refusalText)) {
+      errors.push(`Node ${id}: self-loop needs refusalText so the repeat still changes the line`);
+    }
+  });
+});
 
 [
   "assets/guest/locations/pavel/nightstand-cassette.mp4",

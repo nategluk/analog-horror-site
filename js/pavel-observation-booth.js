@@ -111,7 +111,6 @@
       holdStill: "../assets/guest/locations/pavel/storage-slide-light.webp",
       playedFlag: "clipSeniorGuideExit",
       audio: true,
-      guestExit: true,
     }),
   };
   const CONTROL_EMPTY_CLIP = Object.freeze({
@@ -422,6 +421,12 @@
     ) {
       parsed.nodeId = "hatch-escape";
     }
+    if (parsed.nodeId === "control-camera-press" && parsed.flags?.clipControlChannelSwitch) {
+      parsed.nodeId = "hatch-escape";
+    }
+    if (parsed.nodeId === "slide-guest-light" && parsed.flags?.clipSeniorGuideExit) {
+      parsed.nodeId = "slide-guest-exit";
+    }
     if (!graph?.nodes?.[parsed.nodeId]) return null;
     return parsed;
   };
@@ -451,6 +456,11 @@
         hasFlag("slideFarewellSeen") ||
         content()?.nodes?.[save?.nodeId]?.complete
     );
+
+  const hudLeaveLocked = () => {
+    const node = content()?.nodes?.[save?.nodeId];
+    return Boolean(shiftLocked() || node?.guestExit || node?.autoNext);
+  };
 
   const applyFlags = (flags = []) => {
     const foundArtifactIds = [];
@@ -872,12 +882,35 @@
     else tick();
   };
 
+  const goToNode = (nextId) => {
+    const nextNode = content()?.nodes?.[nextId];
+    if (!save || !nextNode) return;
+    save.nodeId = nextId;
+    if (nextNode.complete) {
+      save.status = "completed";
+      save.operatorHeld = true;
+    }
+    writeSave(save);
+    lastSoundNode = "";
+    render();
+  };
+
   const revealChoicesForNode = (nodeId, token) => {
     if (token !== mediaToken || save?.nodeId !== nodeId) return;
     clearChoiceRevealTimer();
     choicesUnlockedNode = nodeId;
     choiceRevealAnimationPending = true;
     render();
+  };
+
+  const settleAfterClip = (node, nodeId, token) => {
+    if (token !== mediaToken || save?.nodeId !== nodeId) return;
+    clearChoiceRevealTimer();
+    if (node.autoNext) {
+      goToNode(node.autoNext);
+      return;
+    }
+    if (node.choicesAfterClip) revealChoicesForNode(nodeId, token);
   };
 
   const applyVisual = (node) => {
@@ -915,7 +948,16 @@
     }
 
     const skipMotion = !clip || !video || reduceMotion.matches || played;
-    if (skipMotion) return;
+    if (skipMotion) {
+      if (node.autoNext) {
+        if (clip?.playedFlag && save) {
+          save.flags[clip.playedFlag] = true;
+          writeSave(save);
+        }
+        window.setTimeout(() => settleAfterClip(node, nodeId, token), 0);
+      }
+      return;
+    }
 
     video.muted = !clip.audio || !hasFlag("soundEnabled");
     video.loop = clip.playback === "loop";
@@ -933,7 +975,11 @@
     const fail = () => {
       if (token !== mediaToken) return;
       video.hidden = true;
-      if (node.choicesAfterClip) revealChoicesForNode(nodeId, token);
+      if (node.autoNext && clip?.playedFlag && save) {
+        save.flags[clip.playedFlag] = true;
+        writeSave(save);
+      }
+      settleAfterClip(node, nodeId, token);
     };
     let playbackRequested = false;
     const play = () => {
@@ -959,9 +1005,13 @@
     video.addEventListener("error", fail, { once: true });
     video.load();
     if (video.readyState >= 1) play();
-    if (node.choicesAfterClip) {
+    if (node.choicesAfterClip || node.autoNext) {
       choiceRevealTimer = window.setTimeout(() => {
-        revealChoicesForNode(nodeId, token);
+        if (node.autoNext && clip?.playedFlag && save) {
+          save.flags[clip.playedFlag] = true;
+          writeSave(save);
+        }
+        settleAfterClip(node, nodeId, token);
       }, 15000);
     }
     video.addEventListener("ended", () => {
@@ -976,7 +1026,7 @@
         still.hidden = false;
       }
       stopVideo();
-      if (node.choicesAfterClip) revealChoicesForNode(nodeId, token);
+      settleAfterClip(node, nodeId, token);
       if (clip.guestExit && !finaleReached()) exitToGuest();
     }, { once: true });
   };
@@ -1095,11 +1145,12 @@
       soundButton.setAttribute("aria-label", on ? "Выключить звук смены" : "Включить звук смены");
     }
     if (leaveButton) {
-      const held = shiftLocked();
+      const held = hudLeaveLocked();
+      leaveButton.disabled = held;
       leaveButton.setAttribute("aria-disabled", String(held));
       leaveButton.setAttribute(
         "aria-label",
-        held ? "Выход закрыт до сменщика" : "Покинуть кабинку"
+        held ? "Выход закрыт" : "Покинуть кабинку"
       );
       leaveButton.title = held ? "Выход закрыт" : "Покинуть кабинку";
     }
@@ -1139,15 +1190,12 @@
           ...new Set([...pendingRewardIds, ...foundArtifactIds]),
         ];
         if (choice.sound) playSound(choice.sound);
-        save.nodeId = choice.next;
-        const nextNode = graph.nodes[save.nodeId];
-        if (nextNode?.complete) {
-          save.status = "completed";
-          save.operatorHeld = true;
+        if (choice.next === save.nodeId) {
+          lastRenderedNode = "";
+          lineReadyNode = "";
+          lastSoundNode = "";
         }
-        writeSave(save);
-        lastSoundNode = "";
-        render();
+        goToNode(choice.next);
       });
       choicesEl.append(button);
     });
@@ -1211,7 +1259,7 @@
     root.querySelector("[data-booth-leave]")?.addEventListener("click", () => {
       save = save || readSave() || createSave();
       const liveEl = root.querySelector("[data-booth-live]");
-      if (shiftLocked()) {
+      if (hudLeaveLocked()) {
         if (liveEl) {
           liveEl.textContent =
             "Выход закрыт. Ты замена. Жди, пока маршрут станет безопасным.";

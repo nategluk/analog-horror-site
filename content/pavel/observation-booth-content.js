@@ -1166,7 +1166,8 @@
           label: "КАКУЮ КНОПКУ?",
           kind: "speech",
           next: "control-camera-ask",
-          set: ["cameraRefused"]
+          set: ["cameraRefused"],
+          hideIf: ["cameraRefused"]
         }
       ]
     },
@@ -1176,12 +1177,8 @@
       text: "Где находится F6? Зоопарк?",
       visual: "CONTROL_PAVEL_RIGHT",
       imageAlt: "Руки оператора на пульте: после нажатия правый экран переключается на пустой коридор",
-      choices: [
-        {
-          label: "ЖДАТЬ ДЕСЯТЬ СЕКУНД",
-          next: "hatch-escape"
-        }
-      ]
+      autoNext: "hatch-escape",
+      choices: []
     },
     "hatch-escape": {
       room: "control",
@@ -1405,12 +1402,8 @@
       text: "В горке опять загорелся свет.",
       visual: "SLIDE_ESCAPE",
       imageAlt: "Я должен слушаться...",
-      choices: [
-        {
-          label: "ВЫЙТИ",
-          next: "slide-guest-exit"
-        }
-      ]
+      autoNext: "slide-guest-exit",
+      choices: []
     },
     "slide-guest-exit": {
       room: "storage",

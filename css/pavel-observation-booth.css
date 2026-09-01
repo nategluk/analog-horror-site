@@ -105,9 +105,16 @@
   font-weight: 400;
 }
 
-.pavel-booth__leave[aria-disabled="true"] {
-  color: rgba(255, 122, 106, 0.38);
+.pavel-booth__hud-btn:disabled,
+.pavel-booth__hud-btn[aria-disabled="true"] {
+  opacity: 0.42;
   cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pavel-booth__leave:disabled,
+.pavel-booth__leave[aria-disabled="true"] {
+  color: rgba(255, 122, 106, 0.4);
 }
 
 .pavel-booth__stage {
@@ -389,6 +396,11 @@ body.staff-mode .site-wrapper .pavel-booth .pavel-booth__choice {
 
 body.staff-mode .site-wrapper .pavel-booth .pavel-booth__leave {
   color: #ff7a6a;
+}
+
+body.staff-mode .site-wrapper .pavel-booth .pavel-booth__leave:disabled,
+body.staff-mode .site-wrapper .pavel-booth .pavel-booth__leave[aria-disabled="true"] {
+  color: rgba(255, 122, 106, 0.4);
 }
 
 body.pavel-booth-open {
