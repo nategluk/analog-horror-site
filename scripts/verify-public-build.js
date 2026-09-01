@@ -76,6 +76,7 @@ const REQUIRED_PAGES = [
   "assets/guest/locations/solnyshko/irina-cotton-offer.mp4",
   "assets/guest/locations/solnyshko/irina-cotton-lookaway.mp4",
   "assets/guest/solnyshko/game/cotton-machine-idle.webp",
+  "assets/guest/solnyshko/game/cotton-machine-sugar.webp",
   "assets/guest/solnyshko/game/cotton-machine-ready.webp",
   "assets/guest/solnyshko/game/cotton-machine-spin.mp4",
   "assets/guest/locations/pavel/storage-slide-loop.mp4",

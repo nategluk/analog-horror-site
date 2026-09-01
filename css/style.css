@@ -12482,12 +12482,26 @@ body.staff-mode .episode-source:focus-visible {
   z-index: 2;
 }
 
+.sp-cotton-art--sugar {
+  z-index: 2;
+}
+
+.sp-cotton.is-sugar[data-phase="idle"] .sp-cotton-art--idle {
+  opacity: 0;
+}
+
+.sp-cotton.is-sugar[data-phase="idle"] .sp-cotton-art--sugar {
+  opacity: 1;
+}
+
+.sp-cotton[data-phase="sugar"] .sp-cotton-art--idle,
 .sp-cotton[data-phase="ready"] .sp-cotton-art--idle,
 .sp-cotton[data-phase="warm"] .sp-cotton-art--idle,
 .sp-cotton[data-phase="reading"] .sp-cotton-art--idle {
   opacity: 0;
 }
 
+.sp-cotton[data-phase="sugar"] .sp-cotton-art--sugar,
 .sp-cotton[data-phase="ready"] .sp-cotton-art--ready,
 .sp-cotton[data-phase="warm"] .sp-cotton-art--ready,
 .sp-cotton[data-phase="reading"] .sp-cotton-art--ready {
@@ -12505,8 +12519,8 @@ body.staff-mode .episode-source:focus-visible {
   opacity: 0;
 }
 
-.sp-cotton.is-spinning:not(.is-video-ready) .sp-cotton-art--idle,
-.sp-cotton.is-spinning.is-media-fallback .sp-cotton-art--idle {
+.sp-cotton.is-spinning:not(.is-video-ready) .sp-cotton-art--sugar,
+.sp-cotton.is-spinning.is-media-fallback .sp-cotton-art--sugar {
   opacity: 1;
 }
 

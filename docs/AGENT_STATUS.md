@@ -109,6 +109,8 @@ FREE
 
 ## Последняя целевая проверка
 
+- Cotton sugar frame: `cotton-machine-sugar.webp` appears after «Засыпать сахар» and remains the pre-play fallback while the accepted spin MP4 loads. Mobile `390×844`: image loaded, overflow `0`; console `0`. Public build/verify, `node --check`, `git diff --check`.
+
 - Birthday password formats: `120826`, `12.8.26`, `12/08/2026`, `12.08.26`
   принимаются; чужие цифры — нет. Placeholder пустой. Live: `120826` →
   «ДАТА ПРИНЯТА». Validator `13/13`, Copy Desk smoke, `node --check`,
