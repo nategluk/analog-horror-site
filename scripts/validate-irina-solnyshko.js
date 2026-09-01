@@ -111,6 +111,10 @@ if (!source.includes("ДАТА ПРИНЯТА.\\nЛИЧНОЕ ДЕЛО НЕ НА
   errors.push("impostor registration copy missing");
 }
 if (finalNodes.length !== 1) errors.push("exactly one completion node required");
+const parkRuntime = fs.readFileSync(path.resolve(__dirname, "..", "js", "solnyshko-park.js"), "utf8");
+if (!parkRuntime.includes("replace(/\\D/g, \"\")") || !parkRuntime.includes("dateKeys")) {
+  errors.push("birthday password must accept punctuation-free digit formats");
+}
 
 if (errors.length) {
   errors.forEach((error) => console.error(`ERROR ${error}`));

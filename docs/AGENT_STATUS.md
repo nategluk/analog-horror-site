@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-01 CDT |
-| Ветка / HEAD | `main` / `63b34b9` |
-| Дерево | dirty: Irina dossier + 4 document stills; pre-existing about-slides WebP; не commit/push |
-| Активная линия | `documents/dossier-irina.html` интегрировано в индекс, STAFF-регистр и public build |
-| Последний этап | targeted validation, public build и desktop/mobile route QA пройдены |
+| Ветка / HEAD | `main` / `5b05fea` |
+| Дерево | dirty: пароль `birthday-check` (vague label + digit formats); не commit/push |
+| Активная линия | after-hours gate: пароль без формата `ДД.ММ.ГГ` |
+| Последний этап | принимаются цифры даты в любом пунктуационном виде |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский просмотр; commit / push / deploy не выполнялись |
+| Следующий gate | пользовательский просмотр copy; commit не выполнялся |
 
 ## Write-замок
 
@@ -108,6 +108,16 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Birthday password formats: `120826`, `12.8.26`, `12/08/2026`, `12.08.26`
+  принимаются; чужие цифры — нет. Placeholder пустой. Live: `120826` →
+  «ДАТА ПРИНЯТА». Validator `13/13`, Copy Desk smoke, `node --check`,
+  `git diff --check`.
+
+- Birthday password label: `input.prompt` на `birthday-check` — `ПАРОЛЬ`,
+  не «ДАТА С ОТКРЫТКИ». Placeholder `ДД.ММ.ГГ` и inspect открытки без изменений.
+  Desktop: после клика по реплике поле `ПАРОЛЬ`, «ПРОВЕРИТЬ ОТКРЫТКУ» на месте.
+  Validator `13/13`, Copy Desk smoke, `node --check`, `git diff --check`.
 
 - about-slides: исходник был JPEG 1024×1024 / 872KB с расширением `.png`.
   WebP q80 `125KB`, те же 1024×1024 RGB. Привязка только `about.html`

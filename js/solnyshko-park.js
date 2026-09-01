@@ -75,8 +75,46 @@
     return (profile.artifacts || []).some((artifact) => artifact?.id === artifactId);
   };
 
-  const normalizeDate = (value) => String(value || "").trim().replace(/\s+/g, "");
-  const dateAccepted = (value) => content.acceptedDates.includes(normalizeDate(value));
+  const pad2 = (value) => String(value).padStart(2, "0");
+
+  const dateParts = (value) => {
+    const chunks = String(value || "").match(/\d+/g) || [];
+    if (chunks.length < 2) return null;
+    const day = Number(chunks[0]);
+    const month = Number(chunks[1]);
+    if (!day || !month || day > 31 || month > 12) return null;
+    const year = chunks[2] ? Number(chunks[2]) : null;
+    return { day: pad2(day), month: pad2(month), year };
+  };
+
+  const dateKeys = (stamps) => {
+    const keys = new Set();
+    (stamps || []).forEach((stamp) => {
+      const parts = dateParts(stamp);
+      if (!parts) {
+        const raw = String(stamp).replace(/\D/g, "");
+        if (raw) keys.add(raw);
+        return;
+      }
+      keys.add(parts.day + parts.month);
+      if (parts.year == null) return;
+      const yy = pad2(parts.year % 100);
+      keys.add(parts.day + parts.month + yy);
+      keys.add(parts.day + parts.month + "19" + yy);
+      keys.add(parts.day + parts.month + "20" + yy);
+    });
+    return keys;
+  };
+
+  const dateAccepted = (value) => {
+    const allowed = dateKeys(content.acceptedDates);
+    const digits = String(value || "").replace(/\D/g, "");
+    if (digits && allowed.has(digits)) return true;
+    const parts = dateParts(value);
+    if (!parts) return false;
+    if (parts.year == null) return allowed.has(parts.day + parts.month);
+    return allowed.has(parts.day + parts.month + pad2(parts.year % 100));
+  };
 
   const choiceVisible = (choice, role) => {
     if (choice.showFor && !choice.showFor.includes(role)) return false;

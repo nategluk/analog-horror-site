@@ -73,8 +73,8 @@
       },
       mediaFallback: "Тот же порог. Страж ждёт пароль, не взгляд в глаза.",
       input: {
-        prompt: "ДАТА С ОТКРЫТКИ",
-        placeholder: "ДД.ММ.ГГ",
+        prompt: "ПАРОЛЬ",
+        placeholder: "",
         submit: "НАЗВАТЬ ПАРОЛЬ",
         fail: "Неверный пароль.",
         next: "birthday-recorded",
