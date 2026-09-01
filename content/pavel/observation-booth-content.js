@@ -527,7 +527,7 @@
     "control-drain-cue-2": {
       room: "control",
       speaker: "Я",
-      text: "В трубах опять чавкают. На секунду.",
+      text: "В ванной опять эти звуки. Пойду проверю",
       visual: "CONTROL_EMPTY",
       sound: "test-drain-hum",
       choices: [
@@ -703,13 +703,13 @@
     "control-after-drain": {
       room: "control",
       speaker: "ПАВЕЛ",
-      text: "Привет, сменщик. Надеюсь, у тебя все хорошо там. \nЯ немножко задержусь. Ты там как",
+      text: "Привет, сменщик. Я немножко задержусь. Ты там как?",
       visual: "CONTROL_EMPTY",
       sound: "pavel-mm",
       imageAlt: "Пустая мониторная: настоящий Павел без маски говорит с правого экрана",
       choices: [
         {
-          label: "Рассказать про волосы в сливе",
+          label: "Рассказать про разговорчивое существо",
           kind: "speech",
           next: "control-after-drain-warn"
         }
@@ -823,7 +823,7 @@
       imageAlt: "Крупный план слива: язык на решётке и два бледных пальца с ногтями",
       choices: [
         {
-          label: "Он пьёт?",
+          label: "Оно пьёт?",
           kind: "speech",
           next: "drain-pour-tongue"
         }
@@ -859,7 +859,7 @@
     "drain-pour-cat": {
       room: "bathroom",
       speaker: "ГОЛОС ИЗ СЛИВА",
-      text: "Маршрут может поменяться. Ты видишь меня, когда Зона Фильтрации подключается к комнате обозрения! ",
+      text: "Маршруты меняются каждые полчаса. Сейчас твоя горка ведет прямиком в Зону Фильтрации!  ",
       visual: "DRAIN_HUNGRY",
       sound: "drain-voice-thanks-zone",
       choices: [
@@ -1323,7 +1323,7 @@
       imageAlt: "Пустой служебный склад с тёмным входом в старую водную горку",
       choices: [
         {
-          label: "ОГЛЯНУТЬСЯ",
+          label: "ИСКАТЬ ВЫХОД",
           next: "senior-guide-seen",
           set: ["storageSlideFound"]
         }
@@ -1332,7 +1332,7 @@
     "senior-guide-seen": {
       room: "storage",
       speaker: "Я",
-      text: "Давно хотел с ней познакомиться",
+      text: "ВЫХОДА НЕТ!",
       visual: "SENIOR_GUIDE_SLIDE",
       imageAlt: "Видимо, та самая проводница",
       choices: [
