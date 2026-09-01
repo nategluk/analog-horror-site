@@ -34,6 +34,7 @@ const SITE_PAGES = [
   "auth/confirm.html",
   "documents/dossier-kirill-zaytsev.html",
   "documents/dossier-laura.html",
+  "documents/dossier-irina.html",
   "documents/dossier-pavel.html",
   "documents/dossier-sz-312.html",
   "documents/protocol-312-r.html",

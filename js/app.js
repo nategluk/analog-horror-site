@@ -1807,6 +1807,7 @@
       note: "Склонна к импровизации. Рекомендовано наблюдение за служебным каналом.",
       image: audioAsset("assets/staff/staff/irina_sad.jpg"),
       headerImage: audioAsset("assets/staff/personnel/irina-record.webp"),
+      dossier: "documents/dossier-irina.html",
       curatorId: "0091-A",
     },
     pavel: {

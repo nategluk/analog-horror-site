@@ -7,13 +7,13 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-08-31 22:59 CDT |
+| Обновлено | 2026-09-01 CDT |
 | Ветка / HEAD | `main` / `63b34b9` |
-| Дерево | dirty: about-slides WebP; не commit/push |
-| Активная линия | about.html: 872KB mislabeled JPEG → 125KB WebP |
-| Последний этап | PNG удалён, `about.html` смотрит на `about-slides.webp` |
+| Дерево | dirty: Irina dossier + 4 document stills; pre-existing about-slides WebP; не commit/push |
+| Активная линия | `documents/dossier-irina.html` интегрировано в индекс, STAFF-регистр и public build |
+| Последний этап | targeted validation, public build и desktop/mobile route QA пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский push через GitHub Desktop → Cloudflare rebuild → live QA |
+| Следующий gate | пользовательский просмотр; commit / push / deploy не выполнялись |
 
 ## Write-замок
 
