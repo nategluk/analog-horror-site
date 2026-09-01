@@ -12283,10 +12283,6 @@ body.staff-mode .episode-source:focus-visible {
   letter-spacing: 0.08em;
 }
 
-.sp-cotton.is-band .sp-cotton-paper {
-  top: 8%;
-}
-
 .sp-cotton-tray {
   position: relative;
   width: calc(100% - 0.5rem);
@@ -12314,34 +12310,6 @@ body.staff-mode .episode-source:focus-visible {
 
 .sp-cotton-status span {
   display: block;
-}
-
-.sp-cotton-receipt {
-  min-width: 0;
-  padding: 0.8rem 0.75rem;
-  color: #4a3018;
-  border: 1px dashed #8a6a3a;
-  background:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0 11px,
-      rgba(90, 58, 28, 0.12) 11px 12px
-    ),
-    #f4e4c4;
-}
-
-.sp-cotton-receipt p {
-  margin: 0.35rem 0 0;
-  font-size: 0.92rem;
-  line-height: 1.4;
-}
-
-.sp-cotton-receipt__title {
-  margin: 0;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
 
 .sp-cotton-flavor {

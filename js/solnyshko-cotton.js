@@ -7,7 +7,7 @@
   const FLAVOR_LINES = [
     "Сахар ещё тёплый.",
     "Запах не выветривается.",
-    "Браслет помнит этот вечер.",
+    "Порция ещё держит тепло.",
   ];
   const SOUND_FILES = {
     spin: "sfx-cotton-spinner.mp3",
@@ -83,27 +83,21 @@
 
   const applySettledFx = (view) => {
     if (view.phase === "spinning") return;
-    const settled =
-      view.phase === "ready" || view.phase === "warm" || view.phase === "reading";
+    const settled = view.phase === "ready" || view.phase === "warm";
     view.lamp = settled || view.phase === "sugar";
-    view.cotton = settled ? "full" : view.sugar ? "none" : "none";
+    view.cotton = settled ? "full" : "none";
     if (view.phase === "sugar") view.cotton = "none";
     if (view.phase === "idle") view.cotton = "none";
-    view.band = settled;
   };
 
   const renderMachine = (root, view) => {
-    const settled =
-      view.phase === "ready" || view.phase === "warm" || view.phase === "reading";
-
     root.dataset.phase = view.phase;
     root.classList.toggle("is-sugar", view.sugar);
     root.classList.toggle("is-lamp", view.lamp === true);
     root.classList.toggle("is-spinning", view.phase === "spinning");
     root.classList.toggle("is-cotton", view.cotton === "full" || view.cotton === "growing");
     root.classList.toggle("is-cotton-growing", view.cotton === "growing");
-    root.classList.toggle("is-band", view.band === true || settled);
-    root.classList.toggle("is-warm", view.phase === "warm" || view.phase === "reading");
+    root.classList.toggle("is-warm", view.phase === "warm");
     root.classList.toggle("is-busy", view.busy === true);
   };
 
@@ -111,17 +105,16 @@
     const title = root.querySelector("[data-sp-title]");
     const sub = root.querySelector("[data-sp-sub]");
     const status = root.querySelector("[data-sp-status]");
-    const receipt = root.querySelector("[data-sp-receipt]");
     const flavor = root.querySelector("[data-sp-flavor]");
     const live = root.querySelector("[data-sp-live]");
     const actions = root.querySelector("[data-sp-actions]");
 
-    const warmIdle = view.phase === "warm" || view.phase === "reading";
+    const warmIdle = view.phase === "warm";
     if (title) {
       title.textContent = warmIdle ? "Аппарат ещё тёплый" : "Аппарат ваты СВ-312";
     }
     if (sub) {
-      sub.textContent = warmIdle ? "На лотке лежит браслет до закрытия." : "";
+      sub.textContent = warmIdle ? "Порция ещё тёплая." : "";
       setHidden(sub, !warmIdle);
     }
 
@@ -144,7 +137,6 @@
       );
     }
 
-    setHidden(receipt, view.phase !== "ready" && view.phase !== "reading");
     if (flavor) {
       flavor.textContent = view.flavor || "";
       setHidden(flavor, !view.flavor);
@@ -166,7 +158,6 @@
         buttons.push({ act: "take", label: "Снять вату" });
       } else {
         buttons.push({ act: "enter", label: "Остаться до закрытия" });
-        buttons.push({ act: "read", label: "Прочитать браслет" });
         buttons.push({ act: "replay", label: "Приготовить ещё" });
       }
 
@@ -187,9 +178,6 @@
       const parts = [`${title ? title.textContent : "Аппарат ваты СВ-312"}.`];
       if (sub && !sub.hidden) parts.push(sub.textContent);
       parts.push(`Сахар: ${sugarText}. Барабан: ${drumText}. Вата: ${cottonText}.`);
-      if (receipt && !receipt.hidden) {
-        parts.push("Гость до закрытия. Парк не выключает огни. Пройдите к воротам.");
-      }
       if (view.flavor) parts.push(view.flavor);
       live.textContent = parts.join(" ");
     }
@@ -206,7 +194,6 @@
           replaying: false,
           completed: true,
           lamp: false,
-          band: true,
         }
       : {
           phase: "idle",
@@ -217,7 +204,6 @@
           replaying: false,
           completed: false,
           lamp: false,
-          band: false,
         };
     applySettledFx(view);
     return view;
@@ -357,7 +343,6 @@
       view.busy = false;
       view.flavor = "";
       view.replaying = replay;
-      view.band = false;
       applySettledFx(view);
       paintView();
     };
@@ -365,7 +350,6 @@
     const finishSpin = () => {
       view.busy = false;
       view.cotton = "full";
-      view.band = true;
       if (view.replaying || view.completed) {
         view.phase = "warm";
         view.flavor = pickFlavor();
@@ -394,8 +378,7 @@
       const veil = document.createElement("div");
       veil.className = "sp-cotton-assign";
       veil.setAttribute("role", "status");
-      veil.innerHTML =
-        "<div><p>ПАРК НЕ ЗАКРЫВАЕТСЯ</p><p>БРАСЛЕТ: ГОСТЬ ДО ЗАКРЫТИЯ</p></div>";
+      veil.innerHTML = "<div><p>ПАРК НЕ ЗАКРЫВАЕТСЯ</p><p>К ВОРОТАМ</p></div>";
       document.body.append(veil);
       window.setTimeout(() => {
         veil.innerHTML = "<div><p>ВОРОТА ЖДУТ</p><p>ЗАПАХ ВАТЫ УЖЕ ЗА РЕШЁТКОЙ.</p></div>";
@@ -412,7 +395,6 @@
       view.flavor = "";
       view.cotton = "growing";
       view.lamp = true;
-      view.band = false;
       resetMotionMedia();
       paintView();
       playCue("spin");
@@ -459,19 +441,12 @@
           return;
         }
 
-        if (act === "enter" && (view.phase === "warm" || view.phase === "reading")) {
+        if (act === "enter" && view.phase === "warm") {
           enterHours();
           return;
         }
 
-        if (act === "read" && (view.phase === "warm" || view.phase === "reading")) {
-          view.phase = "reading";
-          applySettledFx(view);
-          paintView();
-          return;
-        }
-
-        if (act === "replay" && (view.phase === "warm" || view.phase === "reading")) {
+        if (act === "replay" && view.phase === "warm") {
           startPrep(true);
         }
       },

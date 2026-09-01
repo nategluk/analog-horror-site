@@ -100,7 +100,7 @@ FREE
 
 ## Последняя целевая проверка
 
-- Cotton clicker prelude: `locations/solnyshko-park.html` shows cold СВ-312 with an empty hopper and dark indicator before the click; accepted spin MP4 starts with sugar and lamp on. Old `solnyshko-park-poster.webp` figure removed so the clicker occupies the intro width. Sugar → drum → take launches veil then `solnyshko-after-hours.html`. Replay/resume on completed `tyndex_solnyshko_cotton_v1` shows «Остаться до закрытия». Desktop + `390×844`: image fits, no overflow, video reaches ready, reduced motion falls back. Console 0; public build/verify, `node --check`, `git diff --check`.
+- Cotton clicker: bracelet notice, «Прочитать браслет» and veil «БРАСЛЕТ» removed. After cotton is ready, «Снять вату» opens `solnyshko-after-hours.html` (`gate-night`). Desktop route confirmed. `node --check`, `git diff --check`.
 
 - Dossier backup v2: новый `dossier_backups`, allowlist 20 материалов и
   authenticated `sync-dossier`. В backup входят профиль, текущий сеанс Ирины и
