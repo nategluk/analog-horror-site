@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-08-31 22:52 CDT |
+| Обновлено | 2026-08-31 22:59 CDT |
 | Ветка / HEAD | `main` / `63b34b9` |
-| Дерево | dirty: Pavel button UX 1–3 (wait autoNext, finale HUD, exhausted hide); не commit/push |
-| Активная линия | Кабинка обозрения: три UX-пункта кнопок локально готовы |
-| Последний этап | Исчерпанный «КАКУЮ КНОПКУ?» скрывается после первого отказа |
+| Дерево | dirty: about-slides WebP; не commit/push |
+| Активная линия | about.html: 872KB mislabeled JPEG → 125KB WebP |
+| Последний этап | PNG удалён, `about.html` смотрит на `about-slides.webp` |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский push через GitHub Desktop → Cloudflare rebuild → live QA |
 
@@ -108,6 +108,11 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- about-slides: исходник был JPEG 1024×1024 / 872KB с расширением `.png`.
+  WebP q80 `125KB`, те же 1024×1024 RGB. Привязка только `about.html`
+  (`staff-about__screen`). `git diff --check`. Browser QA не запускался
+  (media swap без смены логики).
 
 - Pavel exhausted choice: «КАКУЮ КНОПКУ?» один раз меняет реплику на отказ
   и исчезает; остаётся «ОКЕЙ», дальше channel-switch без wait-кнопки.
