@@ -254,7 +254,7 @@
           href: "../staff.html?personnel=pavel",
         },
         {
-          label: "НАЧАТЬ НОВУЮ СМЕНУ",
+          label: "ВЕРНУТЬСЯ К ГЛАВНОМУ ВХОДУ",
           restart: true,
         },
       ],

@@ -393,7 +393,7 @@
     };
     if (panel) panel.dataset.waitingAdvance = "true";
     window.requestAnimationFrame(() => {
-      if (textPhase !== "line") return;
+      if (textPhase === "ready") return;
       if (panel) {
         panel._hoursAdvance = fire;
         panel.addEventListener("click", fire);
@@ -419,6 +419,7 @@
       wasHolding = true;
       textPhase = "line";
       clearAdvance();
+      if (panel) delete panel.dataset.choicesOnly;
       shell.line.render({
         kind: textKindFor(node),
         speaker: "",
@@ -432,14 +433,25 @@
       const startBeats = nodeChanged || wasHolding;
       wasHolding = false;
       if (startBeats) textPhase = "line";
-      if (node.popup || !actionText) textPhase = "ready";
+      if (node.popup) textPhase = "ready";
 
-      const waiting = textPhase === "line";
-      if (waiting) {
+      const waiting = textPhase !== "ready";
+      if (textPhase === "line") {
         shell.line.render({
           kind: textKindFor(node),
           speaker: node.speaker || "",
           line: nodeLine(node, save),
+          action: "",
+        });
+        armAdvance(() => {
+          textPhase = actionText ? "thought" : "ready";
+          render();
+        });
+      } else if (textPhase === "thought") {
+        shell.line.render({
+          kind: "thought",
+          speaker: "Я",
+          line: actionText,
           action: "",
         });
         armAdvance(() => {
@@ -450,9 +462,9 @@
         clearAdvance();
         if (actionText) {
           shell.line.render({
-            kind: "thought",
-            speaker: "Я",
-            line: actionText,
+            kind: textKindFor(node),
+            speaker: "",
+            line: "",
             action: "",
           });
         } else {
@@ -463,6 +475,11 @@
             action: "",
           });
         }
+      }
+
+      if (panel) {
+        if (textPhase === "ready" && actionText) panel.dataset.choicesOnly = "true";
+        else delete panel.dataset.choicesOnly;
       }
 
       const hasInput = Boolean(node.input);
@@ -505,7 +522,7 @@
 
     if (!hold) {
       window.requestAnimationFrame(() => {
-        if (textPhase === "line") root.querySelector("[data-game-ui-line]")?.focus();
+        if (textPhase !== "ready") root.querySelector("[data-game-ui-line]")?.focus();
         else if (!form.hidden && dateInput) dateInput.focus();
         else shell.focusFirst();
       });

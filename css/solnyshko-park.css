@@ -33,8 +33,9 @@
 .solnyshko-hours__input {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.45rem 0.65rem;
-  align-items: end;
+  gap: 0.4rem 0.55rem;
+  align-items: stretch;
+  width: 100%;
 }
 
 .solnyshko-hours__input[hidden] {
@@ -42,8 +43,8 @@
 }
 
 .solnyshko-hours__input label {
-  display: grid;
-  gap: 0.35rem;
+  grid-column: 1 / -1;
+  display: block;
   font-weight: 700;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
@@ -191,13 +192,13 @@ body.staff-mode .site-wrapper [data-solnyshko-hours] [data-game-ui-leave] {
   color: var(--game-ui-danger, #ff7a6a);
 }
 
-@media (min-width: 720px) {
-  .solnyshko-hours__input {
-    max-width: 28rem;
-  }
-}
-
 @media (max-width: 520px) {
+  [data-solnyshko-hours] [data-game-ui-panel][data-text-kind="thought"] [data-game-ui-bubble] {
+    width: 100%;
+    max-width: none;
+    justify-self: stretch;
+  }
+
   .solnyshko-hours__input {
     grid-template-columns: minmax(0, 1fr);
   }

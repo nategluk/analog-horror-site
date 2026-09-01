@@ -9,11 +9,11 @@
 |---|---|
 | Обновлено | 2026-09-01 CDT |
 | Ветка / HEAD | `main` / `5b05fea` |
-| Дерево | dirty: пароль `birthday-check` (vague label + digit formats); не commit/push |
-| Активная линия | after-hours gate: пароль без формата `ДД.ММ.ГГ` |
-| Последний этап | принимаются цифры даты в любом пунктуационном виде |
+| Дерево | dirty: after-hours thought→choices, 2×2, финал copy |
+| Активная линия | after-hours compact UI |
+| Последний этап | thought отдельно от кнопок; 2×2; форма даты; финал copy |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский просмотр copy; commit не выполнялся |
+| Следующий gate | пользовательский просмотр UI; commit не выполнялся |
 
 ## Write-замок
 
@@ -108,6 +108,13 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- After-hours UI: реплика → мысль без кнопок → клик → только choices/форма.
+  Кнопки 2×2 на `390×844` (после актуального CSS). Birthday: подпись, поле,
+  «НАЗВАТЬ ДАТУ», затем «ПРОВЕРИТЬ ОТКРЫТКУ» | «ВЕРНУТЬСЯ К ПРИЧИНЕ».
+  Финал: «ВЕРНУТЬСЯ К ГЛАВНОМУ ВХОДУ» → `gate-night`. Overflow `0`, цели ≥44.
+  Validator `13/13`, game-ui, Copy Desk smoke, `node --check`, `git diff --check`.
+  Полный password/artifact route не повторялся.
 
 - Cotton sugar frame: `cotton-machine-sugar.webp` appears after «Засыпать сахар» and remains the pre-play fallback while the accepted spin MP4 loads. Mobile `390×844`: image loaded, overflow `0`; console `0`. Public build/verify, `node --check`, `git diff --check`.
 

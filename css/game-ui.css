@@ -141,13 +141,22 @@ main.panel.game-ui-host {
 [data-game-ui-panel] {
   display: grid;
   gap: 0.45rem;
-  max-height: min(46dvh, 24rem);
+  max-height: min(38dvh, 20rem);
   min-height: 0;
   overflow: hidden;
   padding: 0.65rem 0.9rem 0.75rem;
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
   background: linear-gradient(180deg, rgba(24, 18, 12, 0.86), rgba(8, 6, 4, 0.96));
   border-top: 1px solid var(--game-ui-line);
+}
+
+[data-game-ui-panel][data-choices-only="true"] {
+  max-height: min(32dvh, 14rem);
+  padding-top: 0.5rem;
+}
+
+[data-game-ui-panel][data-choices-only="true"] [data-game-ui-bubble] {
+  display: none;
 }
 
 [data-game-ui-bubble] {
@@ -273,15 +282,20 @@ main.panel.game-ui-host {
 
 [data-game-ui-choices] {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: start;
   gap: var(--game-ui-choice-gap);
   min-height: 0;
   max-height: calc(
-    (var(--game-ui-choice-row) * 4) + (var(--game-ui-choice-gap) * 3)
+    (var(--game-ui-choice-row) * 3) + (var(--game-ui-choice-gap) * 2)
   );
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+[data-game-ui-choices]:has(> :only-child) {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 [data-game-ui-choices] button {
@@ -390,20 +404,14 @@ body.game-ui-open .panel:not(.game-ui-host) {
   overflow: hidden;
 }
 
-@media (min-width: 720px) {
-  [data-game-ui-choices] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  [data-game-ui-choices]:has(> :only-child) {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
 @media (max-height: 560px) {
   [data-game-ui-panel] {
-    max-height: min(52dvh, 18rem);
+    max-height: min(42dvh, 16rem);
     padding: 0.45rem 0.75rem 0.55rem;
+  }
+
+  [data-game-ui-panel][data-choices-only="true"] {
+    max-height: min(34dvh, 12rem);
   }
 }
 
