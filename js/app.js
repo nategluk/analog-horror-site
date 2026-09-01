@@ -1921,6 +1921,9 @@
 
   const getOperatorUsefulness = (profile, progress, lora) => {
     if (!profile) return { id: "undefined", label: "НЕ ОПРЕДЕЛЕНА" };
+    if (profile.role === "impostor") {
+      return { id: "watch", label: "ТРЕБУЕТ НАБЛЮДЕНИЯ" };
+    }
     if (profile.status === "screening" && !progress?.flags?.ageVerified) {
       return { id: "undefined", label: "НЕ ОПРЕДЕЛЕНА" };
     }
@@ -2057,6 +2060,8 @@
     status: "screening",
     curatorId: "0091-A",
     role: null,
+    origin: "curator-0091",
+    clearance: "pending",
     displayName: "",
     nameHistory: [],
     avatarId: null,
@@ -2386,6 +2391,8 @@
     if (progress.status === "completed") {
       profile.status = "completed";
       profile.role = progress.role || getCuratorAssignment(progress);
+      profile.origin = "curator-0091";
+      profile.clearance = "authorized";
       profile.completedAt ||= progress.completedAt || Date.now();
       profile.lastCompletedAt = progress.completedAt || Date.now();
       delete profile.reclassificationActive;
@@ -2428,6 +2435,54 @@
 
     return saveStaffProfile(claimPavelCassette(claimLoraShiftArtifacts(seedStaffMessages(profile))));
   };
+
+  const registerImpostorEntry = ({ enteredAt = Date.now() } = {}) => {
+    const existing = readStaffProfile();
+    if (
+      existing?.status === "completed" &&
+      ["animator", "volunteer"].includes(existing.role)
+    ) {
+      return existing;
+    }
+
+    const profile = existing || createStaffProfile();
+    const timestamp = Number.isFinite(enteredAt) ? enteredAt : Date.now();
+    profile.status = "completed";
+    profile.role = "impostor";
+    profile.origin = "solnyshko-after-hours";
+    profile.clearance = "unauthorized";
+    profile.completedAt ||= timestamp;
+    profile.lastCompletedAt = timestamp;
+    delete profile.reclassificationActive;
+
+    const existingSession = profile.sessions.find(
+      (session) => session.id === "solnyshko-after-hours-entry"
+    );
+    const sessionNumber =
+      existingSession?.number ||
+      Math.max(0, ...profile.sessions.map((session) => Number(session.number) || 0)) + 1;
+    const sessionRecord = {
+      id: "solnyshko-after-hours-entry",
+      number: sessionNumber,
+      role: "impostor",
+      routeMarks: 0,
+      completedAt: profile.completedAt,
+    };
+    const sessionIndex = profile.sessions.findIndex(
+      (session) => session.id === sessionRecord.id
+    );
+    if (sessionIndex >= 0) {
+      profile.sessions[sessionIndex] = sessionRecord;
+    } else {
+      profile.sessions.push(sessionRecord);
+    }
+
+    return saveStaffProfile(seedStaffMessages(profile));
+  };
+
+  window.TyndexStaffProfile = Object.freeze({
+    registerImpostorEntry,
+  });
 
   const getStaffProfile = () => {
     const progress = getCuratorProgress();
@@ -4226,6 +4281,7 @@
     };
 
     const getProfileStatus = (profile) => {
+      if (profile.role === "impostor") return "ДОПУСК НЕ ПОДТВЕРЖДЁН";
       if (profile.status === "completed") {
         return profile.reclassificationActive
           ? "ДОПУЩЕН // ПОВТОРНАЯ ПРОВЕРКА"
@@ -4237,6 +4293,7 @@
     };
 
     const getProfilePrimaryStatus = (profile) => {
+      if (profile.role === "impostor") return "ДОПУСК НЕ ПОДТВЕРЖДЁН";
       if (profile.status === "completed") return "ДОПУЩЕН";
       return profile.status === "in_progress"
         ? "КУРАТОРСКАЯ ПРОВЕРКА"
@@ -4244,6 +4301,7 @@
     };
 
     const getProfileRole = (profile) => {
+      if (profile.role === "impostor") return "САМОЗВАНЕЦ";
       if (profile.role === "volunteer") return "ВОЛОНТЁР";
       if (profile.role === "animator") return "АНИМАТОР";
       return "НЕ НАЗНАЧЕНА";
@@ -4300,6 +4358,10 @@
         }))
         .filter(({ definition }) => definition);
 
+      materialsEmpty.textContent =
+        profile.role === "impostor"
+          ? "КВЕСТОВЫЕ МАТЕРИАЛЫ НЕ ВЫДАВАЛИСЬ"
+          : "МАТЕРИАЛЫ НЕ ЗАРЕГИСТРИРОВАНЫ";
       materialsEmpty.hidden = registered.length > 0;
       registered.forEach(({ stored, definition }) => {
         const entry = document.createElement("article");
@@ -4534,7 +4596,8 @@
       dossierMetadata.hidden = false;
       dossierVisual.hidden = false;
       dossierReviewBadge.hidden = !profile.reclassificationActive;
-      dossierCuratorId.textContent = profile.curatorId || "0091-A";
+      dossierCuratorId.textContent =
+        profile.role === "impostor" ? "НЕ НАЗНАЧЕН" : profile.curatorId || "0091-A";
       dossierClearance.textContent = primaryStatus;
       dossierLastRecord.textContent = formatDossierTimestamp(profile.updatedAt);
       dossierIntegrity.dataset.state = integrityState;
@@ -4544,7 +4607,9 @@
         `Целостность файла: ${integrityLabel.toLocaleLowerCase("ru-RU")}`
       );
       dossierNote.textContent =
-        profile.status === "completed"
+        profile.role === "impostor"
+          ? "Личное дело сформировано после входа в парк «Солнышко» по завершении работы. Назначение отсутствует; допуск не подтверждён."
+          : profile.status === "completed"
           ? "Личное дело сформировано. Назначение и полученные материалы сохранены кадровой системой."
           : profile.status === "in_progress"
             ? "Собеседование не завершено. Последний подтверждённый этап доступен для возобновления."

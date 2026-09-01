@@ -20,7 +20,9 @@ export const GAME_SAVE_KEYS = Object.freeze([
 const GAME_SAVE_KEY_SET = new Set(GAME_SAVE_KEYS);
 const SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
 const SAFE_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
-const ROLE_IDS = new Set(["animator", "volunteer"]);
+const ROLE_IDS = new Set(["animator", "volunteer", "impostor"]);
+const DOSSIER_ORIGINS = new Set(["curator-0091", "solnyshko-after-hours"]);
+const CLEARANCE_IDS = new Set(["pending", "authorized", "unauthorized"]);
 const AVATAR_IDS = new Set([
   "overexposed",
   "drawing",
@@ -61,6 +63,16 @@ const asTimestamp = (value: unknown) =>
 
 const asRole = (value: unknown) =>
   typeof value === "string" && ROLE_IDS.has(value) ? value : null;
+
+const asDossierOrigin = (value: unknown, role: string | null) =>
+  typeof value === "string" && DOSSIER_ORIGINS.has(value)
+    ? value
+    : role === "impostor" ? "solnyshko-after-hours" : "curator-0091";
+
+const asClearance = (value: unknown, role: string | null) =>
+  typeof value === "string" && CLEARANCE_IDS.has(value)
+    ? value
+    : role === "impostor" ? "unauthorized" : "authorized";
 
 const asAvatar = (value: unknown) =>
   typeof value === "string" && AVATAR_IDS.has(value) ? value : null;
@@ -223,6 +235,8 @@ export const normalizeDossier = (value: unknown) => {
     curatorId: CURATOR_ID,
     status: value.status,
     role,
+    origin: asDossierOrigin(value.origin, role),
+    clearance: asClearance(value.clearance, role),
     displayName: boundedString(value.displayName, 20),
     nameHistory: (Array.isArray(value.nameHistory) ? value.nameHistory : [])
       .filter((entry): entry is string => typeof entry === "string")

@@ -62,7 +62,7 @@
       profile?.version !== 1 ||
       profile?.curatorId !== "0091-A" ||
       profile?.status !== "completed" ||
-      !["animator", "volunteer"].includes(profile?.role)
+      !["animator", "volunteer", "impostor"].includes(profile?.role)
     ) {
       return null;
     }
@@ -165,6 +165,15 @@
 
   let save = saveApi.read();
 
+  const ensureImpostorDossier = () => {
+    if (!save || save.flags?.enteredAs !== "birthday") return null;
+    const profile = window.TyndexStaffProfile?.registerImpostorEntry?.({
+      enteredAt: Date.now(),
+    });
+    if (profile?.role === "impostor") save.role = "impostor";
+    return profile || null;
+  };
+
   const writeSave = (next) => {
     save = saveApi.write(next);
     window.TyndexDossierStore?.queueSync?.();
@@ -202,6 +211,7 @@
         if (clip?.playedFlag) save.flags[clip.playedFlag] = true;
         else if (skipped) save.flags.enterPlayed = true;
         else return;
+        if (save.flags.enterPlayed) ensureImpostorDossier();
         writeSave(save);
         pendingEnterReveal = !skipped && !reduceMotion.matches;
         render({ reveal: pendingEnterReveal });
@@ -214,6 +224,7 @@
         if (liveEl) liveEl.textContent = caption;
         if (role === "transition" && save) {
           save.flags.enterPlayed = true;
+          ensureImpostorDossier();
           writeSave(save);
           render();
         }
@@ -476,7 +487,10 @@
       return;
     }
     save.flags.dateAccepted = true;
-    goTo(node.input.next, { enteredAs: "birthday" });
+    const profile = authorizedProfile();
+    goTo(profile ? "park-grounds" : node.input.next, profile
+      ? { enteredAs: "birthday" }
+      : undefined);
   });
 
   artifactDialog?.querySelector("[data-solnyshko-artifact-close]")?.addEventListener("click", () => {
@@ -519,12 +533,16 @@
     render();
   };
 
-  const profile = authorizedProfile();
   if (save) {
+    if (save.flags?.enteredAs === "birthday" && save.flags.enterPlayed) {
+      ensureImpostorDossier();
+    }
+    const profile = authorizedProfile();
     save.role = profile?.role || "fallback";
     writeSave(save);
     render();
   } else {
+    const profile = authorizedProfile();
     start(profile);
   }
 

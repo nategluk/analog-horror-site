@@ -80,6 +80,47 @@ if (
   throw new Error("Pavel cassette was filtered from backup");
 }
 
+const impostorPayload = normalizeBackupPayload({
+  schemaVersion: 2,
+  dossier: {
+    version: 1,
+    status: "completed",
+    curatorId: "0091-A",
+    role: "impostor",
+    origin: "solnyshko-after-hours",
+    clearance: "unauthorized",
+    displayName: "",
+    nameHistory: [],
+    avatarId: null,
+    artifacts: [],
+    sessions: [{
+      id: "solnyshko-after-hours-entry",
+      number: 1,
+      role: "impostor",
+      routeMarks: 0,
+      completedAt: now,
+    }],
+    messages: [],
+    deletedItems: [],
+    removedArtifactIds: [],
+    removedMessageIds: [],
+    createdAt: now,
+    updatedAt: now,
+    completedAt: now,
+  },
+  currentSession: null,
+  gameSaves: {},
+});
+
+if (
+  impostorPayload.dossier.role !== "impostor" ||
+  impostorPayload.dossier.origin !== "solnyshko-after-hours" ||
+  impostorPayload.dossier.clearance !== "unauthorized" ||
+  impostorPayload.dossier.artifacts.length !== 0
+) {
+  throw new Error("impostor dossier contract was not preserved");
+}
+
 console.log(
   `dossier backup contract: ok (${payload.dossier.artifacts.length} artifacts, ` +
     `${Object.keys(payload.gameSaves).length} game saves)`,

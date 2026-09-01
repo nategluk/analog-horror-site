@@ -147,7 +147,7 @@ export default {
         const completedSessions = sessionRows
           .filter((session) =>
             session.status === "completed" &&
-            (session.role === "animator" || session.role === "volunteer")
+            ["animator", "volunteer", "impostor"].includes(session.role || "")
           )
           .map((session) => {
             const progress = isRecord(session.progress)
@@ -176,6 +176,12 @@ export default {
           status: dossierRow.status,
           curatorId: dossierRow.curator_id,
           role: dossierRow.role,
+          origin: dossierRow.role === "impostor"
+            ? "solnyshko-after-hours"
+            : "curator-0091",
+          clearance: dossierRow.role === "impostor"
+            ? "unauthorized"
+            : "authorized",
           avatarId: dossierRow.avatar_id,
           artifacts: artifactRows.map((artifact) => ({
             id: artifact.artifact_id,

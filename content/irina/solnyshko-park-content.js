@@ -77,7 +77,7 @@
         placeholder: "ДД.ММ.ГГ",
         submit: "НАЗВАТЬ ПАРОЛЬ",
         fail: "Неверный пароль.",
-        next: "park-grounds",
+        next: "birthday-recorded",
       },
       choices: [
         {
@@ -87,6 +87,25 @@
           missing: "В ЛИЧНОМ ДЕЛЕ НЕТ ОТКРЫТКИ.",
         },
         { label: "ВЕРНУТЬСЯ К ПРИЧИНЕ", next: "gate-night" },
+      ],
+    },
+    "birthday-recorded": {
+      speaker: "СИСТЕМА",
+      text: "ДАТА ПРИНЯТА.\nЛИЧНОЕ ДЕЛО НЕ НАЙДЕНО.\nВХОД ЗАРЕГИСТРИРОВАН.",
+      media: {
+        id: "gate-wait",
+        loop: true,
+        src: "/assets/guest/locations/solnyshko/gate-closed-loop.mp4",
+        poster: "/assets/guest/locations/solnyshko/gate-closed-loop_poster.webp",
+        alt: "Страж у ночных ворот регистрирует незаявленный вход",
+      },
+      mediaFallback: "Створки ещё закрыты. Система сохранила незаявленный вход.",
+      choices: [
+        {
+          label: "ВОЙТИ",
+          next: "park-grounds",
+          set: { enteredAs: "birthday" },
+        },
       ],
     },
     "volunteer-pass": {

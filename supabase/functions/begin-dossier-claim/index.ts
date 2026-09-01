@@ -20,7 +20,7 @@ const MAX_CLAIMS_PER_EMAIL_PER_HOUR = 3;
 const CLAIM_TTL_SECONDS = 24 * 60 * 60;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SESSION_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
-const ROLE_IDS = new Set(["animator", "volunteer"]);
+const ROLE_IDS = new Set(["animator", "volunteer", "impostor"]);
 const AVATAR_IDS = new Set([
   "overexposed",
   "drawing",

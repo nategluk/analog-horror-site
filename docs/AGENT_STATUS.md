@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-08-31 |
+| Обновлено | 2026-08-31 20:03 CDT |
 | Ветка / HEAD | `main` / `63b34b9` |
-| Дерево | dirty: Pavel staff shortcut hidden + dossier cloud sync; не commit/push |
-| Активная линия | Backend backup v2 развёрнут; frontend собран, но ещё не опубликован |
-| Последний этап | Supabase migration + 4 function deploys + safe production smoke passed |
+| Дерево | dirty: Pavel staff shortcut hidden + dossier cloud sync + impostor dossier class; не commit/push |
+| Активная линия | Класс `impostor` реализован локально; migration применена в Supabase, frontend и Edge Functions ещё не опубликованы |
+| Последний этап | Impostor gate/profile, cabinet labels, backup allowlist, restore path and forward-only SQL migration |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | пользовательский push через GitHub Desktop → Cloudflare rebuild → live QA |
 
@@ -30,6 +30,9 @@ FREE
   `12.08.26`. Все видят четыре причины входа; Аниматор с сохранённой открыткой
   может прочитать пароль внутри игры, а волонтёрский доступ требует сохранённую
   листовку. Восстановленный по email профиль возвращает эти ролевые материалы.
+  Игрок, вошедший по дате без завершённого назначения, получает класс
+  `impostor` («САМОЗВАНЕЦ») со статусом `ДОПУСК НЕ ПОДТВЕРЖДЁН`, без стартовых
+  квестовых материалов; запись можно закрепить по email.
 - Красная комната — референс UX/runtime для новых игр: mobile/web, replay,
   короткие реплики, групповые кнопки, neutral loops и active bursts.
 - Павел после тура уходит через горку; затем игрок не видит его в комнате,
@@ -113,6 +116,11 @@ FREE
   `sync-dossier` развёрнут. Удалённый lint чист; unauthenticated smoke вернул
   ожидаемые `401`, пустой begin — `400`, CORS preflight — `204`. Публичный
   frontend пока старый: публикация `public/` и live Auth-сценарий не выполнены.
+
+- Impostor dossier role: migration `20260831200000_add_impostor_dossier_role.sql`
+  применена в связанном Supabase 31 августа 2026 года; remote migration list
+  совпадает с локальной, `supabase db lint --linked --level warning` чист.
+  Обновлённые frontend и Edge Functions ещё не развёрнуты.
 
 - Park mobile video: `gate-closed-loop.mp4` / `gate-refuse.mp4` без attached MJPEG;
   Game UI Kit не прячет still до `playing`, `play()` не ждёт только `loadeddata`.

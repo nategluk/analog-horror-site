@@ -104,6 +104,12 @@ const assetRoot = path.resolve(__dirname, "..");
 if (!source.includes("РАЗБЛОКИРОВАН НОВЫЙ ID СОТРУДНИКА")) {
   errors.push("unlock announcement copy missing");
 }
+if (!source.includes('"birthday-recorded"')) {
+  errors.push("impostor registration node missing");
+}
+if (!source.includes("ДАТА ПРИНЯТА.\\nЛИЧНОЕ ДЕЛО НЕ НАЙДЕНО.\\nВХОД ЗАРЕГИСТРИРОВАН.")) {
+  errors.push("impostor registration copy missing");
+}
 if (finalNodes.length !== 1) errors.push("exactly one completion node required");
 
 if (errors.length) {

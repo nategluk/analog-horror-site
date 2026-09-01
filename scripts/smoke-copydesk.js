@@ -141,12 +141,15 @@ if (pavel.lines.some((line) => String(line.text).includes("_stage1Keep"))) {
   throw new Error("unknown pavel choice field leaked into literature");
 }
 
-if (solnyshko.nodes.length !== 12) throw new Error("solnyshko nodes missing");
+if (solnyshko.nodes.length !== 13) throw new Error("solnyshko nodes missing");
 if (!solnyshko.lines.some((line) => line.id === "node:gate-night:text")) {
   throw new Error("solnyshko gate text not indexed");
 }
 if (!solnyshko.lines.some((line) => line.id === "node:birthday-check:input.prompt")) {
   throw new Error("solnyshko birthday prompt not indexed");
+}
+if (!solnyshko.lines.some((line) => line.id === "node:birthday-recorded:text")) {
+  throw new Error("solnyshko impostor registration beat not indexed");
 }
 if (!solnyshko.lines.some((line) => line.id === "node:park-grounds:mediaFallback")) {
   throw new Error("solnyshko visible media fallback not indexed");
