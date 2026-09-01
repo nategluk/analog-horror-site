@@ -5,7 +5,7 @@
     "gate-night": {
       speaker: "СТРАЖ",
       text: "Сегодня пройти не получится, простите. \nМы на ремонте. Зачем вы пришли?",
-      action: "Знакомый запах? Что это?\nПахнет свежей сахарной ватой. ",
+      action: "Надо, наверное, ответить честно. ",
       media: {
         id: "gate-night",
         loop: true,
@@ -15,11 +15,11 @@
       },
       mediaFallback: "Закрытые створки и цепь. Страж за решёткой. Парк светится за аркой.",
       choices: [
-        { label: "Ищу своих родителей", next: "refuse-parents" },
-        { label: "Хочу пострелять в тире", next: "refuse-shooting" },
-        { label: "Я пришёл на день рождения", next: "birthday-check" },
+        { label: "Родители ждут внутри", next: "refuse-parents" },
+        { label: "Хочу пострелять (в тире)", next: "refuse-shooting" },
+        { label: "На вечеринку", next: "birthday-check" },
         {
-          label: "ВОЛОНТЁРСКИЙ ДОСТУП",
+          label: "Волонтер в парке",
           next: "volunteer-pass",
         },
       ],
