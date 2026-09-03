@@ -7,13 +7,13 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-01 CDT |
+| Обновлено | 2026-09-02 CDT |
 | Ветка / HEAD | `main` / `5b05fea` |
-| Дерево | dirty: after-hours thought→choices, 2×2, финал copy |
-| Активная линия | after-hours compact UI |
-| Последний этап | thought отдельно от кнопок; 2×2; форма даты; финал copy |
+| Дерево | dirty: after-hours leftover + about-slides layout |
+| Активная линия | about page layout |
+| Последний этап | кадр `about-slides.webp` ограничен по высоте |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский просмотр UI; commit не выполнялся |
+| Следующий gate | пользовательский просмотр about; commit не выполнялся |
 
 ## Write-замок
 
@@ -108,6 +108,12 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- about-slides layout: HTML `1024×1024` задавал высоту `1024px` без `height: auto`.
+  CSS: `height: auto`, `aspect-ratio 16/9`, `object-fit: cover`,
+  `max-height min(42vh, 360px)` / mobile `min(32vh, 220px)`. Staff desktop:
+  кадр `1073×360`, brief и каталог в первом экране. `390×844`: `328×184`,
+  горизонтальный overflow `0`. `git diff --check`.
 
 - After-hours UI: реплика → мысль без кнопок → клик → только choices/форма.
   Кнопки 2×2 на `390×844` (после актуального CSS). Birthday: подпись, поле,

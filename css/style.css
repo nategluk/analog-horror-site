@@ -9592,8 +9592,11 @@ body.staff-mode .about-broadcast-page .staff-about__screen::after {
 body.staff-mode .about-broadcast-page .staff-about__screen img {
   display: block;
   width: 100%;
+  height: auto;
+  max-height: min(42vh, 360px);
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  object-position: center 42%;
   border: 1px solid #08090b;
   border-radius: 0.62rem;
   filter: contrast(1.18) brightness(0.76) saturate(0.78);
@@ -9906,6 +9909,10 @@ body.staff-mode .about-broadcast-page .staff-protocol-warning {
   body.staff-mode .about-broadcast-page .staff-about__screen {
     padding: 0.45rem;
     border-radius: 0.8rem;
+  }
+
+  body.staff-mode .about-broadcast-page .staff-about__screen img {
+    max-height: min(32vh, 220px);
   }
 
   body.staff-mode .about-broadcast-page .staff-about__screen::after {
