@@ -2164,6 +2164,7 @@
 
   const init = (root) => {
     if (!root) return;
+    if (activeRoot === root) return;
     if (activeRoot && activeRoot !== root) destroy();
     activeRoot = root;
     bindChrome(root);

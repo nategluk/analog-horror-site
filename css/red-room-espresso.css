@@ -1,0 +1,545 @@
+/* --- Кофемашина Красной Комнаты --- */
+.location-note-grid > .card:has([data-red-room-espresso]) {
+  grid-column: 1 / -1;
+}
+
+.rr-espresso-card {
+  min-width: 0;
+}
+
+.rr-espresso {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+  margin-top: 0.85rem;
+  padding: 0.8rem 0.75rem 0.9rem;
+  color: #f4e3d0;
+  border: 1px solid #6a2a36;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 186, 92, 0.14), transparent 32%),
+    linear-gradient(180deg, #4d1822 0%, #2a0d14 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 214, 160, 0.08),
+    0 12px 28px rgba(42, 12, 20, 0.22);
+}
+
+.rr-espresso-head {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.rr-espresso-kicker,
+.rr-espresso-sub {
+  margin: 0;
+}
+
+.rr-espresso-kicker {
+  color: #e8b072;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rr-espresso-sub {
+  color: #f7e6d4;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.rr-espresso-stage {
+  min-width: 0;
+  overflow: visible;
+}
+
+.rr-espresso-machine {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 auto;
+  padding: 0.2rem 0.35rem 0.4rem;
+}
+
+.rr-espresso-part-label {
+  position: absolute;
+  z-index: 3;
+  color: #f3e2c0;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.rr-espresso-hopper {
+  position: relative;
+  z-index: 2;
+  width: 5.4rem;
+  height: 4.1rem;
+}
+
+.rr-espresso-hopper .rr-espresso-part-label {
+  right: 0;
+  bottom: 0.15rem;
+  left: 0;
+  text-align: center;
+}
+
+.rr-espresso-hopper__lid {
+  position: absolute;
+  top: 0;
+  right: 8%;
+  left: 8%;
+  height: 0.55rem;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #ece4d4, #8a7464);
+  box-shadow: 0 1px 0 #4a382c;
+}
+
+.rr-espresso-hopper__glass {
+  position: absolute;
+  top: 0.5rem;
+  right: 16%;
+  bottom: 0;
+  left: 16%;
+  overflow: hidden;
+  border: 2px solid #e8d2b0;
+  border-bottom: 0;
+  border-radius: 8px 8px 0 0;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.28), transparent 28%),
+    rgba(70, 28, 22, 0.22);
+  box-shadow: inset 0 0 10px rgba(20, 6, 8, 0.28);
+}
+
+.rr-espresso-beans {
+  position: absolute;
+  right: 6%;
+  bottom: -55%;
+  left: 6%;
+  height: 62%;
+  border-radius: 40% 40% 6px 6px;
+  background:
+    radial-gradient(circle at 22% 36%, #6a3214 0 7px, transparent 8px),
+    radial-gradient(circle at 58% 28%, #4a1c0c 0 6px, transparent 7px),
+    radial-gradient(circle at 78% 58%, #7a3a18 0 7px, transparent 8px),
+    #2e1208;
+  opacity: 0;
+  transition: bottom 0.35s ease, opacity 0.25s ease;
+}
+
+.rr-espresso.is-beans .rr-espresso-beans {
+  bottom: 0;
+  opacity: 1;
+}
+
+.rr-espresso-chassis {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3.1rem minmax(0, 1fr) 2.1rem;
+  gap: 0.45rem;
+  align-items: stretch;
+  width: 100%;
+  min-height: 9.4rem;
+  padding: 0.75rem 0.6rem 1.35rem;
+  border: 1px solid #c4b49c;
+  border-radius: 12px 12px 4px 4px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.22), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.28)),
+    url("../assets/guest/red-room/game/espresso-metal-texture.webp") center / 16rem 16rem repeat,
+    linear-gradient(180deg, #d8c8b4 0%, #8a7a6c 46%, #4e443c 100%);
+  background-blend-mode: screen, soft-light, normal;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 248, 236, 0.55),
+    0 12px 0 #231410;
+}
+
+.rr-espresso-tank {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #e7d7bf;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent 30%),
+    #1a0e12;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.rr-espresso-tank .rr-espresso-part-label {
+  top: 0.35rem;
+  right: 0;
+  left: 0;
+  text-align: center;
+}
+
+.rr-espresso-tank__water {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 10%;
+  background:
+    linear-gradient(180deg, rgba(186, 230, 255, 0.55), rgba(62, 126, 186, 0.82));
+  opacity: 0.45;
+  transition: height 0.45s ease, opacity 0.3s ease;
+}
+
+.rr-espresso.is-water .rr-espresso-tank {
+  box-shadow:
+    inset 0 0 12px rgba(0, 0, 0, 0.4),
+    0 0 0 2px rgba(150, 220, 255, 0.55);
+}
+
+.rr-espresso.is-water .rr-espresso-tank__water {
+  height: 78%;
+  opacity: 1;
+}
+
+.rr-espresso-core {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 0.5rem 0.6rem;
+  min-width: 0;
+  padding: 0.1rem 0 0;
+}
+
+.rr-espresso-lamp {
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 2px solid #2a1210;
+  border-radius: 50%;
+  background: #4a201c;
+  box-shadow: inset 0 0 0 2px #7a3a34;
+}
+
+.rr-espresso.is-lamp .rr-espresso-lamp {
+  background: #ff3b3b;
+  box-shadow:
+    inset 0 0 0 2px #7a1010,
+    0 0 12px #ff5a5a;
+}
+
+.rr-espresso-gauge {
+  position: relative;
+  justify-self: end;
+  width: 3.6rem;
+  height: 3.6rem;
+}
+
+.rr-espresso-gauge__face {
+  position: absolute;
+  inset: 0;
+  border: 3px solid #2c1c16;
+  border-radius: 50%;
+  background:
+    repeating-conic-gradient(from 210deg, #2c1c16 0 8deg, transparent 8deg 30deg),
+    radial-gradient(circle at 50% 50%, #f4ead8 0 62%, #2c1c16 63% 100%);
+  box-shadow: inset 0 0 0 7px #f4ead8;
+}
+
+.rr-espresso-gauge__needle {
+  position: absolute;
+  top: 16%;
+  left: calc(50% - 1.5px);
+  width: 3px;
+  height: 46%;
+  background: #b42323;
+  transform-origin: 50% 90%;
+  transform: rotate(-72deg);
+  transition: transform 0.8s ease;
+}
+
+.rr-espresso-gauge__needle::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  bottom: -4px;
+  left: -3px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2c1c16;
+}
+
+.rr-espresso.is-pressure .rr-espresso-gauge__needle {
+  transform: rotate(48deg);
+}
+
+.rr-espresso-group {
+  position: relative;
+  grid-column: 1 / -1;
+  align-self: end;
+  width: 3.8rem;
+  height: 1.9rem;
+  margin-left: 0.1rem;
+  border-radius: 5px 5px 10px 10px;
+  background: linear-gradient(180deg, #efe4d2, #6e5e52);
+  box-shadow: 0 7px 0 #2a1a16;
+}
+
+.rr-espresso-portafilter {
+  position: absolute;
+  right: -1.7rem;
+  bottom: 0.2rem;
+  width: 1.85rem;
+  height: 0.48rem;
+  border-radius: 0 9px 9px 0;
+  background: #1a100c;
+}
+
+.rr-espresso-portafilter::after {
+  content: "";
+  position: absolute;
+  top: -0.58rem;
+  right: 0.12rem;
+  width: 0.78rem;
+  height: 0.78rem;
+  border: 3px solid #1a100c;
+  border-radius: 50%;
+}
+
+.rr-espresso-steam {
+  position: absolute;
+  top: -1.55rem;
+  left: 0.45rem;
+  width: 1.25rem;
+  height: 1.55rem;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.82) 0 20%, transparent 22%),
+    radial-gradient(circle at 70% 40%, rgba(255, 255, 255, 0.62) 0 16%, transparent 18%);
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.rr-espresso.is-steam .rr-espresso-steam {
+  opacity: 1;
+  animation: rr-espresso-steam 1.4s ease-in-out infinite;
+}
+
+.rr-espresso-slot {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #1a100c;
+  border-radius: 4px;
+  background: #12080a;
+}
+
+.rr-espresso-slot .rr-espresso-part-label {
+  right: 0;
+  bottom: 0.3rem;
+  left: 0;
+  text-align: center;
+}
+
+.rr-espresso-paper {
+  position: absolute;
+  top: 100%;
+  right: 14%;
+  left: 14%;
+  height: 74%;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 5px,
+      rgba(90, 58, 28, 0.18) 5px 6px
+    ),
+    url("../assets/guest/red-room/game/espresso-receipt-texture.webp") center / 10rem 10rem repeat,
+    #f7ead0;
+  background-blend-mode: normal, multiply, normal;
+  transition: top 0.45s ease;
+}
+
+.rr-espresso.is-receipt .rr-espresso-paper {
+  top: 12%;
+}
+
+.rr-espresso-tray {
+  position: relative;
+  width: calc(100% - 0.5rem);
+  height: 1.85rem;
+  margin-top: -0.85rem;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(180deg, #5a3a32, #1c1010);
+  box-shadow: inset 0 8px 0 rgba(0, 0, 0, 0.28);
+}
+
+.rr-espresso-cup {
+  position: absolute;
+  left: 3.15rem;
+  bottom: 0.7rem;
+  width: 1.7rem;
+  height: 1.35rem;
+}
+
+.rr-espresso-cup__bowl {
+  position: absolute;
+  inset: 0 0.35rem 0 0;
+  overflow: hidden;
+  border: 2px solid #f0b15a;
+  border-radius: 0 0 8px 8px;
+  background: rgba(255, 248, 236, 0.16);
+}
+
+.rr-espresso-cup__handle {
+  position: absolute;
+  top: 0.18rem;
+  right: 0;
+  width: 0.5rem;
+  height: 0.62rem;
+  border: 2px solid #f0b15a;
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.rr-espresso-cup__fill {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  background: #140804;
+  transition: height 1.55s ease;
+}
+
+.rr-espresso.is-cup .rr-espresso-cup__fill {
+  height: 78%;
+}
+
+.rr-espresso-status {
+  min-width: 0;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  color: #f7e6d4;
+  border: 1px solid rgba(232, 176, 114, 0.32);
+  border-radius: 8px;
+  background: rgba(20, 6, 10, 0.42);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.rr-espresso-status span {
+  display: block;
+}
+
+.rr-espresso-receipt {
+  min-width: 0;
+  padding: 0.8rem 0.75rem;
+  color: #4a3018;
+  border: 1px dashed #8a6a3a;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 11px,
+      rgba(90, 58, 28, 0.12) 11px 12px
+    ),
+    url("../assets/guest/red-room/game/espresso-receipt-texture.webp") center / 12rem 12rem repeat,
+    #f4e4c4;
+  background-blend-mode: normal, multiply, normal;
+}
+
+.rr-espresso-receipt p {
+  margin: 0.35rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.rr-espresso-receipt__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rr-espresso-flavor {
+  margin: 0;
+  color: #f0b15a;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.rr-espresso-actions {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.rr-espresso-btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 1rem;
+  color: #2a0c14;
+  border: 0;
+  border-radius: 8px;
+  background: #f0b15a;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 0 #b47a2c;
+  cursor: pointer;
+}
+
+.rr-espresso-btn:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.rr-espresso-btn:focus-visible {
+  outline: 2px solid #ffe1a8;
+  outline-offset: 3px;
+}
+
+.rr-espresso.is-busy .rr-espresso-btn {
+  pointer-events: none;
+}
+
+@keyframes rr-espresso-steam {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.08);
+    opacity: 0.95;
+  }
+}
+
+@media (max-width: 640px) {
+  .rr-espresso-machine {
+    max-width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-espresso-beans,
+  .rr-espresso-tank__water,
+  .rr-espresso-gauge__needle,
+  .rr-espresso-paper,
+  .rr-espresso-cup__fill {
+    transition: none;
+  }
+
+  .rr-espresso.is-steam .rr-espresso-steam {
+    animation: none;
+    opacity: 0.8;
+  }
+}

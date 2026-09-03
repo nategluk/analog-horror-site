@@ -31,6 +31,8 @@ const REQUIRED_PAGES = [
   "locations/pavel-observation-booth.html",
   "locations/solnyshko-after-hours.html",
   "css/style.css",
+  "css/curator-call.css",
+  "css/red-room-espresso.css",
   "css/lora-red-room.css",
   "css/auth.css",
   "js/dossier-store.js",

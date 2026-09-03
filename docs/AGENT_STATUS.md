@@ -7,13 +7,13 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-02 CDT |
-| Ветка / HEAD | `main` / `5b05fea` |
-| Дерево | dirty: after-hours leftover + about-slides layout |
-| Активная линия | about page layout |
-| Последний этап | кадр `about-slides.webp` ограничен по высоте |
+| Обновлено | 2026-09-03 CDT |
+| Ветка / HEAD | `main` / `4d86c85` |
+| Дерево | dirty: Week 1 CSS extract + Lora/Pavel dual-boot; audit markdown untracked |
+| Активная линия | code-overload Week 1 выполнен; commit не делался |
+| Последний этап | dead cotton CSS, curator/espresso sheets, Lora/Pavel static dual-boot сняты |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользовательский просмотр about; commit не выполнялся |
+| Следующий gate | пользователь смотрит diff; Week 2 не начинать без запроса |
 
 ## Write-замок
 
@@ -108,6 +108,15 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Code-overload Week 1: мёртвый drawn-cotton CSS удалён; живой PixVerse-путь на месте.
+  `css/curator-call.css` только на hiring (+ SPA ensure). `css/red-room-espresso.css`
+  на cafe/shift; override `.lora-room__coffee-dialog .rr-espresso { margin-top: 0 }`
+  сохранён. Dual-boot Лоры/Павла: статические content/runtime теги сняты с location
+  HTML; app.js грузит скрипты один раз. Direct+SPA desktop и `390×844`: overflow 0,
+  save keys без изменений, console errors 0. `node --check`, `git diff --check`.
+  Commit не делался. `staff.html` по-прежнему статически грузит Lora content для
+  досье, не runtime. Espresso/cotton boot-path не трогался.
 
 - about-slides layout: HTML `1024×1024` задавал высоту `1024px` без `height: auto`.
   CSS: `height: auto`, `aspect-ratio 16/9`, `object-fit: cover`,

@@ -1361,10 +1361,32 @@
     window.DZInitEpisodeCatalog?.();
   };
 
+  const ensurePageStylesheet = (fileName, marker) => {
+    const href = new URL(`../css/${fileName}`, scriptUrl).href;
+    const alreadyLinked = [...document.querySelectorAll("link[rel='stylesheet']")].some(
+      (link) => link.href === href || (link.getAttribute("href") || "").endsWith(fileName)
+    );
+    if (alreadyLinked || document.querySelector(`link[${marker}]`)) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    link.setAttribute(marker, "true");
+    document.head.append(link);
+  };
+
+  const ensureCuratorCallStyles = () => {
+    ensurePageStylesheet("curator-call.css", "data-curator-call-css");
+  };
+
+  const ensureEspressoStyles = () => {
+    ensurePageStylesheet("red-room-espresso.css", "data-espresso-css");
+  };
+
   const initRedRoomEspresso = async () => {
     const root = document.querySelector("[data-red-room-espresso]");
     if (!root) return;
 
+    ensureEspressoStyles();
     if (typeof window.TyndexRedRoomEspresso?.init !== "function") {
       const appScript = [...document.scripts].find((script) =>
         /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
@@ -1408,6 +1430,7 @@
     }
 
     ensureLoraRoomStyles();
+    ensureEspressoStyles();
     const appScript = [...document.scripts].find((script) =>
       /(?:^|\/)app\.js(?:\?|$)/.test(script.src)
     );
@@ -3121,6 +3144,8 @@
       body.classList.remove("curator-call-open");
       return;
     }
+
+    ensureCuratorCallStyles();
 
     detachedModals.forEach((modal) => modal.remove());
 
