@@ -5442,7 +5442,10 @@
 
         button.classList.add("is-denied");
         button.textContent = button.dataset.deniedText || "ОТКАЗАНО";
-        button.setAttribute("aria-label", "Доступ отказан");
+        button.setAttribute(
+          "aria-label",
+          button.dataset.deniedLabel || "Доступ отказан"
+        );
 
         window.setTimeout(() => {
           button.classList.remove("is-denied");
