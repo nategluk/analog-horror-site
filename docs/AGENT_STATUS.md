@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `1f9b083` |
-| Дерево | dirty: hiring broadcast shell migration |
-| Активная линия | `hiring.html` продолжает оболочку «ЖИР ТВ» |
-| Последний этап | STAFF/guest, форма `0091-A` и мобильный маршрут проверены локально |
+| Ветка / HEAD | `main` / `3d64b05` |
+| Дерево | dirty: текущая миграция STAFF-shell локаций |
+| Активная линия | `locations.html` и шесть служебных локаций получили общий STAFF-shell и carrier-классы |
+| Последний этап | public build/verify и desktop/mobile smoke-проверки миграции пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | локальная проверка миграции; commit/push/deploy отдельно |
+| Следующий gate | локальная проверка завершена; commit/push/deploy отдельно |
 
 ## Write-замок
 

@@ -9,12 +9,15 @@
   </head>
   <body>
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
+    <div class="site-wrapper glitch-target broadcast-shell-page location-dossier-broadcast-page">
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
             <img class="logo-image" src="../../assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="../../assets/staff/logo.png" alt="Детский Жир" />
+            <span class="staff-tv-ident" aria-hidden="true">
+              <span class="staff-tv-ident__word">ЖИР</span>
+              <span class="staff-tv-ident__tv">ТВ</span>
+            </span>
           </h1>
           <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
         </div>
@@ -22,24 +25,24 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul>
-          <li><a href="/">Главная</a></li>
-          <li><a href="../../about">О компании</a></li>
-          <li><a href="../../staff">Персонал</a></li>
-          <li><a href="../../hiring">Работа</a></li>
-          <li><a href="../../faq">FAQ</a></li>
-          <li><a href="../../donate">Связь и поддержка</a></li>
-          <li><a href="../../archive" rel="nofollow">Архив</a></li>
+          <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
+          <li><a href="../../about"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
+          <li><a href="../../staff"><span class="staff-nav-code" aria-hidden="true">P200</span>Персонал</a></li>
+          <li><a href="../../hiring"><span class="staff-nav-code" aria-hidden="true">P210</span>Работа</a></li>
+          <li><a href="../../faq"><span class="staff-nav-code" aria-hidden="true">P300</span>FAQ</a></li>
+          <li><a href="../../donate"><span class="staff-nav-code" aria-hidden="true">P310</span>Связь и поддержка</a></li>
+          <li><a href="../../archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
 
-      <main class="panel">
+      <main class="panel location-dossier-panel">
         <section class="guest-content">
           <h2>Раздел временно недоступен</h2>
           <p>Этот адрес зарезервирован для персонала. Вернитесь к гостевой странице бассейна.</p>
           <a class="location-cta" href="../../locations/dolphin-pool">Открыть «Дельфин»</a>
         </section>
 
-        <section class="staff-content staff-dossier">
+        <section class="staff-content staff-dossier location-dossier" data-carrier="incident-record">
           <h2>ПРОТОКОЛ ОЧИСТКИ: ОБЪЕКТ «БАССЕЙН ДЕЛЬФИН»</h2>
           <div class="staff-dossier__meta">
             <p><strong>СТАТУС:</strong> Санитарный час</p>
@@ -59,18 +62,18 @@
 
           <section>
             <h3>Визуальный лог: Состояние объектов</h3>
-            <div class="comic-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-              <figure style="margin: 0; position: relative;">
-                <img src="../../assets/staff/pool/comic1.webp" alt="Общий вид бассейна" style="width: 100%; border-radius: 8px; border: 2px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.8);" />
-                <figcaption style="font-family: monospace; color: #888; font-size: 0.8rem; margin-top: 0.5rem;">LOG #501: Оценка концентрации био-энзимов в резервуаре.</figcaption>
+            <div class="comic-grid location-incident-grid">
+              <figure class="location-incident-record">
+                <img class="location-incident-record__image" src="../../assets/staff/pool/comic1.webp" alt="Общий вид бассейна" />
+                <figcaption class="location-incident-record__caption">LOG #501: Оценка концентрации био-энзимов в резервуаре.</figcaption>
               </figure>
-              <figure style="margin: 0; position: relative;">
-                <img src="../../assets/staff/pool/comic2.webp" alt="Сенсор-уточка" style="width: 100%; border-radius: 8px; border: 2px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.8);" />
-                <figcaption style="font-family: monospace; color: #888; font-size: 0.8rem; margin-top: 0.5rem;">LOG #505: Автономный сенсор в состоянии покоя. Ловушка 4-А активна.</figcaption>
+              <figure class="location-incident-record">
+                <img class="location-incident-record__image" src="../../assets/staff/pool/comic2.webp" alt="Сенсор-уточка" />
+                <figcaption class="location-incident-record__caption">LOG #505: Автономный сенсор в состоянии покоя. Ловушка 4-А активна.</figcaption>
               </figure>
-              <figure style="margin: 0; position: relative; grid-column: 1 / -1; max-width: 600px; margin-left: auto; margin-right: auto; margin-top: 1rem;">
-                <img src="../../assets/staff/pool/comic3.webp" alt="Волосяной комок в стоке" style="width: 100%; border-radius: 8px; border: 2px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.8);" />
-                <figcaption style="font-family: monospace; color: #888; font-size: 0.8rem; margin-top: 0.5rem; text-align: center;">LOG #512: Зона фильтрации. Зафиксирована активность органических остатков.</figcaption>
+              <figure class="location-incident-record location-incident-record--wide">
+                <img class="location-incident-record__image" src="../../assets/staff/pool/comic3.webp" alt="Волосяной комок в стоке" />
+                <figcaption class="location-incident-record__caption location-incident-record__caption--centered">LOG #512: Зона фильтрации. Зафиксирована активность органических остатков.</figcaption>
               </figure>
             </div>
           </section>
