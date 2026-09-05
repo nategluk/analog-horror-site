@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `3d64b05` |
-| Дерево | dirty: текущая миграция STAFF-shell локаций |
-| Активная линия | `locations.html` и шесть служебных локаций получили общий STAFF-shell и carrier-классы |
-| Последний этап | public build/verify и desktop/mobile smoke-проверки миграции пройдены |
+| Ветка / HEAD | `main` / `40a924e` |
+| Дерево | dirty: завершена carrier-разметка служебных локаций |
+| Активная линия | шесть локаций различают `horror-cinematic` и `staff-protocol`; still-файлы временные |
+| Последний этап | public build/verify и desktop/mobile STAFF/guest smoke-проверки пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | локальная проверка завершена; commit/push/deploy отдельно |
+| Следующий gate | commit/push/deploy отдельно; media replacement — отдельный этап |
 
 ## Write-замок
 
