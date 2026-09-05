@@ -23,13 +23,11 @@ const SITE_PAGES = [
   "index.html",
   "about.html",
   "archive.html",
-  "documents.html",
   "donate.html",
   "episodes.html",
   "faq.html",
   "hiring.html",
   "locations.html",
-  "photos.html",
   "staff.html",
   "auth/confirm.html",
   "documents/dossier-kirill-zaytsev.html",
@@ -59,7 +57,7 @@ const SITE_PAGES = [
   "staff/locations/solnyshko-park.html",
 ];
 
-const ROOT_EXTRAS = ["favicon.ico", "robots.txt", "sitemap.xml", "_headers"];
+const ROOT_EXTRAS = ["favicon.ico", "robots.txt", "sitemap.xml", "_headers", "_redirects"];
 
 // Runtimes loaded from app.js via basename URLs, so the generic reference
 // scanner cannot resolve them from the quoted strings alone. Queueing them
@@ -108,7 +106,7 @@ function stripQuery(filePath) {
 function isCopyable(rel) {
   if (!rel || rel.includes("${") || rel.includes("%") || rel.includes(",")) return false;
   const ext = path.extname(rel);
-  if (rel === "_headers") return true;
+  if (rel === "_headers" || rel === "_redirects") return true;
   if (!ext) return false;
   return MEDIA_EXT.has(ext) || CODE_EXT.has(ext) || ext === ".xml" || ext === ".txt";
 }

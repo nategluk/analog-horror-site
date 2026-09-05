@@ -1,16 +1,4 @@
-/documents
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
-
-/documents.html
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
-
 /documents/*
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
-
-/photos
-  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
-
-/photos.html
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
 
 /staff/*

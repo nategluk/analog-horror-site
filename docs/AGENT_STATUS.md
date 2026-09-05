@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `d713fbd` |
-| Дерево | dirty: согласованы счётчики гостевого и STAFF-архива |
-| Активная линия | archive counts: `5 + 5 + 3 = 13` |
-| Последний этап | production fix опубликован и live Павел проверен |
+| Ветка / HEAD | `main` / `cc45a20` |
+| Дерево | dirty: карта носителей + retirement legacy archive indexes |
+| Активная линия | `documents.html` / `photos.html` выведены из public build |
+| Последний этап | `_redirects` ведёт legacy URL в актуальные вкладки архива |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользователь проверяет archive diff; затем отдельно commit/push/deploy |
+| Следующий gate | пользователь проверяет diff; затем commit/push/deploy отдельно |
 
 ## Write-замок
 
@@ -108,6 +108,19 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Legacy archive indexes: `documents.html` и `photos.html` сохранены в Git, но
+  удалены из production allowlist и запрещены verifier-ом в `public/`.
+  `_redirects` отправляет clean и `.html` URL в `archive#protocols` /
+  `archive#photos`; `_headers` оставляет noindex для рабочих `documents/*`.
+  Clean public build: 529 файлов, verification passed; досье Павла сохранено.
+
+- Carrier/device map: добавлен `docs/CARRIER_AND_DEVICE_MAP.md`. Зафиксированы
+  отдельные языки гостевого фасада, «ЖИР ТВ», Tyndex-терминала, архивной полки,
+  бумаги, фото, VHS, звонка Ирины, физических машин, игровых сцен и личного
+  дела. Подтверждены два P1-разрыва: смешение кассеты с бумажным документом и
+  параллельные `documents.html` / `photos.html`; первый ещё требует
+  канонического выбора. Интерфейс/runtime/media не менялись.
 
 - Archive counts: история добавлений показала, что guest-count обновлялся вместе
   со STAFF-count; при добавлении досье Ирины 1 сентября были пропущены guest и

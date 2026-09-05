@@ -17,13 +17,11 @@ const REQUIRED_PAGES = [
   "index.html",
   "about.html",
   "archive.html",
-  "documents.html",
   "donate.html",
   "episodes.html",
   "faq.html",
   "hiring.html",
   "locations.html",
-  "photos.html",
   "staff.html",
   "auth/confirm.html",
   "locations/red-room-cafe.html",
@@ -58,6 +56,7 @@ const REQUIRED_PAGES = [
   "robots.txt",
   "sitemap.xml",
   "_headers",
+  "_redirects",
   "404.html",
   "assets/guest/logo.svg",
   "assets/staff/logo.png",
@@ -181,6 +180,8 @@ const FORBIDDEN_SUBSTRINGS = [
 
 const FORBIDDEN_NAMES = new Set([
   "AGENTS.md",
+  "documents.html",
+  "photos.html",
   "queue.json",
 ]);
 
