@@ -9483,8 +9483,38 @@ body.staff-mode .document-broadcast-page .social-links a:nth-child(5)::after {
   }
 
   body.staff-mode .document-broadcast-page .protocol-copy {
-    font-size: 0.8rem;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    line-height: 1.72;
+    text-wrap: pretty;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy p {
+    margin-bottom: 1rem;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy ul,
+  body.staff-mode .document-broadcast-page .protocol-copy ol {
+    margin-bottom: 1.05rem;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy li {
+    margin-block: 0.35rem;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy > section > h3 {
+    margin: 0 0 0.8rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    letter-spacing: 0.05em;
+    text-wrap: balance;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy > hr {
+    margin-block: 1.55rem;
+  }
+
+  body.staff-mode .document-broadcast-page .protocol-copy > figure {
+    margin-block: 1.55rem;
   }
 }
 

@@ -8,10 +8,10 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-05 CDT |
-| Ветка / HEAD | `main` / `d2dee0e` |
-| Дерево | dirty: archive refusal states |
-| Активная линия | №4: mobile navigation, active пункт и archive refusal states |
-| Последний этап | №3 manifest в HEAD; №4: три archive refusal states; mobile 390×844 / desktop 1280×800 QA, build/verify пройдены |
+| Ветка / HEAD | `main` / `e1142b4` |
+| Дерево | dirty: №5 mobile reading rhythm |
+| Активная линия | №5: мобильный ритм чтения досье и длинных материалов |
+| Последний этап | №5: mobile `protocol-copy` 14.4px / 1.72, явные паузы между блоками; Irina/Pavel + protocol mobile QA, Irina desktop QA, build/verify пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
