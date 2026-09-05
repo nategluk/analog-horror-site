@@ -9,11 +9,11 @@
 |---|---|
 | Обновлено | 2026-09-04 CDT |
 | Ветка / HEAD | `main` / `1f9b083` |
-| Дерево | dirty: пилот архивных ячеек |
-| Активная линия | STAFF-архив отделён от метафоры видеокассеты |
-| Последний этап | ячейки, бумажный возврат и мобильный маршрут проверены локально |
+| Дерево | dirty: hiring broadcast shell migration |
+| Активная линия | `hiring.html` продолжает оболочку «ЖИР ТВ» |
+| Последний этап | STAFF/guest, форма `0091-A` и мобильный маршрут проверены локально |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользователь проверяет результат; затем commit/push/deploy отдельно |
+| Следующий gate | локальная проверка миграции; commit/push/deploy отдельно |
 
 ## Write-замок
 
@@ -108,6 +108,18 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Hiring broadcast migration: `hiring.html` получил STAFF-оболочку `ЖИР ТВ`
+  (`P210`), Tyndex сохранён как подпись и узел контракта, а переходный диалог
+  «ВЫХОД ИЗ ЭФИРА» и его стили удалены. Desktop и mobile `390×844`: overflow
+  `0`, форма `0091-A` открывает звонок Ирины, legacy threshold отсутствует,
+  console errors/warnings `0`; guest-режим показывает прежнюю анкету. Проверены
+  `node --check`, `validate-irina-call-content.js`, `smoke-irina-call.js`,
+  public build/verification и `git diff --check`.
+
+- Пользователь подтвердил commit/push archive cells pilot: `HEAD=origin/main`
+  `1e12750` (`update`). Следующая правка касается только STAFF-оболочки
+  `hiring.html`; guest-форма, звонок Ирины, ID и save keys не меняются.
 
 - Archive cells pilot: STAFF `archive.html` теперь обозначает три металлические
   архивные ячейки вместо кассет; 10 бумажных материалов возвращаются в нужный

@@ -9077,117 +9077,152 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
 
 }
 
-/* ─── Broadcast-to-hiring threshold ─── */
-.hiring-threshold {
-  width: min(31rem, calc(100vw - 2rem));
-  max-width: none;
-  margin: auto;
-  padding: 0;
-  color: #eee8d6;
-  border: 0.35rem solid #0a0c0f;
-  border-radius: 0.55rem;
-  background: #2c3037;
-  box-shadow:
-    inset 0 0 0 2px #5b606a,
-    0 1.5rem 5rem rgba(0, 0, 0, 0.78);
+/* ─── STAFF hiring channel: recruitment inside the ЖИР ТВ apparatus ─── */
+body.staff-mode .hiring-broadcast-page .hiring-panel {
+  gap: 0.8rem;
 }
 
-.hiring-threshold:not([open]) {
-  display: none;
-}
-
-.hiring-threshold::backdrop {
-  background:
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 5px),
-    rgba(2, 5, 9, 0.88);
-  backdrop-filter: blur(3px);
-}
-
-.hiring-threshold__panel {
+body.staff-mode .hiring-broadcast-page .hiring-staff {
   display: grid;
   gap: 0.8rem;
-  padding: clamp(0.85rem, 3vw, 1.25rem);
-  border-left: 0.42rem solid #ef5b55;
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner {
+  min-height: min(48vw, 30rem);
+  border: 2px solid #080a0d;
+  border-radius: 2px;
+  background-color: #171b22;
+  box-shadow:
+    inset 0 0 0 1px #5c626c,
+    inset 0 -8px rgba(0, 0, 0, 0.38),
+    0 4px 0 rgba(0, 0, 0, 0.34);
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner--staff {
+  filter: grayscale(0.88) contrast(1.2) saturate(0.68);
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner--staff::before {
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 34%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
-    #171a20;
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0 1px, transparent 1px 5px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.88), rgba(0, 0, 0, 0.5) 45%, rgba(0, 0, 0, 0.12));
+  mix-blend-mode: screen;
 }
 
-.hiring-threshold__panel h2,
-.hiring-threshold__panel p {
+body.staff-mode .hiring-broadcast-page .recruitment-banner__copy {
+  width: min(34rem, 100%);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner__copy h2 {
+  color: var(--text);
+  font-size: clamp(1.45rem, 4.6vw, 2.9rem);
+  letter-spacing: 0.035em;
+  text-shadow: 3px 3px 0 #080a0d;
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner__copy p {
+  max-width: 25rem;
+  color: #d4d7d2;
+  font-family: var(--font-main);
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+}
+
+body.staff-mode .hiring-broadcast-page .recruitment-banner__button {
+  min-height: 2.85rem;
+  padding: 0.7rem 0.95rem;
+  border: 1px solid #080a0d;
+  border-radius: 2px;
+  color: #101318;
+  background: var(--broadcast-yellow);
+  box-shadow:
+    inset 1px 1px rgba(255, 255, 255, 0.28),
+    inset -2px -2px rgba(0, 0, 0, 0.25),
+    0 3px 0 #080a0d;
+  font-size: 0.72rem;
+  text-shadow: none;
+}
+
+body.staff-mode .hiring-broadcast-page .bio-contract {
   margin: 0;
+  padding: clamp(0.75rem, 2.5vw, 1.1rem);
+  border: 2px solid #090b0e;
+  border-radius: 2px;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.035), transparent 28%),
+    #171b22;
+  box-shadow:
+    inset 0 0 0 1px #50555e,
+    inset 0 -7px rgba(0, 0, 0, 0.3);
 }
 
-.hiring-threshold__kicker {
-  color: #ef5b55;
-  font: 800 0.65rem/1.3 "Courier New", Courier, monospace;
-  letter-spacing: 0.1em;
-}
-
-.hiring-threshold__panel h2 {
-  color: #f0d765;
-  font: 900 clamp(1.7rem, 6vw, 2.5rem)/1 Georgia, "Times New Roman", serif;
-  text-shadow: 0.14rem 0.14rem 0 #090b0e;
-}
-
-.hiring-threshold__panel > p:not(.hiring-threshold__kicker) {
-  padding: 0.75rem;
-  color: #c2c3be;
-  border: 1px dashed #59606a;
+body.staff-mode .hiring-broadcast-page .bio-contract h2 {
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border-left: 4px solid var(--broadcast-magenta);
+  color: var(--text);
   background: #0d1117;
-  font: 0.8rem/1.55 "Courier New", Courier, monospace;
+  font-size: clamp(1rem, 3vw, 1.35rem);
+  letter-spacing: 0.04em;
 }
 
-.hiring-threshold__actions {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(7rem, 0.45fr);
-  gap: 0.65rem;
+body.staff-mode .hiring-broadcast-page .bio-contract__source {
+  margin: 0.45rem 0 0.8rem;
+  color: var(--accent);
+  font: 800 0.63rem/1.35 var(--font-main);
+  letter-spacing: 0.08em;
 }
 
-body.staff-mode .hiring-threshold__actions button {
-  min-height: 3.25rem;
-  padding: 0.75rem;
-  color: #d8d4c8;
-  border: 2px solid #0a0c0f;
-  border-radius: 0.18rem;
-  background: #2b2f36;
+body.staff-mode .hiring-broadcast-page .terminal-lines {
+  margin-bottom: 1rem;
+  padding: 0.85rem;
+  border: 1px solid #4d555d;
+  background: #080c11;
+  color: #cbd4cc;
+  box-shadow: inset 0 0 0 1px #151b22;
+}
+
+body.staff-mode .hiring-broadcast-page .terminal-lines strong {
+  color: var(--broadcast-yellow);
+}
+
+body.staff-mode .hiring-broadcast-page .hiring-form label {
+  color: #d9ded9;
+}
+
+body.staff-mode .hiring-broadcast-page .hiring-form input,
+body.staff-mode .hiring-broadcast-page .hiring-form select {
+  border-color: #5c626c;
+  border-radius: 2px;
+  color: var(--text);
+  background: #0d1117;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.36);
+}
+
+body.staff-mode .hiring-broadcast-page .hiring-form button {
+  border: 1px solid #080a0d;
+  border-radius: 2px;
+  color: #101318;
+  background: var(--broadcast-yellow);
   box-shadow:
-    inset 0 0 0 1px #5b606a,
-    0 0.2rem 0 #0a0c0f;
-  font: 800 0.68rem/1.2 "Courier New", Courier, monospace;
-  letter-spacing: 0.06em;
-  cursor: pointer;
+    inset 1px 1px rgba(255, 255, 255, 0.25),
+    inset -2px -2px rgba(0, 0, 0, 0.25),
+    0 3px 0 #080a0d;
+  text-shadow: none;
 }
 
-body.staff-mode .hiring-threshold__actions [data-hiring-threshold-confirm] {
-  color: #111318;
-  background: #ef5b55;
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
-    0 0.2rem 0 #721d22;
-}
-
-body.staff-mode .hiring-threshold__actions button:hover,
-body.staff-mode .hiring-threshold__actions button:focus-visible {
-  color: #111318;
-  outline: 2px solid #f4eccf;
-  outline-offset: 2px;
-  background: #f0d765;
-}
-
-body.staff-mode .hiring-threshold__actions button:disabled {
-  cursor: wait;
-  opacity: 0.55;
-}
-
-@media (max-width: 480px) {
-  .hiring-threshold__actions {
-    grid-template-columns: 1fr;
+@media (max-width: 700px) {
+  body.staff-mode .hiring-broadcast-page .recruitment-banner {
+    min-height: 23rem;
+    aspect-ratio: auto;
   }
 
-  body.staff-mode .hiring-threshold__actions [data-hiring-threshold-confirm] {
-    grid-row: 1;
+  body.staff-mode .hiring-broadcast-page .recruitment-banner__copy {
+    padding: 1rem;
+  }
+
+  body.staff-mode .hiring-broadcast-page .bio-contract h2 {
+    font-size: 0.98rem;
   }
 }
 

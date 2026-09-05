@@ -1038,89 +1038,6 @@
     modeSwitchAudio.play().catch(() => {});
   };
 
-  const initHiringThreshold = () => {
-    const wrapper = document.querySelector(".broadcast-shell-page");
-    if (!wrapper) return;
-
-    let dialog = document.querySelector("[data-hiring-threshold]");
-    if (!dialog) {
-      dialog = document.createElement("dialog");
-      dialog.className = "hiring-threshold";
-      dialog.dataset.hiringThreshold = "true";
-      dialog.setAttribute("aria-labelledby", "hiring-threshold-title");
-      dialog.setAttribute("aria-describedby", "hiring-threshold-copy");
-      dialog.innerHTML = `
-        <div class="hiring-threshold__panel">
-          <p class="hiring-threshold__kicker">ЖИР ТВ // ВЫХОД ИЗ ЭФИРА</p>
-          <h2 id="hiring-threshold-title">Ты уверен?</h2>
-          <p id="hiring-threshold-copy">
-            Следующий канал не относится к телевизионной сети. Возврат к обычному сигналу
-            не гарантируется.
-          </p>
-          <div class="hiring-threshold__actions">
-            <button type="button" data-hiring-threshold-cancel>НЕТ, ОСТАТЬСЯ</button>
-            <button type="button" data-hiring-threshold-confirm>ДА</button>
-          </div>
-        </div>
-      `;
-      body.append(dialog);
-    }
-
-    const cancelButton = dialog.querySelector("[data-hiring-threshold-cancel]");
-    const confirmButton = dialog.querySelector("[data-hiring-threshold-confirm]");
-    if (dialog.dataset.hiringThresholdReady !== "true") {
-      dialog.dataset.hiringThresholdReady = "true";
-
-      const closeDialog = () => {
-        if (dialog.open) dialog.close();
-        dialog._hiringSourceLink?.focus();
-      };
-
-      cancelButton?.addEventListener("click", closeDialog);
-      dialog.addEventListener("cancel", (event) => {
-        event.preventDefault();
-        closeDialog();
-      });
-
-      confirmButton?.addEventListener("click", () => {
-        if (!dialog._hiringTargetUrl || switching || isNavigating) return;
-
-        confirmButton.disabled = true;
-        dialog.close();
-        playModeSwitchSound();
-        body.classList.add("glitching");
-
-        window.setTimeout(async () => {
-          const url = dialog._hiringTargetUrl;
-          dialog._hiringTargetUrl = null;
-          const success = await fetchAndReplace(url);
-          if (success) {
-            window.history.pushState({}, "", url);
-            window.scrollTo({ top: 0, behavior: "auto" });
-          }
-          body.classList.remove("glitching");
-          confirmButton.disabled = false;
-        }, 1050);
-      });
-    }
-
-    wrapper.querySelectorAll('.site-nav a[href="hiring"], .site-nav a[href="hiring.html"]').forEach((link) => {
-      if (link.dataset.hiringThresholdReady === "true") return;
-      link.dataset.hiringThresholdReady = "true";
-
-      link.addEventListener("click", (event) => {
-        if (!body.classList.contains("staff-mode")) return;
-
-        event.preventDefault();
-        event.stopPropagation();
-        dialog._hiringSourceLink = link;
-        dialog._hiringTargetUrl = new URL("hiring.html", window.location.href).href;
-        dialog.showModal();
-        window.requestAnimationFrame(() => confirmButton?.focus());
-      });
-    });
-  };
-
   const initStaffHomeNotice = () => {
     const existingNotice = document.querySelector("[data-staff-home-notice]");
     const isStaffHome =
@@ -5475,7 +5392,6 @@
     initStaffProtocolWarning();
     initArchiveCatalog();
     initMobileNavigation();
-    initHiringThreshold();
     initStaffHomeNotice();
     initLoraRedRoom();
     initPavelObservationBooth();
