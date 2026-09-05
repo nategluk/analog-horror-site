@@ -9,11 +9,11 @@
 |---|---|
 | Обновлено | 2026-09-04 CDT |
 | Ветка / HEAD | `main` / `9c24754` |
-| Дерево | dirty: homepage discovery pass; unrelated `.DS_Store` changes preserved |
-| Активная линия | главная использует последовательность `entry → route-index → guest-book → admin-memo` |
-| Последний этап | deterministic hero, route hierarchy, carrier labels и desktop/mobile smoke пройдены |
+| Дерево | dirty: homepage heading hierarchy polish |
+| Активная линия | kicker’ы главной различаются с основными заголовками |
+| Последний этап | duplicate heading labels corrected; desktop/mobile smoke и build/verify пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | commit/push/deploy отдельно; следующий homepage-срез — только по отдельному решению |
+| Следующий gate | commit/push/deploy отдельно |
 
 ## Write-замок
 
