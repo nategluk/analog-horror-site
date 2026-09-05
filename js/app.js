@@ -5405,7 +5405,7 @@
       if (options.announce !== false && announcer) {
         const activeTab = tabs.find((tab) => tab.dataset.archiveTab === currentSection);
         const label = activeTab?.querySelector("strong")?.textContent?.trim() || currentSection;
-        announcer.textContent = `Открыта папка архива: ${label}`;
+        announcer.textContent = `Открыта ячейка архива: ${label}`;
       }
     };
 

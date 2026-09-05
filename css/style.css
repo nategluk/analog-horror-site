@@ -8180,7 +8180,7 @@ body.staff-mode .archive-broadcast-page .archive-folders {
 }
 
 body.staff-mode .archive-broadcast-page .archive-folders button {
-  --archive-tape-label: #d9d2b7;
+  --archive-drawer-label: #d9d2b7;
   position: relative;
   grid-template-rows: auto 1fr auto;
   align-content: stretch;
@@ -8191,22 +8191,22 @@ body.staff-mode .archive-broadcast-page .archive-folders button {
   border-radius: 2px;
   color: var(--text);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 18%, transparent 78%, rgba(0, 0, 0, 0.58)),
-    repeating-linear-gradient(90deg, #202329 0 3px, #15181d 3px 6px);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 18%, transparent 75%, rgba(0, 0, 0, 0.48)),
+    #30343b;
   box-shadow:
-    inset 0 0 0 1px #474b53,
-    inset 0 -6px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px #666c75,
+    inset 0 -7px rgba(0, 0, 0, 0.35),
     0 3px 0 rgba(0, 0, 0, 0.35);
   text-shadow: none;
 }
 
 body.staff-mode .archive-broadcast-page .archive-folders button:nth-child(2) {
-  --archive-tape-label: #dfbdc9;
+  --archive-drawer-label: #dfbdc9;
   border-top-color: var(--broadcast-magenta);
 }
 
 body.staff-mode .archive-broadcast-page .archive-folders button:nth-child(3) {
-  --archive-tape-label: #c4ddd8;
+  --archive-drawer-label: #c4ddd8;
   border-top-color: var(--broadcast-green);
 }
 
@@ -8216,8 +8216,8 @@ body.staff-mode .archive-broadcast-page .archive-folders button:focus-visible {
   border-top-color: var(--accent);
   color: var(--text);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 18%, transparent 78%, rgba(0, 0, 0, 0.55)),
-    repeating-linear-gradient(90deg, #272b32 0 3px, #181b20 3px 6px);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 18%, transparent 75%, rgba(0, 0, 0, 0.42)),
+    #393e46;
 }
 
 body.staff-mode .archive-broadcast-page .archive-folders button[aria-selected="true"] {
@@ -8226,7 +8226,7 @@ body.staff-mode .archive-broadcast-page .archive-folders button[aria-selected="t
   color: var(--text);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 18%),
-    #101319;
+    #181c22;
   box-shadow:
     inset 3px 4px 8px rgba(0, 0, 0, 0.82),
     0 0 0 1px #5b616a;
@@ -8246,8 +8246,10 @@ body.staff-mode .archive-broadcast-page .archive-folders button strong {
   color: #181a1d;
   background:
     repeating-linear-gradient(0deg, transparent 0 7px, rgba(62, 58, 48, 0.08) 7px 8px),
-    var(--archive-tape-label);
-  box-shadow: 0 0 0 2px #24272d;
+    var(--archive-drawer-label);
+  box-shadow:
+    0 0 0 2px #24272d,
+    0 0 0 3px #666c75;
   text-align: center;
   text-shadow: none;
 }
@@ -8312,8 +8314,8 @@ body.staff-mode .archive-broadcast-page .archive-record-list .archive-record {
   border-radius: 2px;
   color: var(--text);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.075), transparent 20%, transparent 76%, rgba(0, 0, 0, 0.5)),
-    repeating-linear-gradient(90deg, #1e2127 0 3px, #13161a 3px 6px);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), transparent 20%, transparent 76%, rgba(0, 0, 0, 0.42)),
+    #20242a;
   box-shadow:
     inset 0 0 0 1px #444950,
     0 3px 0 rgba(0, 0, 0, 0.38);

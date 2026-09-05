@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `cc45a20` |
-| Дерево | dirty: карта носителей + retirement legacy archive indexes |
-| Активная линия | `documents.html` / `photos.html` выведены из public build |
-| Последний этап | `_redirects` ведёт legacy URL в актуальные вкладки архива |
+| Ветка / HEAD | `main` / `1f9b083` |
+| Дерево | dirty: пилот архивных ячеек |
+| Активная линия | STAFF-архив отделён от метафоры видеокассеты |
+| Последний этап | ячейки, бумажный возврат и мобильный маршрут проверены локально |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользователь проверяет diff; затем commit/push/deploy отдельно |
+| Следующий gate | пользователь проверяет результат; затем commit/push/deploy отдельно |
 
 ## Write-замок
 
@@ -108,6 +108,14 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Archive cells pilot: STAFF `archive.html` теперь обозначает три металлические
+  архивные ячейки вместо кассет; 10 бумажных материалов возвращаются в нужный
+  раздел формулировкой «ВЕРНУТЬ ДОКУМЕНТ В АРХИВ». Desktop `1280×800` и mobile
+  `390×844`: переключение protocol/dossier/photo и URL-фрагменты работают,
+  возврат из досье Павла открывает `#dossiers`, overflow `0`, цели вкладок
+  `98×88` на mobile, console errors/warnings `0`. Clean public build: 529
+  файлов, verification passed; `node --check`, `git diff --check` прошли.
 
 - Legacy archive indexes: `documents.html` и `photos.html` сохранены в Git, но
   удалены из production allowlist и запрещены verifier-ом в `public/`.
