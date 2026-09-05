@@ -1646,6 +1646,13 @@
 
     if (clicks.length >= 3) {
       clicks = [];
+      const locationCctvRoute = document
+        .querySelector(".logo[data-location-cctv-route]")
+        ?.getAttribute("data-location-cctv-route");
+      if (locationCctvRoute) {
+        enterStaffWithGlitch(new URL(locationCctvRoute, window.location.href).href);
+        return;
+      }
       runGlitchAndToggle();
       return;
     }

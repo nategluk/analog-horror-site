@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-05 CDT |
 | Ветка / HEAD | `main` / `e1142b4` |
-| Дерево | dirty: №5 mobile reading rhythm + CCTV location media replacement |
-| Активная линия | №5: мобильный ритм чтения досье и длинных материалов; замена location comic-логов на CCTV |
-| Последний этап | Четыре STAFF-досье получили квадратные 10-секундные CCTV-лупы с poster-fallback; pool получил альтернативный `slide-01.mp4`; park `REDIRECT REQUIRED` удалён; build/verify и representative desktop/mobile QA пройдены |
+| Дерево | dirty: №5 mobile reading rhythm + CCTV location media replacement + location-logo routes |
+| Активная линия | №5: мобильный ритм чтения досье и длинных материалов; замена location comic-логов на CCTV и скрытый вход в CCTV-досье |
+| Последний этап | Шесть гостевых страниц локаций получили собственный `data-location-cctv-route`: тройной клик по логотипу ведёт в соответствующее STAFF-досье; `locations.html` не изменялась; build/verify и representative desktop/mobile QA пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
