@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-05 CDT |
 | Ветка / HEAD | `main` / `e1142b4` |
-| Дерево | dirty: №5 mobile reading rhythm + CCTV location media replacement + location-logo routes |
-| Активная линия | №5: мобильный ритм чтения досье и длинных материалов; замена location comic-логов на CCTV и скрытый вход в CCTV-досье |
-| Последний этап | Шесть гостевых страниц локаций получили собственный `data-location-cctv-route`: тройной клик по логотипу ведёт в соответствующее STAFF-досье; `locations.html` не изменялась; build/verify и representative desktop/mobile QA пройдены |
+| Дерево | dirty: интерактивный вход в техраздел с `hiring` |
+| Активная линия | Пятый успешный submit гостевой анкеты меняет кнопку и ведёт в STAFF; существующий ответ остаётся inline, popup удаляется |
+| Последний этап | Popup-вход с `hiring` удалён: первые четыре успешных submit меняют текст и цвет кнопки, пятый использует `TyndexSiteFx.enterStaff` и ведёт в `staff.html`; desktop `1280×800` и mobile `390×844` без overflow, console `0`, build/verify пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

@@ -5478,15 +5478,40 @@
     hiringForms.forEach((form) => {
       if (form.dataset.hiringForm === "staff") return;
 
+      const submitButton = form.querySelector("button[type=\"submit\"]");
+      const submitLabels = [
+        "ОТПРАВИТЬ ЕЩЁ РАЗ",
+        "ХВАТИТ",
+        "МЫ УЖЕ ПОЛУЧИЛИ",
+        "МЫ УЖЕ ПОЛУЧИЛИ...",
+        "МЫ УЖЕ ПОЛУЧИЛИ...",
+      ];
+      let submitCount = 0;
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
         const mode = form.dataset.hiringForm;
         const result = document.querySelector(`[data-hiring-result="${mode}"]`);
 
-        if (!result) return;
+        if (!result || !submitButton) return;
+
+        submitCount += 1;
 
         result.textContent =
           "Спасибо. Мы уже начали подготовку вашего вольера. Пожалуйста, не закрывайте окна в спальне сегодня ночью — наш курьер доставит ваш новый облик.";
+
+        const state = Math.min(submitCount, submitLabels.length);
+        submitButton.dataset.hiringSubmitState = String(state);
+        submitButton.textContent = submitLabels[state - 1];
+
+        if (submitCount < 5) return;
+
+        const href = new URL("staff.html", window.location.href).href;
+        if (typeof window.TyndexSiteFx?.enterStaff === "function") {
+          window.TyndexSiteFx.enterStaff(href);
+          return;
+        }
+        window.location.assign(href);
       });
     });
 

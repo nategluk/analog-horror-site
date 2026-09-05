@@ -4608,6 +4608,10 @@ body.staff-mode .staff-content {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hiring-form button {
+    transition: none;
+  }
+
   .staff-access-notice {
     transition: none;
   }
@@ -4908,6 +4912,29 @@ body.staff-mode .recruitment-banner__button {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
+  transition: background 180ms ease, box-shadow 180ms ease, color 180ms ease;
+}
+
+.hiring-form button[data-hiring-submit-state="1"] {
+  background: linear-gradient(140deg, #d67b4b, #b83f58);
+}
+
+.hiring-form button[data-hiring-submit-state="2"] {
+  background: linear-gradient(140deg, #b44358, #74344e);
+}
+
+.hiring-form button[data-hiring-submit-state="3"] {
+  background: linear-gradient(140deg, #75364f, #30334a);
+}
+
+.hiring-form button[data-hiring-submit-state="4"] {
+  background: linear-gradient(140deg, #363047, #151722);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.hiring-form button[data-hiring-submit-state="5"] {
+  background: linear-gradient(140deg, #090b10, #7a2747);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.28);
 }
 
 .hiring-form__result {
