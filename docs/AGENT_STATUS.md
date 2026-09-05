@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-04 CDT |
+| Обновлено | 2026-09-05 CDT |
 | Ветка / HEAD | `main` / `9c24754` |
-| Дерево | dirty: homepage heading hierarchy polish |
-| Активная линия | kicker’ы главной различаются с основными заголовками |
-| Последний этап | duplicate heading labels corrected; desktop/mobile smoke и build/verify пройдены |
+| Дерево | dirty: image art direction manifest |
+| Активная линия | №3: inventory и классификация изображений; asset mutation не выполнялась |
+| Последний этап | read-only manifest на 368 source assets; path parity и diff hygiene проверены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
