@@ -61,6 +61,11 @@ const SITE_PAGES = [
 
 const ROOT_EXTRAS = ["favicon.ico", "robots.txt", "sitemap.xml", "_headers"];
 
+// Runtimes loaded from app.js via basename URLs, so the generic reference
+// scanner cannot resolve them from the quoted strings alone. Queueing them
+// also lets the scanner collect their current media references.
+const DYNAMIC_CODE = ["js/lora-red-room.js", "js/pavel-observation-booth.js"];
+
 const MEDIA_EXT = new Set([
   ".png",
   ".jpg",
@@ -267,6 +272,11 @@ function collectAllowlist() {
     queue.list.push(page);
   });
   ROOT_EXTRAS.forEach((item) => add(files, item));
+  DYNAMIC_CODE.forEach((item) => {
+    add(files, item);
+    queue.seen.add(item);
+    queue.list.push(item);
+  });
 
   harvestIrina(files);
   harvestLora(files);

@@ -7,13 +7,13 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-03 CDT |
-| Ветка / HEAD | `main` / `4d86c85` |
-| Дерево | dirty: Week 1 CSS extract + Lora/Pavel dual-boot; audit markdown untracked |
-| Активная линия | code-overload Week 1 выполнен; commit не делался |
-| Последний этап | dead cotton CSS, curator/espresso sheets, Lora/Pavel static dual-boot сняты |
+| Обновлено | 2026-09-04 CDT |
+| Ветка / HEAD | `main` / `fee78f1` |
+| Дерево | dirty: production allowlist seed для динамических runtime Лоры/Павла |
+| Активная линия | production-сборка восстановлена локально; публикация не выполнялась |
+| Последний этап | clean public build + verifier + Pavel desktop/mobile smoke прошли |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользователь смотрит diff; Week 2 не начинать без запроса |
+| Следующий gate | пользователь проверяет diff; затем отдельно commit/push/deploy |
 
 ## Write-замок
 
@@ -108,6 +108,13 @@ FREE
 - After-hours SFX batch 1: five Sound Effects, `169` credits (`14932→15101 / 90000`, overage `$0`). Lock-tap edited to two hits at `0.287s`/`0.559s`; gate-open leading silence trimmed. Desktop gate: sound on, `sfx-lock-finger-taps.mp3` `200` on parents refusal; `sfx-gate-chain.mp3` loads on shooting node with sound retrigger. Console `0`. Validator `12/12`, kit `39` audio ids, `node --check`, `git diff --check`. Paper unfold wired to artifact inspect; distant laugh left unwired.
 
 ## Последняя целевая проверка
+
+- Production allowlist: динамически загружаемые basename-runtime Лоры/Павла
+  явно добавлены в очередь сборщика; это также возвращает текущие media-ссылки
+  Лоры после чистой пересборки. `public/` пересобран с нуля: 530 файлов,
+  verification passed. Павел desktop `1280×800` и mobile `390×844`: runtime и
+  content `200`, `boothReady=true`, intro media `readyState=4`, overflow `0`,
+  controls `44×44`, console errors/warnings `0`. Публикация не выполнялась.
 
 - Code-overload Week 1: мёртвый drawn-cotton CSS удалён; живой PixVerse-путь на месте.
   `css/curator-call.css` только на hiring (+ SPA ensure). `css/red-room-espresso.css`
