@@ -16,14 +16,14 @@ Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 |---|---:|---:|---:|
 | `ADVERTISEMENT` | 28 | 27 | 1 |
 | `PERSONNEL` | 18 | 18 | 0 |
-| `CCTV` | 11 | 11 | 0 |
+| `CCTV` | 15 | 15 | 0 |
 | `PERSONAL` | 18 | 18 | 0 |
-| `EVENT-RECORD` | 86 | 85 | 1 |
+| `EVENT-RECORD` | 74 | 73 | 1 |
 | `SCHEMA` | 25 | 25 | 0 |
 | `UTILITY` | 12 | 12 | 0 |
 | `IMMERSIVE-SCENE` | 170 | 86 | 84 |
 
-Всего: **368** source assets; public copies: **282**;
+Всего: **360** source assets; public copies: **274**;
 source-only: **86**.
 `projects/` (110 файлов) намеренно не включён: это отдельный staging/reference
 слой. Геометрия считается по исходным размерам: wide ≈ 1.6–1.9, square ≈ 0.9–1.1,
@@ -319,9 +319,7 @@ change runtime references or change canon.
 | `assets/staff/cctv/pool-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
 | `assets/staff/cctv/slide-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
 | `assets/staff/cctv/zoo-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
-| `assets/staff/cinema/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/cinema/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/cinema/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
+| `assets/staff/cinema/cctv-loop-poster.webp` | `CCTV` | fixed cinema CCTV loop poster | `TYNDEX-TERMINAL` | 560x560 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/classes/animators.png` | `SCHEMA` | training or class plate | `BROADCAST-ZHIR-TV` | 1360x768 | yes | NO-CROP | — |
 | `assets/staff/classes/class-10-sun-mask.webp` | `SCHEMA` | training plate / admin overlay | `BROADCAST-ZHIR-TV` | 900x1190 | yes | NO-CROP | WM-QA; OVERLAY |
 | `assets/staff/classes/class-6.webp` | `SCHEMA` | training or class plate | `BROADCAST-ZHIR-TV` | 1280x720 | yes | NO-CROP | — |
@@ -432,12 +430,8 @@ change runtime references or change canon.
 | `assets/staff/documents/protocol-playground-schema-03.webp` | `SCHEMA` | protocol / administrative reconstruction | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | — |
 | `assets/staff/documents/ulybarych-message-avatar.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 512x512 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/logo.png` | `UTILITY` | brand mark | `SHELL` | 760x200 | yes | CONTEXT-SPECIFIC | — |
-| `assets/staff/mall/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/mall/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/mall/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/park/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/park/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/park/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
+| `assets/staff/mall/cctv-loop-poster.webp` | `CCTV` | fixed toy-store CCTV loop poster | `TYNDEX-TERMINAL` | 560x560 | yes | NATIVE-FRAME | WEBP-FALLBACK |
+| `assets/staff/park/cctv-loop-poster.webp` | `CCTV` | fixed carousel CCTV loop poster | `TYNDEX-TERMINAL` | 544x544 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/personnel/irina-record.webp` | `PERSONNEL` | record strip / front-profile capture | `PERSONAL-FILE` | 1536x865 | yes | SUBTYPE-CROP | — |
 | `assets/staff/personnel/kirill-record.webp` | `PERSONNEL` | record strip / front-profile capture | `PERSONAL-FILE` | 1536x640 | yes | SUBTYPE-CROP | — |
 | `assets/staff/personnel/laura-record.webp` | `PERSONNEL` | record strip / front-profile capture | `PERSONAL-FILE` | 1536x640 | yes | SUBTYPE-CROP | — |
@@ -453,9 +447,7 @@ change runtime references or change canon.
 | `assets/staff/pool/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
 | `assets/staff/pool/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
 | `assets/staff/pool/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/red-room/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/red-room/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/red-room/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
+| `assets/staff/red-room/cctv-loop-poster.webp` | `CCTV` | fixed cafe CCTV loop poster | `TYNDEX-TERMINAL` | 544x544 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/staff/alice-message-avatar.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 512x512 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/staff/irina_sad.jpg` | `PERSONNEL` | internal personnel card | `BROADCAST-ZHIR-TV` | 764x1024 | yes | SUBTYPE-CROP | — |
 | `assets/staff/staff/kirill_sad.jpg` | `PERSONNEL` | internal personnel card | `BROADCAST-ZHIR-TV` | 761x1024 | yes | SUBTYPE-CROP | — |

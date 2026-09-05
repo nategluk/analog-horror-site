@@ -11007,6 +11007,41 @@ body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__media
   box-shadow: none;
 }
 
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-stage--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot--cctv {
+  width: min(100%, 720px);
+  margin-inline: auto;
+}
+
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__frame {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #080a0d;
+  background: #080a0d;
+}
+
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__frame > .horror-cinematic-shot__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  box-shadow: none;
+}
+
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__media--fallback {
+  z-index: 0;
+}
+
+body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__media--video {
+  z-index: 1;
+}
+
 body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__caption {
   margin: 0.55rem 0 0.05rem;
   color: #aeb5bf;
@@ -11065,8 +11100,13 @@ body.staff-mode .location-cinematic-broadcast-page .location-cinematic .terminal
 
 @media (prefers-reduced-motion: reduce) {
   body.staff-mode .locations-broadcast-page .surveillance-img,
-  body.staff-mode .locations-broadcast-page .surveillance-container::before {
+  body.staff-mode .locations-broadcast-page .surveillance-container::before,
+  body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__media--video {
     animation: none;
+  }
+
+  body.staff-mode .location-cinematic-broadcast-page .horror-cinematic-shot__media--video {
+    display: none;
   }
 }
 

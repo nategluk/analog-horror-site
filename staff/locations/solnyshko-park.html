@@ -62,18 +62,33 @@
 
           <section>
             <h3>Кинематографический лог: Состояние объектов</h3>
-            <div class="horror-cinematic-stage" data-media-state="temporary-reference">
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/park/comic1.webp" alt="Осмотр гостя" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #603: Патрулирование. Фиксация выброса гормона ностальгии.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/park/comic2.webp" alt="Утилизация в тире" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #608: Зона Тира. Подготовка списанного инвентаря.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot horror-cinematic-shot--wide">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/park/comic3.webp" alt="Комната смеха" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">LOG #615: Комната Смеха. Фаза 4 завершена успешно.</figcaption>
+            <div class="horror-cinematic-stage horror-cinematic-stage--single" data-media-state="approved">
+              <figure class="horror-cinematic-shot horror-cinematic-shot--cctv">
+                <div class="horror-cinematic-shot__frame">
+                  <img
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--fallback"
+                    src="../../assets/staff/park/cctv-loop-poster.webp"
+                    alt="Пустая карусель в парке «Солнышко»"
+                    data-media-role="still-fallback"
+                    data-media-status="approved"
+                    width="544"
+                    height="544"
+                  />
+                  <video
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    poster="../../assets/staff/park/cctv-loop-poster.webp"
+                    aria-label="CCTV-луп: карусель в парке «Солнышко»"
+                    aria-hidden="true"
+                  >
+                    <source src="../../assets/staff/park/cctv-loop.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">CCTV-LOOP // LOG #615: Карусель продолжает вращаться после закрытия парка.</figcaption>
               </figure>
             </div>
           </section>

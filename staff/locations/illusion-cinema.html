@@ -62,18 +62,33 @@
 
           <section>
             <h3>Кинематографический лог: Состояние трансляции</h3>
-            <div class="horror-cinematic-stage" data-media-state="temporary-reference">
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/cinema/comic1.webp" alt="Зал кинотеатра с одиноким зрителем и аниматором" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #701: Фаза тактильного стресса. Объект не должен покидать ряд.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/cinema/comic2.webp" alt="Официантка Лиса передает ведро попкорна" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #708: Пищевой тест принят. Уровень масляного блеска превышен.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot horror-cinematic-shot--wide">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/cinema/comic3.webp" alt="Киномеханик переключает пленку на трансляцию спальни" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">LOG #719: Канал спальни пойман. Выход из зала стабилизирован внутри экрана.</figcaption>
+            <div class="horror-cinematic-stage horror-cinematic-stage--single" data-media-state="approved">
+              <figure class="horror-cinematic-shot horror-cinematic-shot--cctv">
+                <div class="horror-cinematic-shot__frame">
+                  <img
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--fallback"
+                    src="../../assets/staff/cinema/cctv-loop-poster.webp"
+                    alt="Пустой зал кинотеатра и экран с трансляцией спальни"
+                    data-media-role="still-fallback"
+                    data-media-status="approved"
+                    width="560"
+                    height="560"
+                  />
+                  <video
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    poster="../../assets/staff/cinema/cctv-loop-poster.webp"
+                    aria-label="CCTV-луп: трансляция в кинотеатре «Иллюзион»"
+                    aria-hidden="true"
+                  >
+                    <source src="../../assets/staff/cinema/cctv-loop.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">CCTV-LOOP // LOG #719: Канал спальни пойман. Проектор продолжает работу.</figcaption>
               </figure>
             </div>
           </section>

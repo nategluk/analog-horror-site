@@ -62,18 +62,33 @@
 
           <section>
             <h3>Кинематографический лог: Состояние аномалии</h3>
-            <div class="horror-cinematic-stage" data-media-state="temporary-reference">
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/red-room/comic1.webp" alt="Официантка Красной Комнаты держит ключ на подносе" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #812: Мастер-ключ серии 312 снова появился на подносе.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/red-room/comic2.webp" alt="Гости застыли в танце внутри Красной Комнаты" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #817: Танцевальный цикл активен. Не пытаться остановить музыку.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot horror-cinematic-shot--wide">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/red-room/comic3.webp" alt="Ключ у зазора между красными портьерами" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">LOG #829: Зазор за портьерой подтвержден. Контроль субъекта невозможен после шага.</figcaption>
+            <div class="horror-cinematic-stage horror-cinematic-stage--single" data-media-state="approved">
+              <figure class="horror-cinematic-shot horror-cinematic-shot--cctv">
+                <div class="horror-cinematic-shot__frame">
+                  <img
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--fallback"
+                    src="../../assets/staff/red-room/cctv-loop-poster.webp"
+                    alt="Аниматор в костюме животного спит за столиком в Красной Комнате"
+                    data-media-role="still-fallback"
+                    data-media-status="approved"
+                    width="544"
+                    height="544"
+                  />
+                  <video
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    poster="../../assets/staff/red-room/cctv-loop-poster.webp"
+                    aria-label="CCTV-луп: спящий аниматор в Красной Комнате"
+                    aria-hidden="true"
+                  >
+                    <source src="../../assets/staff/red-room/cctv-loop.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">CCTV-LOOP // LOG #829: Аниматор остаётся внутри Красной Комнаты.</figcaption>
               </figure>
             </div>
           </section>

@@ -154,7 +154,7 @@ lightbox. Его три бывших изображения `blueprint_01.webp`,
 подмешивает пять скрытых источников:
 
 - `SOURCE 001 // ВОЛЬЕР 4` — пул `zoo-01.mp4`–`zoo-03.mp4`;
-- `SOURCE 002 // ПУСТОЙ БАССЕЙН` — `pool-01.mp4`;
+- `SOURCE 002 // ПУСТОЙ БАССЕЙН` — пул `pool-01.mp4` и `slide-01.mp4`;
 - `SOURCE 003 // ТЕХНИЧЕСКИЙ СПУСК` — `slide-01.mp4`;
 - `SOURCE 004 // СИГНАЛ ПОМОЩИ` — пул `intrusion-help-sign.mp4` и
   `intrusion-disco-room.mp4`;

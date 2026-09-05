@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-05 CDT |
 | Ветка / HEAD | `main` / `e1142b4` |
-| Дерево | dirty: №5 mobile reading rhythm |
-| Активная линия | №5: мобильный ритм чтения досье и длинных материалов |
-| Последний этап | №5: mobile `protocol-copy` 14.4px / 1.72, явные паузы между блоками; Irina/Pavel + protocol mobile QA, Irina desktop QA, build/verify пройдены |
+| Дерево | dirty: №5 mobile reading rhythm + CCTV location media replacement |
+| Активная линия | №5: мобильный ритм чтения досье и длинных материалов; замена location comic-логов на CCTV |
+| Последний этап | Четыре STAFF-досье получили квадратные 10-секундные CCTV-лупы с poster-fallback; pool получил альтернативный `slide-01.mp4`; park `REDIRECT REQUIRED` удалён; build/verify и representative desktop/mobile QA пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
