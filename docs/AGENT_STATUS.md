@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `fee78f1` |
-| Дерево | dirty: production allowlist seed для динамических runtime Лоры/Павла |
-| Активная линия | production-сборка восстановлена локально; публикация не выполнялась |
-| Последний этап | clean public build + verifier + Pavel desktop/mobile smoke прошли |
+| Ветка / HEAD | `main` / `d713fbd` |
+| Дерево | dirty: согласованы счётчики гостевого и STAFF-архива |
+| Активная линия | archive counts: `5 + 5 + 3 = 13` |
+| Последний этап | production fix опубликован и live Павел проверен |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | пользователь проверяет diff; затем отдельно commit/push/deploy |
+| Следующий gate | пользователь проверяет archive diff; затем отдельно commit/push/deploy |
 
 ## Write-замок
 
@@ -109,12 +109,19 @@ FREE
 
 ## Последняя целевая проверка
 
+- Archive counts: история добавлений показала, что guest-count обновлялся вместе
+  со STAFF-count; при добавлении досье Ирины 1 сентября были пропущены guest и
+  summary. Исправлено `0 / 4` → `0 / 5` и `12` → `13`; проверка подтверждает
+  `5 + 5 + 3 = 13`. Clean public build/verify и `git diff --check` прошли.
+
 - Production allowlist: динамически загружаемые basename-runtime Лоры/Павла
   явно добавлены в очередь сборщика; это также возвращает текущие media-ссылки
   Лоры после чистой пересборки. `public/` пересобран с нуля: 530 файлов,
   verification passed. Павел desktop `1280×800` и mobile `390×844`: runtime и
   content `200`, `boothReady=true`, intro media `readyState=4`, overflow `0`,
-  controls `44×44`, console errors/warnings `0`. Публикация не выполнялась.
+  controls `44×44`, console errors/warnings `0`. После пользовательского push
+  live Павел: runtime/content `200`, `boothReady=true`, intro `readyState=4`,
+  overflow `0`, console errors/warnings `0`; проверочные сцены Лоры также `200`.
 
 - Code-overload Week 1: мёртвый drawn-cotton CSS удалён; живой PixVerse-путь на месте.
   `css/curator-call.css` только на hiring (+ SPA ensure). `css/red-room-espresso.css`
