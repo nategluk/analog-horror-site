@@ -8,12 +8,12 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-04 CDT |
-| Ветка / HEAD | `main` / `40a924e` |
-| Дерево | dirty: завершена carrier-разметка служебных локаций |
-| Активная линия | шесть локаций различают `horror-cinematic` и `staff-protocol`; still-файлы временные |
-| Последний этап | public build/verify и desktop/mobile STAFF/guest smoke-проверки пройдены |
+| Ветка / HEAD | `main` / `9c24754` |
+| Дерево | dirty: homepage discovery pass; unrelated `.DS_Store` changes preserved |
+| Активная линия | главная использует последовательность `entry → route-index → guest-book → admin-memo` |
+| Последний этап | deterministic hero, route hierarchy, carrier labels и desktop/mobile smoke пройдены |
 | Commit / push / deploy | только по прямой просьбе пользователя |
-| Следующий gate | commit/push/deploy отдельно; media replacement — отдельный этап |
+| Следующий gate | commit/push/deploy отдельно; следующий homepage-срез — только по отдельному решению |
 
 ## Write-замок
 

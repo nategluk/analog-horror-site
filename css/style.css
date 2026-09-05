@@ -11039,3 +11039,77 @@ body.staff-mode .location-cinematic-broadcast-page .location-cinematic .terminal
     animation: none;
   }
 }
+
+/* ─── GUEST homepage: discovery sequence ─── */
+body:not(.staff-mode) .home-discovery__kicker {
+  margin: 0 0 0.45rem;
+  color: color-mix(in srgb, var(--accent-2) 78%, var(--text));
+  font: 800 0.68rem/1.2 "Courier New", Courier, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+body:not(.staff-mode) .home-discovery--entry {
+  border-radius: 4px;
+}
+
+body:not(.staff-mode) .home-discovery--entry::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.3) 52%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+}
+
+body:not(.staff-mode) .home-discovery--route-index {
+  border-top-style: solid;
+}
+
+body:not(.staff-mode) .guest-entertainments__card[data-route-priority="primary"] {
+  grid-column: span 2;
+  border-color: color-mix(in srgb, var(--accent-2) 70%, var(--border));
+  box-shadow:
+    0 8px 22px var(--shadow),
+    inset 0 0 0 1px color-mix(in srgb, var(--accent-2) 26%, transparent);
+}
+
+body:not(.staff-mode) .home-discovery--guest-book {
+  padding-inline-start: 0.9rem;
+  border-inline-start: 0.36rem solid color-mix(in srgb, var(--accent-2) 72%, var(--border));
+}
+
+body:not(.staff-mode) .home-discovery--guest-book .guest-reviews__card {
+  border-radius: 4px;
+  box-shadow: 0 5px 14px var(--shadow);
+}
+
+body:not(.staff-mode) .home-discovery--admin-memo {
+  border: 1px dashed color-mix(in srgb, var(--border) 82%, var(--accent));
+  border-inline-start: 0.42rem solid var(--accent-2);
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.025) 0 1px,
+      transparent 1px 5px
+    ),
+    var(--surface-alt);
+}
+
+body:not(.staff-mode) .guest-info-rules__item--anomaly {
+  margin-inline: -0.35rem;
+  padding: 0.55rem 0.65rem 0.55rem 0.8rem;
+  border-inline-start: 0.3rem solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+
+@media (max-width: 640px) {
+  body:not(.staff-mode) .guest-entertainments__card[data-route-priority="primary"] {
+    grid-column: auto;
+  }
+
+  body:not(.staff-mode) .home-discovery--guest-book {
+    padding-inline-start: 0.65rem;
+  }
+}

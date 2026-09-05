@@ -46,8 +46,14 @@
           <li><a href="archive" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Архив</a></li>
         </ul>
       </nav>
-      <section class="hero home-hero" data-home-hero="wonder">
+      <section
+        class="hero home-hero home-discovery home-discovery--entry"
+        data-home-hero="wonder"
+        data-discovery-step="00"
+        data-carrier="entry"
+      >
         <div class="hero__content">
+          <p class="home-discovery__kicker">00 // ВХОД В КОМПЛЕКС</p>
           <h2>Ваш путь к чуду начинается здесь</h2>
           <p>Уютные аллеи, мягкий свет и бесконечная музыка игр.</p>
           <p class="hero__warning">
@@ -113,12 +119,19 @@
         
 
         <section
-          class="guest-content guest-entertainments"
+          class="guest-content guest-entertainments home-discovery home-discovery--route-index"
           aria-labelledby="guest-entertainments-heading"
+          data-discovery-step="01"
+          data-carrier="route-index"
         >
-          <h2 id="guest-entertainments-heading">Наши развлечения</h2>
+          <p class="home-discovery__kicker">01 // УКАЗАТЕЛЬ КОМПЛЕКСА</p>
+          <h2 id="guest-entertainments-heading">Указатель комплекса</h2>
           <div class="guest-entertainments__grid">
-            <a class="guest-entertainments__card" href="locations/losiny-ostrov-zoo">
+            <a
+              class="guest-entertainments__card"
+              href="locations/losiny-ostrov-zoo"
+              data-route-priority="primary"
+            >
               <div
                 class="guest-thumb guest-thumb--losiny"
                 role="img"
@@ -188,11 +201,14 @@
         </section>
 
         <section
-          class="guest-content guest-reviews"
+          class="guest-content guest-reviews home-discovery home-discovery--guest-book"
           aria-labelledby="guest-reviews-heading"
+          data-discovery-step="02"
+          data-carrier="guest-book"
         >
+          <p class="home-discovery__kicker">02 // КНИГА ПОСЕТИТЕЛЕЙ</p>
           <div class="guest-reviews__header">
-            <h2 id="guest-reviews-heading">Отзывы посетителей</h2>
+            <h2 id="guest-reviews-heading">Книга посетителей</h2>
             <a class="guest-reviews__action" href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer">Написать отзыв</a>
           </div>
           <div class="guest-reviews__grid">
@@ -522,11 +538,13 @@
 
       <footer class="site-footer">
         <section
-          class="guest-content guest-info-rules"
+          class="guest-content guest-info-rules home-discovery home-discovery--admin-memo"
           role="region"
           aria-labelledby="guest-info-rules-label guest-info-rules-heading"
+          data-discovery-step="03"
+          data-carrier="admin-memo"
         >
-          <p class="guest-info-rules__label" id="guest-info-rules-label">Информация и правила</p>
+          <p class="guest-info-rules__label" id="guest-info-rules-label">03 // Административная памятка</p>
           <h2 class="guest-info-rules__heading" id="guest-info-rules-heading">
             Памятка для гостей комплекса
           </h2>
@@ -544,7 +562,7 @@
               Правило 2: Если аниматор в костюме Кролика просит вас помочь ему в техническом коридоре
               — немедленно отойдите. В нашем комплексе нет аниматора в костюме Кролика.
             </li>
-            <li>
+            <li class="guest-info-rules__item--anomaly" data-anomaly="wrong-sign">
               Правило 3: Не пытайтесь открыть двери с маркировкой «ВЫХОД».
               Это неправильные таблички. 
             </li>
