@@ -5487,6 +5487,26 @@
         "МЫ УЖЕ ПОЛУЧИЛИ...",
       ];
       let submitCount = 0;
+      let rejectionTone = null;
+
+      const stopRejectionTone = () => {
+        if (!rejectionTone) return;
+        rejectionTone.pause();
+        rejectionTone.currentTime = 0;
+      };
+
+      const playRejectionTone = (volume) => {
+        rejectionTone ||= new Audio(
+          audioAsset("assets/audio/staff/cctv/teletext-tone.mp3")
+        );
+        rejectionTone.preload = "auto";
+        rejectionTone.volume = volume;
+        rejectionTone.currentTime = 0;
+        const playback = rejectionTone.play();
+        if (playback && typeof playback.catch === "function") {
+          playback.catch(() => {});
+        }
+      };
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -5504,8 +5524,12 @@
         submitButton.dataset.hiringSubmitState = String(state);
         submitButton.textContent = submitLabels[state - 1];
 
+        if (submitCount === 3) playRejectionTone(0.1);
+        if (submitCount === 4) playRejectionTone(0.16);
+
         if (submitCount < 5) return;
 
+        stopRejectionTone();
         const href = new URL("staff.html", window.location.href).href;
         if (typeof window.TyndexSiteFx?.enterStaff === "function") {
           window.TyndexSiteFx.enterStaff(href);
