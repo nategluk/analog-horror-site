@@ -9,16 +9,16 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: STAFF FAQ без P-лейблов |
-| Активная линия | STAFF FAQ: убрать телетекст-лейблы P и увеличить шрифт |
-| Последний этап | Убраны бейджи `P301+` у вопросов; шрифт вопросов/ответов увеличен (~16.8/16 desktop, ~15.7/15.2 mobile). Overflow `0`. `git diff --check`. |
+| Дерево | dirty: четыре Gemini-crop ассета и обновлённый image manifest |
+| Активная линия | Удаление видимых Gemini-меток из production-изображений |
+| Последний этап | Обрезаны и увеличены до `1920×1072` `recruitment-guest.webp`, `guides.webp`, `medics.webp` и `tyndex.webp`; `class-10-sun-mask.webp` восстановлен и исключён; public build/verifier OK, `git diff --check`. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
 ## Write-замок
 
 ```text
-FREE
+WRITER / ABOUT-CLASS-CROPS / STARTED
 ```
 
 Перед правкой заменить `FREE` на `WRITER / SCOPE / STARTED`. Перед остановкой

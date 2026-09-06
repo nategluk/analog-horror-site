@@ -1,6 +1,6 @@
 # Image Art Direction Manifest
 
-Снимок: 2026-09-05
+Снимок: 2026-09-06
 Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 `/Users/nateglukhov/analog-horror-site/assets/staff`.
 
@@ -91,7 +91,6 @@ These rows need a human decision before any visual mutation:
 - `assets/staff/documents/dossier-sz-312-05.jpg` — personal object evidence or event record.
 - `assets/staff/curators/irina/cctv-pavel-observation-booth-poster.webp` — monitor-room event, not automatically CCTV because of its filename.
 - `assets/staff/classes/class-10-sun-mask.webp` — portrait used as an admin overlay; verify crop and visible generation mark.
-- `assets/guest/recruitment-guest.webp` — bright promotional outlier; verify the bottom-right generation/watermark-like mark.
 - `assets/staff/about-slides.webp` — location still currently presented inside the broadcast shell.
 - Every row with `Public = no` — source-only/staging material; this is not a deletion instruction.
 
@@ -186,7 +185,7 @@ change runtime references or change canon.
 | `assets/guest/locations/solnyshko/park-wide-15s_poster.webp` | `IMMERSIVE-SCENE` | Solnyshko runtime poster / fallback | `IMMERSIVE-SCENE` | 1280x720 | yes | OWN-RUNTIME | PROTECTED |
 | `assets/guest/logo.svg` | `UTILITY` | brand mark | `SHELL` | 900x210 | yes | CONTEXT-SPECIFIC | — |
 | `assets/guest/pool.webp` | `ADVERTISEMENT` | location thumbnail / facade plate | `GUEST-FACADE` | 1920x1081 | yes | CLEAN-WIDE | — |
-| `assets/guest/recruitment-guest.webp` | `ADVERTISEMENT` | guest recruitment | `GUEST-FACADE` | 1920x1072 | yes | CLEAN-WIDE | WM-QA |
+| `assets/guest/recruitment-guest.webp` | `ADVERTISEMENT` | guest recruitment | `GUEST-FACADE` | 1920x1072 | yes | CLEAN-WIDE | — |
 | `assets/guest/recruitment-staff.webp` | `ADVERTISEMENT` | staff recruitment | `BROADCAST-ZHIR-TV` | 1920x1072 | yes | CLEAN-WIDE | — |
 | `assets/guest/red-room/game/espresso-metal-texture.webp` | `IMMERSIVE-SCENE` | Red Room game texture | `IMMERSIVE-SCENE` | 640x640 | yes | OWN-RUNTIME | PROTECTED |
 | `assets/guest/red-room/game/espresso-receipt-texture.webp` | `IMMERSIVE-SCENE` | Red Room game texture | `IMMERSIVE-SCENE` | 640x640 | yes | OWN-RUNTIME | PROTECTED |
