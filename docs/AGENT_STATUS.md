@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: Copy Desk рассылка писем кабинета |
-| Активная линия | Copy Desk: письмо от выбранного героя |
-| Последний этап | Форма «Письмо»: отправитель из героев всех игр, шаблон в `staffMessages`, `broadcast` кладёт во входящие STAFF. Кнопка у героя и в шапке. Compose+delete byte-identical. Smoke Copy Desk, `node --check`, `git diff --check`. Browser: Павел → COPYDESK QA → удаление. |
+| Дерево | dirty: STAFF FAQ без P-лейблов |
+| Активная линия | STAFF FAQ: убрать телетекст-лейблы P и увеличить шрифт |
+| Последний этап | Убраны бейджи `P301+` у вопросов; шрифт вопросов/ответов увеличен (~16.8/16 desktop, ~15.7/15.2 mobile). Overflow `0`. `git diff --check`. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

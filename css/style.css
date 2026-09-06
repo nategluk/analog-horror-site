@@ -8956,7 +8956,7 @@ body.staff-mode .faq-broadcast-page .staff-faq__header p {
 
 body.staff-mode .faq-broadcast-page .staff-faq .faq-kicker {
   color: var(--broadcast-magenta);
-  font-size: 0.68rem;
+  font-size: 0.82rem;
 }
 
 body.staff-mode .faq-broadcast-page .staff-faq__header h2 {
@@ -8979,7 +8979,6 @@ body.staff-mode .faq-broadcast-page .staff-faq__header > span {
 }
 
 body.staff-mode .faq-broadcast-page .faq-list {
-  counter-reset: staff-faq-page 300;
   gap: 0.55rem;
   padding: 0.65rem;
   border: 0.4rem solid #0b0d10;
@@ -8993,7 +8992,6 @@ body.staff-mode .faq-broadcast-page .faq-list {
 }
 
 body.staff-mode .faq-broadcast-page .staff-faq .faq-item {
-  counter-increment: staff-faq-page;
   border: 1px solid #3d4653;
   border-left: 0.3rem solid #52d3dc;
   border-radius: 0;
@@ -9010,33 +9008,10 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item:nth-child(3n + 3) {
 }
 
 body.staff-mode .faq-broadcast-page .staff-faq .faq-item summary {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.75rem;
-  align-items: start;
-  padding: 0.8rem 2.8rem 0.8rem 0.75rem;
+  padding: 0.9rem 2.8rem 0.9rem 0.9rem;
   color: #e9e5d8;
-  font-size: 0.84rem;
-}
-
-body.staff-mode .faq-broadcast-page .staff-faq .faq-item summary::before {
-  content: "P" counter(staff-faq-page);
-  min-width: 3.2rem;
-  padding: 0.18rem 0.25rem;
-  color: #081015;
-  background: #52d3dc;
-  font-size: 0.62rem;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  text-align: center;
-}
-
-body.staff-mode .faq-broadcast-page .staff-faq .faq-item:nth-child(3n + 2) summary::before {
-  background: var(--broadcast-magenta);
-}
-
-body.staff-mode .faq-broadcast-page .staff-faq .faq-item:nth-child(3n + 3) summary::before {
-  background: var(--broadcast-yellow);
+  font-size: 1.05rem;
+  line-height: 1.4;
 }
 
 body.staff-mode .faq-broadcast-page .staff-faq .faq-item summary::after {
@@ -9052,11 +9027,12 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item[open] {
 
 body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
   margin: 0.1rem 0.75rem 0.75rem;
-  padding: 0.75rem;
+  padding: 0.85rem;
   color: #c6c7c2;
   border-top: 1px dashed #59616d;
   background: rgba(0, 0, 0, 0.18);
-  font-size: 0.8rem;
+  font-size: 1rem;
+  line-height: 1.55;
 }
 
 @media (max-width: 720px) {
@@ -9086,20 +9062,14 @@ body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
   }
 
   body.staff-mode .faq-broadcast-page .staff-faq .faq-item summary {
-    grid-template-columns: 1fr;
-    gap: 0.45rem;
-    padding: 0.7rem 2.4rem 0.7rem 0.65rem;
-    font-size: 0.76rem;
-  }
-
-  body.staff-mode .faq-broadcast-page .staff-faq .faq-item summary::before {
-    width: max-content;
+    padding: 0.8rem 2.4rem 0.8rem 0.75rem;
+    font-size: 0.98rem;
   }
 
   body.staff-mode .faq-broadcast-page .staff-faq .faq-item p {
     margin: 0 0.55rem 0.55rem;
-    padding: 0.65rem;
-    font-size: 0.73rem;
+    padding: 0.75rem;
+    font-size: 0.95rem;
   }
 
 }
