@@ -8,10 +8,10 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-06 CDT |
-| Ветка / HEAD | `main` / `e1142b4` |
-| Дерево | dirty: интерактивный вход в техраздел с `hiring` и отказной beep-сигнал |
+| Ветка / HEAD | `main` / `fc5562e` |
+| Дерево | dirty: one-click local Copy Desk launcher и короткая инструкция запуска |
 | Активная линия | Пятый успешный submit гостевой анкеты меняет кнопку и ведёт в STAFF; существующий ответ остаётся inline, popup удалён |
-| Последний этап | Popup-вход с `hiring` удалён: первые четыре успешных submit меняют текст и цвет кнопки, третий и четвёртый дают короткий отказной сигнал из существующего `assets/audio/staff/cctv/teletext-tone.mp3`, пятый останавливает его, использует `TyndexSiteFx.enterStaff` и ведёт в `staff.html`; desktop `1280×800` и mobile `390×844` без overflow, console `0`, asset `200`, public build/verify пройдены |
+| Последний этап | Popup-вход с `hiring` удалён: первые четыре успешных submit меняют текст и цвет кнопки, третий и четвёртый дают короткий отказной сигнал из существующего `assets/audio/staff/cctv/teletext-tone.mp3`, пятый останавливает его, использует `TyndexSiteFx.enterStaff` и ведёт в `staff.html`; desktop `1280×800` и mobile `390×844` без overflow, console `0`, asset `200`, public build/verify пройдены. Добавлен `Copy Desk.command`: холодный и повторный запуск проверены на порту `18787`. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
