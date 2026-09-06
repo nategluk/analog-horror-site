@@ -14,6 +14,7 @@
       </div>
       <nav class="game-tabs" id="game-tabs" aria-label="Игры"></nav>
       <div class="top-actions">
+        <button type="button" id="btn-compose">Письмо</button>
         <button type="button" id="btn-characters">Герои</button>
         <a class="button-link" href="/admin/nodes.html">Узлы Ирины</a>
         <a class="button-link" href="/hiring.html" target="_blank" rel="noreferrer">Сайт</a>
@@ -42,6 +43,61 @@
         <p class="empty">Выберите ветку слева.</p>
       </section>
     </main>
+
+    <dialog id="compose" class="sheet compose-sheet">
+      <form method="dialog" class="sheet-head">
+        <h2>Письмо в кабинет</h2>
+        <button type="submit" value="close">Закрыть</button>
+      </form>
+      <form id="compose-form" class="compose-form">
+        <p class="hint">
+          Письмо попадает в личный кабинет от выбранного героя. Если включена
+          рассылка, игроки увидят его во входящих при следующем открытии STAFF.
+        </p>
+        <label>
+          Отправитель
+          <input
+            id="compose-sender"
+            list="compose-senders"
+            type="text"
+            required
+            autocomplete="off"
+            placeholder="Имя, как в кабинете"
+          />
+        </label>
+        <datalist id="compose-senders"></datalist>
+        <label>
+          Тема
+          <input id="compose-subject" type="text" required maxlength="80" />
+        </label>
+        <label>
+          Превью в списке
+          <input
+            id="compose-preview"
+            type="text"
+            maxlength="120"
+            placeholder="Если пусто — первая строка письма"
+          />
+        </label>
+        <label>
+          Текст
+          <textarea id="compose-body" required rows="7"></textarea>
+        </label>
+        <label class="compose-check">
+          <input id="compose-greet" type="checkbox" checked />
+          Обратиться по имени игрока в начале письма
+        </label>
+        <label class="compose-check">
+          <input id="compose-broadcast" type="checkbox" checked />
+          Сразу положить во входящие
+        </label>
+        <div class="compose-actions">
+          <button type="submit" class="primary" id="compose-submit">
+            Отправить в кабинет
+          </button>
+        </div>
+      </form>
+    </dialog>
 
     <dialog id="characters" class="sheet">
       <form method="dialog" class="sheet-head">

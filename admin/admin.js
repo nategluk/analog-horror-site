@@ -30,9 +30,20 @@
   const scriptEl = document.getElementById("script");
   const sheetEl = document.getElementById("characters");
   const characterListEl = document.getElementById("character-list");
+  const composeEl = document.getElementById("compose");
+  const composeForm = document.getElementById("compose-form");
+  const composeSender = document.getElementById("compose-sender");
+  const composeSenders = document.getElementById("compose-senders");
+  const composeSubject = document.getElementById("compose-subject");
+  const composePreview = document.getElementById("compose-preview");
+  const composeBody = document.getElementById("compose-body");
+  const composeGreet = document.getElementById("compose-greet");
+  const composeBroadcast = document.getElementById("compose-broadcast");
 
   let games = [];
   let gameId = "irina";
+  let inboxGameId = "irina";
+  let roster = [];
   let script = null;
   let selectedId = null;
   let selectedKind = "node";
@@ -70,7 +81,11 @@
     });
 
   const inboxLines = (messageId) =>
-    nodeLines(messageId, "inbox").filter((line) => line.field !== "sender");
+    nodeLines(messageId, "inbox").filter((line) => {
+      if (line.field === "sender") return false;
+      if (line.fn && !line.unique && line.text === "Оператор") return false;
+      return true;
+    });
 
   const inboxSenderLine = (messageId) =>
     (script?.lines || []).find(
@@ -400,9 +415,10 @@
     const active = kind === selectedKind && node.id === selectedId;
     button.type = "button";
     button.className = active ? "active" : "";
+    const mark = node.broadcast ? " · рассылка" : "";
     button.innerHTML = `<span class="id">${escapeHtml(node.id)}</span><span class="who">${escapeHtml(
       node.sender || node.speaker || "—"
-    )}</span><span class="preview">${escapeHtml(node.subject || node.preview || "")}</span>`;
+    )}${mark}</span><span class="preview">${escapeHtml(node.subject || node.preview || "")}</span>`;
     button.addEventListener("click", () => selectItem(kind, node.id));
     li.append(button);
     listEl.append(li);
@@ -444,7 +460,7 @@
     } else {
       sceneNodes.forEach((node) => appendNodeButton(node, "node"));
     }
-    if (inbox.length) {
+    if (inbox.length || gameId === inboxGameId) {
       appendGroup("КАБИНЕТ");
       inbox.forEach((message) => appendNodeButton(message, "inbox"));
     }
@@ -588,7 +604,10 @@
       }
     });
     actions.append(remove);
-    renderScriptHead(messageId, "Письмо в личный кабинет", actions);
+    const delivery = message?.broadcast
+      ? "Рассылка: во входящих у всех, кто ещё не получал это письмо"
+      : "Шаблон: само во входящие не кладётся";
+    renderScriptHead(messageId, `Письмо в личный кабинет · ${delivery}`, actions);
 
     const nameCard = document.createElement("div");
     nameCard.className = "extra-field";
@@ -644,6 +663,11 @@
       button.className = "primary";
       button.textContent = "Переименовать";
       button.disabled = hero.locked;
+      const write = document.createElement("button");
+      write.type = "button";
+      write.textContent = "Письмо";
+      write.disabled = hero.locked && hero.name !== "СИСТЕМА";
+      write.addEventListener("click", () => openCompose(hero.name));
       const meta = document.createElement("div");
       meta.className = "meta";
       meta.textContent = hero.locked
@@ -674,7 +698,7 @@
           setStatus(error.message, "err");
         }
       });
-      row.append(input, button, meta);
+      row.append(input, button, write, meta);
       characterListEl.append(row);
     });
   };
@@ -725,9 +749,76 @@
     }
   };
 
+  const fillRoster = (senders) => {
+    roster = senders || [];
+    composeSenders.innerHTML = "";
+    roster.forEach((hero) => {
+      const option = document.createElement("option");
+      option.value = hero.name;
+      composeSenders.append(option);
+    });
+  };
+
+  const openCompose = (sender) => {
+    if (sheetEl.open) sheetEl.close();
+    composeSender.value = sender || composeSender.value || "";
+    if (!composeSender.value && script?.characters) {
+      const first = script.characters.find((hero) => !hero.locked);
+      if (first) composeSender.value = first.name;
+    }
+    composeEl.showModal();
+    (composeSender.value ? composeSubject : composeSender).focus();
+  };
+
+  const inboxTarget = () =>
+    games.find((game) => game.inbox)?.id || inboxGameId || "irina";
+
+  document.getElementById("btn-compose").addEventListener("click", () => openCompose());
   document.getElementById("btn-characters").addEventListener("click", () => {
     renderCharacters();
     sheetEl.showModal();
+  });
+  composeForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const sender = composeSender.value.trim();
+    const subject = composeSubject.value.trim();
+    const body = composeBody.value.trim();
+    if (!sender || !subject || !body) return;
+    const target = inboxTarget();
+    setStatus(`Отправляю письмо от ${sender}…`);
+    try {
+      const result = await api(`/api/copydesk/${encodeURIComponent(target)}/message`, {
+        method: "POST",
+        body: JSON.stringify({
+          sender,
+          subject,
+          preview: composePreview.value.trim(),
+          body,
+          greet: composeGreet.checked,
+          broadcast: composeBroadcast.checked,
+        }),
+      });
+      composeEl.close();
+      composeSubject.value = "";
+      composePreview.value = "";
+      composeBody.value = "";
+      composeGreet.checked = true;
+      composeBroadcast.checked = true;
+      if (gameId !== target) {
+        await loadGame(target);
+      } else {
+        applyScript(result);
+      }
+      selectItem("inbox", result.id);
+      setStatus(
+        result.messages?.find((item) => item.id === result.id)?.broadcast
+          ? `Письмо ${result.id} от ${sender} в кабинете и во входящих`
+          : `Шаблон ${result.id} от ${sender} сохранён`,
+        "ok"
+      );
+    } catch (error) {
+      setStatus(error.message, "err");
+    }
   });
   searchEl.addEventListener("input", () => {
     renderList();
@@ -748,8 +839,12 @@
   });
 
   api("/api/copydesk/games")
-    .then((data) => {
+    .then(async (data) => {
       games = data.games || [];
+      inboxGameId = games.find((game) => game.inbox)?.id || "irina";
+      const rosterData = await api("/api/copydesk/inbox-roster");
+      fillRoster(rosterData.senders);
+      if (rosterData.inboxGameId) inboxGameId = rosterData.inboxGameId;
       const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
       const hashGame = hash.split("/")[0];
       renderTabs();

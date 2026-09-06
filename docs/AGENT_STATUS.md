@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: Copy Desk script view (admin UI + sceneGroup в индексе) |
-| Активная линия | Copy Desk: сценарий вместо карточек |
-| Последний этап | Стол узла: реплика/мысль связным текстом, choices кнопками, служебное в «Ещё»; сайдбар группирует по step/префиксу; blur + Cmd+S без полной перерисовки. Pavel `booth-intro`/`bedroom-check` и Lora `pig_talk`: карточек `.card` 0, поиск подсвечивает поле. Smoke Copy Desk, `node --check`, `git diff --check`. |
+| Дерево | dirty: Copy Desk рассылка писем кабинета |
+| Активная линия | Copy Desk: письмо от выбранного героя |
+| Последний этап | Форма «Письмо»: отправитель из героев всех игр, шаблон в `staffMessages`, `broadcast` кладёт во входящие STAFF. Кнопка у героя и в шапке. Compose+delete byte-identical. Smoke Copy Desk, `node --check`, `git diff --check`. Browser: Павел → COPYDESK QA → удаление. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

@@ -69,7 +69,62 @@ const SKIP_KEYS = new Set([
   "href",
   "exit",
   "popup",
+  "broadcast",
 ]);
+
+const INBOX_GAME_ID = "irina";
+
+const INBOX_AVATARS = {
+  СИСТЕМА: "assets/staff/logo.png",
+  "ИРИНА В.": "assets/staff/staff/irina_sad.jpg",
+  ИРИНА: "assets/staff/staff/irina_sad.jpg",
+  "ЛОРА П.": "assets/staff/staff/lora-message-avatar.webp",
+  ЛОРА: "assets/staff/staff/lora-message-avatar.webp",
+  АЛИСА: "assets/staff/staff/alice-message-avatar.webp",
+  УЛЫБАРЫЧ: "assets/staff/documents/ulybarych-message-avatar.webp",
+  ПАВЕЛ: "assets/staff/staff/pavel_sad.jpg",
+  "ПАВЕЛ К.": "assets/staff/staff/pavel_sad.jpg",
+  "ОЛЕГ Ж.": "assets/staff/staff/oleg_sad.webp",
+  ОЛЕГ: "assets/staff/staff/oleg_sad.webp",
+  "КИРИЛЛ З.": "assets/staff/staff/kirill_sad.jpg",
+  КИРИЛЛ: "assets/staff/staff/kirill_sad.jpg",
+};
+
+const SLUG_CYR = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  е: "e",
+  ё: "e",
+  ж: "zh",
+  з: "z",
+  и: "i",
+  й: "i",
+  к: "k",
+  л: "l",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "ts",
+  ч: "ch",
+  ш: "sh",
+  щ: "sch",
+  ъ: "",
+  ы: "y",
+  ь: "",
+  э: "e",
+  ю: "yu",
+  я: "ya",
+};
 
 const SYSTEM_SPEAKERS = new Set(["СИСТЕМА", "КАССА", "ЗАПИСКА", "СМЕНА", "ЗАПИСЬ"]);
 
@@ -755,6 +810,10 @@ const indexGame = (gameId) => {
           )[0];
           sender = lit ? lit.value : "";
         }
+        const broadcastProp = props.find((prop) => prop.key === "broadcast");
+        const broadcast =
+          Boolean(broadcastProp) &&
+          source.slice(broadcastProp.valueStart, broadcastProp.valueEnd).trim() === "true";
         const ctx = {
           gameId,
           bucket: "inbox",
@@ -784,6 +843,7 @@ const indexGame = (gameId) => {
           sender,
           subject: subjectLine ? subjectLine.text : "",
           preview: previewLine ? previewLine.text : "",
+          broadcast,
         });
       });
     }
@@ -926,7 +986,51 @@ const listGames = () =>
     id: game.id,
     title: game.title,
     file: game.file,
+    inbox: Boolean(game.inbox),
+    inboxGameId: game.inbox ? game.id : INBOX_GAME_ID,
   }));
+
+const slugifyId = (text) => {
+  const ascii = [...String(text || "").toLowerCase()]
+    .map((ch) => SLUG_CYR[ch] || ch)
+    .join("");
+  return ascii.replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28);
+};
+
+const avatarForSender = (sender) =>
+  INBOX_AVATARS[sender] || INBOX_AVATARS[sender.replace(/\s+[А-ЯA-Z]\.$/, "")] || INBOX_AVATARS.СИСТЕМА;
+
+const listInboxRoster = () => {
+  const byName = new Map();
+  const add = (name, origin) => {
+    const trimmed = String(name || "").trim();
+    if (!trimmed) return;
+    const current = byName.get(trimmed) || {
+      name: trimmed,
+      avatar: avatarForSender(trimmed),
+      origins: [],
+    };
+    if (origin && !current.origins.includes(origin)) current.origins.push(origin);
+    if (!INBOX_AVATARS[trimmed] && current.avatar === INBOX_AVATARS.СИСТЕМА) {
+      current.avatar = avatarForSender(trimmed);
+    } else if (INBOX_AVATARS[trimmed]) {
+      current.avatar = INBOX_AVATARS[trimmed];
+    }
+    byName.set(trimmed, current);
+  };
+
+  Object.keys(INBOX_AVATARS).forEach((name) => add(name, "staff"));
+  Object.values(GAMES).forEach((game) => {
+    const index = indexGame(game.id);
+    index.characters.forEach((hero) => {
+      if (hero.locked && hero.name !== "СИСТЕМА") return;
+      add(hero.name, game.id);
+    });
+    (index.messages || []).forEach((message) => add(message.sender, "inbox"));
+  });
+
+  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name, "ru"));
+};
 
 const patchLine = (gameId, lineId, expected, nextText) => {
   const index = indexGame(gameId);
@@ -1038,6 +1142,86 @@ const renameCharacter = (gameId, from, to) => {
   };
 };
 
+const formatInboxEntry = ({ id, sender, avatar, subject, preview, body, greet, broadcast }) => {
+  const lines = [
+    `    ${JSON.stringify(id)}: {`,
+    `      sender: ${JSON.stringify(sender)},`,
+    `      avatar: ${JSON.stringify(avatar)},`,
+    `      subject: ${JSON.stringify(subject)},`,
+    `      preview: ${JSON.stringify(preview)},`,
+  ];
+  if (broadcast) lines.push("      broadcast: true,");
+  if (greet) {
+    lines.push("      body: (profile) => {");
+    lines.push('        const name = profile.displayName || "Оператор";');
+    lines.push(`        return name + ", " + ${JSON.stringify(body)};`);
+    lines.push("      }");
+  } else {
+    lines.push(`      body: ${JSON.stringify(body)}`);
+  }
+  lines.push("    }");
+  return lines.join("\n");
+};
+
+const createInboxMessage = (gameId, payload = {}) => {
+  const game = GAMES[gameId];
+  if (!game) throw new Error(`Unknown game: ${gameId}`);
+  if (!game.inbox) throw new Error("В этой игре нет писем личного кабинета");
+
+  const sender = String(payload.sender || "").trim();
+  const subject = String(payload.subject || "").trim();
+  const body = String(payload.body || "").trim();
+  if (!sender) throw new Error("Нужен отправитель");
+  if (!subject) throw new Error("Нужна тема письма");
+  if (!body) throw new Error("Нужен текст письма");
+
+  const preview = String(payload.preview || "").trim() || body.replace(/\s+/g, " ").slice(0, 80);
+  const greet = payload.greet !== false;
+  const broadcast = payload.broadcast !== false;
+  const avatar = String(payload.avatar || "").trim() || avatarForSender(sender);
+
+  const { source } = loadGameSource(gameId);
+  const range = findConstObject(source, game.inbox);
+  if (!range) throw new Error(`Не найден каталог ${game.inbox}`);
+  const entries = parseObjectEntries(source, range.open, range.close);
+  const taken = new Set(entries.map((entry) => entry.key));
+
+  let id = String(payload.id || "").trim();
+  if (id) {
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)) {
+      throw new Error("id только латиница, цифры и дефис");
+    }
+    if (taken.has(id)) throw new Error(`Сообщение «${id}» уже есть`);
+  } else {
+    const base = ["desk", slugifyId(sender) || "hero", slugifyId(subject) || "note"]
+      .filter(Boolean)
+      .join("-");
+    id = base;
+    let n = 2;
+    while (taken.has(id)) {
+      id = `${base}-${n}`;
+      n += 1;
+    }
+  }
+
+  const last = entries[entries.length - 1];
+  const insertAt = last ? last.entryEnd : range.open + 1;
+  const prefix = last && !last.trailingComma ? "," : "";
+  const entry = formatInboxEntry({
+    id,
+    sender,
+    avatar,
+    subject,
+    preview,
+    body,
+    greet,
+    broadcast,
+  });
+  const nextSource = `${source.slice(0, insertAt)}${prefix}\n${entry}${source.slice(insertAt)}`;
+  writeGameSource(gameId, nextSource);
+  return { id, index: indexGame(gameId) };
+};
+
 const deleteInboxMessage = (gameId, messageId) => {
   const game = GAMES[gameId];
   if (!game) throw new Error(`Unknown game: ${gameId}`);
@@ -1056,6 +1240,11 @@ const deleteInboxMessage = (gameId, messageId) => {
   let start = entry.entryStart;
   let end = entry.entryEnd;
   if (start > 0 && source[start - 1] === "\n") start -= 1;
+  if (index === entries.length - 1) {
+    let cursor = start - 1;
+    while (cursor >= 0 && /[ \t]/.test(source[cursor])) cursor -= 1;
+    if (source[cursor] === ",") start = cursor;
+  }
 
   const nextSource = source.slice(0, start) + source.slice(end);
   writeGameSource(gameId, nextSource);
@@ -1064,10 +1253,13 @@ const deleteInboxMessage = (gameId, messageId) => {
 
 module.exports = {
   GAMES,
+  INBOX_GAME_ID,
   listGames,
+  listInboxRoster,
   indexGame,
   patchLine,
   renameCharacter,
+  createInboxMessage,
   deleteInboxMessage,
   projectRoot,
 };

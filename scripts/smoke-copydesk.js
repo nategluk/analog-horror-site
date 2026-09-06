@@ -4,7 +4,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
-const { indexGame, patchLine, deleteInboxMessage } = require("./lib/copydesk-core");
+const { indexGame, patchLine, deleteInboxMessage, createInboxMessage, listInboxRoster } = require("./lib/copydesk-core");
 
 const irina = indexGame("irina");
 const lora = indexGame("lora");
@@ -42,6 +42,13 @@ if (!irina.characters.some((hero) => hero.name === "АЛИСА" && !hero.locked)
 }
 if (!irina.lines.some((line) => line.id === "inbox:fox-after-shift:subject")) {
   throw new Error("inbox subject line not indexed");
+}
+const roster = listInboxRoster();
+if (!roster.some((hero) => hero.name === "АЛИСА")) {
+  throw new Error("inbox roster should include cabinet senders");
+}
+if (!roster.some((hero) => hero.name === "ПАВЕЛ" || hero.name === "ПАВЕЛ К.")) {
+  throw new Error("inbox roster should include heroes from other games");
 }
 
 if (pavel.nodes.length < 12) throw new Error("pavel nodes missing");
@@ -235,6 +242,32 @@ try {
   if (!afterDelete.messages.some((item) => item.id === "fox-after-shift")) {
     throw new Error("inbox delete touched a neighboring message");
   }
+
+  const created = createInboxMessage("irina", {
+    sender: "ПАВЕЛ",
+    subject: "ПРОВЕРКА СТОЛА",
+    preview: "короткое превью",
+    body: "Это тестовая рассылка из Copy Desk.",
+    greet: true,
+    broadcast: true,
+  });
+  if (!created.id.startsWith("desk-pavel-")) {
+    throw new Error(`unexpected composed id: ${created.id}`);
+  }
+  const afterCreate = created.index;
+  const composed = afterCreate.messages.find((item) => item.id === created.id);
+  if (!composed || composed.sender !== "ПАВЕЛ" || !composed.broadcast) {
+    throw new Error("composed broadcast message was not indexed");
+  }
+  const composedBody = afterCreate.lines.find(
+    (line) => line.bucket === "inbox" && line.nodeId === created.id && line.text.includes("тестовая рассылка")
+  );
+  if (!composedBody) throw new Error("composed body was not indexed");
+  deleteInboxMessage("irina", created.id);
+  const afterComposeDelete = indexGame("irina");
+  if (afterComposeDelete.messages.some((item) => item.id === created.id)) {
+    throw new Error("composed message delete failed");
+  }
 } finally {
   fs.writeFileSync(file, before, "utf8");
 }
@@ -242,6 +275,21 @@ try {
 const restored = fs.readFileSync(file, "utf8");
 if (restored !== before) {
   throw new Error("copydesk patch did not roundtrip");
+}
+
+try {
+  const created = createInboxMessage("irina", {
+    sender: "ПАВЕЛ",
+    subject: "ПРОВЕРКА СТОЛА",
+    body: "Это тестовая рассылка из Copy Desk.",
+  });
+  deleteInboxMessage("irina", created.id);
+} finally {
+  const afterCompose = fs.readFileSync(file, "utf8");
+  if (afterCompose !== before) {
+    fs.writeFileSync(file, before, "utf8");
+    throw new Error("inbox compose+delete did not roundtrip byte-identical");
+  }
 }
 
 const pavelFile = path.join(__dirname, "..", "content", "pavel", "observation-booth-content.js");

@@ -883,6 +883,17 @@ const publicCopydeskIndex = (index) => ({
 const handleApi = async (req, res, url) => {
   const { pathname } = url;
 
+  if (req.method === "GET" && pathname === "/api/copydesk/inbox-roster") {
+    try {
+      return sendJson(res, 200, {
+        inboxGameId: copydesk.INBOX_GAME_ID,
+        senders: copydesk.listInboxRoster(),
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
   if (req.method === "GET" && pathname === "/api/copydesk/games") {
     return sendJson(res, 200, { games: copydesk.listGames() });
   }
@@ -934,6 +945,27 @@ const handleApi = async (req, res, url) => {
         to: result.to,
         contentReplacements: result.contentReplacements,
         extras: result.extras,
+        ...publicCopydeskIndex(result.index),
+      });
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  const inboxCreate = pathname.match(/^\/api\/copydesk\/([^/]+)\/message$/);
+  if (req.method === "POST" && inboxCreate) {
+    const gameId = decodeURIComponent(inboxCreate[1]);
+    const raw = await readBody(req);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON" });
+    }
+    try {
+      const result = copydesk.createInboxMessage(gameId, payload);
+      return sendJson(res, 200, {
+        id: result.id,
         ...publicCopydeskIndex(result.index),
       });
     } catch (error) {

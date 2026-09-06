@@ -2107,6 +2107,16 @@
         readAt: null,
       });
     });
+    Object.keys(staffMessages).forEach((messageId) => {
+      if (!staffMessages[messageId]?.broadcast) return;
+      if (known.has(messageId) || removed.has(messageId)) return;
+      if (profile.messages.some((message) => message.id === messageId)) return;
+      profile.messages.push({
+        id: messageId,
+        deliveredAt: Date.now(),
+        readAt: null,
+      });
+    });
     return profile;
   };
 

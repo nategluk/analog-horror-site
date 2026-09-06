@@ -376,9 +376,64 @@ textarea {
   padding: 0.75rem 1rem 1rem;
 }
 
+.sheet.compose-sheet {
+  width: min(640px, 94vw);
+}
+
+.compose-form {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.75rem 1rem 1.1rem;
+}
+
+.compose-form .hint {
+  padding: 0;
+  margin: 0;
+}
+
+.compose-form label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.compose-form input,
+.compose-form textarea {
+  width: 100%;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+.compose-form textarea {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.compose-check {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.compose-check input {
+  width: auto;
+}
+
+.compose-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .character {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   gap: 0.45rem;
   align-items: center;
   padding: 0.65rem 0;
