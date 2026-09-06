@@ -6,7 +6,7 @@
     <title>Развлекательный Комплекс «Детский ЖИР» — Архив</title>
     <meta
       name="description"
-      content="Архив протоколов, личных дел и материалов комплекса «Детский Жир»."
+      content="Архив протоколов, личных дел, фотографий и печатных текстов комплекса «Детский Жир»."
     />
     <link rel="canonical" href="https://detskiyzhir.org/archive" />
     <meta property="og:site_name" content="Развлекательный Комплекс «Детский ЖИР»" />
@@ -15,7 +15,7 @@
     <meta property="og:title" content="Развлекательный Комплекс «Детский ЖИР» — Архив" />
     <meta
       property="og:description"
-      content="Архив протоколов, личных дел и материалов комплекса «Детский Жир»."
+      content="Архив протоколов, личных дел, фотографий и печатных текстов комплекса «Детский Жир»."
     />
     <meta property="og:url" content="https://detskiyzhir.org/archive" />
     <meta property="og:image" content="https://detskiyzhir.org/assets/og-image.png" />
@@ -121,6 +121,20 @@
                 [ ЗАПРОСИТЬ ДОСТУП ]
               </button>
             </article>
+            <article class="guest-archive__folder">
+              <span>ПАПКА 04</span>
+              <h3>Издания</h3>
+              <p>0 / 1 записей доступно</p>
+              <button
+                type="button"
+                data-denied-cta
+                data-original-text="[ ЗАПРОСИТЬ ДОСТУП ]"
+                data-denied-text="ФОНД ИЗДАНИЙ ЗАПЕЧАТАН"
+                data-denied-label="Фонд изданий запечатан и недоступен"
+              >
+                [ ЗАПРОСИТЬ ДОСТУП ]
+              </button>
+            </article>
           </div>
 
           <p class="guest-archive__signal">
@@ -138,7 +152,7 @@
               <p class="staff-archive__kicker">ЖИР ТВ // АРХИВНЫЙ СТЕЛЛАЖ</p>
               <h2 id="staff-archive-heading">Архив материалов</h2>
             </div>
-            <p class="staff-archive__summary">13 МАТЕРИАЛОВ // 3 ЯЧЕЙКИ</p>
+            <p class="staff-archive__summary">14 МАТЕРИАЛОВ // 4 ЯЧЕЙКИ</p>
           </header>
 
           <div class="archive-folders" role="tablist" aria-label="Разделы архива">
@@ -200,6 +214,26 @@
               </span>
               <strong>Фото</strong>
               <small>3 записи</small>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              id="archive-tab-books"
+              aria-controls="archive-panel-books"
+              aria-selected="false"
+              tabindex="-1"
+              data-archive-tab="books"
+            >
+              <span class="archive-folder__code">ЯЧЕЙКА 04</span>
+              <span class="archive-folder__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="3" width="14" height="18" rx="1" />
+                  <path d="M8 7h8M8 11h8M8 15h5" />
+                </svg>
+                <b>1</b>
+              </span>
+              <strong>Издания</strong>
+              <small>1 запись</small>
             </button>
           </div>
 
@@ -406,6 +440,36 @@
                   </figcaption>
                 </figure>
               </article>
+            </div>
+          </section>
+
+          <section
+            class="archive-section"
+            id="archive-panel-books"
+            role="tabpanel"
+            aria-labelledby="archive-tab-books"
+            data-archive-panel="books"
+            hidden
+          >
+            <header class="archive-section__header">
+              <div>
+                <p>АРХИВ / ИЗДАНИЯ</p>
+                <h3>Издания</h3>
+              </div>
+              <span>01 ITEM INDEXED</span>
+            </header>
+            <div class="archive-record-list">
+              <a
+                class="document-card document-card--pink archive-record"
+                href="documents/book-sweet-dream"
+                rel="nofollow"
+                data-full-navigation
+              >
+                <span class="document-card__status">ACCESS: PINK</span>
+                <strong>КНИГА СЛАДКОГО СНА</strong>
+                <span>АНГЕЛИНА ВОЛК // «АЙ-БОЛИТ»</span>
+                <p>Десять фрагментов спорного издания, после которого терапевты, врачи и родители начали говорить языком паломничества.</p>
+              </a>
             </div>
           </section>
 

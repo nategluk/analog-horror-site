@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: Copy Desk — стол архива выпусков |
-| Активная линия | Copy Desk: удобное обновление архива выпусков |
-| Последний этап | В Copy Desk добавлена страница `/admin/episodes.html`: список, поиск, новый выпуск, правка ссылок/текста, удаление. Запись идёт в `content/archive/episode-catalog.js` и синхронизирует счётчик на `archive.html` / `episodes.html`. Smoke, `node --check`, `git diff --check` OK. Desktop: 59 выпусков, EP-056 открывается, черновик `EP-057`, UI-save `SMOKE-UI` → 60, API-delete вернул 59. |
+| Дерево | dirty: archive book reader — новые книга, контент и WebP-иллюстрации |
+| Активная линия | Архив: «Книга Сладкого Сна» как четвёртая ячейка и mobile-first ридер |
+| Последний этап | Ячейка «Книги» переименована в «Издания»; внутренний ключ `books` сохранён для совместимости с `#books`. Public build/verify и `git diff --check` OK. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
