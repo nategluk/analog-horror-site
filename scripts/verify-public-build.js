@@ -53,6 +53,7 @@ const REQUIRED_PAGES = [
   "js/solnyshko-cotton.js",
   "js/pavel-observation-booth.js",
   "js/game-ui-kit.js",
+  "js/game-ui-audio-library.js",
   "content/archive/episode-catalog.js",
   "content/book/sweet-dream-book.js",
   "favicon.ico",

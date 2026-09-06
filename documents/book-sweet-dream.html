@@ -67,7 +67,7 @@
           aria-labelledby="sweet-dream-book-title"
         >
           <a class="sweet-dream-book__back" href="../archive#books" rel="nofollow" data-full-navigation>
-            ← ВЕРНУТЬ КНИГУ В АРХИВ
+            ← В АРХИВ
           </a>
 
           <header class="sweet-dream-book__header">
@@ -99,19 +99,23 @@
               </label>
             </div>
 
-            <div class="sweet-dream-book__steps" data-book-steps aria-label="Выбор листа"></div>
-
             <div class="sweet-dream-book__leaf" data-book-leaf tabindex="-1">
               <figure class="sweet-dream-book__visual">
-                <img
-                  data-book-image
-                  src="../assets/staff/documents/sweet-dream-book/sweet-dream-01.webp"
-                  alt=""
-                  width="1024"
-                  height="1536"
-                  loading="eager"
-                  decoding="async"
-                />
+                <div class="sweet-dream-book__visual-frame">
+                  <img
+                    data-book-image
+                    src="../assets/staff/documents/sweet-dream-book/sweet-dream-01.webp"
+                    alt=""
+                    width="1024"
+                    height="1536"
+                    loading="eager"
+                    decoding="async"
+                  />
+                  <div class="sweet-dream-book__swipe-cues" aria-hidden="true">
+                    <span>←</span>
+                    <span>→</span>
+                  </div>
+                </div>
                 <figcaption data-book-caption>PLATE 01 // QUIET HOUR // BEDROOM BEFORE WAKE</figcaption>
               </figure>
 
@@ -123,9 +127,9 @@
             </div>
 
             <nav class="sweet-dream-book__navigation" aria-label="Перелистывание книги">
-              <button type="button" data-book-previous>← Предыдущий лист</button>
-              <span class="sweet-dream-book__gesture-hint">Свайп влево или вправо</span>
-              <button type="button" data-book-next>Следующий лист →</button>
+              <button type="button" data-book-previous>← НАЗАД</button>
+              <span class="sweet-dream-book__gesture-hint">← СВАЙП →</span>
+              <button type="button" data-book-next>ДАЛЕЕ →</button>
             </nav>
             <p class="visually-hidden" role="status" aria-live="polite" data-book-announcer></p>
           </section>
@@ -149,6 +153,7 @@
     <script src="../js/dossier-store.js"></script>
     <script src="../content/irina/call-content.js"></script>
     <script src="../content/book/sweet-dream-book.js"></script>
+    <script src="../js/game-ui-audio-library.js"></script>
     <script src="../js/sweet-dream-book.js"></script>
     <script src="../js/app.js"></script>
   </body>

@@ -13,13 +13,12 @@
   const text = root.querySelector("[data-book-text]");
   const pageLabel = root.querySelector("[data-book-page-label]");
   const progress = root.querySelector("[data-book-progress]");
-  const steps = root.querySelector("[data-book-steps]");
   const announcer = root.querySelector("[data-book-announcer]");
   const leaf = root.querySelector("[data-book-leaf]");
   const previous = root.querySelector("[data-book-previous]");
   const next = root.querySelector("[data-book-next]");
 
-  if (!image || !imageCaption || !kicker || !title || !text || !pageLabel || !progress || !steps || !leaf) {
+  if (!image || !imageCaption || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
     return;
   }
 
@@ -27,6 +26,15 @@
   const pageCount = entries.length;
   let currentIndex = 0;
   let pointerStart = null;
+  const paperTurnSource =
+    window.TyndexGameUiAudioLibrary?.resolve("shared.paper.unfold")?.href ||
+    "../assets/audio/guest/red-room/shift/sfx-paper-unfold.mp3";
+  const paperTurnSound = typeof Audio === "function" ? new Audio(paperTurnSource) : null;
+
+  if (paperTurnSound) {
+    paperTurnSound.preload = "auto";
+    paperTurnSound.volume = 0.36;
+  }
 
   const formatPage = (index) => String(index + 1).padStart(2, "0");
 
@@ -60,32 +68,18 @@
     preload.src = resolveAsset(entries[index].image);
   };
 
-  const renderSteps = () => {
-    steps.replaceChildren(
-      ...entries.map((entry, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "sweet-dream-book__step";
-        button.dataset.bookStep = String(index);
-        button.textContent = formatPage(index);
-        button.setAttribute("aria-label", `Открыть лист ${formatPage(index)}`);
-        button.addEventListener("click", () => render(index));
-        return button;
-      })
-    );
+  const playPaperTurn = () => {
+    if (!paperTurnSound) return;
+    paperTurnSound.currentTime = 0;
+    paperTurnSound.play().catch(() => {});
   };
 
-  const updateSteps = () => {
-    steps.querySelectorAll("[data-book-step]").forEach((button) => {
-      const isCurrent = Number(button.dataset.bookStep) === currentIndex;
-      button.setAttribute("aria-current", isCurrent ? "page" : "false");
-    });
-  };
-
-  const render = (index, { announce = true, focus = false, syncHash = true } = {}) => {
+  const render = (index, { announce = true, focus = false, syncHash = true, sound = false } = {}) => {
     const safeIndex = Math.min(pageCount - 1, Math.max(0, index));
     const entry = entries[safeIndex];
     currentIndex = safeIndex;
+
+    if (sound) playPaperTurn();
 
     root.dataset.bookPage = formatPage(currentIndex);
     image.src = resolveAsset(entry.image);
@@ -110,14 +104,13 @@
 
     if (previous) {
       previous.disabled = currentIndex === 0;
-      previous.setAttribute("aria-label", currentIndex === 0 ? "Это первый лист" : "Предыдущий лист");
+      previous.setAttribute("aria-label", currentIndex === 0 ? "Первый лист" : "Назад");
     }
     if (next) {
       next.disabled = currentIndex === pageCount - 1;
-      next.setAttribute("aria-label", currentIndex === pageCount - 1 ? "Это последний лист" : "Следующий лист");
+      next.setAttribute("aria-label", currentIndex === pageCount - 1 ? "Последний лист" : "Далее");
     }
 
-    updateSteps();
     if (syncHash) updateHash(currentIndex);
     prefetch(currentIndex - 1);
     prefetch(currentIndex + 1);
@@ -131,10 +124,9 @@
   const move = (delta) => {
     const nextIndex = currentIndex + delta;
     if (nextIndex < 0 || nextIndex >= pageCount) return;
-    render(nextIndex, { focus: true });
+    render(nextIndex, { focus: true, sound: true });
   };
 
-  renderSteps();
   render(getHashIndex(), { announce: false, syncHash: false });
 
   previous?.addEventListener("click", () => move(-1));

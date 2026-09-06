@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: archive book reader — новые книга, контент и WebP-иллюстрации |
-| Активная линия | Архив: «Книга Сладкого Сна» как четвёртая ячейка и mobile-first ридер |
-| Последний этап | Ячейка «Книги» переименована в «Издания»; внутренний ключ `books` сохранён для совместимости с `#books`. Public build/verify и `git diff --check` OK. |
+| Дерево | dirty: mobile redesign of `documents/book-sweet-dream.html` reader |
+| Активная линия | Архив: mobile-first ридер «Книги Сладкого Сна» |
+| Последний этап | Сетка листов удалена; добавлены стрелки свайпа, короткие «НАЗАД» / «ДАЛЕЕ», paper-turn cue и production build verification. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
