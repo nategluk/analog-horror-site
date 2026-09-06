@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Детский ЖИР // Архив выпусков</title>
+    <link rel="stylesheet" href="/admin/admin.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div>
+        <p class="eyebrow">LOCAL ONLY · COPY DESK</p>
+        <h1>Архив выпусков</h1>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="primary" id="btn-new">Новый выпуск</button>
+        <a class="button-link" href="/admin/">Стол реплик</a>
+        <a class="button-link" href="/episodes.html" target="_blank" rel="noreferrer">Каталог на сайте</a>
+      </div>
+    </header>
+
+    <section class="status" id="status" role="status" aria-live="polite">
+      Загрузка…
+    </section>
+
+    <main class="desk">
+      <aside class="sidebar">
+        <div class="sidebar-head">
+          <h2>Выпуски <span id="episode-count"></span></h2>
+          <input
+            id="search"
+            type="search"
+            placeholder="Найти id, заголовок, площадку"
+            autocomplete="off"
+          />
+        </div>
+        <ul id="episode-list" class="node-list"></ul>
+      </aside>
+
+      <section class="script" id="editor">
+        <p class="empty">Выберите выпуск слева или создайте новый.</p>
+      </section>
+    </main>
+
+    <script src="/admin/episodes.js"></script>
+  </body>
+</html>

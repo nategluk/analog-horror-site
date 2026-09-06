@@ -9,16 +9,16 @@
 |---|---|
 | Обновлено | 2026-09-06 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: четыре Gemini-crop ассета и обновлённый image manifest |
-| Активная линия | Удаление видимых Gemini-меток из production-изображений |
-| Последний этап | Обрезаны и увеличены до `1920×1072` `recruitment-guest.webp`, `guides.webp`, `medics.webp` и `tyndex.webp`; `class-10-sun-mask.webp` восстановлен и исключён; public build/verifier OK, `git diff --check`. |
+| Дерево | dirty: Copy Desk — стол архива выпусков |
+| Активная линия | Copy Desk: удобное обновление архива выпусков |
+| Последний этап | В Copy Desk добавлена страница `/admin/episodes.html`: список, поиск, новый выпуск, правка ссылок/текста, удаление. Запись идёт в `content/archive/episode-catalog.js` и синхронизирует счётчик на `archive.html` / `episodes.html`. Smoke, `node --check`, `git diff --check` OK. Desktop: 59 выпусков, EP-056 открывается, черновик `EP-057`, UI-save `SMOKE-UI` → 60, API-delete вернул 59. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
 ## Write-замок
 
 ```text
-WRITER / ABOUT-CLASS-CROPS / STARTED
+FREE
 ```
 
 Перед правкой заменить `FREE` на `WRITER / SCOPE / STARTED`. Перед остановкой

@@ -431,6 +431,53 @@ textarea {
   justify-content: flex-end;
 }
 
+.episode-form {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 720px;
+}
+
+.episode-form label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.episode-form input,
+.episode-form textarea,
+.episode-form select {
+  width: 100%;
+  color: var(--text);
+  background: #100e0d;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+}
+
+.episode-form textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.episode-form .field-note {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.episode-sources-head {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
+}
+
+.episode-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
 .character {
   display: grid;
   grid-template-columns: 1fr auto auto;

@@ -4,8 +4,9 @@
  * Local Copy Desk + Irina node inspector.
  *
  *   node scripts/admin-server.js
- *   open http://127.0.0.1:8787/admin/          writer UI (both games)
- *   open http://127.0.0.1:8787/admin/nodes.html node inspector (Irina)
+ *   open http://127.0.0.1:8787/admin/             writer UI (games)
+ *   open http://127.0.0.1:8787/admin/episodes.html archive of episodes
+ *   open http://127.0.0.1:8787/admin/nodes.html   node inspector (Irina)
  *
  * Bind is localhost only. Not for production deploy.
  */
@@ -19,6 +20,7 @@ const { URL } = require("node:url");
 const { spawnSync } = require("node:child_process");
 const vm = require("node:vm");
 const copydesk = require("./lib/copydesk-core");
+const episodeCatalog = require("./lib/episode-catalog");
 
 const projectRoot = path.resolve(__dirname, "..");
 const contentPath = path.join(projectRoot, "content", "irina", "call-content.js");
@@ -898,6 +900,55 @@ const handleApi = async (req, res, url) => {
     return sendJson(res, 200, { games: copydesk.listGames() });
   }
 
+  if (req.method === "GET" && pathname === "/api/copydesk/episodes") {
+    try {
+      return sendJson(res, 200, episodeCatalog.listEpisodes());
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  if (req.method === "POST" && pathname === "/api/copydesk/episodes") {
+    const raw = await readBody(req);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON" });
+    }
+    try {
+      return sendJson(res, 200, episodeCatalog.saveEpisode(payload));
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  const episodeSave = pathname.match(/^\/api\/copydesk\/episodes\/([^/]+)$/);
+  if (episodeSave && req.method === "PUT") {
+    const previousId = decodeURIComponent(episodeSave[1]);
+    const raw = await readBody(req);
+    let payload;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return sendJson(res, 400, { error: "Invalid JSON" });
+    }
+    try {
+      return sendJson(res, 200, episodeCatalog.saveEpisode(payload, { previousId }));
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
+  if (episodeSave && req.method === "DELETE") {
+    const episodeId = decodeURIComponent(episodeSave[1]);
+    try {
+      return sendJson(res, 200, episodeCatalog.deleteEpisode(episodeId));
+    } catch (error) {
+      return sendJson(res, 400, { error: error.message || String(error) });
+    }
+  }
+
   if (req.method === "GET" && pathname.startsWith("/api/copydesk/") && pathname.endsWith("/script")) {
     const gameId = decodeURIComponent(pathname.slice("/api/copydesk/".length, -"/script".length));
     try {
@@ -1190,6 +1241,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(`Copy Desk:     http://${HOST}:${PORT}/admin/`);
+  console.log(`Episodes:      http://${HOST}:${PORT}/admin/episodes.html`);
   console.log(`Node inspector: http://${HOST}:${PORT}/admin/nodes.html`);
   console.log(`Site preview:   http://${HOST}:${PORT}/hiring.html`);
 });
