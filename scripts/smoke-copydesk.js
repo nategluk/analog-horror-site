@@ -60,6 +60,25 @@ if (!pavel.lines.some((line) => line.id === "node:hatch-note:speaker" && line.te
 if (!pavel.lines.some((line) => line.id === "node:booth-intro:choices[0].label")) {
   throw new Error("pavel choice label not indexed");
 }
+const pavelIntro = pavel.nodes.find((node) => node.id === "booth-intro");
+if (!pavelIntro || pavelIntro.sceneGroup !== "booth") {
+  throw new Error("pavel booth-intro should group as booth");
+}
+if (!pavelIntro.preview || pavelIntro.preview.startsWith("CONTROL")) {
+  throw new Error("pavel preview should be literary text");
+}
+const loraPig = lora.nodes.find((node) => node.id === "pig_talk");
+if (!loraPig || loraPig.sceneGroup !== "pig") {
+  throw new Error("lora pig_talk should group as pig");
+}
+const solnyshkoGate = solnyshko.nodes.find((node) => node.id === "gate-night");
+if (!solnyshkoGate || solnyshkoGate.sceneGroup) {
+  throw new Error("solnyshko should not use sidebar groups");
+}
+const irinaIntro = irina.nodes.find((node) => node.id === "intro");
+if (!irinaIntro?.sceneGroup || irinaIntro.sceneGroup.includes("//")) {
+  throw new Error("irina intro sceneGroup should strip step suffix");
+}
 if (!pavel.lines.some((line) => line.id === "node:bedroom-check:choices[0].imageAlt")) {
   throw new Error("pavel imageAlt should remain editable");
 }

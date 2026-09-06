@@ -518,6 +518,18 @@ const looksLikeFunction = (source, start, end) => {
   );
 };
 
+const sceneGroupFor = (gameId, nodeId, step) => {
+  if (gameId === "solnyshko") return "";
+  if (gameId === "irina") {
+    const raw = String(step || "").trim();
+    if (!raw) return "Сцена";
+    const cut = raw.indexOf(" // ");
+    return cut === -1 ? raw : raw.slice(0, cut);
+  }
+  const match = String(nodeId).match(/^[a-z]+/i);
+  return match ? match[0] : "сцена";
+};
+
 const lineKind = (gameId, { speaker, field }) => {
   if (field === "speaker") return "name";
   if (field === "step") return "meta";
@@ -796,13 +808,18 @@ const indexGame = (gameId) => {
           id: line.nodeId,
           speaker: line.speaker,
           preview: "",
+          step: "",
+          sceneGroup: "",
           kinds: new Set(),
           outbound: [],
         });
       }
       const node = byNode.get(line.nodeId);
       if (line.field === "speaker") node.speaker = line.text;
-      if (!node.preview && line.kind !== "name" && line.kind !== "choice") {
+      if (line.field === "step") node.step = line.text;
+      const previewField =
+        line.field === "text" || line.field === "line" || line.field === "action";
+      if (!node.preview && previewField && !line.fn) {
         node.preview = line.text.replace(/\s+/g, " ").slice(0, 140);
       }
       node.kinds.add(line.kind);
@@ -813,6 +830,8 @@ const indexGame = (gameId) => {
       id: nodeEntry.key,
       speaker: "",
       preview: "",
+      step: "",
+      sceneGroup: "",
       kinds: new Set(),
       outbound: [],
     };
@@ -845,6 +864,17 @@ const indexGame = (gameId) => {
       }
     });
     node.kinds = [...node.kinds];
+    if (!node.preview) {
+      const fallback = lines.find(
+        (line) =>
+          line.nodeId === nodeEntry.key &&
+          line.kind !== "name" &&
+          line.kind !== "choice" &&
+          line.field !== "step"
+      );
+      if (fallback) node.preview = fallback.text.replace(/\s+/g, " ").slice(0, 140);
+    }
+    node.sceneGroup = sceneGroupFor(gameId, node.id, node.step);
     nodes.push(node);
   });
 
