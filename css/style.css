@@ -11841,29 +11841,33 @@ body.staff-mode .sweet-dream-book__gesture-hint {
   letter-spacing: 0.11em;
 }
 
-body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__leaf,
-body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__leaf {
+body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__leaf,
+body.staff-mode .sweet-dream-book.is-copy .sweet-dream-book__leaf {
   grid-template-columns: 1fr;
 }
 
-body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__copy,
-body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__visual {
+body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__copy,
+body.staff-mode .sweet-dream-book.is-copy .sweet-dream-book__visual {
   display: none;
 }
 
-body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual-frame {
+body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__visual-frame {
   width: min(100%, 28rem);
 }
 
-body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual img {
+body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__visual img {
   max-height: min(78vh, 44rem);
   object-fit: contain;
 }
 
-body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__copy {
+body.staff-mode .sweet-dream-book.is-copy .sweet-dream-book__copy {
   padding-inline-start: 0;
   border-inline-start: 0;
   max-width: 40rem;
+}
+
+body.staff-mode .sweet-dream-book.is-copy .sweet-dream-book__warning {
+  margin-top: 1.1rem;
 }
 
 @media (max-width: 700px) {
@@ -11929,35 +11933,20 @@ body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__copy {
     max-width: 100%;
   }
 
-  body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual img {
+  body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__visual img {
     width: auto;
     max-width: 100%;
     max-height: min(72vh, 34rem);
     margin-inline: auto;
   }
 
-  body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__visual img {
-    width: auto;
-    max-width: 100%;
-    max-height: min(42vh, 19rem);
-    margin-inline: auto;
-  }
-
-  body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__swipe-cues {
+  body.staff-mode .sweet-dream-book.is-copy .sweet-dream-book__swipe-cues {
     display: none;
   }
 
-  body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual figcaption {
+  body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__visual figcaption {
     display: block;
     text-align: center;
-  }
-
-  body.staff-mode .sweet-dream-book.is-text .sweet-dream-book__visual figcaption {
-    display: none;
-  }
-
-  body.staff-mode .sweet-dream-book.is-continuation .sweet-dream-book__copy h3 {
-    display: none;
   }
 
   body.staff-mode .sweet-dream-book__copy {

@@ -26,28 +26,27 @@
 
   const expandPages = (source) => {
     const pages = [];
-    let textPage = null;
     source.forEach((entry) => {
-      const chapter = Number(entry.chapter);
-      if (!textPage || textPage.chapter !== chapter) {
-        pages.push({
-          kind: "plate",
-          chapter,
-          title: entry.title,
-          image: entry.image,
-          alt: entry.alt,
-          caption: entry.caption
-        });
-        textPage = {
-          kind: "text",
-          chapter,
-          title: entry.title,
-          continuation: false,
-          paragraphs: []
-        };
-        pages.push(textPage);
+      if (entry.kind === "cover" || entry.kind === "preface") {
+        pages.push({ ...entry });
+        return;
       }
-      textPage.paragraphs.push(...(Array.isArray(entry.paragraphs) ? entry.paragraphs : []));
+      pages.push({
+        kind: "plate",
+        chapter: Number(entry.chapter),
+        title: entry.title,
+        image: entry.image,
+        alt: entry.alt,
+        caption: entry.caption,
+        width: entry.width,
+        height: entry.height
+      });
+      pages.push({
+        kind: "text",
+        chapter: Number(entry.chapter),
+        title: entry.title,
+        paragraphs: Array.isArray(entry.paragraphs) ? entry.paragraphs : []
+      });
     });
     return pages;
   };
@@ -114,44 +113,52 @@
 
     if (sound) playPaperTurn();
 
-    const chapter = Number(entry.chapter) || currentIndex + 1;
-    const chapterLabel = String(chapter).padStart(2, "0");
-    const isPlate = entry.kind === "plate";
-    const isContinuation = !isPlate && entry.continuation === true;
+    const kind = entry.kind || "text";
+    const isVisual = kind === "cover" || kind === "plate";
+    const chapter = Number(entry.chapter);
+    const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
 
     root.dataset.bookPage = formatPage(currentIndex);
-    root.dataset.bookChapter = chapterLabel;
-    root.dataset.bookKind = isPlate ? "plate" : "text";
-    root.classList.toggle("is-plate", isPlate);
-    root.classList.toggle("is-text", !isPlate);
-    root.classList.toggle("is-continuation", isContinuation);
-    visual.hidden = !isPlate;
-    copy.hidden = isPlate;
+    if (chapterLabel) root.dataset.bookChapter = chapterLabel;
+    else delete root.dataset.bookChapter;
+    root.dataset.bookKind = kind;
+    root.classList.toggle("is-cover", kind === "cover");
+    root.classList.toggle("is-preface", kind === "preface");
+    root.classList.toggle("is-plate", kind === "plate");
+    root.classList.toggle("is-text", kind === "text");
+    root.classList.toggle("is-visual", isVisual);
+    root.classList.toggle("is-copy", !isVisual);
+    visual.hidden = !isVisual;
+    copy.hidden = isVisual;
 
-    if (isPlate) {
+    if (isVisual) {
       image.src = resolveAsset(entry.image);
-      image.alt = entry.alt;
-      image.width = 1024;
-      image.height = 1536;
+      image.alt = entry.alt || "";
+      image.width = Number(entry.width) || 1024;
+      image.height = Number(entry.height) || 1536;
       image.loading = currentIndex === 0 ? "eager" : "lazy";
-      imageCaption.textContent = entry.caption;
-      kicker.textContent = `ГЛАВА ${chapterLabel}`;
-      title.hidden = false;
-      title.textContent = entry.title;
+      imageCaption.textContent = entry.caption || "";
+      kicker.textContent = "";
+      title.hidden = true;
+      title.textContent = entry.title || "";
       text.replaceChildren();
     } else {
-      kicker.textContent = isContinuation
-        ? `ГЛАВА ${chapterLabel} · ПРОДОЛЖЕНИЕ`
-        : `ГЛАВА ${chapterLabel}`;
-      title.hidden = isContinuation;
-      title.textContent = entry.title;
-      text.replaceChildren(
-        ...(entry.paragraphs || []).map((paragraph) => {
-          const element = document.createElement("p");
-          element.textContent = paragraph;
-          return element;
-        })
-      );
+      kicker.textContent =
+        kind === "preface" ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ" : chapterLabel ? `ГЛАВА ${chapterLabel}` : "";
+      title.hidden = false;
+      title.textContent = entry.title || "";
+      const nodes = (entry.paragraphs || []).map((paragraph) => {
+        const element = document.createElement("p");
+        element.textContent = paragraph;
+        return element;
+      });
+      if (entry.warning) {
+        const warning = document.createElement("p");
+        warning.className = "sweet-dream-book__warning";
+        warning.textContent = entry.warning;
+        nodes.push(warning);
+      }
+      text.replaceChildren(...nodes);
     }
     pageLabel.textContent = `СТР. ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
     progress.max = String(pageCount);
@@ -160,7 +167,9 @@
     progress.setAttribute("aria-valuemax", String(pageCount));
     progress.setAttribute(
       "aria-valuetext",
-      `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
+      chapterLabel
+        ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
+        : `Страница ${formatPage(currentIndex)} из ${pageCount}`
     );
 
     if (previous) {
@@ -177,11 +186,14 @@
     prefetch(currentIndex + 1);
 
     if (announce && announcer) {
-      const place = isPlate
-        ? `иллюстрация, ${entry.title}`
-        : isContinuation
-          ? `${entry.title}, продолжение`
-          : entry.title;
+      const place =
+        kind === "cover"
+          ? "обложка"
+          : kind === "preface"
+            ? "предисловие редакции"
+            : kind === "plate"
+              ? `иллюстрация, ${entry.title}`
+              : entry.title;
       announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }
     if (focus) {
