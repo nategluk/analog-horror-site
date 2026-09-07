@@ -1,6 +1,6 @@
 # Image Art Direction Manifest
 
-Снимок: 2026-09-06
+Снимок: 2026-09-07
 Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 `/Users/nateglukhov/analog-horror-site/assets/staff`.
 
@@ -15,7 +15,7 @@ Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 | Class | Total | Public | Source-only |
 |---|---:|---:|---:|
 | `ADVERTISEMENT` | 28 | 27 | 1 |
-| `PERSONNEL` | 18 | 18 | 0 |
+| `PERSONNEL` | 20 | 20 | 0 |
 | `CCTV` | 15 | 15 | 0 |
 | `PERSONAL` | 18 | 18 | 0 |
 | `EVENT-RECORD` | 74 | 73 | 1 |
@@ -23,7 +23,7 @@ Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 | `UTILITY` | 12 | 12 | 0 |
 | `IMMERSIVE-SCENE` | 170 | 86 | 84 |
 
-Всего: **360** source assets; public copies: **274**;
+Всего: **362** source assets; public copies: **276**;
 source-only: **86**.
 `projects/` (110 файлов) намеренно не включён: это отдельный staging/reference
 слой. Геометрия считается по исходным размерам: wide ≈ 1.6–1.9, square ≈ 0.9–1.1,
@@ -384,6 +384,8 @@ change runtime references or change canon.
 | `assets/staff/documents/dossier-sz-312-04.jpg` | `CCTV` | dossier camera evidence | `PAPER-FILE` | 1024x686 | yes | NATIVE-FRAME | — |
 | `assets/staff/documents/dossier-sz-312-05.jpg` | `PERSONAL` | file / family / object evidence | `PAPER-FILE` | 1024x686 | yes | PRESERVE-CARRIER | AMBIGUOUS |
 | `assets/staff/documents/dossier-sz-312-06.jpg` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1024x681 | yes | EVENT-CAMERA | — |
+| `assets/staff/documents/dossier-sz-312-mask-closeup.webp` | `PERSONNEL` | record strip / mask close-up | `PAPER-FILE` | 1024x1024 | yes | SUBTYPE-CROP | — |
+| `assets/staff/documents/dossier-sz-312-mugshot.webp` | `PERSONNEL` | record strip / front-profile capture | `PAPER-FILE` | 1024x682 | yes | SUBTYPE-CROP | — |
 | `assets/staff/documents/irina-carousel-record.webp` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1792x1008 | yes | EVENT-CAMERA | — |
 | `assets/staff/documents/irina-cotton-candy-stall.webp` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1792x1008 | yes | EVENT-CAMERA | — |
 | `assets/staff/documents/irina-gas-station-offer.webp` | `ADVERTISEMENT` | external promotional offer | `PAPER-FILE` | 1792x1008 | yes | CLEAN-WIDE | — |

@@ -8380,8 +8380,10 @@ body.staff-mode .archive-broadcast-page .archive-record--preview {
 body.staff-mode .archive-broadcast-page .archive-record__preview-frame {
   position: relative;
   display: block;
-  align-self: stretch;
-  min-height: 5.1rem;
+  align-self: start;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #0d1116;
   border: 1px solid #090b0e;
@@ -8401,10 +8403,6 @@ body.staff-mode .archive-broadcast-page .archive-record__preview {
 }
 
 body.staff-mode .archive-broadcast-page .archive-record__preview--mugshot {
-  object-position: 22% 34%;
-}
-
-body.staff-mode .archive-broadcast-page .archive-record__preview--mask {
   object-position: center;
 }
 
@@ -8500,7 +8498,7 @@ body.staff-mode .archive-broadcast-page .archive-record-list .archive-record > s
   }
 
   body.staff-mode .archive-broadcast-page .archive-record__preview-frame {
-    min-height: 5rem;
+    min-height: 0;
   }
 
   body.staff-mode .archive-broadcast-page .archive-record-list .archive-record:hover,
