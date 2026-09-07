@@ -4,7 +4,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Книга Сладкого Сна",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-cover.webp",
     alt: "Потёртая обложка: неваляшка на ржавой цепи в розовом дыму, сверху имя Ангелины Волк и название «Книга Сладкого Сна».",
-    caption: "COVER // ANGELINA VOLK // SWEET DREAM",
     width: 682,
     height: 1024
   },
@@ -21,7 +20,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Пока тебя не разбудили",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-01.webp",
     alt: "Тёмная детская спальня перед рассветом: ребёнок спит, дверь приоткрыта, а на стене висит неваляшка.",
-    caption: "PLATE 01 // QUIET HOUR // BEDROOM BEFORE WAKE",
     paragraphs: [
       "Мои дорогие, попробуйте вспомнить последнее утро, когда вам позволили поспать.",
       "Не выходной. Не болезнь. То утро, когда за стеной уже звенели чашки, шуршал пакет с хлебом и кто-то говорил другому человеку: «Тише. Пусть ещё».",
@@ -38,7 +36,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Первый день болезни",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-02.webp",
     alt: "Детское пальто в старой прихожей; взрослые руки застёгивают рукав, а в зеркале остаётся пустой коридор.",
-    caption: "PLATE 02 // FIRST SYMPTOM // COAT ROOM",
     paragraphs: [
       "Взросление начинается с похвалы.",
       "Ребёнок сам застегнул пальто, и ему сказали: молодец. Сам перестал плакать — умница. Не попросил посидеть рядом — совсем большой.",
@@ -55,7 +52,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Сквозняк",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-03.webp",
     alt: "Пустой длинный коридор старой квартиры с открытыми дверями, колышущейся занавеской и ложкой на столе.",
-    caption: "PLATE 03 // DRAFT // RESIDENCE CLEARED",
     paragraphs: [
       "После Терапии в квартирах стало удивительно чисто. Люди избавлялись от лишнего: от тяжёлых одеял, старых игрушек, праздничной посуды. Потом перестали понимать, зачем столько комнат.",
       "Одна женщина сказала мне:",
@@ -73,7 +69,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Триста двенадцать",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-04.webp",
     alt: "Старая медицинская шкала с детской туфлей и чашей сахара; за ней коридор ведёт к тёплой кухне.",
-    caption: "PLATE 04 // STANDARD 312 // WEIGHING ROOM",
     paragraphs: [
       "Меня часто спрашивают, почему душа имеет вес.",
       "Обычно это спрашивают люди, которые всю жизнь взвешивали хлеб, лекарства и собственное тело. Их не смущало, что от нескольких граммов зависит здоровье. Их возмущает, что от граммов может зависеть спасение.",
@@ -91,7 +86,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "За маму",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-05.webp",
     alt: "Пустой детский стул у кухонного стола; ложка зависла над миской, а в дверном проёме повторяются одинаковые ложки.",
-    caption: "PLATE 05 // SECOND HELPING // FAMILY TABLE",
     paragraphs: [
       "Сколько раз вы слышали: за маму, за папу, за бабушку?",
       "Вам казалось, взрослые хитрят, чтобы вы доели кашу. Но в этих словах сохранилось древнее знание: человек принимает пищу и за тех, кто рядом с ним.",
@@ -109,7 +103,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Белое лицо",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-06.webp",
     alt: "Белая фехтовальная маска с металлической сеткой перед пустой кроваткой; сетка похожа на прутья.",
-    caption: "PLATE 06 // WHITE FACE // CRADLE BARS",
     paragraphs: [
       "Однажды девочка спросила меня, почему у добрых людей бывают такие сердитые лица.",
       "Я хотела ответить, что они устали. Но ведь именно этим мы оправдываем всё, чего ребёнку приходится бояться.",
@@ -127,7 +120,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Неваляшка",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-07.webp",
     alt: "Ржавая неваляшка на цепи висит в тёмной квартире; сладкий дым складывается в очертания комнат, внизу стоят детские тапочки.",
-    caption: "PLATE 07 // HOUSEHOLD CENSER // NEVALYASHKA",
     paragraphs: [
       "В детстве у меня была неваляшка. Я укладывала её на бок, накрывала носовым платком и сердилась: почему она не хочет спать?",
       "Теперь я понимаю, что она сторожила.",
@@ -145,7 +137,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "У дверей Вознесения",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-08.webp",
     alt: "Женщина со свёрнутым одеялом стоит у круглой промышленной двери; рядом оставлен пустой деревянный стул.",
-    caption: "PLATE 08 // ASCENSION DOOR // WAITING ROOM",
     paragraphs: [
       "Одна мать ждала у дверей и всё спрашивала, когда ей вернут сына.",
       "Я принесла ей стул. Она не села: боялась, что его выведут, а она не успеет подняться.",
@@ -165,7 +156,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Ребёнок, которому ещё снится",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-09.webp",
     alt: "Маленький силуэт виден за матовым стеклом; перед стеклом стоят чашка и бумажный агнец, а тень фигуры кажется старше её самой.",
-    caption: "PLATE 09 // SUGAR LAMB // OBSERVATION",
     paragraphs: [
       "Сахарного Агнца будут искать среди улыбающихся. Это понятно: людям хочется, чтобы спаситель заранее выглядел благодарным.",
       "Но он может отвернуться.",
@@ -185,7 +175,6 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     title: "Кто останется у кроватей",
     image: "assets/staff/documents/sweet-dream-book/sweet-dream-10.webp",
     alt: "Длинная спальня с рядами кроватей и тапочками у каждой; на переднем плане одна кровать свободна, в конце горит дверь.",
-    caption: "PLATE 10 // QUIET HOUR // FINAL BED",
     paragraphs: [
       "Когда Сахарный Агнец отдаст свой сон, детские комнаты перестанут помещаться внутри домов.",
       "За дверью учреждения окажется спальня. За спальней — другая. Мягкий свет дойдёт до последних лестниц, и люди, уснувшие сидя, будут бережно уложены.",

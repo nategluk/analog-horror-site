@@ -7,7 +7,6 @@
   if (!root || root.dataset.bookReady === "true" || entries.length === 0) return;
 
   const image = root.querySelector("[data-book-image]");
-  const imageCaption = root.querySelector("[data-book-caption]");
   const visual = root.querySelector(".sweet-dream-book__visual");
   const copy = root.querySelector(".sweet-dream-book__copy");
   const kicker = root.querySelector("[data-book-kicker]");
@@ -21,7 +20,7 @@
   const next = root.querySelector("[data-book-next]");
   const swipeGuide = root.querySelector("[data-book-swipe-guide]");
 
-  if (!image || !imageCaption || !visual || !copy || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
+  if (!image || !visual || !copy || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
     return;
   }
 
@@ -32,9 +31,16 @@
 
   const tokenizeParagraphs = (paragraphs) => {
     const tokens = [];
+    const segmenter =
+      typeof Intl?.Segmenter === "function"
+        ? new Intl.Segmenter("ru", { granularity: "sentence" })
+        : null;
     normalizeParagraphs(paragraphs).forEach((paragraph, paragraphIndex) => {
-      paragraph.split(/\s+/).forEach((word) => {
-        tokens.push({ paragraphIndex, word });
+      const sentences = segmenter
+        ? Array.from(segmenter.segment(paragraph), ({ segment }) => segment.trim()).filter(Boolean)
+        : paragraph.split(/(?<=[.!?…])\s+/u);
+      sentences.forEach((sentence) => {
+        tokens.push({ paragraphIndex, sentence: sentence.trim() });
       });
     });
     return tokens;
@@ -46,10 +52,10 @@
     for (let index = start; index < end; index += 1) {
       const token = tokens[index];
       if (token.paragraphIndex !== currentParagraph) {
-        paragraphs.push(token.word);
+        paragraphs.push(token.sentence);
         currentParagraph = token.paragraphIndex;
       } else {
-        paragraphs[paragraphs.length - 1] += ` ${token.word}`;
+        paragraphs[paragraphs.length - 1] += ` ${token.sentence}`;
       }
     }
     return paragraphs;
@@ -86,14 +92,10 @@
     const isVisual = isCover || isChapterLead;
     const chapter = Number(entry.chapter);
     const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
-    const partLabel =
-      isChapter && entry.partCount > 1 ? ` // ЧАСТЬ ${entry.part}/${entry.partCount}` : "";
 
     root.dataset.bookKind = kind;
     if (chapterLabel) root.dataset.bookChapter = chapterLabel;
     else delete root.dataset.bookChapter;
-    if (isChapter && entry.part) root.dataset.bookPart = String(entry.part);
-    else delete root.dataset.bookPart;
     root.classList.toggle("is-cover", isCover);
     root.classList.toggle("is-preface", kind === "preface");
     root.classList.toggle("is-chapter", isChapter);
@@ -110,7 +112,6 @@
       image.width = Number(entry.width) || 1024;
       image.height = Number(entry.height) || 1536;
       image.loading = isCover ? "eager" : "lazy";
-      imageCaption.textContent = entry.caption || "";
     }
 
     if (isCover) {
@@ -122,11 +123,11 @@
       kicker.textContent =
         kind === "preface"
           ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ"
-          : chapterLabel
-            ? `ГЛАВА ${chapterLabel}${partLabel}`
+          : isChapterLead && chapterLabel
+            ? `ГЛАВА ${chapterLabel}`
             : "";
-      title.hidden = false;
-      title.textContent = entry.title || "";
+      title.hidden = isChapterText;
+      title.textContent = isChapterText ? "" : entry.title || "";
       const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) => {
         const element = document.createElement("p");
         element.textContent = paragraph;
@@ -144,20 +145,17 @@
     return { kind, isChapter, chapterLabel };
   };
 
-  const makeChapterPage = (entry, kind, paragraphs, wordStart, wordEnd) => ({
+  const makeChapterPage = (entry, kind, paragraphs, sentenceStart, sentenceEnd) => ({
     kind,
     chapter: Number(entry.chapter),
-    part: 1,
-    partCount: 9,
     title: entry.title,
     image: kind === "chapter-lead" ? entry.image : undefined,
     alt: kind === "chapter-lead" ? entry.alt : undefined,
-    caption: kind === "chapter-lead" ? entry.caption : undefined,
     width: kind === "chapter-lead" ? entry.width : undefined,
     height: kind === "chapter-lead" ? entry.height : undefined,
     paragraphs,
-    wordStart,
-    wordEnd
+    sentenceStart,
+    sentenceEnd
   });
 
   const entryFits = (entry) => {
@@ -209,11 +207,7 @@
       kind = "chapter-text";
     }
 
-    return chapterPages.map((page, index) => ({
-      ...page,
-      part: index + 1,
-      partCount: chapterPages.length
-    }));
+    return chapterPages;
   };
 
   const paginateBook = () => {
@@ -287,7 +281,7 @@
     progress.setAttribute(
       "aria-valuetext",
       chapterLabel
-        ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}, часть ${entry.part} из ${entry.partCount}`
+        ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
         : `Страница ${formatPage(currentIndex)} из ${pageCount}`
     );
 
@@ -310,7 +304,7 @@
           ? "обложка"
           : kind === "preface"
             ? "предисловие редакции"
-            : `глава ${chapterLabel}, часть ${entry.part} из ${entry.partCount}: ${entry.title}`;
+        : `глава ${chapterLabel}: ${entry.title}`;
       announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }
     if (focus) {
@@ -338,12 +332,12 @@
     let targetIndex = getHashIndex();
     if (previousEntry) {
       if (previousEntry.chapter) {
-        const previousWord = Number(previousEntry.wordStart) || 0;
+        const previousSentence = Number(previousEntry.sentenceStart) || 0;
         const matchingIndex = pages.findIndex(
           (page) =>
             page.chapter === previousEntry.chapter &&
-            page.wordStart <= previousWord &&
-            previousWord < page.wordEnd
+            page.sentenceStart <= previousSentence &&
+            previousSentence < page.sentenceEnd
         );
         targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
       } else {

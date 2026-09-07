@@ -11441,15 +11441,6 @@ body.staff-mode .sweet-dream-book__visual img {
     0 0.55rem 1rem rgba(0, 0, 0, 0.28);
 }
 
-body.staff-mode .sweet-dream-book__visual figcaption {
-  margin-top: 0.55rem;
-  color: var(--sweet-muted);
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.6rem;
-  line-height: 1.4;
-  letter-spacing: 0.045em;
-}
-
 body.staff-mode .sweet-dream-book__copy {
   min-width: 0;
   color: var(--sweet-ink);
@@ -11859,11 +11850,6 @@ body.staff-mode .sweet-dream-book__swipe-guide-label {
   }
 }
 
-body.staff-mode .sweet-dream-book__visual figcaption {
-  margin-top: 0.6rem;
-  font-size: 0.58rem;
-}
-
 body.staff-mode .sweet-dream-book__copy {
   min-width: 0;
   padding: 0.15rem 0 0 clamp(1rem, 3vw, 1.6rem);
@@ -12124,11 +12110,6 @@ body.staff-mode .sweet-dream-book.is-preface .sweet-dream-book__warning {
 
   body.staff-mode .sweet-dream-book__swipe-guide {
     display: grid;
-  }
-
-  body.staff-mode .sweet-dream-book.is-visual .sweet-dream-book__visual figcaption {
-    display: block;
-    text-align: center;
   }
 
   body.staff-mode .sweet-dream-book__copy {
