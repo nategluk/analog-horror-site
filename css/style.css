@@ -8404,8 +8404,8 @@ body.staff-mode .archive-broadcast-page .archive-record__preview--mugshot {
   object-position: 22% 34%;
 }
 
-body.staff-mode .archive-broadcast-page .archive-record__preview--sz {
-  object-position: 13% 40%;
+body.staff-mode .archive-broadcast-page .archive-record__preview--mask {
+  object-position: center;
 }
 
 body.staff-mode .archive-broadcast-page .archive-record__preview--cover {
