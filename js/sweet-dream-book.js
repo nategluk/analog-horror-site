@@ -26,10 +26,10 @@
 
   const expandPages = (source) => {
     const pages = [];
-    let lastChapter = null;
+    let textPage = null;
     source.forEach((entry) => {
       const chapter = Number(entry.chapter);
-      if (chapter !== lastChapter) {
+      if (!textPage || textPage.chapter !== chapter) {
         pages.push({
           kind: "plate",
           chapter,
@@ -38,15 +38,16 @@
           alt: entry.alt,
           caption: entry.caption
         });
-        lastChapter = chapter;
+        textPage = {
+          kind: "text",
+          chapter,
+          title: entry.title,
+          continuation: false,
+          paragraphs: []
+        };
+        pages.push(textPage);
       }
-      pages.push({
-        kind: "text",
-        chapter,
-        title: entry.title,
-        continuation: entry.continuation === true,
-        paragraphs: Array.isArray(entry.paragraphs) ? entry.paragraphs : []
-      });
+      textPage.paragraphs.push(...(Array.isArray(entry.paragraphs) ? entry.paragraphs : []));
     });
     return pages;
   };
