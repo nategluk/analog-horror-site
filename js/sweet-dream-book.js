@@ -8,6 +8,8 @@
 
   const image = root.querySelector("[data-book-image]");
   const imageCaption = root.querySelector("[data-book-caption]");
+  const visual = root.querySelector(".sweet-dream-book__visual");
+  const copy = root.querySelector(".sweet-dream-book__copy");
   const kicker = root.querySelector("[data-book-kicker]");
   const title = root.querySelector("[data-book-title]");
   const text = root.querySelector("[data-book-text]");
@@ -18,12 +20,40 @@
   const previous = root.querySelector("[data-book-previous]");
   const next = root.querySelector("[data-book-next]");
 
-  if (!image || !imageCaption || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
+  if (!image || !imageCaption || !visual || !copy || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
     return;
   }
 
+  const expandPages = (source) => {
+    const pages = [];
+    let lastChapter = null;
+    source.forEach((entry) => {
+      const chapter = Number(entry.chapter);
+      if (chapter !== lastChapter) {
+        pages.push({
+          kind: "plate",
+          chapter,
+          title: entry.title,
+          image: entry.image,
+          alt: entry.alt,
+          caption: entry.caption
+        });
+        lastChapter = chapter;
+      }
+      pages.push({
+        kind: "text",
+        chapter,
+        title: entry.title,
+        continuation: entry.continuation === true,
+        paragraphs: Array.isArray(entry.paragraphs) ? entry.paragraphs : []
+      });
+    });
+    return pages;
+  };
+
   root.dataset.bookReady = "true";
-  const pageCount = entries.length;
+  const pages = expandPages(entries);
+  const pageCount = pages.length;
   let currentIndex = 0;
   let pointerStart = null;
   const paperTurnSource =
@@ -63,9 +93,11 @@
 
   const prefetch = (index) => {
     if (index < 0 || index >= pageCount) return;
+    const plate = pages[index];
+    if (!plate?.image) return;
     const preload = new Image();
     preload.decoding = "async";
-    preload.src = resolveAsset(entries[index].image);
+    preload.src = resolveAsset(plate.image);
   };
 
   const playPaperTurn = () => {
@@ -76,39 +108,67 @@
 
   const render = (index, { announce = true, focus = false, syncHash = true, sound = false } = {}) => {
     const safeIndex = Math.min(pageCount - 1, Math.max(0, index));
-    const entry = entries[safeIndex];
+    const entry = pages[safeIndex];
     currentIndex = safeIndex;
 
     if (sound) playPaperTurn();
 
+    const chapter = Number(entry.chapter) || currentIndex + 1;
+    const chapterLabel = String(chapter).padStart(2, "0");
+    const isPlate = entry.kind === "plate";
+    const isContinuation = !isPlate && entry.continuation === true;
+
     root.dataset.bookPage = formatPage(currentIndex);
-    image.src = resolveAsset(entry.image);
-    image.alt = entry.alt;
-    image.width = 1024;
-    image.height = 1536;
-    image.loading = currentIndex === 0 ? "eager" : "lazy";
-    imageCaption.textContent = entry.caption;
-    kicker.textContent = `ФРАГМЕНТ ${formatPage(currentIndex)}`;
-    title.textContent = entry.title;
-    text.replaceChildren(
-      ...entry.paragraphs.map((paragraph) => {
-        const element = document.createElement("p");
-        element.textContent = paragraph;
-        return element;
-      })
-    );
-    pageLabel.textContent = `ЛИСТ ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
+    root.dataset.bookChapter = chapterLabel;
+    root.dataset.bookKind = isPlate ? "plate" : "text";
+    root.classList.toggle("is-plate", isPlate);
+    root.classList.toggle("is-text", !isPlate);
+    root.classList.toggle("is-continuation", isContinuation);
+    visual.hidden = !isPlate;
+    copy.hidden = isPlate;
+
+    if (isPlate) {
+      image.src = resolveAsset(entry.image);
+      image.alt = entry.alt;
+      image.width = 1024;
+      image.height = 1536;
+      image.loading = currentIndex === 0 ? "eager" : "lazy";
+      imageCaption.textContent = entry.caption;
+      kicker.textContent = `ГЛАВА ${chapterLabel}`;
+      title.hidden = false;
+      title.textContent = entry.title;
+      text.replaceChildren();
+    } else {
+      kicker.textContent = isContinuation
+        ? `ГЛАВА ${chapterLabel} · ПРОДОЛЖЕНИЕ`
+        : `ГЛАВА ${chapterLabel}`;
+      title.hidden = isContinuation;
+      title.textContent = entry.title;
+      text.replaceChildren(
+        ...(entry.paragraphs || []).map((paragraph) => {
+          const element = document.createElement("p");
+          element.textContent = paragraph;
+          return element;
+        })
+      );
+    }
+    pageLabel.textContent = `СТР. ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
+    progress.max = String(pageCount);
     progress.value = String(currentIndex + 1);
     progress.setAttribute("aria-valuenow", String(currentIndex + 1));
-    progress.setAttribute("aria-valuetext", `Лист ${formatPage(currentIndex)} из ${pageCount}`);
+    progress.setAttribute("aria-valuemax", String(pageCount));
+    progress.setAttribute(
+      "aria-valuetext",
+      `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
+    );
 
     if (previous) {
       previous.disabled = currentIndex === 0;
-      previous.setAttribute("aria-label", currentIndex === 0 ? "Первый лист" : "Назад");
+      previous.setAttribute("aria-label", currentIndex === 0 ? "Первая страница" : "Назад");
     }
     if (next) {
       next.disabled = currentIndex === pageCount - 1;
-      next.setAttribute("aria-label", currentIndex === pageCount - 1 ? "Последний лист" : "Далее");
+      next.setAttribute("aria-label", currentIndex === pageCount - 1 ? "Последняя страница" : "Далее");
     }
 
     if (syncHash) updateHash(currentIndex);
@@ -116,9 +176,18 @@
     prefetch(currentIndex + 1);
 
     if (announce && announcer) {
-      announcer.textContent = `Открыт лист ${formatPage(currentIndex)}: ${entry.title}`;
+      const place = isPlate
+        ? `иллюстрация, ${entry.title}`
+        : isContinuation
+          ? `${entry.title}, продолжение`
+          : entry.title;
+      announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }
-    if (focus) leaf.focus({ preventScroll: true });
+    if (focus) {
+      const reader = root.querySelector(".sweet-dream-book__reader");
+      reader?.scrollIntoView({ block: "start", behavior: "auto" });
+      leaf.focus({ preventScroll: true });
+    }
   };
 
   const move = (delta) => {
