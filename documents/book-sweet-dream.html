@@ -81,7 +81,12 @@
               </label>
             </div>
 
-            <div class="sweet-dream-book__leaf" data-book-leaf tabindex="-1">
+            <div
+              class="sweet-dream-book__leaf"
+              data-book-leaf
+              tabindex="-1"
+              aria-describedby="sweet-dream-book-instructions"
+            >
               <figure class="sweet-dream-book__visual">
                 <div class="sweet-dream-book__visual-frame">
                   <img
@@ -93,16 +98,18 @@
                     loading="eager"
                     decoding="async"
                   />
-                  <div class="sweet-dream-book__swipe-cues" aria-hidden="true">
-                    <span>←</span>
-                    <span>→</span>
+                  <div class="sweet-dream-book__swipe-guide" data-book-swipe-guide hidden aria-hidden="true">
+                    <span class="sweet-dream-book__swipe-guide-track">
+                      <span class="sweet-dream-book__swipe-guide-finger"></span>
+                    </span>
+                    <span class="sweet-dream-book__swipe-guide-label">СВАЙПНИТЕ ВЛЕВО, ЧТОБЫ ЛИСТАТЬ</span>
                   </div>
                 </div>
                 <figcaption data-book-caption>COVER // ANGELINA VOLK // SWEET DREAM</figcaption>
               </figure>
 
               <div class="sweet-dream-book__copy" hidden>
-                <p class="sweet-dream-book__copy-kicker" data-book-kicker>ГЛАВА 01</p>
+                <p class="sweet-dream-book__copy-kicker" data-book-kicker>ГЛАВА 01 // ЧАСТЬ 1/2</p>
                 <h3 data-book-title>Пока тебя не разбудили</h3>
                 <div data-book-text></div>
               </div>
@@ -110,9 +117,11 @@
 
             <nav class="sweet-dream-book__navigation" aria-label="Перелистывание книги">
               <button type="button" data-book-previous>← НАЗАД</button>
-              <span class="sweet-dream-book__gesture-hint">← СВАЙП →</span>
               <button type="button" data-book-next>ДАЛЕЕ →</button>
             </nav>
+            <p id="sweet-dream-book-instructions" class="visually-hidden">
+              На мобильном устройстве проведите по странице влево или вправо, чтобы перелистывать книгу. На компьютере используйте кнопки или клавиши со стрелками.
+            </p>
             <p class="visually-hidden" role="status" aria-live="polite" data-book-announcer></p>
           </section>
         </article>

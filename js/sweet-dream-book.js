@@ -19,41 +19,44 @@
   const leaf = root.querySelector("[data-book-leaf]");
   const previous = root.querySelector("[data-book-previous]");
   const next = root.querySelector("[data-book-next]");
+  const swipeGuide = root.querySelector("[data-book-swipe-guide]");
 
   if (!image || !imageCaption || !visual || !copy || !kicker || !title || !text || !pageLabel || !progress || !leaf) {
     return;
   }
 
-  const expandPages = (source) => {
-    const pages = [];
-    source.forEach((entry) => {
-      if (entry.kind === "cover" || entry.kind === "preface") {
-        pages.push({ ...entry });
-        return;
-      }
-      pages.push({
-        kind: "plate",
-        chapter: Number(entry.chapter),
-        title: entry.title,
-        image: entry.image,
-        alt: entry.alt,
-        caption: entry.caption,
-        width: entry.width,
-        height: entry.height
-      });
-      pages.push({
-        kind: "text",
-        chapter: Number(entry.chapter),
-        title: entry.title,
-        paragraphs: Array.isArray(entry.paragraphs) ? entry.paragraphs : []
+  const normalizeParagraphs = (paragraphs) =>
+    (Array.isArray(paragraphs) ? paragraphs : [])
+      .map((paragraph) => String(paragraph || "").trim())
+      .filter(Boolean);
+
+  const tokenizeParagraphs = (paragraphs) => {
+    const tokens = [];
+    normalizeParagraphs(paragraphs).forEach((paragraph, paragraphIndex) => {
+      paragraph.split(/\s+/).forEach((word) => {
+        tokens.push({ paragraphIndex, word });
       });
     });
-    return pages;
+    return tokens;
   };
 
-  root.dataset.bookReady = "true";
-  const pages = expandPages(entries);
-  const pageCount = pages.length;
+  const tokensToParagraphs = (tokens, start, end) => {
+    const paragraphs = [];
+    let currentParagraph = -1;
+    for (let index = start; index < end; index += 1) {
+      const token = tokens[index];
+      if (token.paragraphIndex !== currentParagraph) {
+        paragraphs.push(token.word);
+        currentParagraph = token.paragraphIndex;
+      } else {
+        paragraphs[paragraphs.length - 1] += ` ${token.word}`;
+      }
+    }
+    return paragraphs;
+  };
+
+  let pages = [];
+  let pageCount = 0;
   let currentIndex = 0;
   let pointerStart = null;
   const paperTurnSource =
@@ -72,6 +75,158 @@
     const source = String(value || "");
     if (/^(?:\.\.\/|\/|https?:)/.test(source)) return source;
     return `../${source}`;
+  };
+
+  const applyEntry = (entry) => {
+    const kind = entry.kind || "preface";
+    const isCover = kind === "cover";
+    const isChapterLead = kind === "chapter-lead";
+    const isChapterText = kind === "chapter-text";
+    const isChapter = isChapterLead || isChapterText;
+    const isVisual = isCover || isChapterLead;
+    const chapter = Number(entry.chapter);
+    const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
+    const partLabel =
+      isChapter && entry.partCount > 1 ? ` // ЧАСТЬ ${entry.part}/${entry.partCount}` : "";
+
+    root.dataset.bookKind = kind;
+    if (chapterLabel) root.dataset.bookChapter = chapterLabel;
+    else delete root.dataset.bookChapter;
+    if (isChapter && entry.part) root.dataset.bookPart = String(entry.part);
+    else delete root.dataset.bookPart;
+    root.classList.toggle("is-cover", isCover);
+    root.classList.toggle("is-preface", kind === "preface");
+    root.classList.toggle("is-chapter", isChapter);
+    root.classList.toggle("is-chapter-lead", isChapterLead);
+    root.classList.toggle("is-chapter-text", isChapterText);
+    root.classList.toggle("is-visual", isVisual);
+    root.classList.toggle("is-copy", kind === "preface" || isChapterText);
+    visual.hidden = !isVisual;
+    copy.hidden = isCover;
+
+    if (isVisual) {
+      image.src = resolveAsset(entry.image);
+      image.alt = entry.alt || "";
+      image.width = Number(entry.width) || 1024;
+      image.height = Number(entry.height) || 1536;
+      image.loading = isCover ? "eager" : "lazy";
+      imageCaption.textContent = entry.caption || "";
+    }
+
+    if (isCover) {
+      kicker.textContent = "";
+      title.hidden = true;
+      title.textContent = entry.title || "";
+      text.replaceChildren();
+    } else {
+      kicker.textContent =
+        kind === "preface"
+          ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ"
+          : chapterLabel
+            ? `ГЛАВА ${chapterLabel}${partLabel}`
+            : "";
+      title.hidden = false;
+      title.textContent = entry.title || "";
+      const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) => {
+        const element = document.createElement("p");
+        element.textContent = paragraph;
+        return element;
+      });
+      if (entry.warning) {
+        const warning = document.createElement("p");
+        warning.className = "sweet-dream-book__warning";
+        warning.textContent = entry.warning;
+        nodes.push(warning);
+      }
+      text.replaceChildren(...nodes);
+    }
+
+    return { kind, isChapter, chapterLabel };
+  };
+
+  const makeChapterPage = (entry, kind, paragraphs, wordStart, wordEnd) => ({
+    kind,
+    chapter: Number(entry.chapter),
+    part: 1,
+    partCount: 9,
+    title: entry.title,
+    image: kind === "chapter-lead" ? entry.image : undefined,
+    alt: kind === "chapter-lead" ? entry.alt : undefined,
+    caption: kind === "chapter-lead" ? entry.caption : undefined,
+    width: kind === "chapter-lead" ? entry.width : undefined,
+    height: kind === "chapter-lead" ? entry.height : undefined,
+    paragraphs,
+    wordStart,
+    wordEnd
+  });
+
+  const entryFits = (entry) => {
+    applyEntry(entry);
+    if (leaf.clientHeight <= 0 || copy.clientHeight <= 0) return false;
+    return leaf.scrollHeight <= leaf.clientHeight + 1 && copy.scrollHeight <= copy.clientHeight + 1;
+  };
+
+  const findPageEnd = (entry, kind, tokens, start) => {
+    let low = start + 1;
+    let high = tokens.length;
+    let best = start;
+
+    while (low <= high) {
+      const end = Math.floor((low + high) / 2);
+      const candidate = makeChapterPage(
+        entry,
+        kind,
+        tokensToParagraphs(tokens, start, end),
+        start,
+        end
+      );
+      if (entryFits(candidate)) {
+        best = end;
+        low = end + 1;
+      } else {
+        high = end - 1;
+      }
+    }
+
+    return best > start ? best : Math.min(tokens.length, start + 1);
+  };
+
+  const paginateChapter = (entry) => {
+    const tokens = tokenizeParagraphs(entry.paragraphs);
+    if (tokens.length === 0) {
+      return [makeChapterPage(entry, "chapter-lead", [], 0, 0)];
+    }
+
+    const chapterPages = [];
+    let start = 0;
+    let kind = "chapter-lead";
+    while (start < tokens.length) {
+      const end = findPageEnd(entry, kind, tokens, start);
+      chapterPages.push(
+        makeChapterPage(entry, kind, tokensToParagraphs(tokens, start, end), start, end)
+      );
+      start = end;
+      kind = "chapter-text";
+    }
+
+    return chapterPages.map((page, index) => ({
+      ...page,
+      part: index + 1,
+      partCount: chapterPages.length
+    }));
+  };
+
+  const paginateBook = () => {
+    root.dataset.bookPaginating = "true";
+    const nextPages = [];
+    entries.forEach((entry) => {
+      if (entry.kind === "cover" || entry.kind === "preface") {
+        nextPages.push({ ...entry });
+      } else {
+        nextPages.push(...paginateChapter(entry));
+      }
+    });
+    return nextPages;
   };
 
   const getHashIndex = () => {
@@ -106,60 +261,24 @@
     paperTurnSound.play().catch(() => {});
   };
 
+  const updateSwipeGuide = () => {
+    if (!swipeGuide) return;
+    const visible = currentIndex === 0 && root.dataset.bookSwipeGuideSeen !== "true";
+    swipeGuide.hidden = !visible;
+  };
+
   const render = (index, { announce = true, focus = false, syncHash = true, sound = false } = {}) => {
+    if (pageCount === 0) return;
     const safeIndex = Math.min(pageCount - 1, Math.max(0, index));
     const entry = pages[safeIndex];
     currentIndex = safeIndex;
+    if (currentIndex !== 0) root.dataset.bookSwipeGuideSeen = "true";
+    updateSwipeGuide();
 
     if (sound) playPaperTurn();
 
-    const kind = entry.kind || "text";
-    const isVisual = kind === "cover" || kind === "plate";
-    const chapter = Number(entry.chapter);
-    const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
-
+    const { kind, chapterLabel } = applyEntry(entry);
     root.dataset.bookPage = formatPage(currentIndex);
-    if (chapterLabel) root.dataset.bookChapter = chapterLabel;
-    else delete root.dataset.bookChapter;
-    root.dataset.bookKind = kind;
-    root.classList.toggle("is-cover", kind === "cover");
-    root.classList.toggle("is-preface", kind === "preface");
-    root.classList.toggle("is-plate", kind === "plate");
-    root.classList.toggle("is-text", kind === "text");
-    root.classList.toggle("is-visual", isVisual);
-    root.classList.toggle("is-copy", !isVisual);
-    visual.hidden = !isVisual;
-    copy.hidden = isVisual;
-
-    if (isVisual) {
-      image.src = resolveAsset(entry.image);
-      image.alt = entry.alt || "";
-      image.width = Number(entry.width) || 1024;
-      image.height = Number(entry.height) || 1536;
-      image.loading = currentIndex === 0 ? "eager" : "lazy";
-      imageCaption.textContent = entry.caption || "";
-      kicker.textContent = "";
-      title.hidden = true;
-      title.textContent = entry.title || "";
-      text.replaceChildren();
-    } else {
-      kicker.textContent =
-        kind === "preface" ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ" : chapterLabel ? `ГЛАВА ${chapterLabel}` : "";
-      title.hidden = false;
-      title.textContent = entry.title || "";
-      const nodes = (entry.paragraphs || []).map((paragraph) => {
-        const element = document.createElement("p");
-        element.textContent = paragraph;
-        return element;
-      });
-      if (entry.warning) {
-        const warning = document.createElement("p");
-        warning.className = "sweet-dream-book__warning";
-        warning.textContent = entry.warning;
-        nodes.push(warning);
-      }
-      text.replaceChildren(...nodes);
-    }
     pageLabel.textContent = `СТР. ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
     progress.max = String(pageCount);
     progress.value = String(currentIndex + 1);
@@ -168,7 +287,7 @@
     progress.setAttribute(
       "aria-valuetext",
       chapterLabel
-        ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
+        ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}, часть ${entry.part} из ${entry.partCount}`
         : `Страница ${formatPage(currentIndex)} из ${pageCount}`
     );
 
@@ -191,9 +310,7 @@
           ? "обложка"
           : kind === "preface"
             ? "предисловие редакции"
-            : kind === "plate"
-              ? `иллюстрация, ${entry.title}`
-              : entry.title;
+            : `глава ${chapterLabel}, часть ${entry.part} из ${entry.partCount}: ${entry.title}`;
       announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }
     if (focus) {
@@ -206,16 +323,67 @@
   const move = (delta) => {
     const nextIndex = currentIndex + delta;
     if (nextIndex < 0 || nextIndex >= pageCount) return;
+    root.dataset.bookSwipeGuideSeen = "true";
     render(nextIndex, { focus: true, sound: true });
   };
 
-  render(getHashIndex(), { announce: false, syncHash: false });
+  let initialized = false;
+  let resizeTimer = 0;
+
+  const rebuildPages = ({ preservePosition = false } = {}) => {
+    const previousEntry = preservePosition ? pages[currentIndex] : null;
+    pages = paginateBook();
+    pageCount = pages.length;
+
+    let targetIndex = getHashIndex();
+    if (previousEntry) {
+      if (previousEntry.chapter) {
+        const previousWord = Number(previousEntry.wordStart) || 0;
+        const matchingIndex = pages.findIndex(
+          (page) =>
+            page.chapter === previousEntry.chapter &&
+            page.wordStart <= previousWord &&
+            previousWord < page.wordEnd
+        );
+        targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
+      } else {
+        const matchingIndex = pages.findIndex((page) => page.kind === previousEntry.kind);
+        targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
+      }
+    }
+
+    root.dataset.bookReady = "true";
+    render(targetIndex, { announce: false, syncHash: preservePosition });
+    delete root.dataset.bookPaginating;
+  };
+
+  const initialize = () => {
+    if (initialized || !document.body.classList.contains("staff-mode")) return false;
+    initialized = true;
+    rebuildPages();
+    return true;
+  };
+
+  window.requestAnimationFrame(() => {
+    if (initialize()) return;
+    const modeObserver = new MutationObserver(() => {
+      if (!initialize()) return;
+      modeObserver.disconnect();
+    });
+    modeObserver.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  });
+
+  window.addEventListener("resize", () => {
+    if (!initialized) return;
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => rebuildPages({ preservePosition: true }), 140);
+  });
 
   previous?.addEventListener("click", () => move(-1));
   next?.addEventListener("click", () => move(1));
 
   leaf.addEventListener("pointerdown", (event) => {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (event.pointerType === "mouse") return;
     pointerStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
     try {
       leaf.setPointerCapture?.(event.pointerId);
@@ -239,6 +407,7 @@
   });
 
   window.addEventListener("hashchange", () => {
+    if (!pageCount) return;
     const requested = getHashIndex();
     if (requested !== currentIndex) render(requested, { announce: true, syncHash: false });
   });
