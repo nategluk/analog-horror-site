@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-07 CDT |
 | Ветка / HEAD | `main` / `fc5562e` |
-| Дерево | dirty: архивные preview-кропы + перестановка материалов в досье SZ-312 |
-| Активная линия | Досье SZ-312: разнесённые вводный mugshot и confidential file |
-| Последний этап | Второе изображение `dossier-sz-312-03.jpg` перенесено после раздела «Происхождение», чтобы два стартовых материала не шли подряд. Production build/verifier пройдены; desktop `1280×800` и mobile `390×844`: horizontal overflow `0`, console `0`. |
+| Дерево | dirty: архивные preview-кропы + перестановка материалов в досье SZ-312 + preview Ирины |
+| Активная линия | Архив: одиночный фронтальный preview Ирины |
+| Последний этап | `dossier-irina.webp` заменён supplied `irina-record-1 copy.jpg` в квадратном `640×640` формате; существующая привязка `archive.html` сохранена. Production build/verifier, target path, dimensions и `git diff --check` пройдены. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
