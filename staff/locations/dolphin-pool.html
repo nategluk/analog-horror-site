@@ -62,18 +62,33 @@
 
           <section>
             <h3>Кинематографический лог: Состояние объектов</h3>
-            <div class="horror-cinematic-stage" data-media-state="temporary-reference">
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/pool/comic1.webp" alt="Общий вид бассейна" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #501: Оценка концентрации био-энзимов в резервуаре.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/pool/comic2.webp" alt="Сенсор-уточка" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption">LOG #505: Автономный сенсор в состоянии покоя. Ловушка 4-А активна.</figcaption>
-              </figure>
-              <figure class="horror-cinematic-shot horror-cinematic-shot--wide">
-                <img class="horror-cinematic-shot__media" src="../../assets/staff/pool/comic3.webp" alt="Волосяной комок в стоке" data-media-role="still-fallback" data-media-status="temporary-reference" />
-                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">LOG #512: Зона фильтрации. Зафиксирована активность органических остатков.</figcaption>
+            <div class="horror-cinematic-stage horror-cinematic-stage--single" data-media-state="approved">
+              <figure class="horror-cinematic-shot horror-cinematic-shot--cctv">
+                <div class="horror-cinematic-shot__frame">
+                  <img
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--fallback"
+                    src="../../assets/staff/cctv/pool-poster.jpg"
+                    alt="Два аниматора в пустом бассейне"
+                    data-media-role="still-fallback"
+                    data-media-status="approved"
+                    width="480"
+                    height="480"
+                  />
+                  <video
+                    class="horror-cinematic-shot__media horror-cinematic-shot__media--video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    poster="../../assets/staff/cctv/pool-poster.jpg"
+                    aria-label="CCTV-луп: пустой бассейн «Дельфин»"
+                    aria-hidden="true"
+                  >
+                    <source src="../../assets/staff/cctv/pool-01.mp4" type="video/mp4" />
+                  </video>
+                </div>
+                <figcaption class="horror-cinematic-shot__caption horror-cinematic-shot__caption--centered">CCTV-LOOP // LOG #501: Пустой бассейн не означает отсутствие объектов.</figcaption>
               </figure>
             </div>
           </section>

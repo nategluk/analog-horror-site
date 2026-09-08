@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-08 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: Kidults attachment replacements + existing book layout + protocol-kidults paragraph |
-| Активная линия | protocol-kidults: шесть вставок после согласованных абзацев; финальная связка взрослых детей, увечных и Батутного парка |
-| Последний этап | `insert-05` и `insert-06` заменены пользовательскими аттачами в том же порядке; оба нормализованы в `1024×1536 WebP`, alt-описания и журнал ассетов обновлены. `build-public`, public verifier, побитное совпадение source/public, `node --check` и `git diff --check` прошли. Логику ридера и остальные четыре кадра не менял. Дополнительно в абзаце перед «Мы желаем вам сладких снов» заменено упоминание Аниматора на Медперсонал; `node --check` и `git diff --check` прошли. |
+| Дерево | dirty: location CCTV migration for zoo and pool; old comic assets removed |
+| Активная линия | location dossiers: square CCTV/VHS media replacement |
+| Последний этап | `staff/locations/losiny-ostrov-zoo.html` получил серию `zoo-01/02/03.mp4`; `staff/locations/dolphin-pool.html` — `pool-01.mp4`; обе страницы используют poster-fallback и approved media state. Шесть неиспользуемых `comic*.webp` удалены, asset manifest очищен. `build-public`, public verifier, `node --check js/app.js`, desktop/mobile browser QA и `git diff --check` прошли. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

@@ -445,9 +445,6 @@ change runtime references or change canon.
 | `assets/staff/player-avatars/avatar-02.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 960x1280 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/player-avatars/avatar-03-fox.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 960x1280 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/player-avatars/avatar-04-dog.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 960x1280 | yes | CONTEXT-SPECIFIC | — |
-| `assets/staff/pool/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/pool/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/pool/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
 | `assets/staff/red-room/cctv-loop-poster.webp` | `CCTV` | fixed cafe CCTV loop poster | `TYNDEX-TERMINAL` | 544x544 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/staff/alice-message-avatar.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 512x512 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/staff/irina_sad.jpg` | `PERSONNEL` | internal personnel card | `BROADCAST-ZHIR-TV` | 764x1024 | yes | SUBTYPE-CROP | — |
@@ -461,6 +458,3 @@ change runtime references or change canon.
 | `assets/staff/tv/sytno-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
 | `assets/staff/tv/ulybarych-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
 | `assets/staff/tv/zhmuriki-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
-| `assets/staff/zoo/comic1.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
-| `assets/staff/zoo/comic2.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1024x1024 | yes | EVENT-CAMERA | — |
-| `assets/staff/zoo/comic3.webp` | `EVENT-RECORD` | illustrated reconstruction | `TYNDEX-TERMINAL` | 1920x1920 | yes | EVENT-CAMERA | — |
