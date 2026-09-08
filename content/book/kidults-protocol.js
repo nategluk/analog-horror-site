@@ -1,5 +1,13 @@
 window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   {
+    kind: "cover",
+    title: "ПРОТОКОЛ KIDULTS",
+    image: "assets/staff/documents/protocol-kidults/protocol-kidults-title.webp",
+    alt: "Титульный лист протокола KIDULTS: взрослый в розовой детской одежде и улыбающейся маске сидит на стуле. Внизу — «НЕ ПЕРЕДАВАТЬ СУБЪЕКТУ».",
+    width: 1024,
+    height: 1536
+  },
+  {
     kind: "preface",
     title: "Памятка специалиста по коррекции возраста",
     paragraphs: [

@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-07 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: Kidults swipe-guide + SPA book init |
-| Активная линия | protocol-kidults: уведомление о свайпе как в Книге Сладкого Сна |
-| Последний этап | Подсказка «СВАЙПНИТЕ ВЛЕВО» вынесена на лист: на предисловии Kidults видна на mobile 390×844, после свайпа скрывается. Книга сна сохраняет прежний оверлей обложки. overflowX 0. |
+| Дерево | dirty: Kidults title leaf + scoped swipe position |
+| Активная линия | protocol-kidults: иллюстрированный титульный лист перед памяткой |
+| Последний этап | Добавлен protocol-kidults-title.webp (1024×1536, 342010 bytes), cover перед памяткой. Подсказка на свободном поле (38%, только Kidults). Chromium 390×844: титул виден, pointer swipe открывает памятку и скрывает подсказку; overflowX 0. node --check и git diff --check прошли. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

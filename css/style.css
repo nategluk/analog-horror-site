@@ -11769,6 +11769,10 @@ body.staff-mode .sweet-dream-book__swipe-guide {
   transform: translateY(-50%);
 }
 
+body.staff-mode .sweet-dream-book[data-book-content="kidults-protocol"].is-cover .sweet-dream-book__swipe-guide {
+  top: 38%;
+}
+
 body.staff-mode .sweet-dream-book__swipe-guide[hidden] {
   display: none;
 }
