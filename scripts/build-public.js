@@ -40,6 +40,7 @@ const SITE_PAGES = [
   "documents/protocol-avd-312-17.html",
   "documents/protocol-media-integration.html",
   "documents/protocol-playground.html",
+  "documents/protocol-kidults.html",
   "documents/book-sweet-dream.html",
   "locations/detskiy-zhir-mall.html",
   "locations/dolphin-pool.html",
