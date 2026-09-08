@@ -524,11 +524,14 @@ textarea {
   display: grid;
   gap: 0.85rem;
   margin: 0.4rem 0 1.1rem;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .beat-field,
 .extra-field {
   min-width: 0;
+  width: 100%;
 }
 
 .beat-field.hit,
@@ -549,9 +552,14 @@ textarea {
 
 .beat-field textarea,
 .extra-field textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 0;
   resize: none;
   overflow: hidden;
+  field-sizing: fixed;
   font-size: 1.12rem;
   line-height: 1.45;
   font-family: var(--sans);
@@ -649,6 +657,8 @@ textarea {
   display: grid;
   gap: 0.75rem;
   margin-top: 0.75rem;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .layout-lock {
@@ -666,6 +676,8 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--panel);
+  width: 100%;
+  min-width: 0;
 }
 
 .archive-page h3 {

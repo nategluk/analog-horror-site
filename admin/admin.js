@@ -204,9 +204,34 @@
   };
 
   const fitArea = (area) => {
+    if (!area || area.tagName !== "TEXTAREA" || !area.isConnected || area.dataset.fitting) return;
+    area.dataset.fitting = "1";
     area.style.height = "0px";
     area.style.height = `${Math.max(area.scrollHeight, 36)}px`;
+    delete area.dataset.fitting;
   };
+
+  const fitVisibleAreas = () => {
+    scriptEl.querySelectorAll("textarea[data-line-id]").forEach(fitArea);
+  };
+
+  const scheduleFit = () => {
+    fitVisibleAreas();
+    requestAnimationFrame(() => {
+      fitVisibleAreas();
+      requestAnimationFrame(fitVisibleAreas);
+    });
+    setTimeout(fitVisibleAreas, 0);
+    setTimeout(fitVisibleAreas, 32);
+    setTimeout(fitVisibleAreas, 80);
+  };
+
+  const areaObserver =
+    typeof ResizeObserver === "function"
+      ? new ResizeObserver((entries) => {
+          entries.forEach((entry) => fitArea(entry.target));
+        })
+      : null;
 
   const syncFieldChrome = (lineId) => {
     const wrap = scriptEl.querySelector(`[data-field="${CSS.escape(lineId)}"]`);
@@ -277,7 +302,8 @@
     control.disabled = locked;
     if (Number.isInteger(line.maxChars)) control.maxLength = line.maxChars;
     if (autosize) {
-      fitArea(control);
+      areaObserver?.observe(control);
+      control.addEventListener("focus", () => fitArea(control));
       control.addEventListener("input", () => {
         fitArea(control);
         syncFieldChrome(line.id);
@@ -751,6 +777,7 @@
     if (selectedKind === "inbox") renderInbox(selectedId);
     else if (script?.game?.id === "archive") renderArchive(selectedId);
     else renderScript(selectedId);
+    scheduleFit();
   };
 
   const renderCharacters = () => {
@@ -935,6 +962,7 @@
     renderList();
     markHits();
   });
+  window.addEventListener("resize", fitVisibleAreas);
   window.addEventListener("keydown", (event) => {
     if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "s") return;
     event.preventDefault();

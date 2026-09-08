@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-08 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: public archive SEO copy + Copy Desk archive editor |
-| Активная линия | Copy Desk archive records |
-| Последний этап | Copy Desk вкладка «Архив» правит 12 записей (протоколы, досье, книга). KIDULTS и книга сна: фиксированные 12 и 22 страницы читателя, hard-лимит знаков на блок, maxlength в UI. HTML-досье/протоколы — поток без жёсткой вёрстки. `node --check`, `git diff --check`, API и браузер Copy Desk (kidults/досье Ирины/книга сна) прошли. Полный `smoke-copydesk` на этом дереве падает из‑за чужого rename Ирины в `call-content.js`. |
+| Дерево | dirty: Copy Desk archive field autosize |
+| Активная линия | Copy Desk archive field autosize |
+| Последний этап | Поля Copy Desk в Архиве тянутся на ширину колонки (`minmax(0,1fr)` + `width:100%` + `field-sizing:fixed`). Высота пересчитывается после вставки в DOM, по ResizeObserver, focus/input и отложенным кадрам. FAITH абзац про маску: ширина 585, высота 77, clipped 0. `node --check`, `git diff --check`. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
