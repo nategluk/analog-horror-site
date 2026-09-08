@@ -20,6 +20,7 @@ const { URL } = require("node:url");
 const { spawnSync } = require("node:child_process");
 const vm = require("node:vm");
 const copydesk = require("./lib/copydesk-core");
+const copydeskArchive = require("./lib/copydesk-archive");
 const episodeCatalog = require("./lib/episode-catalog");
 
 const projectRoot = path.resolve(__dirname, "..");
@@ -952,6 +953,9 @@ const handleApi = async (req, res, url) => {
   if (req.method === "GET" && pathname.startsWith("/api/copydesk/") && pathname.endsWith("/script")) {
     const gameId = decodeURIComponent(pathname.slice("/api/copydesk/".length, -"/script".length));
     try {
+      if (gameId === "archive") {
+        return sendJson(res, 200, copydeskArchive.publicIndex());
+      }
       return sendJson(res, 200, publicCopydeskIndex(copydesk.indexGame(gameId)));
     } catch (error) {
       return sendJson(res, 400, { error: error.message || String(error) });
@@ -968,6 +972,15 @@ const handleApi = async (req, res, url) => {
       return sendJson(res, 400, { error: "Invalid JSON" });
     }
     try {
+      if (gameId === "archive") {
+        return sendJson(
+          res,
+          200,
+          copydeskArchive.publicIndex(
+            copydeskArchive.patchLine(payload.id, payload.expected, payload.text)
+          )
+        );
+      }
       const index = copydesk.patchLine(
         gameId,
         payload.id,

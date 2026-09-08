@@ -103,7 +103,7 @@
         `${profile.displayName || "Привет"}. Если вам пришлют что-нибудь из Красной Комнаты, не сохраняйте все файлы подряд.\n\nЯ серьёзно. Иногда важнее помнить, кто прислал фотографию, чем саму фотографию.`
     },
     "ulybarych-after-broadcast": {
-      sender: "УЛЫБАРЫЧ",
+      sender: "ДЯДЯ УЛЫБАРЫЧ",
       avatar: "assets/staff/documents/ulybarych-message-avatar.webp",
       subject: "ТЫ ДОСМОТРЕЛ?",
       preview: "На твоём месте в студии пока никого нет.",
@@ -341,7 +341,7 @@
       media: "state-file-investigation",
       feedState: "ПРЕДЫДУЩИЙ ДОПУСК НАЙДЕН",
       signal: 63,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Тебя я помню. Звук и возраст второй раз проверять не будем. Но ответы придётся собрать заново: прошлое назначение уже знает, кем ты был.",
       choices: [
         {
@@ -353,7 +353,7 @@
     intro: {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ты меня слышишь? Нет. Правильно. Я здесь буквами. Но комнату можно включить.",
       choices: [
         {
@@ -365,7 +365,7 @@
     "sound-prompt": {
       step: "ПРОВЕРКА КАНАЛА // ЗВУК",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.enabledSoundAtIntro
           ? "Уже нашёл. Вот. Теперь ты слышишь не меня. Это комната."
@@ -389,7 +389,7 @@
     "sound-on-response": {
       step: "ПРОВЕРКА КАНАЛА // ЗВУК ВКЛЮЧЁН",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Вот. Теперь ты слышишь не меня. Это комната.",
       choices: [
         {
@@ -401,7 +401,7 @@
     "sound-silent-response": {
       step: "ПРОВЕРКА КАНАЛА // ТИХИЙ РЕЖИМ",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Хорошо. В тишине я выгляжу добрее.",
       choices: [
         {
@@ -413,7 +413,7 @@
     "age-check": {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Я Ирина, куратор детских маршрутов. Этот канал — только для бывших детей. Тебе уже восемнадцать?",
       choices: [
         {
@@ -433,7 +433,7 @@
     "adult-status": {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Значит, ты уже не ребёнок?",
       choices: [
         {
@@ -459,7 +459,7 @@
     "adult-certainty": {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.questionsAdultStatus
           ? "Ответь точно. Центр хранит детский возраст отдельно от тела. Ты сейчас говоришь со мной как бывший ребёнок?"
@@ -483,7 +483,7 @@
     "name-prompt": {
       step: "ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ",
       media: "state-file-investigation",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Подожди. В карточке вместо имени пустая строка. Как мне к тебе обращаться? Можно настоящее. Можно другое.",
       input: {
         kind: "displayName",
@@ -496,7 +496,7 @@
     "name-ack": {
       step: "ПРОВЕРКА ДОПУСКА // ЛИЧНАЯ ЗАПИСЬ",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: () => {
         const displayName = readStaffProfile()?.displayName || "Так";
         return `Хорошо, ${displayName}. Я запишу так. Если это не настоящее имя, система всё равно привыкнет.`;
@@ -511,7 +511,7 @@
     "minor-doctor-check": {
       step: "ПРОВЕРКА ДЕТСКОГО ДОПУСКА",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Тогда ты уже подписал договор с Главврачом?",
       choices: [
         {
@@ -537,7 +537,7 @@
     "minor-inspector-check": {
       step: "ПРОВЕРКА ДЕТСКОГО ДОПУСКА",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.minorDoctorContract
           ? "Тогда проверю регистрацию. Тебя уже взвесил Инспектор по сырью?"
@@ -556,7 +556,7 @@
     "adult-ack": {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Бывший ребёнок. С такими, как ты, мне можно разговаривать. Настоящих передают Старшему Проводнику. Зачем ты вернулся?",
       choices: [
         {
@@ -591,7 +591,7 @@
     "adult-reason": {
       step: "ПРОВЕРКА ДОПУСКА // 1 ИЗ 9",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.returnsForMemory) {
           return "Ты пришёл по адресу. Здесь хранят детство, забытое у входа. Иногда оно портится, если долго не забирать.";
@@ -613,7 +613,7 @@
     "orientation-one": {
       step: "ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Детей сюда приводят взрослые. Бывшие дети приходят сами — за работой, старой передачей или местом из сна.",
       choices: [
         {
@@ -625,7 +625,7 @@
     "orientation-two": {
       step: "ВВОДНЫЙ ИНСТРУКТАЖ // ВОЗВРАЩЕНИЕ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Да. Возвращение — когда место помнит тебя лучше. Ты узнаёшь запах или музыку. Потом выясняется: у тебя был маршрут.",
       choices: [
         {
@@ -651,7 +651,7 @@
     "orientation-three": {
       step: "ВВОДНЫЙ ИНСТРУКТАЖ // КУРАТОР",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.askedAboutOwnRoute
           ? "Наверное. Иначе этот канал тебя бы не нашёл. Номер маршрута появится после проверки."
@@ -670,7 +670,7 @@
     "orientation-personal": {
       step: "ВВОДНЫЙ ИНСТРУКТАЖ // КУРАТОР",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Мне нравится задавать вопросы взрослым. Если проверка пройдёт правильно, канал оставят мне ещё на одну смену.",
       choices: [
         {
@@ -682,7 +682,7 @@
     "role-question": {
       step: "ВЫБОР РОЛИ // 2 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Теперь главное. Ты Волонтёр или Аниматор?",
       choices: [
         {
@@ -726,7 +726,7 @@
     "role-animator": {
       step: "ВЫБОР РОЛИ // 2 ИЗ 9",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Хороший ответ. Аниматор принимает костюм, маршрут и длительность смены. Так удобнее: дальше выбирать почти не нужно.",
       choices: [
         {
@@ -738,7 +738,7 @@
     "role-volunteer": {
       step: "ВЫБОР РОЛИ // 2 ИЗ 9",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Волонтёр приходит сам и ищет то, чего нет в маршруте. Смотреть ему можно. Чтобы уйти, нужно отдельное разрешение.",
       choices: [
         {
@@ -750,7 +750,7 @@
     "role-delegate": {
       step: "ВЫБОР РОЛИ // 2 ИЗ 9",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Тогда я выберу за тебя. Мне недавно разрешили самой назначать роли. Я сейчас куратор.",
       choices: [
         {
@@ -767,7 +767,7 @@
     "class-briefing-one": {
       step: "КЛАССЫ УЧАСТИЯ // ОБЩИЕ ПРАВИЛА",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Коротко: Аниматор становится частью места. Волонтёр остаётся посетителем, пока сам не попросит следующий уровень.",
       choices: [
         {
@@ -793,7 +793,7 @@
     "class-briefing-two": {
       step: "КЛАССЫ УЧАСТИЯ // АНИМАТОР",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.askedWhoCanLeave
           ? "Волонтёр может попроситься наружу. Аниматор сначала сдаёт смену. Иначе непонятно, кто просится: человек или оболочка."
@@ -808,7 +808,7 @@
     "class-briefing-three": {
       step: "КЛАССЫ УЧАСТИЯ // ВОЛОНТЁР",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Нет. Я тебе ещё не надоела?",
       choices: [
         {
@@ -837,7 +837,7 @@
       sound: "disco-room-music",
       feedState: "НЕЗАПЛАНИРОВАННОЕ ОСВЕЩЕНИЕ",
       signal: 31,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.reassuredIrina
           ? "Хорошо. Я иногда проверяю. Здесь легко не заметить, что собеседник уже ушёл."
@@ -856,7 +856,7 @@
       media: "state-warm",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 64,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Не знаю. В «Детском жире» всегда так.",
       choices: [
         {
@@ -868,7 +868,7 @@
     "waiting-test": {
       step: "СИТУАЦИЯ // 3 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Служебная ситуация. Родители оставили ребёнка у входа и обещали вернуться через пять минут. Что ему делать?",
       choices: [
         {
@@ -921,7 +921,7 @@
     "waiting-response": {
       step: "СИТУАЦИЯ // 3 ИЗ 9",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.waitedForParents) {
           return "Правильно. Родители всегда возвращаются. Иногда пять минут идут долго, но это всё ещё пять минут.";
@@ -943,7 +943,7 @@
     "parents-rule-one": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Пять минут — не время, а обещание. Пока ребёнок ждёт на месте, по документам родители всё ещё возвращаются.",
       choices: [
         {
@@ -969,7 +969,7 @@
     "parents-rule-two": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ОЖИДАНИЕ",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.questionedWaitingTime
           ? "Пока ребёнок ждёт. Если он уйдёт, пять минут начнутся заново — уже в другом месте."
@@ -984,7 +984,7 @@
     "parents-rule-three": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // ЗАКРЫТА",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Нет. Меня оформили на работу. Это другое: у меня были костюм, питание и место ожидания. Давай следующий вопрос.",
       choices: [
         {
@@ -1001,7 +1001,7 @@
       feedMode: "document",
       feedState: "ЛИЧНЫЙ ФАЙЛ ВОССТАНОВЛЕН",
       signal: 42,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Странно. Я не открывала архив. Ты помнишь, как нарисовал это в детстве?",
       choices: [
         {
@@ -1038,7 +1038,7 @@
       media: "state-confidential",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 57,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.remembersDrawing) {
           return "Хорошо. Память ещё принимает старые файлы. Не вспоминай, кто уходит справа. Взрослые часто не помещаются.";
@@ -1060,7 +1060,7 @@
     "drawing-history": {
       step: "ЛИЧНЫЙ ФАЙЛ // ПРОИСХОЖДЕНИЕ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Администрация читает рисунки так: есть дверь — ребёнок согласился войти; взрослые у края — они уже ушли.",
       choices: [
         {
@@ -1089,7 +1089,7 @@
       stillAlt: "Детский рисунок с серым зданием, лесом, Медведем и уходящими взрослыми",
       feedMode: "document",
       feedState: "ПОВТОРНАЯ ПРОВЕРКА",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.questionedDrawingConsent
           ? "Администрация говорит, что рисунок и есть согласие. Посмотри ещё раз. Какого предмета здесь не хватает?"
@@ -1127,7 +1127,7 @@
     "drawing-missing-response": {
       step: "ЛИЧНЫЙ ФАЙЛ // ДОПОЛНЕН",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.drawingMissingExit) {
           return "Обратную дорогу рисуют после возвращения. Значит, лист просто не закончен. Это можно считать хорошим признаком.";
@@ -1149,7 +1149,7 @@
     "image-test": {
       step: "ВИЗУАЛЬНАЯ ПРОВЕРКА // 4 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Перед входом можно выбрать маршрут. Слева ждут сотрудники. Справа открыта незарегистрированная дверь. Куда ты пойдёшь?",
       choices: [
         {
@@ -1191,7 +1191,7 @@
       stillAlt: "Старая служебная карта комплекса с цветными маршрутами, заклеенным сектором и зачёркнутыми помещениями",
       feedMode: "document",
       feedState: "КАРТА МАРШРУТА ВОССТАНОВЛЕНА",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.choseMascotFeed) {
           return "Ты выбрал маршрут, где тебе скажут, куда встать и когда идти. Для Аниматора это безопасный выбор.";
@@ -1209,7 +1209,7 @@
     "wristband-test": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 5 ИЗ 9",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "У закрытой двери лежит детский браслет с завтрашней датой. По журналу его ещё не выдавали. Что ты сделаешь?",
       choices: [
         {
@@ -1265,7 +1265,7 @@
       stillAlt: "Потёртый синий служебный ключ без бирки лежит на мокром зелёном столе рядом с документами",
       feedMode: "document",
       feedState: "СОПУТСТВУЮЩИЙ ПРЕДМЕТ НЕ УЧТЁН",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.reportedTomorrowBand) {
           return "Куратор внесёт браслет в журнал. Если завтрашний посетитель не придёт, браслет назначат тому, кто его нашёл.";
@@ -1290,7 +1290,7 @@
       stillAlt: "Старая фотография: плюшевый кролик с пустой служебной биркой сидит на детском стуле перед тёмной дверью",
       feedMode: "document",
       feedState: "ПРЕДМЕТ ОЖИДАЕТ НАЗНАЧЕНИЯ",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "У нас вещи появляются раньше владельцев. Браслет, маска или игрушка сначала попадают в учёт, а потом ждут тело.",
       choices: [
         {
@@ -1306,7 +1306,7 @@
       signal: 38,
       glitchIn: true,
       delayChoicesUntilEnd: true,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Подожди. В канал попало детское дело. Я его не запрашивала. Папка мокрая, а журнал говорит, что такого ребёнка нет.",
       choices: [
         {
@@ -1324,7 +1324,7 @@
       feedState: "ЗАПИСЬ В ЖУРНАЛЕ НЕ НАЙДЕНА",
       signal: 52,
       delayChoicesUntilEnd: true,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Здесь нет имени и фотографии. Только ответы и маршрут. Один ответ уже совпал с твоим. Такое бывает, если дело ждёт человека раньше тела.",
       choices: [
         {
@@ -1346,7 +1346,7 @@
       feedMode: "document",
       feedState: "ИСТОЧНИК НЕ ОПРЕДЕЛЁН",
       signal: 47,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "В журнале между страницами вырвано место. Что делать с оригиналом: оставить у меня или искать маршрут, пока канал его показывает?",
       choices: [
         {
@@ -1388,7 +1388,7 @@
       media: "state-file-investigation",
       feedState: "СРАВНЕНИЕ С ТЕКУЩИМ СЕАНСОМ",
       signal: 55,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         const firstMatch = progress.flags.waitedForParents
           ? "Он тоже решил ждать там, где его оставили."
@@ -1428,7 +1428,7 @@
       media: "state-file-investigation",
       feedState: "СРАВНЕНИЕ НЕ ЗАВЕРШЕНО",
       signal: 50,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.askedIfOwnFile
           ? "Не знаю. У твоего дела должно быть взрослое имя. Здесь имя вытерли до того, как ребёнок потерялся."
@@ -1478,7 +1478,7 @@
       feedMode: "document",
       feedState: "СЛЕДУЙ ЗА МНОЙ",
       signal: 68,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Он напечатал билет. Последняя точка зачёркнута. Можно послушаться, отдать билет мне или проверить, что терминал пытается скрыть.",
       choices: [
         {
@@ -1552,7 +1552,7 @@
       media: "state-file-investigation",
       feedState: "ДВЕ ТОЧКИ СОВПАЛИ",
       signal: 58,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.followedTerminalTicket) {
           return "Билет ведёт сам. Это удобно, пока не замечаешь: он возвращает потерянного не туда, где его ждут, а туда, где есть свободное место.";
@@ -1577,7 +1577,7 @@
       media: "state-file-investigation",
       feedState: "ВИЗУАЛЬНАЯ СВЕРКА",
       signal: 61,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Остались два кадра. В игровой зоне можно ждать сопровождающего. В пустом бассейне след заканчивается у трубы. Куда смотреть?",
       choices: [
         {
@@ -1623,7 +1623,7 @@
       media: "state-file-investigation",
       feedState: "ИСТОЧНИК 002 ОБНАРУЖЕН",
       signal: 43,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.checkedEmptyPool
           ? "На дне нет ребёнка. Только кабель от старого телевизора. Он всё ещё передаёт выпуск."
@@ -1781,7 +1781,7 @@
       signal: 41,
       glitchIn: true,
       delayChoicesUntilEnd: true,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ты здесь? Не отвечай ей больше. Она не проверяет знания. Ей нужен сам ответ — любой.",
       autoNext: "irina-reconnect-response"
     },
@@ -1790,7 +1790,7 @@
       media: "state-file-investigation",
       feedState: "СИСТЕМНАЯ СВЕРКА ОТКЛОНЕНА",
       signal: 53,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.answeredElena
           ? "Ты сказал ей «нет», но она услышала только участие. Старые передачи так устроены: смысл ответа им не нужен."
@@ -1807,7 +1807,7 @@
       media: "state-file-investigation",
       feedState: "СИСТЕМА ТРЕБУЕТ ВОЗВРАТА",
       signal: 48,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Система просит вернуть дело в канал. Если я впишу ребёнка в бумажный журнал, запись останется здесь, даже когда экран забудет.",
       choices: [
         {
@@ -1847,7 +1847,7 @@
       feedState: "ЛОКАЛЬНАЯ ЗАПИСЬ СОЗДАНА",
       signal: 59,
       delayChoicesUntilEnd: true,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.leftFileInChannel
           ? "Нет. В канале оно снова станет твоим. Я внесу ребёнка сама. Я сейчас куратор."
@@ -1859,7 +1859,7 @@
       media: "state-file-investigation",
       feedState: "ДЕЛО СОХРАНЕНО",
       signal: 63,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Теперь у него есть место в журнале. Имя всё ещё пустое. Если дело снова покажет твои ответы, это не доказывает, что ребёнок — ты.",
       choices: [
         {
@@ -1875,7 +1875,7 @@
       feedMode: "document",
       feedState: "КАРТОЧКА 04",
       signal: 66,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ещё одна карточка. Здесь нужно отвечать быстро. Что ты видишь: котика или кролика?",
       choices: [
         {
@@ -1913,7 +1913,7 @@
       feedMode: "cctv",
       feedState: "КАБИНКА ОБОЗРЕНИЯ 06",
       signal: 39,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Я тоже вижу котика. У нас есть кот Паша — оператор кабинок обозрения. Он всегда улыбается в камеру.",
       delayChoicesUntilEnd: true,
       choices: [
@@ -1942,7 +1942,7 @@
       media: "state-warm",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 61,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.askedIfPavelCat
           ? "Паша говорит, что Павел — служебное имя. Кот — домашнее. Но домой его ещё ни разу не забирали."
@@ -1958,7 +1958,7 @@
       step: "ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
       media: "state-warm",
       feedState: "КАРТОЧКА ПРИНЯТА",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Раньше здесь был кролик. Потом его перевели на маршрут без камер. На старых карточках он всё равно появляется.",
       choices: [
         {
@@ -1971,7 +1971,7 @@
       step: "ПРОВЕРКА ДЕТСКОГО РАСПОЗНАВАНИЯ",
       media: "state-confidential",
       feedState: "ОТВЕТ НЕ КЛАССИФИЦИРОВАН",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Просто пятен не бывает. Если картинка ничего не напоминает, Администрация назначает воспоминание. Запишу: котик.",
       choices: [
         {
@@ -1984,7 +1984,7 @@
       step: "НЕЗАПЛАНИРОВАННЫЙ ВОПРОС",
       media: "state-confidential",
       feedState: "ПРЯМОЙ КАНАЛ",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "У Паши много кабинок. У меня только этот канал. Здесь у меня нет друзей. Есть сотрудники, но это другое, наверное.",
       choices: [
         {
@@ -2021,7 +2021,7 @@
       media: "action-private-file",
       feedState: "ИСХОДЯЩИЙ ФАЙЛ",
       signal: 48,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ничего. Сейчас я уже не совсем одна. У меня для тебя кое-что есть. Только не показывай Старшему Проводнику.",
       delayChoicesUntilEnd: true,
       choices: [
@@ -2053,7 +2053,7 @@
       step: "ФАЙЛ ПОЛУЧЕН // 1",
       media: "state-warm",
       feedState: "ПЕРЕДАЧА ЗАВЕРШЕНА",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Это я в фотокабинке торгового центра. Там можно было сделать четыре фотографии. Теперь ты меня не забудешь.",
       choices: [
         {
@@ -2070,7 +2070,7 @@
     "private-file-declined": {
       step: "ПЕРЕДАЧА ОТМЕНЕНА",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Хорошо. Я оставлю её у себя. Фотографии тоже могут подождать, если не выключать свет.",
       choices: [
         {
@@ -2082,7 +2082,7 @@
     "loneliness-bear": {
       step: "НЕЗАПЛАНИРОВАННЫЙ ВОПРОС",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Медведь — не друг. Медведь работает вместе со мной. Друзьям разрешено видеть лица, а ему моё лицо мешает.",
       choices: [
         {
@@ -2094,7 +2094,7 @@
     "loneliness-formal": {
       step: "СЛУЖЕБНЫЙ КАНАЛ ВОССТАНОВЛЕН",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Хорошо. Так удобнее. Сотрудники тоже обычно просят меня перейти к следующему вопросу.",
       choices: [
         {
@@ -2107,7 +2107,7 @@
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9",
       media: "state-neutral",
       sound: "baby-cry-costume",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Во время смены из соседнего костюма слышен плач. Согласно записям, костюм не занят. Что ты сделаешь?",
       choices: [
         {
@@ -2160,7 +2160,7 @@
     "costume-response": {
       step: "СЛУЖЕБНАЯ СИТУАЦИЯ // 6 ИЗ 9",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.openedCostume) {
           return "Ты пошёл на звук, хотя журнал объявил его несуществующим. Волонтёрам полезно находить то, чего нет в списке.";
@@ -2182,7 +2182,7 @@
     "costume-history-one": {
       step: "ОБОЛОЧКИ // УЧЁТ",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Журнал хранит костюм отдельно от человека. Если пустой костюм плачет, плач ещё не оформлен. Молнию открывать нельзя.",
       choices: [
         {
@@ -2194,7 +2194,7 @@
     "costume-history-two": {
       step: "ОБОЛОЧКИ // ПРИВЯЗКА",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Иногда сотрудник снимает голову, называет старое имя или вспоминает дом. Тогда ждут, пока память устанет.",
       choices: [
         {
@@ -2206,7 +2206,7 @@
     "bear-question": {
       step: "ОБОЛОЧКА // ДЕМОНСТРАЦИЯ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ты смотришь на голову Медведя. Когда человеку страшно, оболочка помогает. В ней никто не видит страха.",
       choices: [
         {
@@ -2243,7 +2243,7 @@
       media: "action-bear-head-on",
       feedState: "СОТРУДНИК 0091-A",
       signal: 52,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.askedIfIrinaAfraid) {
           return "Это не относится к проверке. Подожди. Я покажу, как правильно.";
@@ -2300,7 +2300,7 @@
       media: "state-bear-neutral",
       feedState: "ЛИЦО СОТРУДНИКА СКРЫТО",
       signal: 44,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.greetedBear) {
           return "Он услышал. Только не разговаривай с ним долго. Потом он начинает думать, что это его видеозвонок.";
@@ -2334,7 +2334,7 @@
       media: "state-alarmed",
       feedState: "СЛУЖЕБНАЯ ПАУЗА",
       signal: 58,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Подожди. Каждые двенадцать часов здесь ароматизация. Тебе противогаз не нужен: через экран запах не проходит.",
       glitchIn: true,
       choices: [
@@ -2361,7 +2361,7 @@
       feedMode: "document",
       feedState: "НОРМА ВОССТАНОВЛЕНА",
       signal: 62,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "После ароматизации сотрудникам дают десерт. Это положено, даже если не хочется.",
       delayChoicesUntilEnd: true,
       choices: [
@@ -2397,7 +2397,7 @@
     "jelly-response": {
       step: "НОРМА СОТРУДНИКА // 0091-A",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.askedJellyFlavor) {
           return "Как детство. Сложно объяснить. Только не моё, наверное. На крышке другой ребёнок.";
@@ -2419,7 +2419,7 @@
     "jelly-memory": {
       step: "ПРОТОКОЛ ВОССТАНОВЛЕН",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       interruptedText: "Мы говорили о Медведе. До ароматизации я ещё помнила, как меня привезли сюда и—",
       text: "До ароматизации? Мы ещё не начинали личные вопросы. Ты, наверное, перепутал этот звонок с предыдущим.",
       choices: [
@@ -2446,7 +2446,7 @@
     "cycle-history-one": {
       step: "ЦИКЛ СОТРУДНИКА // 12 ЧАСОВ",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Смена длится двенадцать часов. Между сменами есть несколько минут: поесть, сменить фильтр и обновить возраст.",
       choices: [
         {
@@ -2472,7 +2472,7 @@
     "cycle-history-two": {
       step: "ЦИКЛ СОТРУДНИКА // ВОЗРАСТ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.askedIfIrinaRemembersHome
           ? "Иногда помню кухню или прихожую. А потом замечаю там служебную дверь, которой раньше не было."
@@ -2490,7 +2490,7 @@
       sound: "muffled-help",
       feedState: "НЕУЧТЁННЫЙ СОТРУДНИК",
       signal: 27,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Родители устроили меня на работу. Здесь безопаснее, чем дома. Я не должна сомневаться в их решении. Забудь.",
       glitchIn: true,
       delayChoicesUntilEnd: true,
@@ -2518,7 +2518,7 @@
     "favorite-childrens-show": {
       step: "ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Давай лучше о другом. Я люблю детские шоу. Не по работе — по-настоящему. А у тебя какое любимое?",
       choices: [
         {
@@ -2553,7 +2553,7 @@
     "favorite-childrens-show-response": {
       step: "ЛИЧНЫЙ ВОПРОС // ДЕТСКИЙ ЭФИР",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.favoriteShowUlybarych) {
           return "Правда? Я тоже. Я не пропускала ни одного выпуска. Улыбарыч умел улыбаться так, будто уже знает твой ответ. Подожди...";
@@ -2592,7 +2592,7 @@
       media: "state-confidential",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 49,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Мой любимый выпуск. Улыбарыч просит ребёнка ждать на стуле. Раньше родители возвращались. Наверное, плёнку обрезали.",
       choices: [
         {
@@ -2627,7 +2627,7 @@
     "ulybarych-answer": {
       step: "АРХИВНЫЙ ЭФИР // ЗАВЕРШЁН",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.noticedEmptyChair) {
           return "Нет. Ребёнок сидел правильно. Камера просто не всегда показывает сырьё. Это правило старых передач.";
@@ -2649,7 +2649,7 @@
     "ulybarych-history-one": {
       step: "АРХИВНЫЙ ЭФИР // СПРАВКА",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Улыбарыч учил правильно быть ребёнком: иметь любимую игрушку, бояться темноты и отвечать, когда он смотрит в камеру.",
       choices: [
         {
@@ -2661,7 +2661,7 @@
     "ulybarych-history-two": {
       step: "АРХИВНЫЙ ЭФИР // ПОМОЩНИК ПО ВОЗРАСТУ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Взрослые узнают музыку слишком быстро. Улыбарыч зовёт это остаточным детством. Потом они уже не переключают канал.",
       choices: [
         {
@@ -2684,7 +2684,7 @@
       media: "action-hears-noise",
       feedState: "ПОСТОРОННИЙ ШУМ",
       signal: 31,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Тихо. Не пытайся разглядеть, кто там. Кажется, Проводница проверяет канал.",
       delayChoicesUntilEnd: true,
       choices: [
@@ -2740,7 +2740,7 @@
       media: "state-alarmed",
       feedState: "СИГНАЛ НЕСТАБИЛЕН",
       signal: 28,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.askedAboutGuide) {
           return "Это не имя. Это должность. Если она спросит, мы говорили только о классификации.";
@@ -2776,7 +2776,7 @@
       media: "state-alarmed",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 38,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Не переживай. Это для пропуска в Лосиный Остров. Обычно Главврач просит не моргать. Жаль, что только после вспышки.",
       choices: [
         {
@@ -2811,7 +2811,7 @@
     "plague-doctor-answer": {
       step: "ВРЕМЕННЫЙ ПРОПУСК // СОЗДАНИЕ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.refusedPhotoConsent) {
           return "Окно с согласием появилось перед вспышкой и сразу закрылось. Главврач считает, что взрослые читают быстро.";
@@ -2833,7 +2833,7 @@
     "pass-history-one": {
       step: "ВРЕМЕННЫЙ ПРОПУСК // ФОТО",
       media: "state-neutral",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "На первом пропуске фото всегда немного неправильное. Камера снимает не лицо, а того, кем ты войдёшь в Лосиный Остров.",
       choices: [
         {
@@ -2845,7 +2845,7 @@
     "pass-history-two": {
       step: "ВРЕМЕННЫЙ ПРОПУСК // 0091-A",
       media: "state-alarmed",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "На моём вместо меня был Медведь. Я ещё не выбрала его, но родители назвали фотографию удачной. Вторую мне не показывают.",
       choices: [
         {
@@ -2868,7 +2868,7 @@
       media: "action-shush-exit",
       feedState: "НЕ ОТКЛЮЧАТЬСЯ",
       signal: 12,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Подожди здесь. И не нажимай красную кнопку.",
       autoNext: "empty-room"
     },
@@ -2946,7 +2946,7 @@
       media: "state-alarmed",
       feedState: "ПРЯМОЙ КАНАЛ",
       signal: 51,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.answeredBear) {
           return "Медведь не умеет говорить. Я просила тебя не отвечать, когда меня нет.";
@@ -2964,7 +2964,7 @@
     "return-memory-one": {
       step: "КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ",
       media: "state-confidential",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         const drawingCallback = progress.flags.deniesDrawing
           ? "Ты не признал рисунок."
@@ -2999,7 +2999,7 @@
     "return-memory-two": {
       step: "КАНАЛ 0091-A // ЛИЧНОЕ ОТКЛОНЕНИЕ",
       media: "state-warm",
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         progress.flags.promisesToRememberCall
           ? "Хорошо. Значит, ты запомнишь этот разговор там, снаружи. Это почти как друг, которому не нужно отвечать каждый день."
@@ -3016,7 +3016,7 @@
       media: "action-unseen-interlocutor",
       feedState: "ВТОРОЙ ГОЛОС НЕ ОБНАРУЖЕН",
       signal: 44,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Нет. Теперь назначаю я. Я сейчас куратор. В прошлый раз выбирал ты.",
       autoNext: "assignment"
     },
@@ -3027,7 +3027,7 @@
       soundAfterText: true,
       feedState: "КЛАССИФИКАЦИЯ ЗАВЕРШЕНА",
       signal: 63,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         const role = getCuratorAssignment(progress);
         const callbacks = getAssignmentCallbacks(progress, role);
@@ -3050,7 +3050,7 @@
       media: "state-confidential",
       feedState: "РАЗНИЦА НЕДОСТАТОЧНА",
       signal: 57,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: "Ответы почти равны. Аниматор отдаёт системе маршрут, лицо и время смены. Волонтёр сохраняет лицо, но сам идёт туда, где страшно. Выход не обещан ни одному.",
       choices: [
         {
@@ -3078,7 +3078,7 @@
       media: "state-warm",
       feedState: "КЛАССИФИКАЦИЯ ЗАВЕРШЕНА",
       signal: 63,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) =>
         getCuratorAssignment(progress) === "volunteer"
           ? "Волонтёр. Ты ищешь путь, даже когда его никто не назначал. Тебе выдадут театральную маску и доступ на следующий уровень."
@@ -3095,7 +3095,7 @@
       media: "state-confidential",
       feedState: "СЕАНС ЗАВЕРШАЕТСЯ",
       signal: 63,
-      speaker: "ИРИНА В.",
+      speaker: "ИРИНА",
       text: (progress) => {
         if (progress.flags.acceptedPrivatePhoto) {
           return "Фотографию оставь у себя. Если канал велит удалить её, сначала запомни лицо. Так будет правильнее.";

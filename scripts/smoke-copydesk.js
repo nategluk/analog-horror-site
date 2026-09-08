@@ -351,4 +351,83 @@ if (fs.readFileSync(solnyshkoFile, "utf8") !== solnyshkoBefore) {
   throw new Error("solnyshko copydesk patch did not roundtrip byte-identical");
 }
 
+const {
+  indexArchive,
+  patchLine: patchArchiveLine,
+  RECORDS,
+} = require("./lib/copydesk-archive");
+
+const archive = indexArchive();
+if (archive.nodes.length !== RECORDS.length) {
+  throw new Error(`archive should index ${RECORDS.length} records`);
+}
+const kidults = archive.nodes.find((node) => node.id === "protocol-kidults");
+const dream = archive.nodes.find((node) => node.id === "book-sweet-dream");
+if (!kidults || kidults.layout !== "locked" || kidults.readerPages !== 12) {
+  throw new Error("kidults should be layout-locked to 12 reader pages");
+}
+if (!dream || dream.layout !== "locked" || dream.readerPages !== 22) {
+  throw new Error("sweet-dream book should be layout-locked to 22 reader pages");
+}
+if (!archive.lines.some((line) => line.nodeId === "dossier-irina" && line.kind === "dialogue")) {
+  throw new Error("dossier-irina body copy was not indexed");
+}
+const kidultsParagraph = archive.lines.find(
+  (line) =>
+    line.nodeId === "protocol-kidults" &&
+    line.layoutLocked &&
+    /\.paragraphs\[0\]$/.test(line.field)
+);
+if (!kidultsParagraph || !Number.isInteger(kidultsParagraph.maxChars)) {
+  throw new Error("kidults paragraph should carry a layout character budget");
+}
+const over = `${kidultsParagraph.text}${"x".repeat(kidultsParagraph.maxChars + 1)}`;
+let overBudget = false;
+try {
+  patchArchiveLine(kidultsParagraph.id, kidultsParagraph.text, over);
+} catch (error) {
+  overBudget = /Лимит знаков/.test(error.message);
+}
+if (!overBudget) throw new Error("layout-locked over-budget patch should fail");
+
+const irinaFile = path.join(__dirname, "..", "documents", "dossier-irina.html");
+const irinaBefore = fs.readFileSync(irinaFile, "utf8");
+const irinaLine = archive.lines.find(
+  (line) => line.nodeId === "dossier-irina" && line.field === "html.p[0]"
+);
+if (!irinaLine) throw new Error("dossier-irina first paragraph missing");
+const irinaNext = irinaLine.text.includes("ДОСЬЕ")
+  ? irinaLine.text.replace("ДОСЬЕ", "ДОСЬЕ-TEST")
+  : `${irinaLine.text}!`;
+try {
+  patchArchiveLine(irinaLine.id, irinaLine.text, irinaNext);
+  const patched = indexArchive();
+  const patchedLine = patched.lines.find((line) => line.id === irinaLine.id);
+  if (!patchedLine || patchedLine.text !== irinaNext) {
+    throw new Error("archive html patch was not re-indexed");
+  }
+  patchArchiveLine(irinaLine.id, irinaNext, irinaLine.text);
+} finally {
+  fs.writeFileSync(irinaFile, irinaBefore, "utf8");
+}
+if (fs.readFileSync(irinaFile, "utf8") !== irinaBefore) {
+  throw new Error("archive html patch did not roundtrip byte-identical");
+}
+
+const bookFile = path.join(__dirname, "..", "content", "book", "kidults-protocol.js");
+const bookBefore = fs.readFileSync(bookFile, "utf8");
+try {
+  const shorter =
+    kidultsParagraph.text.slice(0, Math.max(0, kidultsParagraph.text.length - 1)) || kidultsParagraph.text;
+  if (shorter !== kidultsParagraph.text) {
+    patchArchiveLine(kidultsParagraph.id, kidultsParagraph.text, shorter);
+    patchArchiveLine(kidultsParagraph.id, shorter, kidultsParagraph.text);
+  }
+} finally {
+  fs.writeFileSync(bookFile, bookBefore, "utf8");
+}
+if (fs.readFileSync(bookFile, "utf8") !== bookBefore) {
+  throw new Error("kidults copydesk patch did not roundtrip byte-identical");
+}
+
 console.log("OK smoke-copydesk");

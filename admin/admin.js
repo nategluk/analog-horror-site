@@ -133,6 +133,7 @@
 
   const fieldLabel = (line, override) => {
     if (override) return override;
+    if (line.label) return line.label;
     const root = line.field.split(/[.[]/)[0];
     return FIELD_LABEL[line.field] || FIELD_LABEL[root] || KIND_LABEL[line.kind] || line.field;
   };
@@ -163,7 +164,16 @@
     return `${n} ${many}`;
   };
 
-  const limitsFor = (line) => (isChoiceButton(line) ? CHOICE_LIMIT : BEAT_LIMIT);
+  const limitsFor = (line) => {
+    if (Number.isInteger(line?.maxChars)) {
+      return { target: line.targetChars || line.maxChars, hard: line.maxChars };
+    }
+    if (line?.bucket === "archive") {
+      const n = [...(line.text || "")].length;
+      return { target: n, hard: Math.max(n * 4, 4000) };
+    }
+    return isChoiceButton(line) ? CHOICE_LIMIT : BEAT_LIMIT;
+  };
 
   const lengthClass = (text, limits) => {
     const n = [...text].length;
@@ -207,7 +217,9 @@
     if (counter) {
       const limits = limitsFor(line);
       const n = [...(control?.value || line.text)].length;
-      counter.textContent = `${n} / ${limits.target}`;
+      counter.textContent = Number.isInteger(line.maxChars)
+        ? `${n} / ${limits.hard}`
+        : `${n} / ${limits.target}`;
       counter.className = `len ${lengthClass(control?.value || line.text, limits)}`.trim();
     }
     const note = wrap.querySelector(".field-note");
@@ -263,6 +275,7 @@
     control.dataset.lineId = line.id;
     const locked = line.fn && !line.unique;
     control.disabled = locked;
+    if (Number.isInteger(line.maxChars)) control.maxLength = line.maxChars;
     if (autosize) {
       fitArea(control);
       control.addEventListener("input", () => {
@@ -644,8 +657,99 @@
     markHits();
   };
 
+  const renderArchiveField = (line) => {
+    const wrap = document.createElement("div");
+    wrap.className = `extra-field kind-${line.kind}`;
+    wrap.dataset.field = line.id;
+    const limits = limitsFor(line);
+    wrap.innerHTML = `<div class="beat-meta"><span class="kind ${line.kind}">${escapeHtml(
+      fieldLabel(line)
+    )}</span><span class="len"></span></div>`;
+    const area = document.createElement("textarea");
+    area.rows = line.kind === "dialogue" || line.kind === "caption" ? 3 : 1;
+    area.value = line.text;
+    bindControl(area, line, { autosize: true });
+    wrap.append(area);
+    if (line.layoutLocked) {
+      const note = document.createElement("p");
+      note.className = "field-note";
+      note.textContent = `Лимит вёрстки: ${limits.hard} знаков. Длиннее — собьётся число страниц.`;
+      wrap.append(note);
+    }
+    const counter = wrap.querySelector(".len");
+    const n = [...line.text].length;
+    counter.textContent = Number.isInteger(line.maxChars) ? `${n} / ${limits.hard}` : `${n}`;
+    counter.className = `len ${lengthClass(line.text, limits)}`.trim();
+    return wrap;
+  };
+
+  const renderArchive = (nodeId) => {
+    const node = script.nodes.find((item) => item.id === nodeId);
+    const lines = nodeLines(nodeId, "archive");
+    scriptEl.innerHTML = "";
+    if (!node) {
+      scriptEl.innerHTML = "<p class=\"empty\">Документ не найден.</p>";
+      return;
+    }
+
+    const preview = document.createElement("a");
+    preview.className = "button-link";
+    preview.href = node.href || `/${nodeId}`;
+    preview.target = "_blank";
+    preview.rel = "noreferrer";
+    preview.textContent = "Открыть на сайте";
+    const metaBits = [node.sceneGroup, node.step || node.speaker];
+    if (node.layout === "locked") {
+      metaBits.push(
+        `читатель: ${String(node.readerPages).padStart(2, "0")} стр. (фиксировано)`
+      );
+      if (node.sourcePages) metaBits.push(`${node.sourcePages} исходных листов`);
+    }
+    renderScriptHead(node.id, metaBits.filter(Boolean).join(" · "), preview);
+
+    if (node.layout === "locked") {
+      const banner = document.createElement("p");
+      banner.className = "layout-lock";
+      banner.textContent =
+        "Вёрстка зафиксирована. Нельзя добавлять абзацы; каждый блок не длиннее исходного лимита знаков, чтобы число страниц читателя не выросло.";
+      scriptEl.append(banner);
+    }
+
+    if (!lines.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty";
+      empty.textContent = "В этом документе нет правимого текста.";
+      scriptEl.append(empty);
+      return;
+    }
+
+    const groups = new Map();
+    lines.forEach((line) => {
+      let key = "Документ";
+      if (line.page) key = line.pageLabel || `Лист ${String(line.page).padStart(2, "0")}`;
+      else if (String(line.field).startsWith("seo.")) key = "SEO";
+      else if (String(line.field).startsWith("shelf.")) key = "Карточка на полке";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(line);
+    });
+    groups.forEach((groupLines, label) => {
+      const section = document.createElement("section");
+      section.className = "archive-page";
+      const heading = document.createElement("h3");
+      heading.textContent = label;
+      section.append(heading);
+      const stack = document.createElement("div");
+      stack.className = "extra-stack";
+      groupLines.forEach((line) => stack.append(renderArchiveField(line)));
+      section.append(stack);
+      scriptEl.append(section);
+    });
+    markHits();
+  };
+
   const renderSelected = () => {
     if (selectedKind === "inbox") renderInbox(selectedId);
+    else if (script?.game?.id === "archive") renderArchive(selectedId);
     else renderScript(selectedId);
   };
 
@@ -728,11 +832,18 @@
     const data = await api(`/api/copydesk/${encodeURIComponent(id)}/script`);
     applyScript(data, { refreshSelected: false });
     const inboxCount = (data.messages || []).length;
-    setStatus(
-      `${data.game.title}: ${data.nodes.length} веток, ${data.lines.length} строк` +
-        (inboxCount ? `, ${inboxCount} писем кабинета` : ""),
-      "ok"
-    );
+    if (id === "archive") {
+      setStatus(
+        `${data.game.title}: ${data.nodes.length} документов, ${data.lines.length} полей`,
+        "ok"
+      );
+    } else {
+      setStatus(
+        `${data.game.title}: ${data.nodes.length} веток, ${data.lines.length} строк` +
+          (inboxCount ? `, ${inboxCount} писем кабинета` : ""),
+        "ok"
+      );
+    }
     const hash = decodeURIComponent(location.hash.replace(/^#/, ""));
     const parts = hash.split("/");
     if (parts[0] === id && parts[1] === "inbox" && parts[2]) {

@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-08 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: public archive SEO copy (uncommitted) |
-| Активная линия | public archive SEO copy |
-| Последний этап | `archive.html` получил отдельный SEO title/description, Open Graph copy, видимую фразу про крипипасту и ARG и более ясную ссылку на каталог эпизодов. `build-public`, public verifier, archive SEO check 6/6 и `git diff --check` прошли. |
+| Дерево | dirty: public archive SEO copy + Copy Desk archive editor |
+| Активная линия | Copy Desk archive records |
+| Последний этап | Copy Desk вкладка «Архив» правит 12 записей (протоколы, досье, книга). KIDULTS и книга сна: фиксированные 12 и 22 страницы читателя, hard-лимит знаков на блок, maxlength в UI. HTML-досье/протоколы — поток без жёсткой вёрстки. `node --check`, `git diff --check`, API и браузер Copy Desk (kidults/досье Ирины/книга сна) прошли. Полный `smoke-copydesk` на этом дереве падает из‑за чужого rename Ирины в `call-content.js`. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

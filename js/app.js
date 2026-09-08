@@ -1787,7 +1787,7 @@
     );
   const staffDirectory = {
     irina: {
-      name: "ИРИНА В.",
+      name: "ИРИНА",
       role: "КУРАТОР ДЕТСКИХ МАРШРУТОВ",
       status: "АКТИВЕН",
       note: "Склонна к импровизации. Рекомендовано наблюдение за служебным каналом.",
@@ -3273,7 +3273,7 @@
     };
 
     const startTypingSound = (node) => {
-      if (!soundEnabled || reducedMotion || node?.speaker !== "ИРИНА В.") return;
+      if (!soundEnabled || reducedMotion || node?.speaker !== "ИРИНА") return;
 
       if (Number.isFinite(typingSound.duration) && typingSound.duration > 4) {
         typingSound.currentTime = Math.random() * (typingSound.duration - 4);
@@ -3607,7 +3607,7 @@
       step.textContent = "КУРАТОРСКИЙ ДОСТУП ОТМЕНЁН";
       signal.textContent = "СИГНАЛ 0%";
       feedState.textContent = "ПЕРЕДАЧА СТАРШЕМУ ПРОВОДНИКУ";
-      speaker.textContent = "ИРИНА В.";
+      speaker.textContent = "ИРИНА";
       const rejectionMessages = {
         "minor-inspected":
           "Тогда ты уже учтён как сырьё. Твой маршрут начинается не в кадровом канале. За тобой придёт Старший Проводник.",

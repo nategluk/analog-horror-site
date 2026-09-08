@@ -982,13 +982,23 @@ const collectChoices = (ctx, source, prop, speaker) => {
 };
 
 const listGames = () =>
-  Object.values(GAMES).map((game) => ({
-    id: game.id,
-    title: game.title,
-    file: game.file,
-    inbox: Boolean(game.inbox),
-    inboxGameId: game.inbox ? game.id : INBOX_GAME_ID,
-  }));
+  Object.values(GAMES)
+    .map((game) => ({
+      id: game.id,
+      title: game.title,
+      file: game.file,
+      inbox: Boolean(game.inbox),
+      inboxGameId: game.inbox ? game.id : INBOX_GAME_ID,
+      surface: "game",
+    }))
+    .concat({
+      id: "archive",
+      title: "Архив",
+      file: "documents/",
+      inbox: false,
+      inboxGameId: INBOX_GAME_ID,
+      surface: "archive",
+    });
 
 const slugifyId = (text) => {
   const ascii = [...String(text || "").toLowerCase()]
@@ -1262,4 +1272,9 @@ module.exports = {
   createInboxMessage,
   deleteInboxMessage,
   projectRoot,
+  createScanner,
+  parseObjectEntries,
+  collectLiterals,
+  encodeJsString,
+  decodeJsString,
 };

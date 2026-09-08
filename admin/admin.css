@@ -651,6 +651,31 @@ textarea {
   margin-top: 0.75rem;
 }
 
+.layout-lock {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #7a3a30;
+  background: rgba(196, 92, 74, 0.12);
+  color: #f0c2ba;
+  font-size: 0.88rem;
+}
+
+.archive-page {
+  margin: 0 0 1.4rem;
+  padding: 0.9rem 1rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.archive-page h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
 @media (max-width: 840px) {
   .desk {
     grid-template-columns: 1fr;

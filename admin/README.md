@@ -39,6 +39,9 @@ Port: `ADMIN_PORT` env or default `8787`.
 (`imageAlt`, `mediaFallback`, варианты `lineWhen`) в блоке «Ещё».
 
 - Игры: куратор Ирина, Красная комната, кабинка Павла, парк «Солнышко»
+- Вкладка **Архив**: досье, протоколы и книги. У протокола KIDULTS и книги
+  сна фиксированное число страниц читателя и жёсткий лимит знаков на блок,
+  чтобы правка не раздувала вёрстку.
 - Сайдбар группирует ветки: у Ирины по `step`, у Павла и Лоры по префиксу id
 - Правка статичного текста и **уникальных** строк внутри функций
 - Сохранение по blur и Cmd/Ctrl+S, одна строка в исходнике
@@ -66,6 +69,8 @@ validate и export MD. Surgical save для узлов Ирины остаётс
 | `admin/admin.js` / `admin.css` | Writer UI |
 | `admin/nodes.html` | Legacy node inspector |
 | `scripts/lib/copydesk-core.js` | Index / patch / rename |
+| `scripts/lib/copydesk-archive.js` | Архив: досье, протоколы, книги |
+| `content/archive/copydesk-layout-budgets.json` | Лимиты знаков для KIDULTS и книги сна |
 | `scripts/admin-server.js` | Localhost static + API |
 | `content/irina/call-content.js` | Irina source |
 | `content/lora/red-room-content.js` | Red Room source |
