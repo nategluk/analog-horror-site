@@ -12210,6 +12210,47 @@ body.staff-mode .sweet-dream-book.is-preface .sweet-dream-book__warning {
   }
 }
 
+/* Inserts grow from modest pamphlet plates to full clinical photographs. */
+body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__leaf {
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+}
+
+body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__copy {
+  display: none;
+}
+
+body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual,
+body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual-frame {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+body.staff-mode .sweet-dream-book.is-plate .sweet-dream-book__visual img {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+body.staff-mode .sweet-dream-book[data-book-plate-scale="small"] .sweet-dream-book__visual-frame {
+  width: 72%;
+  height: 72%;
+}
+
+body.staff-mode .sweet-dream-book[data-book-plate-scale="medium"] .sweet-dream-book__visual-frame {
+  width: 88%;
+  height: 88%;
+}
+
 /* The protocol uses top-aligned, balanced text leaves rather than centered remnants. */
 body.staff-mode.protocol-book-page .sweet-dream-book.is-chapter-text .sweet-dream-book__copy,
 body.staff-mode.protocol-book-page .sweet-dream-book.is-preface .sweet-dream-book__copy {

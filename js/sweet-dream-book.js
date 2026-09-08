@@ -95,14 +95,18 @@
   const applyEntry = (entry) => {
     const kind = entry.kind || "preface";
     const isCover = kind === "cover";
+    const isPlate = kind === "plate";
     const isChapterLead = kind === "chapter-lead";
     const isChapterText = kind === "chapter-text";
     const isChapter = isChapterLead || isChapterText;
-    const isVisual = isCover || isChapterLead;
+    const isVisual = isCover || isChapterLead || isPlate;
     const chapter = Number(entry.chapter);
     const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
 
     root.dataset.bookKind = kind;
+    if (isPlate) root.dataset.bookPlateScale = entry.scale || "full";
+    else delete root.dataset.bookPlateScale;
+    root.classList.toggle("is-plate", isPlate);
     if (chapterLabel) root.dataset.bookChapter = chapterLabel;
     else delete root.dataset.bookChapter;
     root.classList.toggle("is-cover", isCover);
@@ -113,7 +117,7 @@
     root.classList.toggle("is-visual", isVisual);
     root.classList.toggle("is-copy", kind === "preface" || isChapterText);
     visual.hidden = !isVisual;
-    copy.hidden = isCover;
+    copy.hidden = isCover || isPlate;
 
     if (isVisual) {
       image.src = resolveAsset(entry.image);
@@ -123,7 +127,7 @@
       image.loading = isCover ? "eager" : "lazy";
     }
 
-    if (isCover) {
+    if (isCover || isPlate) {
       kicker.textContent = "";
       title.hidden = true;
       title.textContent = entry.title || "";
@@ -198,21 +202,22 @@
     return best > start ? best : Math.min(tokens.length, start + 1);
   };
 
-  const paginateChapter = (entry) => {
+  const paginateChapterSegment = (entry) => {
     const tokens = tokenizeParagraphs(entry.paragraphs);
+    const firstKind = entry.continuation ? "chapter-text" : "chapter-lead";
     if (tokens.length === 0) {
       return [makeChapterPage(entry, "chapter-lead", [], 0, 0)];
     }
 
     if (root.dataset.bookLayout === "balanced") {
       // Keep the illustrated opening, then balance whole paragraphs across text leaves.
-      const leadLimit = findPageEnd(entry, "chapter-lead", tokens, 0);
+      const leadLimit = findPageEnd(entry, firstKind, tokens, 0);
       const isBoundary = (end) => end === tokens.length ||
         tokens[end - 1].paragraphIndex !== tokens[end].paragraphIndex;
       let leadEnd = leadLimit;
       while (leadEnd > 1 && !isBoundary(leadEnd)) leadEnd -= 1;
       if (!isBoundary(leadEnd)) leadEnd = leadLimit;
-      const result = [makeChapterPage(entry, "chapter-lead",
+      const result = [makeChapterPage(entry, firstKind,
         tokensToParagraphs(tokens, 0, leadEnd), 0, leadEnd)];
       const best = new Map([[tokens.length, { count: 0, cost: 0, pages: [] }]]);
       for (let start = tokens.length - 1; start >= leadEnd; start -= 1) {
@@ -237,7 +242,7 @@
 
     const chapterPages = [];
     let start = 0;
-    let kind = "chapter-lead";
+    let kind = firstKind;
     while (start < tokens.length) {
       const end = findPageEnd(entry, kind, tokens, start);
       chapterPages.push(
@@ -248,6 +253,31 @@
     }
 
     return chapterPages;
+  };
+
+  const paginateChapter = (entry) => {
+    if (!entry.inserts?.length) return paginateChapterSegment(entry);
+    const result = [];
+    let paragraphStart = 0;
+    let sentenceOffset = 0;
+    const appendText = (end) => {
+      const paragraphs = entry.paragraphs.slice(paragraphStart, end);
+      if (!paragraphs.length) return;
+      const segment = { ...entry, paragraphs, continuation: paragraphStart > 0 };
+      result.push(...paginateChapterSegment(segment).map((page) => ({
+        ...page,
+        sentenceStart: page.sentenceStart + sentenceOffset,
+        sentenceEnd: page.sentenceEnd + sentenceOffset
+      })));
+      sentenceOffset += tokenizeParagraphs(paragraphs).length;
+      paragraphStart = end;
+    };
+    entry.inserts.forEach((insert) => {
+      appendText(insert.afterParagraph);
+      result.push({ ...insert, kind: "plate", chapter: Number(entry.chapter), title: entry.title });
+    });
+    appendText(entry.paragraphs.length);
+    return result;
   };
 
   const paginateBook = () => {
@@ -340,7 +370,9 @@
 
     if (announce && announcer) {
       const place =
-        kind === "cover"
+        kind === "plate"
+          ? `иллюстрация: ${entry.alt || entry.title}`
+          : kind === "cover"
           ? "обложка"
           : kind === "preface"
             ? "предисловие редакции"
@@ -371,7 +403,10 @@
 
     let targetIndex = getHashIndex();
     if (previousEntry) {
-      if (previousEntry.chapter) {
+      if (previousEntry.kind === "plate") {
+        const matchingIndex = pages.findIndex((page) => page.kind === "plate" && page.image === previousEntry.image);
+        targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
+      } else if (previousEntry.chapter) {
         const previousSentence = Number(previousEntry.sentenceStart) || 0;
         const matchingIndex = pages.findIndex(
           (page) =>

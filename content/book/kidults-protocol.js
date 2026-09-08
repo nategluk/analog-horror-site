@@ -19,6 +19,16 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   },
   {
     chapter: 1,
+    inserts: [
+      {
+        afterParagraph: 7,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-01.webp",
+        alt: "Специалист спокойно застёгивает больничный браслет на запястье взрослого; рядом лежит карточка учёта.",
+        width: 1024,
+        height: 1536,
+        scale: "small"
+      }
+    ],
     title: "Приёмная для взрослых",
     image: "assets/staff/documents/protocol-kidults/protocol-kidults-01-intake.webp",
     alt: "Рисованная медицинская иллюстрация: специалист в маске показывает взрослому субъекту таблицу возрастных категорий.",
@@ -39,6 +49,16 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   },
   {
     chapter: 2,
+    inserts: [
+      {
+        afterParagraph: 4,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-02.webp",
+        alt: "Усталый взрослый в тяжёлом костюме зайца на кушетке; рядом — улыбающаяся голова костюма.",
+        width: 1024,
+        height: 1536,
+        scale: "small"
+      }
+    ],
     title: "Тройная доза и зоопарк",
     image: "assets/staff/documents/protocol-kidults/protocol-kidults-02-triple-dose.webp",
     alt: "Рисованная медицинская иллюстрация: взрослый субъект проходит три этапа подготовки и оказывается в дружелюбном костюме животного.",
@@ -58,6 +78,16 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   },
   {
     chapter: 3,
+    inserts: [
+      {
+        afterParagraph: 7,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-03.webp",
+        alt: "Взрослый с почти фотографическим лицом сидит за детским столом; снизу видны основание медицинского кресла и педали.",
+        width: 1024,
+        height: 1536,
+        scale: "medium"
+      }
+    ],
     title: "Индивидуальная коррекция",
     image: "assets/staff/documents/protocol-kidults/protocol-kidults-03-individual-correction.webp",
     alt: "Рисованная медицинская иллюстрация: специалист по коррекции возраста проводит с взрослым субъектом спокойный урок с карточками и кубиками.",
@@ -77,6 +107,16 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   },
   {
     chapter: 4,
+    inserts: [
+      {
+        afterParagraph: 7,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-04.webp",
+        alt: "Медицинский снимок: две послеоперационные культи полностью закрыты бинтами и лежат на больничной простыне.",
+        width: 1024,
+        height: 1536,
+        scale: "full"
+      }
+    ],
     title: "Коррекция роста",
     image: "assets/staff/documents/protocol-kidults/protocol-kidults-04-growth-correction.webp",
     alt: "Рисованная медицинская иллюстрация: улыбающийся взрослый человек в инвалидном кресле находится рядом со специалистом и ростомером.",
@@ -97,6 +137,24 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
   },
   {
     chapter: 5,
+    inserts: [
+      {
+        afterParagraph: 6,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-05.webp",
+        alt: "Фотографический снимок тёмного помещения с несколькими фигурами, обмотанными белой тканью; центральная фигура движется на костылях среди чёрных батутов.",
+        width: 1024,
+        height: 1536,
+        scale: "full"
+      },
+      {
+        afterParagraph: 12,
+        image: "assets/staff/documents/protocol-kidults/protocol-kidults-insert-06.webp",
+        alt: "Фотография фигуры с забинтованной головой, склонившейся над жёлтым батутом; вокруг — глубокая тьма.",
+        width: 1024,
+        height: 1536,
+        scale: "full"
+      }
+    ],
     title: "Принудительный ребёнок",
     image: "assets/staff/documents/protocol-kidults/protocol-kidults-05-final-correction.webp",
     alt: "Рисованная медицинская иллюстрация: улыбающийся взрослый пациент с чистой повязкой на голове получает служебный лист у специалиста.",
