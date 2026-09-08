@@ -12198,3 +12198,19 @@ body.staff-mode .sweet-dream-book.is-preface .sweet-dream-book__warning {
     animation: none;
   }
 }
+
+/* The protocol uses top-aligned, balanced text leaves rather than centered remnants. */
+body.staff-mode.protocol-book-page .sweet-dream-book.is-chapter-text .sweet-dream-book__copy,
+body.staff-mode.protocol-book-page .sweet-dream-book.is-preface .sweet-dream-book__copy {
+  justify-content: flex-start;
+}
+
+body.staff-mode.protocol-book-page .sweet-dream-book.is-chapter-text .sweet-dream-book__copy [data-book-text],
+body.staff-mode.protocol-book-page .sweet-dream-book.is-preface .sweet-dream-book__copy [data-book-text] {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+body.staff-mode.protocol-book-page .sweet-dream-book.is-chapter-text .sweet-dream-book__copy [data-book-text] p {
+  margin-bottom: 0.7rem;
+}

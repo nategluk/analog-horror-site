@@ -195,6 +195,37 @@
       return [makeChapterPage(entry, "chapter-lead", [], 0, 0)];
     }
 
+    if (root.dataset.bookLayout === "balanced") {
+      // Keep the illustrated opening, then balance whole paragraphs across text leaves.
+      const leadLimit = findPageEnd(entry, "chapter-lead", tokens, 0);
+      const isBoundary = (end) => end === tokens.length ||
+        tokens[end - 1].paragraphIndex !== tokens[end].paragraphIndex;
+      let leadEnd = leadLimit;
+      while (leadEnd > 1 && !isBoundary(leadEnd)) leadEnd -= 1;
+      if (!isBoundary(leadEnd)) leadEnd = leadLimit;
+      const result = [makeChapterPage(entry, "chapter-lead",
+        tokensToParagraphs(tokens, 0, leadEnd), 0, leadEnd)];
+      const best = new Map([[tokens.length, { count: 0, cost: 0, pages: [] }]]);
+      for (let start = tokens.length - 1; start >= leadEnd; start -= 1) {
+        const limit = findPageEnd(entry, "chapter-text", tokens, start);
+        let choice = null;
+        for (let end = start + 1; end <= limit; end += 1) {
+          const tail = best.get(end);
+          const paragraphs = tokensToParagraphs(tokens, start, end);
+          const length = paragraphs.join(" ").length;
+          const count = tail.count + 1;
+          const cost = tail.cost + length * length + (isBoundary(end) ? 0 : 1000000);
+          if (!choice || count < choice.count || (count === choice.count && cost < choice.cost)) {
+            choice = { count, cost, pages: [
+              makeChapterPage(entry, "chapter-text", paragraphs, start, end), ...tail.pages
+            ] };
+          }
+        }
+        best.set(start, choice);
+      }
+      return [...result, ...best.get(leadEnd).pages];
+    }
+
     const chapterPages = [];
     let start = 0;
     let kind = "chapter-lead";
