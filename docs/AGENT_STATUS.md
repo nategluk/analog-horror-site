@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-07 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: SPA init протокола Kidults / Книги Сладкого Сна |
-| Активная линия | protocol-kidults: кнопка «Далее» и свайп после SPA из архива |
-| Последний этап | SPA больше не глотает runtime книги: `DZInitSweetDreamBook` грузит content+runtime, синхронизирует `protocol-book-page`. Архив → Kidults: `bookReady`, «Далее» ведёт на `#leaf-02`, свайп на стр. 03, overflowX 0. |
+| Дерево | dirty: Kidults swipe-guide + SPA book init |
+| Активная линия | protocol-kidults: уведомление о свайпе как в Книге Сладкого Сна |
+| Последний этап | Подсказка «СВАЙПНИТЕ ВЛЕВО» вынесена на лист: на предисловии Kidults видна на mobile 390×844, после свайпа скрывается. Книга сна сохраняет прежний оверлей обложки. overflowX 0. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 

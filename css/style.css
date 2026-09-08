@@ -11406,6 +11406,7 @@ body.staff-mode .sweet-dream-book__step[aria-current="page"] {
 }
 
 body.staff-mode .sweet-dream-book__leaf {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
   align-items: start;
@@ -11748,6 +11749,7 @@ body.staff-mode .sweet-dream-book.is-chapter-lead .sweet-dream-book__visual img 
 
 body.staff-mode .sweet-dream-book__swipe-guide {
   position: absolute;
+  z-index: 2;
   right: 0.75rem;
   left: 0.75rem;
   top: 57%;
@@ -12110,6 +12112,11 @@ body.staff-mode .sweet-dream-book.is-preface .sweet-dream-book__warning {
 
   body.staff-mode .sweet-dream-book__swipe-guide {
     display: grid;
+  }
+
+  body.staff-mode .sweet-dream-book.is-preface .sweet-dream-book__swipe-guide {
+    top: 7.5rem;
+    transform: none;
   }
 
   body.staff-mode .sweet-dream-book__copy {
