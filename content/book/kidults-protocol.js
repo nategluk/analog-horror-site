@@ -111,3 +111,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     ]
   }
 ]);
+
+window.DZ_BOOK_CONTENT = Object.assign(window.DZ_BOOK_CONTENT || {}, {
+  "kidults-protocol": window.DZ_SWEET_DREAM_BOOK
+});

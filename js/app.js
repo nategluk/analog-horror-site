@@ -1278,6 +1278,45 @@
     window.DZInitEpisodeCatalog?.();
   };
 
+  const BOOK_CONTENT_SCRIPTS = Object.freeze({
+    "kidults-protocol": "../content/book/kidults-protocol.js",
+    "sweet-dream": "../content/book/sweet-dream-book.js"
+  });
+  const PAGE_BODY_CLASSES = Object.freeze([
+    "document-page",
+    "sweet-dream-page",
+    "protocol-book-page"
+  ]);
+
+  const syncPageBodyClasses = (nextBody) => {
+    PAGE_BODY_CLASSES.forEach((className) => {
+      body.classList.toggle(className, Boolean(nextBody?.classList.contains(className)));
+    });
+  };
+
+  const initSweetDreamBook = async () => {
+    const root = document.querySelector("[data-sweet-dream-book]");
+    if (!root) {
+      window.DZInitSweetDreamBook?.();
+      return;
+    }
+
+    const bookId = root.dataset.bookContent || "sweet-dream";
+    const contentPath = BOOK_CONTENT_SCRIPTS[bookId] || BOOK_CONTENT_SCRIPTS["sweet-dream"];
+    const dataScript = new URL(contentPath, scriptUrl).href;
+    const runtimeScript = new URL("sweet-dream-book.js", scriptUrl).href;
+
+    if (!Array.isArray(window.DZ_BOOK_CONTENT?.[bookId])) {
+      await loadPageScript(dataScript);
+    }
+
+    if (typeof window.DZInitSweetDreamBook !== "function") {
+      await loadPageScript(runtimeScript);
+    }
+
+    window.DZInitSweetDreamBook?.();
+  };
+
   const ensurePageStylesheet = (fileName, marker) => {
     const href = new URL(`../css/${fileName}`, scriptUrl).href;
     const alreadyLinked = [...document.querySelectorAll("link[rel='stylesheet']")].some(
@@ -5408,6 +5447,7 @@
     initAssetClassifier();
     initStaffProtocolWarning();
     initArchiveCatalog();
+    initSweetDreamBook();
     initMobileNavigation();
     initStaffHomeNotice();
     initLoraRedRoom();
@@ -5581,6 +5621,7 @@
         if (player && player.parentNode) player.parentNode.removeChild(player);
         
         document.title = doc.title;
+        syncPageBodyClasses(doc.body);
         currentWrapper.innerHTML = newWrapper.innerHTML;
         currentWrapper.className = newWrapper.className;
         currentWrapper.style.opacity = "1";
@@ -5595,6 +5636,7 @@
         }
 
         await initEpisodeCatalogPage(response.url || url);
+        await initSweetDreamBook();
         await initRedRoomEspresso();
         await initSolnyshkoCotton();
         await initLoraRedRoom();

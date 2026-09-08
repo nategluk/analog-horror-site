@@ -1,11 +1,20 @@
 (() => {
-  const root = document.querySelector("[data-sweet-dream-book]");
-  const entries = Array.isArray(window.DZ_SWEET_DREAM_BOOK)
-    ? window.DZ_SWEET_DREAM_BOOK
-    : [];
+  let active = null;
 
-  if (!root || root.dataset.bookReady === "true" || entries.length === 0) return;
+  const getBookEntries = (root) => {
+    const bookId = root?.dataset.bookContent;
+    const catalog = window.DZ_BOOK_CONTENT?.[bookId];
+    if (Array.isArray(catalog) && catalog.length) return catalog;
+    return Array.isArray(window.DZ_SWEET_DREAM_BOOK) ? window.DZ_SWEET_DREAM_BOOK : [];
+  };
 
+  const destroySweetDreamBook = () => {
+    if (!active) return;
+    active.cleanup();
+    active = null;
+  };
+
+  const mountSweetDreamBook = (root, entries) => {
   const image = root.querySelector("[data-book-image]");
   const visual = root.querySelector(".sweet-dream-book__visual");
   const copy = root.querySelector(".sweet-dream-book__copy");
@@ -389,9 +398,23 @@
     return true;
   };
 
+  const abortController = new AbortController();
+  const { signal } = abortController;
+  let modeObserver = null;
+
+  const cleanup = () => {
+    modeObserver?.disconnect();
+    abortController.abort();
+    window.clearTimeout(resizeTimer);
+    if (paperTurnSound) {
+      paperTurnSound.pause();
+    }
+    delete root.dataset.bookReady;
+  };
+
   window.requestAnimationFrame(() => {
     if (initialize()) return;
-    const modeObserver = new MutationObserver(() => {
+    modeObserver = new MutationObserver(() => {
       if (!initialize()) return;
       modeObserver.disconnect();
     });
@@ -402,10 +425,10 @@
     if (!initialized) return;
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => rebuildPages({ preservePosition: true }), 140);
-  });
+  }, { signal });
 
-  previous?.addEventListener("click", () => move(-1));
-  next?.addEventListener("click", () => move(1));
+  previous?.addEventListener("click", () => move(-1), { signal });
+  next?.addEventListener("click", () => move(1), { signal });
 
   leaf.addEventListener("pointerdown", (event) => {
     if (event.pointerType === "mouse") return;
@@ -415,7 +438,7 @@
     } catch (error) {
       // Synthetic or already-released pointers may not be capturable.
     }
-  });
+  }, { signal });
 
   leaf.addEventListener("pointerup", (event) => {
     if (!pointerStart || pointerStart.id !== event.pointerId) return;
@@ -425,17 +448,17 @@
     if (Math.abs(deltaX) < 56 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
     event.preventDefault();
     move(deltaX < 0 ? 1 : -1);
-  });
+  }, { signal });
 
   leaf.addEventListener("pointercancel", () => {
     pointerStart = null;
-  });
+  }, { signal });
 
   window.addEventListener("hashchange", () => {
     if (!pageCount) return;
     const requested = getHashIndex();
     if (requested !== currentIndex) render(requested, { announce: true, syncHash: false });
-  });
+  }, { signal });
 
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
@@ -449,5 +472,24 @@
       event.preventDefault();
       move(1);
     }
-  });
+  }, { signal });
+
+  active = { root, cleanup };
+  };
+
+  const initSweetDreamBook = () => {
+    const root = document.querySelector("[data-sweet-dream-book]");
+    if (!root) {
+      destroySweetDreamBook();
+      return;
+    }
+    const entries = getBookEntries(root);
+    if (!entries.length) return;
+    if (active?.root === root) return;
+    destroySweetDreamBook();
+    mountSweetDreamBook(root, entries);
+  };
+
+  window.DZInitSweetDreamBook = initSweetDreamBook;
+  initSweetDreamBook();
 })();

@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-07 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: archive.html dossier card labels |
-| Активная линия | Архив / личные дела: имя и должность выше номера досье |
-| Последний этап | В пяти карточках STAFF-архива `strong` теперь роль/имя, вторичная строка — номер досье. Протоколы не трогались. Desktop 1280×800 и 390×844: overflowX 0, console 0. |
+| Дерево | dirty: SPA init протокола Kidults / Книги Сладкого Сна |
+| Активная линия | protocol-kidults: кнопка «Далее» и свайп после SPA из архива |
+| Последний этап | SPA больше не глотает runtime книги: `DZInitSweetDreamBook` грузит content+runtime, синхронизирует `protocol-book-page`. Архив → Kidults: `bookReady`, «Далее» ведёт на `#leaf-02`, свайп на стр. 03, overflowX 0. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
