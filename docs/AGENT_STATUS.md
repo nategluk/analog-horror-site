@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-08 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: Kidults attachment replacements + existing book layout + protocol-playground paragraph |
-| Активная линия | protocol-kidults: шесть вставок после согласованных абзацев; protocol-playground: абзац о Батутном парке «Кузнечик» |
-| Последний этап | `insert-05` и `insert-06` заменены пользовательскими аттачами в том же порядке; оба нормализованы в `1024×1536 WebP`, alt-описания и журнал ассетов обновлены. `build-public`, public verifier, побитное совпадение source/public, `node --check` и `git diff --check` прошли. Логику ридера и остальные четыре кадра не менял. Дополнительно добавлен контентный абзац после `SCHEMA P-03` в `protocol-playground.html`; `git diff --check` прошёл. |
+| Дерево | dirty: Kidults attachment replacements + existing book layout + protocol-kidults paragraph |
+| Активная линия | protocol-kidults: шесть вставок после согласованных абзацев; финальная связка взрослых детей, увечных и Батутного парка |
+| Последний этап | `insert-05` и `insert-06` заменены пользовательскими аттачами в том же порядке; оба нормализованы в `1024×1536 WebP`, alt-описания и журнал ассетов обновлены. `build-public`, public verifier, побитное совпадение source/public, `node --check` и `git diff --check` прошли. Логику ридера и остальные четыре кадра не менял. Дополнительно добавлен абзац перед «Мы желаем вам сладких снов»; `node --check` и `git diff --check` прошли. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
