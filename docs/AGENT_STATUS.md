@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-08 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: location CCTV migration for zoo and pool; old comic assets removed |
-| Активная линия | location dossiers: square CCTV/VHS media replacement |
-| Последний этап | `staff/locations/losiny-ostrov-zoo.html` оставлен с одним CCTV-видео `zoo-01.mp4`; два остальных ролика не дублируются в досье и остаются только в скрытом VCR-пуле главной. `dolphin-pool.html` использует `pool-01.mp4`; poster-fallback и approved media state сохранены. `build-public`, public verifier, desktop/mobile browser QA, console check и `git diff --check` прошли. |
+| Дерево | dirty: public archive SEO copy (uncommitted) |
+| Активная линия | public archive SEO copy |
+| Последний этап | `archive.html` получил отдельный SEO title/description, Open Graph copy, видимую фразу про крипипасту и ARG и более ясную ссылку на каталог эпизодов. `build-public`, public verifier, archive SEO check 6/6 и `git diff --check` прошли. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
