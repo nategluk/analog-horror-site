@@ -255,10 +255,12 @@
         >
           <div class="cctv-console">
             <article class="cctv-monitor">
-              <div class="cctv-monitor__brand" aria-hidden="true">
-                <strong>ТЫНДЕКС ВИДЕО</strong>
-                <span>MODEL 312-C</span>
-              </div>
+              <img
+                class="cctv-monitor__housing"
+                src="assets/staff/tv/zhir-tv-monitor-graphite.webp"
+                alt=""
+                aria-hidden="true"
+              />
               <div class="cctv-status">
                 <span class="cctv-dot blink"></span>
                 <span data-cctv-channel-label>CH -- // НЕТ СИГНАЛА</span>
@@ -341,82 +343,71 @@
                     SOURCE — ВЕРНУТЬСЯ К ЭФИРУ
                   </p>
                 </div>
-                <div
-                  class="cctv-screen__mute"
-                  data-cctv-mute-indicator
-                  aria-hidden="true"
-                  hidden
-                >
-                  MUTE
-                </div>
+              <div
+                class="cctv-screen__mute"
+                data-cctv-mute-indicator
+                aria-hidden="true"
+                hidden
+              >
+                MUTE
               </div>
-              <div class="cctv-monitor__controls">
-                <button
-                  class="cctv-monitor__power-button cctv-monitor__power-button--on"
-                  type="button"
-                  data-cctv-power-on
-                  aria-pressed="false"
-                  aria-label="Включить телевизор"
-                >
-                  <span aria-hidden="true"></span>
-                </button>
-                <button
-                  class="cctv-monitor__power-button cctv-monitor__power-button--off"
-                  type="button"
-                  data-cctv-power-off
-                  aria-pressed="true"
-                  aria-label="Выключить телевизор"
-                >
-                  <span aria-hidden="true"></span>
-                </button>
               </div>
+              <span class="cctv-monitor__standby" aria-hidden="true"></span>
             </article>
 
+            <div class="cctv-remote-bay" data-cctv-remote-bay>
+              <button
+                type="button"
+                class="cctv-remote-bay__handle"
+                data-cctv-remote-toggle
+                aria-expanded="false"
+                aria-controls="home-cctv-remote-well"
+                aria-label="Выдвинуть пульт ЖИР ТВ"
+              >
+                <span data-cctv-remote-toggle-label>ПУЛЬТ // ВЫДВИНУТЬ</span>
+              </button>
+              <div
+                class="cctv-remote-bay__well"
+                id="home-cctv-remote-well"
+                data-cctv-remote-well
+                aria-hidden="true"
+                inert
+              >
+                <div class="cctv-remote-bay__tray">
             <nav class="cctv-remote" aria-label="Пульт внутреннего эфира">
-              <p aria-hidden="true">REMOTE CONTROL // MODEL R-04</p>
+              <img
+                class="cctv-remote__housing"
+                src="assets/staff/tv/zhir-tv-remote.webp"
+                alt=""
+                aria-hidden="true"
+              />
               <div class="cctv-remote__buttons">
-                <button
-                  type="button"
-                  data-cctv-source-button
-                  aria-pressed="false"
-                  aria-label="Открыть внешний источник"
-                >
-                  <span aria-hidden="true">SRC</span>
-                  <strong data-cctv-source-label>SOURCE</strong>
+                <button type="button" class="cctv-remote__key" style="--x:32%;--y:5.2%;--w:36%;--h:11%" data-cctv-power aria-pressed="false" aria-label="Питание телевизора"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:16.4%;--w:21%;--h:10.4%" data-cctv-digit="1" aria-label="Канал 1"></button>
+                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:16.4%;--w:19.4%;--h:10.4%" data-cctv-digit="2" aria-label="Канал 2"></button>
+                <button type="button" class="cctv-remote__key" style="--x:60%;--y:16.4%;--w:18.5%;--h:10.4%" data-cctv-digit="3" aria-label="Канал 3"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:26.9%;--w:21%;--h:10.4%" data-cctv-digit="4" aria-label="Канал 4"></button>
+                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:26.9%;--w:19.4%;--h:10.4%" data-cctv-digit="5" aria-label="Канал 5"></button>
+                <button type="button" class="cctv-remote__key" style="--x:60%;--y:26.9%;--w:18.5%;--h:10.4%" data-cctv-digit="6" aria-label="Канал 6"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:37.4%;--w:21%;--h:10.4%" data-cctv-digit="7" aria-label="Канал 7"></button>
+                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:37.4%;--w:19.4%;--h:10.4%" data-cctv-digit="8" aria-label="Канал 8"></button>
+                <button type="button" class="cctv-remote__key" style="--x:60%;--y:37.4%;--w:18.5%;--h:10.4%" data-cctv-digit="9" aria-label="Канал 9"></button>
+                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:47.8%;--w:19.4%;--h:9.8%" data-cctv-digit="0" aria-label="Канал 0"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:56.8%;--w:29.2%;--h:10.6%" data-cctv-prev aria-label="Предыдущий канал"></button>
+                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:56.8%;--w:29.3%;--h:10.6%" data-cctv-next aria-label="Следующий канал"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:67.4%;--w:29.2%;--h:10.6%" data-cctv-vol-down aria-label="Выключить звук эфира"></button>
+                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:67.4%;--w:29.3%;--h:10.6%" data-cctv-vol-up aria-label="Включить звук эфира"></button>
+                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:78.1%;--w:29.2%;--h:11%" data-cctv-teletext-button aria-pressed="false" aria-label="Открыть телетекст"></button>
+                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:78.1%;--w:29.3%;--h:11%" data-cctv-source-button aria-pressed="false" aria-label="Открыть внешний источник">
+                  <span data-cctv-source-label class="visually-hidden">AV</span>
                   <small data-cctv-vhs-count hidden></small>
                 </button>
-                <button
-                  type="button"
-                  data-cctv-mute
-                  aria-pressed="false"
-                  aria-label="Выключить звук эфира"
-                >
-                  <span aria-hidden="true">M</span>
-                  <strong>MUTE</strong>
-                </button>
-                <button
-                  type="button"
-                  data-cctv-next
-                  aria-label="Следующий канал"
-                  disabled
-                >
-                  <span aria-hidden="true">CH</span>
-                  <strong>NEXT +</strong>
-                </button>
-                <button
-                  type="button"
-                  data-cctv-teletext-button
-                  aria-pressed="false"
-                  aria-label="Открыть телетекст"
-                >
-                  <span aria-hidden="true">TXT</span>
-                  <strong>TEXT</strong>
-                </button>
               </div>
-              <output data-cctv-remote-status>
-                <span data-cctv-remote-state>TV OFF</span>
-              </output>
+              <span class="visually-hidden" data-cctv-remote-state>TV OFF</span>
             </nav>
+                </div>
+              </div>
+            </div>
 
             <div hidden data-cctv-sources>
               <span

@@ -1,0 +1,41 @@
+{
+  "status": "staging-only",
+  "createdAt": "2026-09-08",
+  "figma": {
+    "fileKey": "4fd7H5QBf288UkhDUb7SdJ",
+    "url": "https://www.figma.com/design/4fd7H5QBf288UkhDUb7SdJ",
+    "pages": [
+      "01 / Направления и основы",
+      "02 / Компоненты",
+      "03 / Desktop + Mobile"
+    ],
+    "nodes": {
+      "monitor": "3:23",
+      "remote": "3:14",
+      "keySet": "3:13",
+      "vhs": "3:30",
+      "desktop": "5:2",
+      "mobile": "5:30"
+    },
+    "starterMcpStatus": "resolved: Professional Full seat after manual upgrade",
+    "qa": {
+      "desktop": "1280x960 screenshot passed",
+      "mobile": "390x844 screenshot passed",
+      "sourceContrast": "fixed on node 5:42",
+      "remoteAlpha": "uploaded to node 3:15"
+    }
+  },
+  "production": {
+    "changed": false,
+    "allowlistChanged": false,
+    "runtimeChanged": false
+  },
+  "assets": [
+    {"path": "assets/tv-a-graphite.png", "role": "selected CRT housing", "alpha": true},
+    {"path": "assets/tv-b-ivory.png", "role": "comparison direction", "alpha": true},
+    {"path": "assets/remote-cutout.png", "role": "clean remote housing", "alpha": true},
+    {"path": "assets/remote.png", "role": "raw ImageGen source", "alpha": false},
+    {"path": "assets/vhs.png", "role": "VHS cassette with blank label", "alpha": true},
+    {"path": "assets/broadcast-reference.png", "role": "existing site poster reference", "alpha": false}
+  ]
+}

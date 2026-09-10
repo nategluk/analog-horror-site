@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-08 CDT |
+| Обновлено | 2026-09-10 CDT |
 | Ветка / HEAD | `main` / `7bc86d4` |
-| Дерево | dirty: Copy Desk archive field autosize |
-| Активная линия | Copy Desk archive field autosize |
-| Последний этап | Поля Copy Desk в Архиве тянутся на ширину колонки (`minmax(0,1fr)` + `width:100%` + `field-sizing:fixed`). Высота пересчитывается после вставки в DOM, по ResizeObserver, focus/input и отложенным кадрам. FAITH абзац про маску: ширина 585, высота 77, clipped 0. `node --check`, `git diff --check`. |
+| Дерево | dirty: Copy Desk archive field autosize + ЖИР ТВ оболочка + скрываемый пульт |
+| Активная линия | ЖИР ТВ CRT + выдвижной пульт / local only |
+| Последний этап | STAFF-главная: пульт убран в ящик под CRT. Ручка `ПУЛЬТ // ВЫДВИНУТЬ`, повтор скрывает без сброса эфира. Первый STAFF-вход один раз раскрывает пульт (`tyndex_staff_tv_remote_intro_v1`). Корпус remote WebP с настоящей альфой, без шахматной подложки. Desktop 1280×960 и mobile 390×844: overflow 0, POWER + канал `8` сохраняются после скрытия, console errors 0. Логика эфира / save keys / VHS / guest не менялись. |
 | Commit / push / deploy | только по прямой просьбе пользователя |
 | Следующий gate | commit/push/deploy отдельно |
 
