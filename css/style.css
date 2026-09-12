@@ -1086,8 +1086,8 @@ body:not(.staff-mode) .site-footer {
 
 .logo-image {
   display: block;
-  width: min(320px, 50vw);
-  max-height: 64px;
+  width: min(360px, 58vw);
+  max-height: 112px;
   height: auto;
   object-fit: contain;
   object-position: left center;
@@ -5566,8 +5566,8 @@ body.lora-room-open .vhs-noise {
   }
 
   .logo-image {
-    width: min(100%, 220px);
-    max-height: 46px;
+    width: min(100%, 260px);
+    max-height: 94px;
   }
 
   body.staff-mode .staff-logo-image {

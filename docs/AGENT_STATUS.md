@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 03:33 CDT |
+| Обновлено | 2026-09-12 04:02 CDT |
 | Ветка / HEAD | `main` / `655d8a6` |
-| Дерево | dirty: STAFF HOME text-load redesign в `index.html`, `css/style.css`, `js/app.js` |
-| Активная линия | STAFF HOME: unread inbox indicator connected to personal dossier |
-| Последний этап | Materials counter заменён на unread-message indicator; ссылка ведёт в существующие ЛИЧНЫЕ ВХОДЯЩИЕ. QA mobile/desktop, overflow и console пройдены. |
+| Дерево | dirty: STAFF HOME text-load redesign в `index.html`, `css/style.css`, `js/app.js`; guest logo в `assets/guest/logo.svg`, `assets/guest/logo-imagegen.png` и `css/style.css` |
+| Активная линия | Новая imagegen-версия guest logo интегрирована в guest mode и Figma |
+| Последний этап | Figma `GUEST LOGO / ImageGen` reference/master/export; browser QA `1280x900` и `390x844`, overflow и console пройдены; public build `569` / verify `570` пройдены. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
