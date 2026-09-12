@@ -430,7 +430,7 @@ change runtime references or change canon.
 | `assets/staff/documents/protocol-playground-schema-02.webp` | `SCHEMA` | protocol / administrative reconstruction | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | — |
 | `assets/staff/documents/protocol-playground-schema-03.webp` | `SCHEMA` | protocol / administrative reconstruction | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | — |
 | `assets/staff/documents/ulybarych-message-avatar.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 512x512 | yes | CONTEXT-SPECIFIC | — |
-| `assets/staff/logo.png` | `UTILITY` | brand mark | `SHELL` | 760x200 | yes | CONTEXT-SPECIFIC | — |
+| `assets/staff/logo.png` | `UTILITY` | brand mark | `SHELL` | 760x249 | yes | CONTEXT-SPECIFIC | — |
 | `assets/staff/mall/cctv-loop-poster.webp` | `CCTV` | fixed toy-store CCTV loop poster | `TYNDEX-TERMINAL` | 560x560 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/park/cctv-loop-poster.webp` | `CCTV` | fixed carousel CCTV loop poster | `TYNDEX-TERMINAL` | 544x544 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/personnel/irina-record.webp` | `PERSONNEL` | record strip / front-profile capture | `PERSONAL-FILE` | 1536x865 | yes | SUBTYPE-CROP | — |
