@@ -3166,7 +3166,7 @@
         copy.hidden = hasProfile;
         copy.textContent = hasProfile
           ? ""
-          : "Нажмите на снимок";
+          : "";
       }
       if (status) status.textContent = hasProfile ? `${roleLabel} // ${stateLabel}` : "—";
       if (unreadCount) {
