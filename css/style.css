@@ -12548,3 +12548,643 @@ body.staff-mode.protocol-book-page .sweet-dream-book.is-preface .sweet-dream-boo
 body.staff-mode.protocol-book-page .sweet-dream-book.is-chapter-text .sweet-dream-book__copy [data-book-text] p {
   margin-bottom: 0.7rem;
 }
+
+/* ─── STAFF HOME: operator desk ─── */
+body.staff-mode .home-broadcast-page .staff-home-dashboard {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
+  padding: clamp(0.8rem, 2.4vw, 1.35rem);
+  border: 2px solid #0b0d10;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 30%),
+    #1b1e23;
+  box-shadow:
+    inset 0 0 0 2px #4b5058,
+    inset 0 0 1.5rem rgba(0, 0, 0, 0.48);
+}
+
+body.staff-mode .home-broadcast-page .staff-home-dashboard__header,
+body.staff-mode .staff-tv-room-page .staff-tv-room__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-left: 0.35rem solid var(--broadcast-cyan);
+  background: rgba(5, 7, 10, 0.7);
+}
+
+body.staff-mode .home-broadcast-page .staff-home-dashboard__header h2,
+body.staff-mode .staff-tv-room-page .staff-tv-room__header h2 {
+  margin: 0.2rem 0 0;
+  color: #f0d765;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.65rem);
+  letter-spacing: 0.04em;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-dashboard__header > p,
+body.staff-mode .staff-tv-room-page .staff-tv-room__header > a {
+  margin: 0;
+  color: #9ee8ea;
+  font: 800 0.68rem/1.4 "Courier New", Courier, monospace;
+  letter-spacing: 0.08em;
+  text-align: right;
+  text-decoration: none;
+}
+
+.staff-home-dashboard__kicker,
+.staff-tv-room__kicker,
+.staff-home-card__kicker {
+  margin: 0;
+  color: #8ee3e6;
+  font: 800 0.65rem/1.3 "Courier New", Courier, monospace;
+  letter-spacing: 0.12em;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-dashboard__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.7vw, 1.1rem);
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.9rem;
+  margin: 0;
+  padding: clamp(0.75rem, 1.8vw, 1.05rem);
+  color: #d8d2bf;
+  border: 2px solid #0b0d10;
+  border-radius: 0.2rem;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 5px),
+    #292d34;
+  box-shadow:
+    inset 0 0 0 1px #565b64,
+    0 0.35rem 0.8rem rgba(0, 0, 0, 0.28);
+  text-decoration: none;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__body {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card strong,
+body.staff-mode .home-broadcast-page .staff-home-card h3 {
+  margin: 0;
+  color: #f0d765;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  line-height: 1.1;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card strong {
+  display: block;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card span,
+body.staff-mode .home-broadcast-page .staff-home-card p {
+  margin: 0;
+  color: #aaa99f;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--dossier {
+  border-left: 0.38rem solid #db4b91;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--dossier .staff-home-card__body > span {
+  color: #d8d2bf;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0.25rem 0 0;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__summary[hidden],
+body.staff-mode .home-broadcast-page .staff-home-card__actions [hidden] {
+  display: none !important;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__summary div {
+  display: grid;
+  gap: 0.15rem;
+  padding-top: 0.42rem;
+  border-top: 1px solid #515761;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__summary dt {
+  color: #777e88;
+  font: 800 0.55rem/1.2 "Courier New", Courier, monospace;
+  letter-spacing: 0.09em;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__summary dd {
+  margin: 0;
+  color: #c7ffcf;
+  font: 800 0.68rem/1.3 "Courier New", Courier, monospace;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__actions button,
+body.staff-mode .home-broadcast-page .staff-home-card__action {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.6rem 0.72rem;
+  color: #101216;
+  border: 2px solid #080a0d;
+  border-radius: 0.15rem;
+  background: #f0d765;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38), 0 0.22rem 0 #8d7629;
+  font: 800 0.65rem/1.15 "Courier New", Courier, monospace;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__actions button:hover,
+body.staff-mode .home-broadcast-page .staff-home-card__actions button:focus-visible,
+body.staff-mode .home-broadcast-page .staff-home-card__action:hover,
+body.staff-mode .home-broadcast-page .staff-home-card__action:focus-visible,
+body.staff-mode .home-broadcast-page .staff-home-card--routes > .staff-home-card__action:hover,
+body.staff-mode .home-broadcast-page .staff-home-card--routes > .staff-home-card__action:focus-visible {
+  color: #101216;
+  outline: 2px solid #fff09a;
+  outline-offset: 2px;
+  background: #fff09a;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--tv {
+  padding: 0;
+  overflow: hidden;
+  border-color: #080a0d;
+  background: #111318;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--tv:hover,
+body.staff-mode .home-broadcast-page .staff-home-card--tv:focus-visible {
+  border-color: var(--broadcast-cyan);
+  outline: 2px solid var(--broadcast-cyan);
+  outline-offset: 2px;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--tv .staff-home-card__body {
+  padding: 0 0.85rem 0.9rem;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__media {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-bottom: 2px solid #080a0d;
+  background: #08090c;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1672 / 941;
+  object-fit: cover;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--tv:hover .staff-home-card__media img,
+body.staff-mode .home-broadcast-page .staff-home-card--tv:focus-visible .staff-home-card__media img {
+  filter: brightness(1.12) contrast(1.08);
+  transform: scale(1.015);
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card__media figcaption {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.5rem;
+  padding: 0.28rem 0.35rem;
+  color: #f0d765;
+  background: rgba(5, 7, 10, 0.82);
+  font: 800 0.56rem/1 "Courier New", Courier, monospace;
+  letter-spacing: 0.08em;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--routes {
+  border-left: 0.38rem solid #59d9df;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-route-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem 0.5rem;
+  margin-top: 0.15rem;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-route-list a {
+  min-width: 0;
+  padding: 0.28rem 0.35rem;
+  overflow: hidden;
+  color: #9ee8ea;
+  border: 1px solid #3c6d72;
+  background: rgba(5, 12, 14, 0.72);
+  font: 800 0.56rem/1.25 "Courier New", Courier, monospace;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-route-list a:hover,
+body.staff-mode .home-broadcast-page .staff-home-route-list a:focus-visible {
+  color: #101216;
+  outline: 2px solid #b8ffff;
+  outline-offset: 1px;
+  background: #9ee8ea;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-card--routes > .staff-home-card__action {
+  width: 100%;
+}
+
+body.staff-mode .broadcast-shell-page .staff-footer-archive,
+body.staff-mode .staff-tv-room-page .staff-tv-room__footer-link {
+  display: block;
+  margin: 0 0 0.35rem;
+  color: var(--broadcast-yellow);
+  font-family: var(--font-display);
+  font-size: clamp(0.82rem, 1.8vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+
+body.staff-mode .broadcast-shell-page .staff-footer-archive:hover,
+body.staff-mode .broadcast-shell-page .staff-footer-archive:focus-visible,
+body.staff-mode .staff-tv-room-page .staff-tv-room__footer-link:hover,
+body.staff-mode .staff-tv-room-page .staff-tv-room__footer-link:focus-visible {
+  color: #fff09a;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* ─── STAFF TV ROOM: the broadcast machine behind the portal ─── */
+body.staff-mode .staff-tv-room-page .staff-tv-room-panel {
+  padding: clamp(0.7rem, 2vw, 1.2rem);
+  overflow: visible;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.035), transparent 28%),
+    #24272d;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__header {
+  margin-bottom: clamp(0.7rem, 2vw, 1.1rem);
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__header > a:hover,
+body.staff-mode .staff-tv-room-page .staff-tv-room__header > a:focus-visible {
+  color: #fff09a;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__stage {
+  --tv-screen-left: 9.2%;
+  --tv-screen-top: 7.5%;
+  --tv-screen-width: 81.6%;
+  --tv-screen-height: 47.8%;
+  --tv-shelf-left: 8.2%;
+  --tv-shelf-top: 78.1%;
+  --tv-shelf-width: 83.6%;
+  --tv-shelf-height: 17.2%;
+  --tv-standby-led-x: 88.28125%;
+  --tv-standby-led-y: 63.4986%;
+  --tv-standby-led-size: 6.25%;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  min-height: 0;
+  overflow: visible;
+  padding: clamp(0.6rem, 2vw, 1.4rem) 0 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(14, 18, 22, 0.12), rgba(14, 18, 22, 0.04) 55%, rgba(14, 18, 22, 0.24)),
+    url("../assets/staff/tv/zhir-tv-kindergarten-carpet-v1.png") center / cover no-repeat;
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.38);
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__stage:has(.cctv-remote-bay.is-open) {
+  padding-bottom: calc(1.5rem + min(4rem, 10vw));
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__unit {
+  position: relative;
+  width: min(100%, 28rem);
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__unit img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__unit > .staff-tv-room__standby-led {
+  position: absolute;
+  top: var(--tv-standby-led-y);
+  left: var(--tv-standby-led-x);
+  z-index: 1;
+  display: block;
+  width: var(--tv-standby-led-size);
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 180ms ease;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__unit:has(.staff-cctv-dashboard.is-powered-off) > .staff-tv-room__standby-led {
+  opacity: 1;
+  animation: staff-tv-standby-led-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes staff-tv-standby-led-pulse {
+  0%,
+  100% {
+    filter: brightness(0.9) drop-shadow(0 0 0 rgba(235, 5, 10, 0));
+  }
+
+  50% {
+    filter: brightness(1.08) drop-shadow(0 0 0.38rem rgba(235, 5, 10, 0.54));
+  }
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__console {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  min-height: 0;
+  padding: 0;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__console > .staff-cctv-dashboard,
+body.staff-mode .staff-tv-room-page .cctv-console {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-monitor {
+  position: absolute;
+  left: var(--tv-screen-left);
+  top: var(--tv-screen-top);
+  z-index: 3;
+  width: var(--tv-screen-width);
+  height: var(--tv-screen-height);
+  aspect-ratio: auto;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-screen {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 7% / 10%;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-status {
+  top: 6%;
+  left: 8%;
+  width: 84%;
+  font-size: clamp(0.42rem, 0.85vw, 0.72rem);
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay {
+  position: absolute;
+  left: var(--tv-shelf-left);
+  top: var(--tv-shelf-top);
+  z-index: 4;
+  display: block;
+  width: var(--tv-shelf-width);
+  height: var(--tv-shelf-height);
+  margin: 0;
+  overflow: visible;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__handle {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: transparent;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0;
+  cursor: pointer;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__handle::before,
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__handle::after {
+  content: none;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__handle:hover,
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__handle:focus-visible {
+  outline: 2px solid var(--broadcast-cyan);
+  outline-offset: -2px;
+  background: rgba(255, 248, 220, 0.04);
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay.is-open .cctv-remote-bay__handle {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  z-index: 3;
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  min-height: 3rem;
+  place-items: center;
+  border: 2px solid #080a0d;
+  border-radius: 50%;
+  color: #f0d765;
+  background: #20242b;
+  box-shadow:
+    inset 0 0 0 1px #5d626b,
+    0 0.25rem 0.55rem rgba(0, 0, 0, 0.42);
+  font: 800 1.35rem/1 "Courier New", Courier, monospace;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay.is-open .cctv-remote-bay__handle::before {
+  content: "×";
+  display: block;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__well {
+  position: absolute;
+  top: -132%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  z-index: 2;
+  display: block;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(15rem, 54vw);
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transform: translate(-50%, -0.75rem) scale(0.9);
+  transform-origin: top center;
+  transition:
+    opacity 0.24s ease,
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.42s;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay.is-open .cctv-remote-bay__well {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translate(-50%, 0) scale(1);
+  transition-delay: 0s;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay__tray {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  aspect-ratio: 864 / 1152;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  pointer-events: auto;
+}
+
+body.staff-mode .staff-tv-room-page .cctv-remote-bay.is-open .cctv-remote {
+  transform: none;
+}
+
+body.staff-mode .staff-tv-room-page .staff-tv-room__locked {
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 2px solid #0b0d10;
+  background: #1b1e23;
+}
+
+@media (max-width: 900px) {
+  body.staff-mode .home-broadcast-page .staff-home-dashboard__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-card--routes {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 700px) {
+  body.staff-mode .staff-tv-room-page .staff-tv-room__unit {
+    width: min(100%, 22.5rem);
+  }
+
+  body.staff-mode .staff-tv-room-page .cctv-status {
+    font-size: 0.48rem;
+  }
+}
+
+@media (max-width: 640px) {
+  body.staff-mode .staff-tv-room-page .staff-tv-room-panel {
+    width: calc(100% + 1.2rem);
+    margin-inline: -0.6rem;
+    padding: 0;
+    border-inline: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-dashboard__header,
+  body.staff-mode .staff-tv-room-page .staff-tv-room__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-dashboard__header > p,
+  body.staff-mode .staff-tv-room-page .staff-tv-room__header > a {
+    text-align: left;
+  }
+
+  body.staff-mode .staff-tv-room-page .staff-tv-room__header {
+    margin: 0;
+    padding: 0.7rem;
+  }
+
+  body.staff-mode .staff-tv-room-page .staff-tv-room__stage {
+    width: 100%;
+    padding: 0 0 1.2rem;
+  }
+
+  body.staff-mode .staff-tv-room-page .staff-tv-room__stage:has(.cctv-remote-bay.is-open) {
+    padding-bottom: min(4rem, 10vw);
+  }
+
+  body.staff-mode .staff-tv-room-page .staff-tv-room__unit {
+    width: 100%;
+    max-width: none;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-card--routes {
+    grid-column: auto;
+  }
+}

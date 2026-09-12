@@ -249,281 +249,101 @@
         </section>
 
         <section
-          class="staff-content staff-cctv-dashboard is-powered-off"
-          data-cctv-console
-          data-cctv-powered="false"
+          class="staff-content staff-home-dashboard"
+          aria-labelledby="staff-home-dashboard-heading"
         >
-          <div class="cctv-console">
-            <article class="cctv-monitor">
-              <img
-                class="cctv-monitor__housing"
-                src="assets/staff/tv/zhir-tv-monitor-graphite.webp"
-                alt=""
-                aria-hidden="true"
-              />
-              <div class="cctv-status">
-                <span class="cctv-dot blink"></span>
-                <span data-cctv-channel-label>TV OFF</span>
-              </div>
-              <div class="cctv-screen" data-cctv-screen>
-                <video
-                  class="cctv-media"
-                  data-cctv-video
-                  data-video-pool="assets/staff/tv/ulybarych.mp4"
-                  poster="assets/staff/tv/ulybarych-poster.webp"
-                  aria-label="CH 01 Шоу Улыбарыча"
-                  muted
-                  playsinline
-                  preload="none"
-                ></video>
-                <div class="cctv-no-signal" aria-hidden="true">
-                  <strong>ЖИР ТВ</strong>
-                  <span>НЕТ СИГНАЛА</span>
-                </div>
-                <div class="cctv-teletext" data-cctv-teletext hidden>
-                  <div class="cctv-teletext__header">
-                    <strong>ЖИР-ТЕКСТ</strong>
-                    <span data-cctv-teletext-page>P100</span>
-                  </div>
-                  <div class="cctv-teletext__rule" aria-hidden="true">
-                    <span></span><span></span><span></span><span></span>
-                  </div>
-                  <p class="cctv-teletext__section">ДЕТСКИЙ ЖИР // ИНФОРМАЦИЯ</p>
-                  <p
-                    class="cctv-teletext__message"
-                    data-cctv-teletext-message
-                    aria-live="polite"
-                    aria-atomic="true"
-                  >
-                    ДОБРО ПОЖАЛОВАТЬ В ЭФИР
-                  </p>
-                  <p class="cctv-teletext__footer">TXT — СЛЕДУЮЩАЯ СТРАНИЦА</p>
-                </div>
-                <div class="cctv-source-screen" data-cctv-source-screen hidden>
-                  <div class="cctv-source-screen__header">
-                    <strong>VIDEO INPUT</strong>
-                    <span>VCR</span>
-                  </div>
-                  <div class="cctv-source-screen__body">
-                    <div
-                      class="cctv-source-screen__library"
-                      data-cctv-vhs-library
-                      aria-live="polite"
-                      hidden
-                    ></div>
-                    <video
-                      class="cctv-source-screen__video"
-                      data-cctv-cassette-video
-                      src="assets/staff/tv/pavel-cassette-450p.mp4"
-                      poster="assets/staff/tv/pavel-cassette-poster.webp"
-                      aria-label="Кассета из кабинки обозрения Павла"
-                      playsinline
-                      preload="none"
-                      hidden
-                    ></video>
-                    <div class="cctv-source-screen__slot" data-cctv-cassette-empty aria-hidden="true">
-                      <span></span>
-                    </div>
-                    <button
-                      class="cctv-source-screen__back"
-                      type="button"
-                      data-cctv-vhs-back
-                      hidden
-                    >
-                      ВЫБРАТЬ ДРУГУЮ КАССЕТУ
-                    </button>
-                  </div>
-                  <p class="cctv-source-screen__message" data-cctv-source-message>
-                    ВСТАВЬТЕ ВИДЕОКАССЕТУ
-                  </p>
-                  <p class="cctv-source-screen__status" data-cctv-source-status>
-                    НОСИТЕЛЬ НЕ ОБНАРУЖЕН
-                  </p>
-                  <p class="cctv-source-screen__footer">
-                    SOURCE — ВЕРНУТЬСЯ К ЭФИРУ
-                  </p>
-                </div>
-              <div
-                class="cctv-screen__mute"
-                data-cctv-mute-indicator
-                aria-hidden="true"
-                hidden
-              >
-                MUTE
-              </div>
-              </div>
-            </article>
+          <header class="staff-home-dashboard__header">
+            <div>
+              <p class="staff-home-dashboard__kicker">STAFF // P100 // ОПЕРАТОРСКАЯ</p>
+              <h2 id="staff-home-dashboard-heading">РАБОЧЕЕ МЕСТО ОПЕРАТОРА</h2>
+            </div>
+            <p>СОСТОЯНИЕ КАНАЛА: ГОТОВ К ПЕРЕДАЧЕ</p>
+          </header>
 
-            <div class="cctv-remote-bay" data-cctv-remote-bay>
-              <button
-                type="button"
-                class="cctv-remote-bay__handle"
-                data-cctv-remote-toggle
-                aria-expanded="false"
-                aria-controls="home-cctv-remote-well"
-                aria-label="Выдвинуть пульт ЖИР ТВ"
-              >
-                <span data-cctv-remote-toggle-label>ПУЛЬТ // ВЫДВИНУТЬ</span>
-              </button>
-              <div
-                class="cctv-remote-bay__well"
-                id="home-cctv-remote-well"
-                data-cctv-remote-well
-                aria-hidden="true"
-                inert
-              >
-                <div class="cctv-remote-bay__tray">
-            <nav class="cctv-remote" aria-label="Пульт внутреннего эфира">
-              <img
-                class="cctv-remote__housing"
-                src="assets/staff/tv/zhir-tv-remote.webp"
-                alt=""
-                aria-hidden="true"
-              />
-              <div class="cctv-remote__buttons">
-                <button type="button" class="cctv-remote__key" style="--x:32%;--y:5.2%;--w:36%;--h:11%" data-cctv-power aria-pressed="false" aria-label="Питание телевизора"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:16.4%;--w:21%;--h:10.4%" data-cctv-digit="1" aria-label="Канал 1"></button>
-                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:16.4%;--w:19.4%;--h:10.4%" data-cctv-digit="2" aria-label="Канал 2"></button>
-                <button type="button" class="cctv-remote__key" style="--x:60%;--y:16.4%;--w:18.5%;--h:10.4%" data-cctv-digit="3" aria-label="Канал 3"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:26.9%;--w:21%;--h:10.4%" data-cctv-digit="4" aria-label="Канал 4"></button>
-                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:26.9%;--w:19.4%;--h:10.4%" data-cctv-digit="5" aria-label="Канал 5"></button>
-                <button type="button" class="cctv-remote__key" style="--x:60%;--y:26.9%;--w:18.5%;--h:10.4%" data-cctv-digit="6" aria-label="Канал 6"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:37.4%;--w:21%;--h:10.4%" data-cctv-digit="7" aria-label="Канал 7"></button>
-                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:37.4%;--w:19.4%;--h:10.4%" data-cctv-digit="8" aria-label="Канал 8"></button>
-                <button type="button" class="cctv-remote__key" style="--x:60%;--y:37.4%;--w:18.5%;--h:10.4%" data-cctv-digit="9" aria-label="Канал 9"></button>
-                <button type="button" class="cctv-remote__key" style="--x:40.2%;--y:47.8%;--w:19.4%;--h:9.8%" data-cctv-digit="0" aria-label="Канал 0"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:56.8%;--w:29.2%;--h:10.6%" data-cctv-prev aria-label="Предыдущий канал"></button>
-                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:56.8%;--w:29.3%;--h:10.6%" data-cctv-next aria-label="Следующий канал"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:67.4%;--w:29.2%;--h:10.6%" data-cctv-vol-down aria-label="Выключить звук эфира"></button>
-                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:67.4%;--w:29.3%;--h:10.6%" data-cctv-vol-up aria-label="Включить звук эфира"></button>
-                <button type="button" class="cctv-remote__key" style="--x:18.8%;--y:78.1%;--w:29.2%;--h:11%" data-cctv-teletext-button aria-pressed="false" aria-label="Открыть телетекст"></button>
-                <button type="button" class="cctv-remote__key" style="--x:49.2%;--y:78.1%;--w:29.3%;--h:11%" data-cctv-source-button aria-pressed="false" aria-label="Открыть внешний источник">
-                  <span data-cctv-source-label class="visually-hidden">AV</span>
-                  <small data-cctv-vhs-count hidden></small>
+          <div class="staff-home-dashboard__grid">
+            <aside
+              class="personnel-access staff-home-card staff-home-card--dossier"
+              data-dossier-access-panel
+            >
+              <div class="staff-home-card__body">
+                <p class="staff-home-card__kicker">01 // ЛИЧНОЕ ДЕЛО</p>
+                <strong data-dossier-heading>ЛИЧНОЕ ДЕЛО УЖЕ ЗАКРЕПЛЕНО?</strong>
+                <span data-dossier-copy>
+                  Восстановите роль и материалы без повторного прохождения.
+                </span>
+                <dl class="staff-home-card__summary" data-home-dossier-summary hidden>
+                  <div>
+                    <dt>СТАТУС</dt>
+                    <dd data-home-dossier-status>—</dd>
+                  </div>
+                  <div>
+                    <dt>МАТЕРИАЛЫ</dt>
+                    <dd data-home-dossier-material-count>—</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="staff-home-card__actions">
+                <button type="button" data-dossier-access>
+                  <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+                    <path d="M3 4v6h6"></path>
+                  </svg>
+                  <span>ВОССТАНОВИТЬ ЛИЧНОЕ ДЕЛО</span>
                 </button>
+                <a
+                  class="staff-home-card__action"
+                  href="staff.html?personnel=player"
+                  data-home-inventory-link
+                  data-full-navigation
+                  hidden
+                >
+                  ОТКРЫТЬ ИНВЕНТАРЬ
+                </a>
               </div>
-              <span class="visually-hidden" data-cctv-remote-state>TV OFF</span>
-            </nav>
-                </div>
+            </aside>
+
+            <a
+              class="staff-home-card staff-home-card--tv"
+              href="staff/tv.html"
+              data-full-navigation
+              aria-label="Открыть внутренний эфир ЖИР ТВ"
+            >
+              <figure class="staff-home-card__media">
+                <img
+                  src="assets/staff/home/zhir-tv-desktop-stage-remote-off-v1.png"
+                  alt="Телевизор ЖИР ТВ на тумбе перед красной шторой"
+                  width="1672"
+                  height="941"
+                />
+                <figcaption>ЖИР ТВ // ВХОД В ЭФИР</figcaption>
+              </figure>
+              <div class="staff-home-card__body">
+                <p class="staff-home-card__kicker">02 // СИГНАЛ</p>
+                <h3>СМОТРЕТЬ ЭФИР</h3>
+                <span>Телевизор, пульт и красная штора находятся за этим входом.</span>
               </div>
-            </div>
+            </a>
 
-            <div hidden data-cctv-sources>
-              <span
-                data-cctv-source
-                data-channel-code="CH 01"
-                data-channel-name="ШОУ УЛЫБАРЫЧА"
-                data-video-pool="assets/staff/tv/ulybarych.mp4"
-                data-poster="assets/staff/tv/ulybarych-poster.webp"
-                data-status="Программа: детский утренний блок."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 02"
-                data-channel-name="ЖМУРИКИ"
-                data-video-pool="assets/staff/tv/zhmuriki.mp4"
-                data-poster="assets/staff/tv/zhmuriki-poster.webp"
-                data-status="Программа: игры для самых маленьких."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 03"
-                data-channel-name="ПРАВИЛЬНЫЙ ОТВЕТ"
-                data-video-pool="assets/staff/curators/irina/archive-elena-question.mp4"
-                data-poster="assets/staff/curators/irina/archive-elena-question-poster.webp"
-                data-status="Программа: семейная викторина. Запись из фонда вещания."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 04"
-                data-channel-name="СЫТНО"
-                data-video-pool="assets/staff/tv/sytno.mp4"
-                data-poster="assets/staff/tv/sytno-poster.webp"
-                data-status="Программа: домашняя кухня для всей семьи."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 05"
-                data-channel-name="АДРЕНАЛИН"
-                data-video-pool="assets/staff/tv/adrenaline.mp4"
-                data-poster="assets/staff/tv/adrenaline-poster.webp"
-                data-status="Программа: спортивно-развлекательное шоу."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 06"
-                data-channel-name="ВЕЧЕРНИЙ ПОВТОР"
-                data-video-pool="assets/staff/curators/irina/archive-elena-breach.mp4"
-                data-poster="assets/staff/curators/irina/archive-elena-breach-poster.webp"
-                data-status="Программа: ответы на письма телезрителей. Повтор."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-source
-                data-channel-code="CH 07"
-                data-channel-name="ШОУ УЛЫБАРЫЧА // ПОВТОР"
-                data-video-pool="assets/staff/curators/irina/archive-ulybarych-empty-chair.mp4"
-                data-poster="assets/staff/curators/irina/archive-ulybarych-empty-chair-poster.webp"
-                data-status="Программа: детский утренний блок. Повтор 1991 года."
-                data-loop="false"
-              ></span>
-            </div>
-
-            <div hidden data-cctv-haunted-sources>
-              <span
-                data-cctv-haunted-source
-                data-channel-code="SOURCE 001"
-                data-channel-name="ВОЛЬЕР 4"
-                data-video-pool="assets/staff/cctv/zoo-01.mp4|assets/staff/cctv/zoo-02.mp4|assets/staff/cctv/zoo-03.mp4"
-                data-poster="assets/staff/cctv/zoo-poster.jpg"
-                data-status="Канал отключён. Наблюдение продолжается."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-haunted-source
-                data-channel-code="SOURCE 002"
-                data-channel-name="ПУСТОЙ БАССЕЙН"
-                data-video-pool="assets/staff/cctv/pool-01.mp4|assets/staff/cctv/slide-01.mp4"
-                data-poster="assets/staff/cctv/pool-poster.jpg"
-                data-status="Канал отключён. На объекте обнаружено присутствие."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-haunted-source
-                data-channel-code="SOURCE 003"
-                data-channel-name="ТЕХНИЧЕСКИЙ СПУСК"
-                data-video-pool="assets/staff/cctv/slide-01.mp4"
-                data-poster="assets/staff/cctv/slide-poster.jpg"
-                data-status="Канал отключён. Механизм продолжает работу."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-haunted-source
-                data-channel-code="SOURCE 004"
-                data-channel-name="СИГНАЛ ПОМОЩИ"
-                data-video-pool="assets/staff/curators/irina/intrusion-help-sign.mp4|assets/staff/curators/irina/intrusion-disco-room.mp4"
-                data-poster="assets/staff/curators/irina/intrusion-help-sign-poster.webp"
-                data-status="Канал отключён. Сообщение не зарегистрировано."
-                data-loop="false"
-              ></span>
-              <span
-                data-cctv-haunted-source
-                data-channel-code="SOURCE 005"
-                data-channel-name="НЕИЗВЕСТНАЯ КАМЕРА"
-                data-video-pool="assets/staff/curators/irina/intrusion-plague-doctor-camera.mp4"
-                data-poster="assets/staff/curators/irina/intrusion-plague-doctor-camera-poster.webp"
-                data-status="Канал отключён. Источник сигнала отсутствует."
-                data-loop="false"
-              ></span>
-            </div>
+            <section class="staff-home-card staff-home-card--routes">
+              <div class="staff-home-card__body">
+                <p class="staff-home-card__kicker">03 // МАРШРУТЫ</p>
+                <h3>УКАЗАТЕЛЬ КОМПЛЕКСА</h3>
+                <p>Служебный дубль гостевого указателя. Все маршруты ведут в рабочий контур.</p>
+                <nav class="staff-home-route-list" aria-label="Служебные маршруты комплекса">
+                  <a href="staff/locations/losiny-ostrov-zoo.html" data-full-navigation>ЛОСИНЫЙ ОСТРОВ</a>
+                  <a href="staff/locations/dolphin-pool.html" data-full-navigation>БАССЕЙН «ДЕЛЬФИН»</a>
+                  <a href="staff/locations/solnyshko-park.html" data-full-navigation>ПАРК «СОЛНЫШКО»</a>
+                  <a href="staff/locations/illusion-cinema.html" data-full-navigation>«ИЛЛЮЗИОН»</a>
+                  <a href="staff/locations/detskiy-zhir-mall.html" data-full-navigation>ТЦ «ДЕТСКИЙ ЖИР»</a>
+                  <a href="staff/locations/red-room-cafe.html" data-full-navigation>КРАСНАЯ КОМНАТА</a>
+                </nav>
+              </div>
+              <a class="staff-home-card__action" href="locations.html" data-full-navigation>
+                ОТКРЫТЬ УКАЗАТЕЛЬ →
+              </a>
+            </section>
           </div>
         </section>
-
       </main>
 
       <footer class="site-footer">
@@ -561,7 +381,9 @@
 
         <p class="guest-content">© Тындекс Роботикс. Радость, проверенная временем.</p>
 
-        <p class="staff-content">все выпуски наших шоу</p>
+        <a class="staff-content staff-footer-archive" href="episodes.html" data-full-navigation>
+          все выпуски наших шоу →
+        </a>
         <nav class="social-links" aria-label="Социальные сети">
           <a href="https://t.me/horror_rules" target="_blank" rel="noopener noreferrer" data-vhs-code="01" aria-label="Telegram"><span>Telegram</span></a>
           <a href="https://www.instagram.com/aivisions_lab/" target="_blank" rel="noopener noreferrer" data-vhs-code="02" aria-label="Instagram"><span>Instagram</span></a>

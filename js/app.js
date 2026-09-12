@@ -9,7 +9,6 @@
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
-  const STAFF_TV_REMOTE_INTRO_KEY = "tyndex_staff_tv_remote_intro_v1";
   const IRINA_SOLNYSHKO_KEY = "tyndex_irina_solnyshko_v1";
   const PAVEL_BOOTH_KEY = "tyndex_pavel_observation_booth_v1";
   const STAFF_DISPLAY_NAME_MAX = 20;
@@ -1002,7 +1001,7 @@
       );
     }
     if (label) {
-      label.textContent = open ? "ПУЛЬТ // УБРАТЬ" : "ПУЛЬТ // ВЫДВИНУТЬ";
+      label.textContent = open ? "Убрать пульт ЖИР ТВ" : "Пульт ЖИР ТВ";
     }
     if (well) {
       well.inert = !open;
@@ -1031,10 +1030,6 @@
     }
 
     if (!isStaff) return;
-    if (localStorage.getItem(STAFF_TV_REMOTE_INTRO_KEY) === "true") return;
-
-    localStorage.setItem(STAFF_TV_REMOTE_INTRO_KEY, "true");
-    setHomeCctvRemoteOpen(bay, true);
   };
 
   const initCctvConsole = (consoleElement) => {
@@ -3060,9 +3055,63 @@
     if (!panel || !button || button.dataset.accessReady === "true") return;
 
     button.dataset.accessReady = "true";
-    panel.hidden =
-      Boolean(readStaffProfile()) || hasActiveDossierAuthSession();
+    const heading = panel.querySelector("[data-dossier-heading]");
+    const copy = panel.querySelector("[data-dossier-copy]");
+    const summary = panel.querySelector("[data-home-dossier-summary]");
+    const status = panel.querySelector("[data-home-dossier-status]");
+    const materialCount = panel.querySelector(
+      "[data-home-dossier-material-count]"
+    );
+    const inventoryLink = panel.querySelector("[data-home-inventory-link]");
+
+    const renderPanel = () => {
+      const profile = readStaffProfile();
+      const hasProfile = Boolean(profile);
+      const roleLabel = {
+        animator: "АНИМАТОР",
+        volunteer: "ВОЛОНТЁР",
+        impostor: "САМОЗВАНЕЦ",
+      }[profile?.role] || "НЕ НАЗНАЧЕНА";
+      const stateLabel =
+        profile?.status === "completed"
+          ? "ДОПУЩЕН"
+          : profile?.status === "in_progress"
+            ? "ПРОВЕРКА"
+            : "ФОРМИРУЕТСЯ";
+      const visibleArtifacts = profile
+        ? profile.artifacts.filter(
+            (artifact) =>
+              !profile.deletedItems.some(
+                (deleted) => deleted.kind === "artifact" && deleted.id === artifact.id
+              )
+          )
+        : [];
+
+      panel.hidden = false;
+      button.hidden = hasProfile;
+      if (inventoryLink) inventoryLink.hidden = !hasProfile;
+      if (summary) summary.hidden = !hasProfile;
+      if (heading) {
+        heading.textContent = hasProfile
+          ? "ЛИЧНОЕ ДЕЛО ЗАКРЕПЛЕНО"
+          : "ЛИЧНОЕ ДЕЛО УЖЕ ЗАКРЕПЛЕНО?";
+      }
+      if (copy) {
+        copy.textContent = hasProfile
+          ? "Роль и материалы готовы к продолжению."
+          : "Восстановите роль и материалы без повторного прохождения.";
+      }
+      if (status) status.textContent = hasProfile ? `${roleLabel} // ${stateLabel}` : "—";
+      if (materialCount) {
+        materialCount.textContent = hasProfile
+          ? String(visibleArtifacts.length).padStart(2, "0")
+          : "—";
+      }
+    };
+
+    renderPanel();
     button.addEventListener("click", openDossierAccess);
+    window.addEventListener("tyndex:dossier-store-change", renderPanel);
   };
 
   const unlockCuratorArtifact = (progress, artifactId) => {
@@ -5085,7 +5134,10 @@
     });
 
     const requestedPersonnel = new URLSearchParams(window.location.search).get("personnel");
-    if (requestedPersonnel === "pavel" && hasPavelBridgeAccess()) {
+    if (requestedPersonnel === "player" && readStaffProfile()) {
+      const playerCard = grid.querySelector('[data-personnel-open="player"]');
+      window.setTimeout(() => openPersonnelDossier("player", playerCard), 0);
+    } else if (requestedPersonnel === "pavel" && hasPavelBridgeAccess()) {
       const pavelCard = grid.querySelector('[data-personnel-open="pavel"]');
       window.setTimeout(() => openPersonnelDossier("pavel", pavelCard), 0);
     }

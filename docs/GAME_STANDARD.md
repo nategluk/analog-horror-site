@@ -85,13 +85,11 @@ Visual ID ссылается на media-state с `neutral/active/burst/transitio
 
 ## 8. Проверки
 
-- На каждом изменении: `git diff --check`; для JS — `node --check`.
+- Объём проверок выбирать по `AGENTS.md`, раздел «Проверки по риску».
 - Контент: validator проверяет reachability, ссылки, лимиты текста, максимум
   видимых choices и известные visual/audio IDs. Браузер не нужен.
 - Media replacement: path, codec/dimensions, loop/one-shot role и fallback.
-- Runtime milestone: один репрезентативный маршрут в одном viewport.
-- Release candidate: desktop + `390x844`, clean/resume/replay, основные исходы,
-  sound on/off, reduced motion, media failure, console и overflow.
+- Для release candidate дополнительно покрыть основные исходы и media failure.
 
 ## 9. Definition of done
 

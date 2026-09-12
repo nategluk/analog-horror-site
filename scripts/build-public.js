@@ -29,6 +29,7 @@ const SITE_PAGES = [
   "hiring.html",
   "locations.html",
   "staff.html",
+  "staff/tv.html",
   "auth/confirm.html",
   "documents/dossier-kirill-zaytsev.html",
   "documents/dossier-laura.html",

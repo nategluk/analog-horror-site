@@ -23,6 +23,7 @@ const REQUIRED_PAGES = [
   "hiring.html",
   "locations.html",
   "staff.html",
+  "staff/tv.html",
   "auth/confirm.html",
   "documents/book-sweet-dream.html",
   "documents/protocol-kidults.html",

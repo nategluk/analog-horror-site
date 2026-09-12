@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="&#208;&#150;&#208;&#152;&#208;&#160; &#208;&#162;&#208;&#146; / Standby LED / ON">
+<circle id="Glow / outer" cx="16" cy="16" r="15" fill="#C70409" fill-opacity="0.12"/>
+<circle id="Glow / inner" cx="16" cy="16" r="11.5" fill="#EB050A" fill-opacity="0.23"/>
+<circle id="Housing / black bezel" cx="16" cy="16" r="9.5" fill="#060709"/>
+<circle id="Lens / red" cx="16" cy="16" r="7" fill="#850507"/>
+<circle id="Lens / reflected light" cx="14" cy="13.5" r="3.5" fill="#EB1416" fill-opacity="0.78"/>
+<circle id="Lens / glint" cx="12.5" cy="12" r="1.5" fill="#FFB89E" fill-opacity="0.9"/>
+</g>
+</svg>
