@@ -468,6 +468,61 @@ body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame--polar
   }
 }
 
+body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__button {
+  display: block;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__body {
+  position: absolute;
+  z-index: 3;
+  top: 75.5%;
+  right: 10.5%;
+  bottom: 3.5%;
+  left: 10.5%;
+  display: grid;
+  align-content: center;
+  gap: 0.14rem;
+  padding: 0;
+  color: #2d2a24;
+  pointer-events: none;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.46);
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__body strong {
+  color: #28251f;
+  font-size: clamp(1rem, 2.1vw, 1.4rem);
+  line-height: 1;
+  letter-spacing: 0.035em;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__body > .personnel-card__role {
+  min-height: 0;
+  color: #625c50;
+  font-size: clamp(0.68rem, 1.1vw, 0.82rem);
+  line-height: 1.2;
+}
+
+@media (max-width: 760px) {
+  body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__button {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__portrait-frame--polaroid {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__body strong {
+    font-size: clamp(1rem, 5vw, 1.35rem);
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-card--polaroid .personnel-card__body > .personnel-card__role {
+    font-size: clamp(0.68rem, 3.2vw, 0.82rem);
+  }
+}
+
 body.staff-mode {
   --bg: #050505;
   --surface: #0d0d0d;

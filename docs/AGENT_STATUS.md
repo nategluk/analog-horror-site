@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 14:19 CDT |
+| Обновлено | 2026-09-12 14:35 CDT |
 | Ветка / HEAD | `main` / `a579bc3` |
-| Дерево | dirty: три standalone-каталога, прямые STAFF HOME-ссылки, program-навигация, redirects, icon-only mobile-сигналы новых материалов, document-back links, порядок `каталоги → маршруты` и мобильный перенос длинных кнопок; пользовательские изменения сохранены |
-| Активная линия | mobile STAFF navigation wrapping |
-| Последний этап | Длинные пункты «Связь и поддержка» и «Программа передач» в мобильной сетке STAFF переведены на перенос и две строки; build `580`, `verify-public-build` `581`, Playwright `390×844` / desktop и console `0/0` пройдены. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: карточки персонала с текстом в белом поле полароида, три standalone-каталога, прямые STAFF HOME-ссылки, program-навигация, redirects, icon-only mobile-сигналы новых материалов, document-back links, порядок `каталоги → маршруты` и мобильный перенос длинных кнопок; пользовательские изменения сохранены |
+| Активная линия | personnel polaroid card copy placement |
+| Последний этап | В пяти STAFF-карточках убрана общая строка `КАДРОВАЯ ЗАПИСЬ`; имя и должность наложены на белое поле полароида, действие сохранено доступным. Build `580`, `verify-public-build` `581`, Playwright `1280×900` / `390×844`, overflow `0`, console `0/0` пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -27,6 +27,11 @@ FREE
 
 ## Текущая работа и сохранность
 
+- 2026-09-12: пять статичных STAFF-карточек в `staff.html` перевёрстаны как
+  вертикальные полароиды с именем и должностью в нижнем белом поле; `ОТКРЫТЬ
+  ДОСЬЕ` сохранено в доступном имени кнопки. На mobile `390x844` полароид
+  сохраняет ratio `4:5` вместо прежнего квадратного crop; существующие dossier
+  routes и operator card не изменялись.
 - 2026-09-12: player dossier перевёрстан как полноэкранный page-like dialog в
   `css/style.css`; existing `staff.html` markup, save keys, вкладки и действия
   сообщений/материалов сохранены. Browser QA: desktop `1280x900` и mobile
@@ -104,6 +109,11 @@ FREE
 
 ## Проверка ревизии
 
+- Personnel polaroid copy: `git diff --check`, production build (`580` файлов)
+  и `verify-public-build` (`581` файлов) пройдены; Playwright проверил STAFF
+  на desktop `1280x900` и mobile `390x844`: пять карточек, `КАДРОВАЯ ЗАПИСЬ`
+  отсутствует, текст в DOM сохранён для action name, ratio `4:5`, overflow `0`,
+  console `0/0`; одна карточка открыла и закрыла dossier.
 - Material catalogs / STAFF HOME signal cleanup: `git diff --check`,
   `node --check js/app.js`, production build (`580` files) и
   `verify-public-build` (`581` files) пройдены; Playwright проверил STAFF HOME
