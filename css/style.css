@@ -14638,6 +14638,12 @@ body.staff-mode .home-broadcast-page .status-pill.status-pill--exit .mode-label_
   display: none;
 }
 
+body.staff-mode .home-broadcast-page .status-pill.status-pill--exit {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
 body.staff-mode .home-broadcast-page .status-pill.status-pill--exit::before {
   content: "EXIT";
   display: grid;

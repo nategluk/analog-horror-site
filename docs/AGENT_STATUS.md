@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 18:24 CDT |
-| Ветка / HEAD | `main` / `a579bc3` |
-| Дерево | dirty: пользовательские STAFF HOME-изменения сохранены; лиминальный фон, centered horror v2 и CSS-знак `EXIT` подключены к `site-header` |
-| Активная линия | centered STAFF header horror cue |
-| Последний этап | `site-header-bg-horror-v2.png` заменил v1 в STAFF-шапке; существующая синяя кнопка получила красный `EXIT` через CSS, доступное имя и механика выхода сохранены. `git diff --check`, production build `582`, `verify-public-build` `583`, Playwright desktop/mobile, overflow `0`, console `0/0` и возврат в гостевой режим пройдены. Commit / push / deploy не выполнялись. |
+| Обновлено | 2026-09-12 18:46 CDT |
+| Ветка / HEAD | `main` / `bec0133` |
+| Дерево | dirty: узкая CSS-правка STAFF HOME для внешнего оформления `EXIT`; unrelated work не затронут |
+| Активная линия | STAFF HOME exit control visual cleanup |
+| Последний этап | У внешнего `status-pill` кнопки выхода убраны голубые фон, рамка и тень; красный `EXIT`, доступное имя и механика выхода сохранены. `git diff --check`, Playwright desktop/mobile, overflow `0`, console `0/0` и фактический переход в гостевой режим пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
