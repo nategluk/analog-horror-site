@@ -436,6 +436,38 @@ body.staff-mode .personnel-broadcast-page .personnel-material {
   }
 }
 
+body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame--polaroid {
+  aspect-ratio: 4 / 5;
+  border: 0;
+  border-radius: 0;
+  background: #111318;
+  box-shadow: none;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame--polaroid::after {
+  display: none;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame--polaroid .personnel-card__portrait--polaroid {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+}
+
+@media (max-width: 720px) {
+  body.staff-mode .personnel-broadcast-page .personnel-card__portrait-frame--polaroid {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+}
+
 body.staff-mode {
   --bg: #050505;
   --surface: #0d0d0d;

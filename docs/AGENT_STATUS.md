@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 11:31 CDT |
+| Обновлено | 2026-09-12 12:53 CDT |
 | Ветка / HEAD | `main` / `655d8a6` |
 | Дерево | dirty: очищены `assets/staff/logo.png` и `assets/staff/logo-imagegen.png`; guest logo не изменён |
-| Активная линия | STAFF reveal logo очищен и синхронизирован с Figma/runtime |
-| Последний этап | Figma stage `74:2` обновлён чистым alpha-контуром; export `760x249` подключён в runtime. Desktop и `390x844`: reveal читаемый, overflow отсутствует, console `0/0`; build `569`, verify `570`. |
+| Активная линия | STAFF photo-evidence / Polaroid previews connected |
+| Последний этап | В Figma file `4fd7H5QBf288UkhDUb7SdJ` создана секция `84:5` с preview `PAVEL`, `OLEG`, `LORA`, `KIRILL` на component `80:2`; пять flattened WebP подключены к STAFF-карточкам `staff.html`. Runtime QA desktop `1280x900` и mobile `390x844`: overflow `0`, console `0/0`; build `575`, verify `576`. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
