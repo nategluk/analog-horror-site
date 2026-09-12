@@ -251,8 +251,7 @@
         >
           <header class="staff-home-dashboard__header">
             <div>
-              <p class="staff-home-dashboard__kicker"><span aria-hidden="true">P100</span><span class="visually-hidden">Главная STAFF</span></p>
-              <h2 id="staff-home-dashboard-heading">ОПЕРАТОРСКАЯ</h2>
+              <h2 id="staff-home-dashboard-heading">ЛИЧНЫЙ КАБИНЕТ</h2>
             </div>
           </header>
 
@@ -262,34 +261,36 @@
               data-dossier-access-panel
             >
               <div class="staff-home-card__body">
-                <div class="staff-home-card__folder-actions">
-                  <button class="staff-home-folder" type="button" data-dossier-access aria-label="Открыть доступ к личному делу">
-                    <svg class="staff-home-folder__icon" viewBox="0 0 160 120" aria-hidden="true" focusable="false">
-                      <path class="staff-home-folder__tab" d="M10 29h48l10-14h37l12 14h33v75a9 9 0 0 1-9 9H19a9 9 0 0 1-9-9Z"></path>
-                      <path class="staff-home-folder__front" d="M10 38h140v66a9 9 0 0 1-9 9H19a9 9 0 0 1-9-9Z"></path>
-                      <circle cx="80" cy="73" r="22"></circle>
-                      <path class="staff-home-folder__mask" d="M69 71c4-6 18-6 22 0-4 5-18 5-22 0Zm5 8c3 3 9 3 12 0"></path>
-                    </svg>
+                <div class="staff-home-card__dossier-actions">
+                  <button class="staff-home-dossier-action" type="button" data-dossier-access aria-label="Открыть доступ к личному делу">
+                    <img
+                      class="staff-home-dossier-action__image"
+                      src="assets/staff/home/staff-dossier-stop-frame-v1.png"
+                      alt=""
+                      width="1254"
+                      height="1254"
+                    />
                     <strong data-dossier-heading>ДОСЬЕ</strong>
                   </button>
                   <a
-                    class="staff-home-folder"
+                    class="staff-home-dossier-action"
                     href="staff.html?personnel=player"
                     data-home-inventory-link
                     data-full-navigation
                     aria-label="Открыть личное дело оператора"
                     hidden
                   >
-                    <svg class="staff-home-folder__icon" viewBox="0 0 160 120" aria-hidden="true" focusable="false">
-                      <path class="staff-home-folder__tab" d="M10 29h48l10-14h37l12 14h33v75a9 9 0 0 1-9 9H19a9 9 0 0 1-9-9Z"></path>
-                      <path class="staff-home-folder__front" d="M10 38h140v66a9 9 0 0 1-9 9H19a9 9 0 0 1-9-9Z"></path>
-                      <circle cx="80" cy="73" r="22"></circle>
-                      <path class="staff-home-folder__mask" d="M69 71c4-6 18-6 22 0-4 5-18 5-22 0Zm5 8c3 3 9 3 12 0"></path>
-                    </svg>
+                    <img
+                      class="staff-home-dossier-action__image"
+                      src="assets/staff/home/staff-dossier-stop-frame-v1.png"
+                      alt=""
+                      width="1254"
+                      height="1254"
+                    />
                     <strong>ОТКРЫТЬ</strong>
                   </a>
                 </div>
-                <span class="staff-home-folder__status" data-dossier-copy>Нажмите на папку</span>
+                <span class="staff-home-dossier-action__status" data-dossier-copy>Нажмите на снимок</span>
                 <div class="staff-home-card__summary" data-home-dossier-summary hidden>
                   <span
                     class="staff-home-card__metric staff-home-card__metric--role"
