@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 18:09 CDT |
+| Обновлено | 2026-09-12 18:24 CDT |
 | Ветка / HEAD | `main` / `a579bc3` |
-| Дерево | dirty: пользовательские STAFF HOME-изменения сохранены; два фона `site-header` подключены к гостевому и STAFF-состояниям |
-| Активная линия | home site-header dual-mode backgrounds |
-| Последний этап | `css/style.css` подключает `site-header-bg-liminal-v1.png` в гостевом режиме и `site-header-bg-horror-v1.png` в STAFF; разметка, лого, аудио и маршруты не менялись. `git diff --check`, production build `582`, `verify-public-build` `583`, Playwright desktop/mobile, overflow `0`, console `0/0` пройдены. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: пользовательские STAFF HOME-изменения сохранены; лиминальный фон, centered horror v2 и CSS-знак `EXIT` подключены к `site-header` |
+| Активная линия | centered STAFF header horror cue |
+| Последний этап | `site-header-bg-horror-v2.png` заменил v1 в STAFF-шапке; существующая синяя кнопка получила красный `EXIT` через CSS, доступное имя и механика выхода сохранены. `git diff --check`, production build `582`, `verify-public-build` `583`, Playwright desktop/mobile, overflow `0`, console `0/0` и возврат в гостевой режим пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 

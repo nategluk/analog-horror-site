@@ -14630,6 +14630,28 @@ body.staff-mode .home-broadcast-page .site-header {
       rgba(12, 16, 22, 0.3) 48%,
       rgba(12, 16, 22, 0.58) 100%
     ),
-    url("../assets/guest/site-header-bg-horror-v1.png") center / cover no-repeat,
+    url("../assets/guest/site-header-bg-horror-v2.png") center / cover no-repeat,
     var(--broadcast-case);
+}
+
+body.staff-mode .home-broadcast-page .status-pill.status-pill--exit .mode-label__icon {
+  display: none;
+}
+
+body.staff-mode .home-broadcast-page .status-pill.status-pill--exit::before {
+  content: "EXIT";
+  display: grid;
+  width: 2.15rem;
+  min-height: 1.1rem;
+  place-items: center;
+  padding: 0.17rem 0.14rem 0.15rem;
+  border: 1px solid #7f182b;
+  color: #ffe9e8;
+  background: #b52e43;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 224, 221, 0.2),
+    0 0 0 1px rgba(94, 16, 30, 0.72);
+  font: 900 0.58rem/1 Arial, "Helvetica Neue", sans-serif;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px rgba(76, 9, 20, 0.8);
 }
