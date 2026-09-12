@@ -1,4 +1,6 @@
-/documents /archive#protocols 301
-/documents.html /archive#protocols 301
-/photos /archive 301
-/photos.html /archive 301
+/archive /episodes 301
+/archive.html /episodes 301
+/documents /protocols 301
+/documents.html /protocols 301
+/photos / 301
+/photos.html / 301

@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 12:53 CDT |
-| Ветка / HEAD | `main` / `655d8a6` |
-| Дерево | dirty: очищены `assets/staff/logo.png` и `assets/staff/logo-imagegen.png`; guest logo не изменён |
-| Активная линия | STAFF photo-evidence / Polaroid previews connected |
-| Последний этап | В Figma file `4fd7H5QBf288UkhDUb7SdJ` создана секция `84:5` с preview `PAVEL`, `OLEG`, `LORA`, `KIRILL` на component `80:2`; пять flattened WebP подключены к STAFF-карточкам `staff.html`. Runtime QA desktop `1280x900` и mobile `390x844`: overflow `0`, console `0/0`; build `575`, verify `576`. |
+| Обновлено | 2026-09-12 14:08 CDT |
+| Ветка / HEAD | `main` / `a579bc3` |
+| Дерево | dirty: три standalone-каталога, прямые STAFF HOME-ссылки, program-навигация, redirects, icon-only mobile-сигналы новых материалов, document-back links и порядок `каталоги → маршруты`; пользовательские изменения сохранены |
+| Активная линия | STAFF HOME signal cleanup |
+| Последний этап | Убраны декоративные подписи каталога, `NEW` заменён SVG-индикатором, кнопка программы из STAFF-футера удалена; каталоги остаются перед редко обновляемыми маршрутами. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -104,12 +104,20 @@ FREE
 
 ## Проверка ревизии
 
+- Material catalogs / STAFF HOME signal cleanup: `git diff --check`,
+  `node --check js/app.js`, production build (`580` files) и
+  `verify-public-build` (`581` files) пройдены; Playwright проверил STAFF HOME
+  на desktop `1280x900` и mobile `390x844`: icon-only SVG-индикаторы новых
+  материалов, отсутствие `ЯЧЕЙКА` / `P400` / `NEW` / `3 КАТАЛОГА`, порядок
+  `каталоги → маршруты`, отсутствие program-кнопки в футере и console `0/0`.
 - Player dossier: `git diff --check`, `node --check js/app.js`, production
   build (`565` files) и `verify-public-build` (`566` files) пройдены; Playwright
   console `0 errors / 0 warnings`, tabs, message detail, artifact detail,
   close/focus return and ordinary dossier geometry checked.
-- После переноса выполнены `git diff --check`, `node --check js/app.js`,
-  production build и `verify-public-build`.
+- Для archive-cell integration выполнены `git diff --check`, production build
+  (`578` файлов) и `verify-public-build` (`579` файлов); browser QA STAFF HOME
+  на desktop `1280x900` и mobile `390x844`: overflow `0`, console `0/0`, все
+  три hash-перехода открыли соответствующие вкладки архива.
 - Browser QA пройден для desktop и `390x844`: STAFF HOME, STAFF TV, overflow,
   восстановление досье/инвентарь и POWER/CH1; console без ошибок.
 - Figma Phase 0: страницы, nodes, variables, styles и библиотеки проверены read-only.

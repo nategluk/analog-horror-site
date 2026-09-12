@@ -8,6 +8,7 @@
   const DOSSIER_AUTH_SESSION_KEY = "tyndex_auth_session_v1";
   const ABOUT_ASSET_RECORD_KEY = "tyndex_about_asset_record_v1";
   const ARCHIVE_SECTION_KEY = "tyndex_archive_section_v1";
+  const CATALOG_SEEN_KEY = "tyndex_catalog_seen_v1";
   const STAFF_HOME_NOTICE_KEY = "tyndex_staff_home_notice_seen_v1";
   const IRINA_SOLNYSHKO_KEY = "tyndex_irina_solnyshko_v1";
   const PAVEL_BOOTH_KEY = "tyndex_pavel_observation_booth_v1";
@@ -5684,6 +5685,62 @@
     renderSection(currentSection, { announce: false, updateHash: false });
   };
 
+  const readCatalogSeen = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(CATALOG_SEEN_KEY) || "{}");
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const writeCatalogSeen = (seen) => {
+    try {
+      localStorage.setItem(CATALOG_SEEN_KEY, JSON.stringify(seen));
+    } catch {
+      // Catalog signals remain visible when storage is unavailable.
+    }
+  };
+
+  const initMaterialCatalogSignals = () => {
+    const cells = [...document.querySelectorAll("[data-catalog-cell]")];
+    const catalogPage = document.querySelector("[data-material-catalog]");
+    if (cells.length === 0 && !catalogPage) return;
+
+    const seen = readCatalogSeen();
+
+    cells.forEach((cell) => {
+      const catalogId = cell.dataset.catalogCell;
+      const revision = cell.dataset.catalogRevision;
+      if (!catalogId || !revision) return;
+
+      const count = Math.max(0, Number(cell.dataset.catalogNewCount || 1));
+      const isNew = count > 0 && seen[catalogId] !== revision;
+      const newLabel = cell.querySelector("[data-catalog-new-label]");
+      const baseLabel = cell.dataset.catalogBaseLabel || cell.getAttribute("aria-label") || "";
+      const materialLabel = count === 1 ? "новый материал" : "новых материалов";
+
+      cell.dataset.catalogBaseLabel = baseLabel;
+      cell.dataset.catalogNew = String(isNew);
+      if (newLabel) {
+        newLabel.hidden = !isNew;
+      }
+      cell.setAttribute(
+        "aria-label",
+        isNew ? `${baseLabel}, ${count} ${materialLabel}` : baseLabel
+      );
+    });
+
+    if (catalogPage && document.body.classList.contains("staff-mode")) {
+      const catalogId = catalogPage.dataset.materialCatalog;
+      const revision = catalogPage.dataset.catalogRevision;
+      if (catalogId && revision && seen[catalogId] !== revision) {
+        seen[catalogId] = revision;
+        writeCatalogSeen(seen);
+      }
+    }
+  };
+
   const initMobileNavigation = () => {
     const nav = document.querySelector(".site-nav");
     if (!nav || nav.dataset.mobileNavReady === "true") return;
@@ -5724,6 +5781,7 @@
     initAssetClassifier();
     initStaffProtocolWarning();
     initArchiveCatalog();
+    initMaterialCatalogSignals();
     initSweetDreamBook();
     initMobileNavigation();
     initStaffHomeNotice();

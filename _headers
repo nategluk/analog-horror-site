@@ -1,6 +1,15 @@
 /documents/*
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
 
+/protocols*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+
+/dossiers*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+
+/books*
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+
 /staff/*
   X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
 

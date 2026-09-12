@@ -22,9 +22,11 @@ const OUT = path.join(ROOT, "public");
 const SITE_PAGES = [
   "index.html",
   "about.html",
-  "archive.html",
   "donate.html",
   "episodes.html",
+  "protocols.html",
+  "dossiers.html",
+  "books.html",
   "faq.html",
   "hiring.html",
   "locations.html",

@@ -16,9 +16,11 @@ const OUT = path.join(ROOT, "public");
 const REQUIRED_PAGES = [
   "index.html",
   "about.html",
-  "archive.html",
   "donate.html",
   "episodes.html",
+  "protocols.html",
+  "dossiers.html",
+  "books.html",
   "faq.html",
   "hiring.html",
   "locations.html",
@@ -187,6 +189,7 @@ const FORBIDDEN_SUBSTRINGS = [
 
 const FORBIDDEN_NAMES = new Set([
   "AGENTS.md",
+  "archive.html",
   "documents.html",
   "photos.html",
   "queue.json",
