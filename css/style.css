@@ -14171,8 +14171,15 @@ body.staff-mode .home-broadcast-page .staff-footer-archive:focus-visible {
     overflow-wrap: anywhere;
   }
 
-  body.staff-mode .broadcast-shell-page .site-nav li:nth-child(6) {
-    grid-column: span 2;
+  body.staff-mode .broadcast-shell-page .site-nav li:nth-child(6) a,
+  body.staff-mode .broadcast-shell-page .site-nav li:nth-child(7) a {
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  body.staff-mode .broadcast-shell-page .site-nav li:nth-child(6),
+  body.staff-mode .broadcast-shell-page .site-nav li:nth-child(7) {
+    grid-column: span 1;
   }
 
   body.staff-mode .home-broadcast-page .staff-logo-image {
