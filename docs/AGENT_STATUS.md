@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 11:19 CDT |
+| Обновлено | 2026-09-12 11:31 CDT |
 | Ветка / HEAD | `main` / `655d8a6` |
-| Дерево | dirty: staff reveal logo в `assets/staff/logo.png` и `assets/staff/logo-imagegen.png`; размеры в `docs/IMAGE_ART_DIRECTION_MANIFEST.md` |
-| Активная линия | Новая creepy reveal-версия staff logo интегрирована в Figma и STAFF mode |
-| Последний этап | Figma stage `STAFF LOGO / Reveal ImageGen` (`74:2`) с reference/master/export; browser QA `1280x900` и `390x844`, overflow и console пройдены; public build `569` / verify `570` пройдены. |
+| Дерево | dirty: очищены `assets/staff/logo.png` и `assets/staff/logo-imagegen.png`; guest logo не изменён |
+| Активная линия | STAFF reveal logo очищен и синхронизирован с Figma/runtime |
+| Последний этап | Figma stage `74:2` обновлён чистым alpha-контуром; export `760x249` подключён в runtime. Desktop и `390x844`: reveal читаемый, overflow отсутствует, console `0/0`; build `569`, verify `570`. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
