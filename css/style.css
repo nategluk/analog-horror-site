@@ -14608,3 +14608,28 @@ body:not(.staff-mode) .catalog-locked button.is-denied {
   background: rgba(138, 47, 71, 0.1);
   color: #6f1f35;
 }
+
+/* ─── HOME SITE HEADER: generated guest / STAFF backdrops ─── */
+body:not(.staff-mode) .home-broadcast-page .site-header {
+  background:
+    linear-gradient(
+      135deg,
+      var(--guest-overlay-top) 0%,
+      var(--guest-overlay-mid) 54%,
+      var(--guest-overlay-bottom) 100%
+    ),
+    url("../assets/guest/site-header-bg-liminal-v1.png") center / cover no-repeat,
+    var(--surface);
+}
+
+body.staff-mode .home-broadcast-page .site-header {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(12, 16, 22, 0.2) 0%,
+      rgba(12, 16, 22, 0.3) 48%,
+      rgba(12, 16, 22, 0.58) 100%
+    ),
+    url("../assets/guest/site-header-bg-horror-v1.png") center / cover no-repeat,
+    var(--broadcast-case);
+}

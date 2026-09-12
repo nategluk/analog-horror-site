@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 17:54 CDT |
+| Обновлено | 2026-09-12 18:09 CDT |
 | Ветка / HEAD | `main` / `a579bc3` |
-| Дерево | dirty: карточки персонала с текстом в белом поле полароида, три standalone-каталога, прямые STAFF HOME-ссылки, program-навигация, redirects, icon-only mobile-сигналы новых материалов, document-back links, порядок `каталоги → маршруты`, мобильный перенос длинных кнопок, FAQ-формулировка стикера и единый STAFF HOME tile-label стиль; пользовательские изменения сохранены |
-| Активная линия | STAFF HOME shared tile-label standardization |
-| Последний этап | На STAFF HOME досье, эфир, каталоги и маршруты переведены на общий лейбл `иконка → название → стрелка`; счётчики, NEW-сигналы, ссылки и доступность сохранены. `git diff --check`, production build `580`, `verify-public-build` `581`, Playwright `1280×900` / `390×844`, overflow `0`, console `0/0` пройдены. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: пользовательские STAFF HOME-изменения сохранены; два фона `site-header` подключены к гостевому и STAFF-состояниям |
+| Активная линия | home site-header dual-mode backgrounds |
+| Последний этап | `css/style.css` подключает `site-header-bg-liminal-v1.png` в гостевом режиме и `site-header-bg-horror-v1.png` в STAFF; разметка, лого, аудио и маршруты не менялись. `git diff --check`, production build `582`, `verify-public-build` `583`, Playwright desktop/mobile, overflow `0`, console `0/0` пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
