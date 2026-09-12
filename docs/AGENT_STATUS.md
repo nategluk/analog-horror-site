@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 02:24 CDT |
+| Обновлено | 2026-09-12 02:42 CDT |
 | Ветка / HEAD | `main` / `655d8a6` |
-| Дерево | dirty: пользовательские документы; STAFF HOME transfer; STAFF TV mobile composition + kindergarten wall/carpet backdrop + centered small remote + standby LED state на runtime |
-| Активная линия | STAFF TV: мобильный full-bleed юнит из отдельных Figma TV + stand |
-| Последний этап | Одобренный фон детского сада с рисунками и зелёным ковром интегрирован под TV-юнитом; маленький R16-пульт встроен по центру полки, standby LED для TV OFF сохранён. |
+| Дерево | dirty: player dossier fullscreen layout в `css/style.css` |
+| Активная линия | Player dossier: личная карточка как полноэкранный рабочий лист на desktop и mobile |
+| Последний этап | Player dialog растянут на весь viewport; шапка, вкладки, сообщения и материалы получили свободную responsive-сетку и читаемую типографику. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -27,6 +27,11 @@ FREE
 
 ## Текущая работа и сохранность
 
+- 2026-09-12: player dossier перевёрстан как полноэкранный page-like dialog в
+  `css/style.css`; existing `staff.html` markup, save keys, вкладки и действия
+  сообщений/материалов сохранены. Browser QA: desktop `1280x900` и mobile
+  `390x844`, без горизонтального overflow; временные screenshots перемещены в
+  `/Users/nateglukhov/.Trash/player-card-qa-20260912`.
 - В согласованный scope добавлены операторская STAFF HOME, `staff/tv.html`,
   общий доступ к сохранённому личному делу и production-allowlist новой страницы.
 - Codex 2026-09-12 01:50: runtime использует
@@ -77,6 +82,10 @@ FREE
 
 ## Проверка ревизии
 
+- Player dossier: `git diff --check`, `node --check js/app.js`, production
+  build (`565` files) и `verify-public-build` (`566` files) пройдены; Playwright
+  console `0 errors / 0 warnings`, tabs, message detail, artifact detail,
+  close/focus return and ordinary dossier geometry checked.
 - После переноса выполнены `git diff --check`, `node --check js/app.js`,
   production build и `verify-public-build`.
 - Browser QA пройден для desktop и `390x844`: STAFF HOME, STAFF TV, overflow,
