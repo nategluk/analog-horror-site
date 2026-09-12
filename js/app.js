@@ -61,19 +61,19 @@
     ],
     staff: [
       {
-        title: "AUDIO FEED // 01",
+        title: "01",
         src: audioAsset("assets/audio/staff/track-01.mp3"),
       },
       {
-        title: "AUDIO FEED // 02",
+        title: "02",
         src: audioAsset("assets/audio/staff/track-02.mp3"),
       },
       {
-        title: "AUDIO FEED // 03",
+        title: "03",
         src: audioAsset("assets/audio/staff/track-03.mp3"),
       },
       {
-        title: "AUDIO FEED // 04",
+        title: "04",
         src: audioAsset("assets/audio/staff/track-04.mp3"),
       },
     ],
@@ -281,12 +281,33 @@
     });
   };
 
+  const musicIconPaths = {
+    play: '<path d="m8 5 10 7-10 7Z"></path>',
+    pause: '<path d="M8 5v14M16 5v14"></path>',
+    next: '<path d="m5 5 8 7-8 7ZM17 5v14"></path>',
+  };
+
+  const setMusicButtonIcon = (button, iconName, label) => {
+    if (!button) return;
+
+    button.innerHTML = `
+      <svg class="music-player__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        ${musicIconPaths[iconName] || musicIconPaths.play}
+      </svg>
+    `;
+    button.setAttribute("aria-label", label);
+    button.title = label;
+  };
+
   const setPlayerState = (isPlaying) => {
     if (!player || !playButton) return;
 
     player.classList.toggle("is-playing", isPlaying);
-    playButton.textContent = isPlaying ? "II" : "PLAY";
-    playButton.setAttribute("aria-label", isPlaying ? "Поставить музыку на паузу" : "Включить музыку");
+    setMusicButtonIcon(
+      playButton,
+      isPlaying ? "pause" : "play",
+      isPlaying ? "Поставить музыку на паузу" : "Включить музыку"
+    );
     localStorage.setItem(MUSIC_PLAYING_KEY, isPlaying ? "true" : "false");
   };
 
@@ -1642,6 +1663,7 @@
     playButton = document.createElement("button");
     playButton.className = "music-player__button";
     playButton.type = "button";
+    setMusicButtonIcon(playButton, "play", "Включить музыку");
 
     trackLabel = document.createElement("span");
     trackLabel.className = "music-player__track";
@@ -1649,8 +1671,7 @@
     nextButton = document.createElement("button");
     nextButton.className = "music-player__next";
     nextButton.type = "button";
-    nextButton.textContent = "NEXT";
-    nextButton.setAttribute("aria-label", "Следующий трек");
+    setMusicButtonIcon(nextButton, "next", "Следующий трек");
 
     downloadLink = document.createElement("a");
     downloadLink.className = "music-player__download";
@@ -1726,9 +1747,17 @@
   const syncModeLabel = (isStaff) => {
     const statusLabel = document.querySelector("[data-mode-label]");
     if (!statusLabel) return;
-    statusLabel.textContent = isStaff
-      ? "НАЖМИ ЧТОБЫ ПРОСНУТЬСЯ!"
-      : "Режим: Гостевая версия";
+    if (isStaff) {
+      statusLabel.innerHTML = `
+        <svg class="mode-label__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M14 5h6v14h-6"></path>
+          <path d="M4 12h10M10 8l4 4-4 4"></path>
+        </svg>
+        <span class="visually-hidden">Нажми чтобы проснуться</span>
+      `;
+    } else {
+      statusLabel.textContent = "Режим: Гостевая версия";
+    }
     statusLabel.classList.toggle("status-pill--exit", isStaff);
     statusLabel.title = isStaff ? "Вернуться в гостевую версию" : "";
     statusLabel.setAttribute("role", isStaff ? "button" : "status");
@@ -3058,11 +3087,19 @@
     const heading = panel.querySelector("[data-dossier-heading]");
     const copy = panel.querySelector("[data-dossier-copy]");
     const summary = panel.querySelector("[data-home-dossier-summary]");
+    const roleIcon = panel.querySelector("[data-home-dossier-role-icon]");
+    const statusMetric = panel.querySelector("[data-home-dossier-status-icon]");
     const status = panel.querySelector("[data-home-dossier-status]");
-    const materialCount = panel.querySelector(
-      "[data-home-dossier-material-count]"
+    const unreadCount = panel.querySelector(
+      "[data-home-dossier-unread-count]"
     );
+    const inboxLink = panel.querySelector("[data-home-dossier-inbox-link]");
     const inventoryLink = panel.querySelector("[data-home-inventory-link]");
+    const roleIconSources = {
+      animator: "assets/staff/icons/role-animator.svg",
+      volunteer: "assets/staff/icons/role-volunteer.svg",
+      impostor: "assets/staff/icons/role-impostor.svg",
+    };
 
     const renderPanel = () => {
       const profile = readStaffProfile();
@@ -3078,33 +3115,63 @@
           : profile?.status === "in_progress"
             ? "ПРОВЕРКА"
             : "ФОРМИРУЕТСЯ";
-      const visibleArtifacts = profile
-        ? profile.artifacts.filter(
-            (artifact) =>
+      const visibleMessages = profile
+        ? profile.messages.filter(
+            (message) =>
+              staffMessages[message.id] &&
               !profile.deletedItems.some(
-                (deleted) => deleted.kind === "artifact" && deleted.id === artifact.id
+                (deleted) => deleted.kind === "message" && deleted.id === message.id
               )
           )
         : [];
+      const unreadMessages = visibleMessages.filter((message) => !message.readAt);
+      const unreadMessageLabel = `${unreadMessages.length} новых непрочитанных сообщений`;
 
       panel.hidden = false;
       button.hidden = hasProfile;
       if (inventoryLink) inventoryLink.hidden = !hasProfile;
+      if (inboxLink) {
+        inboxLink.hidden = !hasProfile;
+        inboxLink.setAttribute(
+          "aria-label",
+          hasProfile
+            ? `Открыть личные входящие: ${unreadMessageLabel}`
+            : "Открыть личные входящие"
+        );
+        inboxLink.title = hasProfile
+          ? `Личные входящие: ${unreadMessageLabel}`
+          : "Открыть личные входящие";
+      }
       if (summary) summary.hidden = !hasProfile;
+      const roleIconSource = roleIconSources[profile?.role] || "";
+      if (roleIcon) {
+        roleIcon.hidden = !hasProfile || !roleIconSource;
+        if (roleIconSource) roleIcon.src = roleIconSource;
+      }
+      if (statusMetric) {
+        statusMetric.setAttribute(
+          "aria-label",
+          hasProfile
+            ? `Статус: ${roleLabel} // ${stateLabel}`
+            : "Статус профиля"
+        );
+        statusMetric.dataset.profileState = profile?.status || "";
+      }
       if (heading) {
         heading.textContent = hasProfile
-          ? "ЛИЧНОЕ ДЕЛО ЗАКРЕПЛЕНО"
-          : "ЛИЧНОЕ ДЕЛО УЖЕ ЗАКРЕПЛЕНО?";
+          ? "ДОСЬЕ ДОСТУПНО"
+          : "ДОСЬЕ";
       }
       if (copy) {
+        copy.hidden = hasProfile;
         copy.textContent = hasProfile
-          ? "Роль и материалы готовы к продолжению."
-          : "Восстановите роль и материалы без повторного прохождения.";
+          ? ""
+          : "Нажмите на папку";
       }
       if (status) status.textContent = hasProfile ? `${roleLabel} // ${stateLabel}` : "—";
-      if (materialCount) {
-        materialCount.textContent = hasProfile
-          ? String(visibleArtifacts.length).padStart(2, "0")
+      if (unreadCount) {
+        unreadCount.textContent = hasProfile
+          ? String(unreadMessages.length).padStart(2, "0")
           : "—";
       }
     };

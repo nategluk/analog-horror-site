@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 02:42 CDT |
+| Обновлено | 2026-09-12 03:33 CDT |
 | Ветка / HEAD | `main` / `655d8a6` |
-| Дерево | dirty: player dossier fullscreen layout в `css/style.css` |
-| Активная линия | Player dossier: личная карточка как полноэкранный рабочий лист на desktop и mobile |
-| Последний этап | Player dialog растянут на весь viewport; шапка, вкладки, сообщения и материалы получили свободную responsive-сетку и читаемую типографику. |
+| Дерево | dirty: STAFF HOME text-load redesign в `index.html`, `css/style.css`, `js/app.js` |
+| Активная линия | STAFF HOME: unread inbox indicator connected to personal dossier |
+| Последний этап | Materials counter заменён на unread-message indicator; ссылка ведёт в существующие ЛИЧНЫЕ ВХОДЯЩИЕ. QA mobile/desktop, overflow и console пройдены. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -32,6 +32,28 @@ FREE
   сообщений/материалов сохранены. Browser QA: desktop `1280x900` и mobile
   `390x844`, без горизонтального overflow; временные screenshots перемещены в
   `/Users/nateglukhov/.Trash/player-card-qa-20260912`.
+- 2026-09-12: STAFF HOME в `index.html` получил sun-mask logo, иконки audio/exit,
+  папку досье, шесть самостоятельных карточек маршрутов и responsive grid;
+  `staff/tv.html`, dossier access и прямой STAFF route сохранены. QA: desktop
+  `1280x900`, mobile `390x844`, overflow `0`, console `0/0`; build `565` и
+  `verify-public-build` `566` пройдены.
+- 2026-09-12: STAFF route cards переведены на guest index pattern
+  `image → title → short copy`; использованы существующие guest thumbnails с
+  отдельным тёмным STAFF treatment, прямые `.html`-маршруты сохранены. QA:
+  mobile `390x844` и desktop `1280x900`, guest mode не изменён, route click и
+  console `0/0`; build `565` и `verify-public-build` `566` пройдены.
+- 2026-09-12: в `js/app.js` промежуточный `data-dossier-copy` скрывается при
+  наличии профиля, чтобы не дублировать `data-home-dossier-status`; в пустом
+  состоянии остаётся инструкция «Нажмите на папку». QA: mobile `390x844`,
+  desktop `1280x900`, overflow `0`, console `0/0`; build `565` и
+  `verify-public-build` `566` пройдены.
+- 2026-09-12: Figma SVG icons `role-animator.svg`, `role-volunteer.svg`,
+  `role-impostor.svg` и `status-unread-messages.svg` подключены к dossier
+  card; роль выбирает соответствующий icon, envelope badge показывает число
+  непрочитанных сообщений и ведёт в `staff.html?personnel=player`, доступные
+  подписи сохранены visually-hidden/ARIA. QA: роли animator, volunteer и
+  impostor на mobile `390x844`, desktop `1280x900`, overflow `0`, console
+  `0/0`; build `569` и `verify-public-build` `570` пройдены.
 - В согласованный scope добавлены операторская STAFF HOME, `staff/tv.html`,
   общий доступ к сохранённому личному делу и production-allowlist новой страницы.
 - Codex 2026-09-12 01:50: runtime использует
