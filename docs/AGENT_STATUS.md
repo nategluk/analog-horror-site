@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-13 12:59 CDT |
+| Обновлено | 2026-09-13 13:12 CDT |
 | Ветка / HEAD | `main` / `18272a8` |
-| Дерево | dirty: STAFF music-player styling в `css/style.css` и `css/lora-red-room.css`, текущий снимок `docs/AGENT_STATUS.md`; unrelated work не затронут |
+| Дерево | dirty: STAFF music-player label reveal в `js/app.js` и `css/style.css`, текущий снимок `docs/AGENT_STATUS.md`; unrelated work не затронут |
 | Активная линия | STAFF music player |
-| Последний этап | STAFF-плеер переведён на компактный кегль `0.68rem` и зелёный LCD-акцент `#77ff88`; гостевые правила не изменены. Browser QA на `1280x900` и `390x844`: цвет/размер подтверждены, горизонтального overflow нет, console `0/0`. `git diff --check`, production build (`583` файла) и `verify-public-build` (`584` файла) пройдены. Commit / push / deploy не выполнялись. |
+| Последний этап | Название STAFF-трека скрыто до первого нажатия Play и сохраняется после Pause; гостевой плеер не изменён. Browser QA на `1280x900` и `390x844`: до Play `opacity: 0`, после Play `opacity: 1`, overflow отсутствует, console `0/0`. `node --check js/app.js`, `git diff --check`, production build (`583` файла) и `verify-public-build` (`584` файла) пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 

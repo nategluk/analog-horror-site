@@ -1696,6 +1696,8 @@
     (document.querySelector(".logo-area") || body).append(player);
 
     playButton.addEventListener("click", () => {
+      player.classList.add("is-track-revealed");
+
       if (audio.paused) {
         audio.play().catch(() => setPlayerState(false));
         return;

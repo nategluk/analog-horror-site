@@ -1036,7 +1036,13 @@ body.staff-mode .music-player__track {
   color: var(--staff-player-green);
   font-size: 0.68rem;
   letter-spacing: 0.04em;
+  opacity: 0;
   text-shadow: 0 0 5px rgba(119, 255, 136, 0.28);
+  transition: opacity 0.18s ease;
+}
+
+body.staff-mode .music-player.is-track-revealed .music-player__track {
+  opacity: 1;
 }
 
 body.staff-mode .music-player__progress {
