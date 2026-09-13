@@ -8281,6 +8281,11 @@ body.staff-mode .broadcast-shell-page .cctv-source-screen[hidden] {
   display: none;
 }
 
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-teletext .cctv-status,
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-source .cctv-status {
+  visibility: hidden;
+}
+
 body.staff-mode .broadcast-shell-page .cctv-source-screen__body {
   grid-row: 2;
   display: grid;
@@ -8582,12 +8587,12 @@ body.staff-mode .broadcast-shell-page .cctv-no-signal span {
   letter-spacing: 0.16em;
 }
 
-body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-no-channel:not(.is-powered-off) .cctv-no-signal {
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-no-channel:not(.is-powered-off):not(.is-teletext):not(.is-source) .cctv-no-signal {
   visibility: visible;
   opacity: 1;
 }
 
-body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-no-channel:not(.is-powered-off) .cctv-media {
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-no-channel:not(.is-powered-off):not(.is-teletext):not(.is-source) .cctv-media {
   opacity: 0;
 }
 
@@ -8598,7 +8603,7 @@ body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-powered-off .cctv
   opacity: 0;
 }
 
-body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-powered-off .cctv-remote__key:not([data-cctv-power]) {
+body.staff-mode .broadcast-shell-page .staff-cctv-dashboard.is-powered-off .cctv-remote__key:not([data-cctv-power]):not([data-cctv-teletext-button]):not([data-cctv-source-button]) {
   pointer-events: none;
 }
 

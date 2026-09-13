@@ -715,6 +715,13 @@
 
     if (!restoreDisplay || !state?.sources.length) return;
 
+    if (state.tuned !== true) {
+      const channelMark = state.noSignalChannel || "--";
+      if (remoteStatus) remoteStatus.textContent = `CH ${channelMark}`;
+      if (label) label.textContent = `CH ${channelMark} // НЕТ СИГНАЛА`;
+      return;
+    }
+
     const source = state.sources[state.sourceIndex];
     const channelCode = source.dataset.channelCode || "CH --";
     const channelName = source.dataset.channelName || "ИСТОЧНИК НЕ ОПРЕДЕЛЁН";
@@ -734,8 +741,7 @@
     if (!sourceScreen || !sourceButton) return;
 
     if (consoleElement.dataset.cctvPowered !== "true") {
-      if (remoteStatus) remoteStatus.textContent = "SRC // TV OFF";
-      return;
+      wakeCctvForService(consoleElement);
     }
 
     if (consoleElement.classList.contains("is-source")) {
@@ -766,8 +772,7 @@
     if (!teletext || !pageNumber || !message || !state) return;
 
     if (consoleElement.dataset.cctvPowered !== "true") {
-      if (remoteStatus) remoteStatus.textContent = "TXT // НЕТ НЕСУЩЕЙ";
-      return;
+      wakeCctvForService(consoleElement);
     }
 
     closeCctvSourceScreen(consoleElement);
@@ -938,6 +943,7 @@
     consoleElement.classList.add("is-no-channel");
     const padded = String(rawDigits ?? "").replace(/\D/g, "");
     const channelMark = padded ? padded.padStart(2, "0") : "--";
+    if (state) state.noSignalChannel = channelMark;
     if (label) label.textContent = `CH ${channelMark} // НЕТ СИГНАЛА`;
     if (status) status.textContent = "Несущая не найдена.";
     if (remoteStatus) remoteStatus.textContent = `CH ${channelMark}`;
@@ -1007,6 +1013,12 @@
 
   const powerOnCctv = (consoleElement) => {
     showCctvHauntNoise(consoleElement);
+  };
+
+  const wakeCctvForService = (consoleElement) => {
+    if (!isCctvPowered(consoleElement)) {
+      powerOnCctv(consoleElement);
+    }
   };
 
   const setHomeCctvRemoteOpen = (bay, open) => {
@@ -1096,6 +1108,7 @@
       audioMuted: false,
       selectedVhsId: null,
       digitBuffer: "",
+      noSignalChannel: "",
       sounds: createCctvSoundRack(),
     };
     setCctvMuted(consoleElement, false);
@@ -1142,14 +1155,12 @@
     });
 
     teletextButton.addEventListener("click", () => {
-      if (!isCctvPowered(consoleElement)) return;
       playCctvSound(consoleElement, "click");
       playCctvSound(consoleElement, "teletext");
       showNextCctvTeletextPage(consoleElement);
     });
 
     sourceButton.addEventListener("click", () => {
-      if (!isCctvPowered(consoleElement)) return;
       playCctvSound(consoleElement, "click");
       playCctvSound(consoleElement, "teletext");
       toggleCctvSourceScreen(consoleElement);
