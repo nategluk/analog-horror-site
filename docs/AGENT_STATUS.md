@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 21:25 CDT |
+| Обновлено | 2026-09-13 12:59 CDT |
 | Ветка / HEAD | `main` / `18272a8` |
-| Дерево | dirty: текущий снимок `docs/AGENT_STATUS.md`, labels STAFF-плеера в `js/app.js`, homepage marker в `index.html` и scoped CSS; unrelated work не затронут |
-| Активная линия | STAFF EXIT visibility |
-| Последний этап | EXIT скрыт в STAFF на всех страницах, кроме главной `/`: `index.html` помечен как `staff-home-page`, CSS скрывает `status-pill--exit` вне этого контейнера. Smoke QA desktop: `/about.html` — `display: none`, `/` — видим. `git diff --check` и `node --check js/app.js` пройдены. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: STAFF music-player styling в `css/style.css` и `css/lora-red-room.css`, текущий снимок `docs/AGENT_STATUS.md`; unrelated work не затронут |
+| Активная линия | STAFF music player |
+| Последний этап | STAFF-плеер переведён на компактный кегль `0.68rem` и зелёный LCD-акцент `#77ff88`; гостевые правила не изменены. Browser QA на `1280x900` и `390x844`: цвет/размер подтверждены, горизонтального overflow нет, console `0/0`. `git diff --check`, production build (`583` файла) и `verify-public-build` (`584` файла) пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 

@@ -89,50 +89,50 @@
 }
 
 body.staff-mode .lora-room .music-player {
-  color: #f5eadc;
-  border-color: rgba(255, 196, 160, 0.28);
+  color: var(--staff-player-green);
+  border-color: rgba(119, 255, 136, 0.28);
   background: rgba(28, 10, 10, 0.94);
-  box-shadow: inset 0 0 0 1px rgba(80, 24, 18, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(119, 255, 136, 0.18);
 }
 
 body.staff-mode .lora-room .music-player.is-playing::before {
-  background: #ffc49a;
-  box-shadow: 0 0 14px rgba(255, 196, 160, 0.55);
+  background: var(--staff-player-green);
+  box-shadow: 0 0 14px rgba(119, 255, 136, 0.55);
 }
 
 body.staff-mode .lora-room .music-player button,
 body.staff-mode .lora-room .music-player__download {
-  border: 1px solid rgba(255, 210, 170, 0.35);
+  border: 1px solid rgba(119, 255, 136, 0.35);
   border-radius: 2px;
-  color: #ffe4c9;
-  background: rgba(48, 14, 14, 0.86);
+  color: var(--staff-player-green);
+  background: rgba(7, 18, 10, 0.86);
   box-shadow: none;
 }
 
 body.staff-mode .lora-room .music-player__download {
-  background: rgba(48, 14, 14, 0.86);
+  background: rgba(7, 18, 10, 0.86);
 }
 
 body.staff-mode .lora-room .music-player button:hover,
 body.staff-mode .lora-room .music-player button:focus-visible,
 body.staff-mode .lora-room .music-player__download:hover,
 body.staff-mode .lora-room .music-player__download:focus-visible {
-  color: #ffe4c9;
-  border-color: #ffd7b0;
+  color: #b8ffc0;
+  border-color: var(--staff-player-green);
 }
 
 body.staff-mode .lora-room .music-player__track {
-  color: #f5eadc;
+  color: var(--staff-player-green);
 }
 
 body.staff-mode .lora-room .music-player__progress {
-  accent-color: #ffc49a;
+  accent-color: var(--staff-player-green);
 }
 
 body.staff-mode .lora-room .music-player__progress::-webkit-slider-runnable-track {
-  border-color: rgba(255, 196, 160, 0.28);
+  border-color: rgba(119, 255, 136, 0.28);
   background:
-    linear-gradient(90deg, #ffc49a var(--progress, 0%), transparent 0),
+    linear-gradient(90deg, var(--staff-player-green) var(--progress, 0%), transparent 0),
     rgba(18, 6, 6, 0.92);
 }
 
@@ -141,14 +141,14 @@ body.staff-mode .lora-room .music-player__progress::-moz-range-track {
 }
 
 body.staff-mode .lora-room .music-player__progress::-moz-range-progress {
-  background: #ffc49a;
+  background: var(--staff-player-green);
 }
 
 body.staff-mode .lora-room .music-player__progress::-webkit-slider-thumb,
 body.staff-mode .lora-room .music-player__progress::-moz-range-thumb {
-  border-color: #ffc49a;
-  background: #f5eadc;
-  box-shadow: 0 0 10px rgba(255, 196, 160, 0.4);
+  border-color: var(--staff-player-green);
+  background: var(--staff-player-green);
+  box-shadow: 0 0 10px rgba(119, 255, 136, 0.4);
 }
 
 .lora-room__top {

@@ -990,8 +990,9 @@ body:not(.staff-mode)::before {
 }
 
 body.staff-mode .music-player {
+  --staff-player-green: #77ff88;
   text-transform: uppercase;
-  color: #eee9d5;
+  color: var(--staff-player-green);
   border-color: #080a0e;
   border-radius: 3px;
   background: #171a20;
@@ -1002,65 +1003,70 @@ body.staff-mode .music-player {
 }
 
 body.staff-mode .music-player.is-playing::before {
-  background: #52d3dc;
-  box-shadow: 0 0 14px #52d3dc;
+  background: var(--staff-player-green);
+  box-shadow: 0 0 14px var(--staff-player-green);
 }
 
 body.staff-mode .music-player button,
 body.staff-mode .music-player__download {
-  border: 1px solid #07090c;
+  border: 1px solid #214d2a;
   border-radius: 2px;
-  color: #0c1017;
-  background: #ebcd51;
+  color: var(--staff-player-green);
+  background: #0a120c;
+  font-size: 0.68rem;
   box-shadow:
-    inset 1px 1px rgba(255, 255, 255, 0.24),
+    inset 1px 1px rgba(119, 255, 136, 0.16),
     inset -2px -2px rgba(0, 0, 0, 0.25);
 }
 
 body.staff-mode .music-player__download {
-  background: #da69a9;
+  background: #0a120c;
 }
 
 body.staff-mode .music-player button:hover,
 body.staff-mode .music-player button:focus-visible,
 body.staff-mode .music-player__download:hover,
 body.staff-mode .music-player__download:focus-visible {
-  color: #0c1017;
-  border-color: #07090c;
+  color: #b8ffc0;
+  border-color: var(--staff-player-green);
+  background: #102315;
 }
 
 body.staff-mode .music-player__track {
-  color: #eee9d5;
+  color: var(--staff-player-green);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 5px rgba(119, 255, 136, 0.28);
 }
 
 body.staff-mode .music-player__progress {
-  accent-color: #52d3dc;
+  accent-color: var(--staff-player-green);
 }
 
 body.staff-mode .music-player__progress::-webkit-slider-runnable-track {
-  border-color: #4f555e;
+  border-color: #214d2a;
   background:
-    linear-gradient(90deg, #52d3dc var(--progress, 0%), transparent 0),
-    #080b10;
+    linear-gradient(90deg, var(--staff-player-green) var(--progress, 0%), transparent 0),
+    #080f0a;
 }
 
 body.staff-mode .music-player__progress::-moz-range-track {
-  background: #080b10;
+  background: #080f0a;
 }
 
 body.staff-mode .music-player__progress::-moz-range-progress {
-  background: #52d3dc;
+  background: var(--staff-player-green);
 }
 
 body.staff-mode .music-player__progress:focus-visible {
-  outline-color: #52d3dc;
+  outline-color: var(--staff-player-green);
 }
 
 body.staff-mode .music-player__progress::-webkit-slider-thumb,
 body.staff-mode .music-player__progress::-moz-range-thumb {
-  border-color: #52d3dc;
-  background: #eee9d5;
-  box-shadow: 0 0 10px rgba(82, 211, 220, 0.45);
+  border-color: var(--staff-player-green);
+  background: var(--staff-player-green);
+  box-shadow: 0 0 10px rgba(119, 255, 136, 0.45);
 }
 
 
@@ -7612,31 +7618,31 @@ body.staff-mode .broadcast-shell-page .music-player {
 
 body.staff-mode .broadcast-shell-page .music-player button,
 body.staff-mode .broadcast-shell-page .music-player__download {
-  border: 1px solid #07090c;
+  border: 1px solid #214d2a;
   border-radius: 2px;
-  color: #0c1017;
-  background: var(--broadcast-yellow);
+  color: var(--staff-player-green);
+  background: #0a120c;
   box-shadow:
-    inset 1px 1px rgba(255, 255, 255, 0.24),
+    inset 1px 1px rgba(119, 255, 136, 0.16),
     inset -2px -2px rgba(0, 0, 0, 0.25);
 }
 
 body.staff-mode .broadcast-shell-page .music-player__download {
-  background: var(--broadcast-magenta);
+  background: #0a120c;
 }
 
 body.staff-mode .broadcast-shell-page .music-player__track {
-  color: var(--text);
+  color: var(--staff-player-green);
 }
 
 body.staff-mode .broadcast-shell-page .music-player__progress::-webkit-slider-runnable-track {
   background:
-    linear-gradient(90deg, var(--accent) var(--progress, 0%), transparent 0),
-    #080b10;
+    linear-gradient(90deg, var(--staff-player-green) var(--progress, 0%), transparent 0),
+    #080f0a;
 }
 
 body.staff-mode .broadcast-shell-page .music-player__progress::-moz-range-track {
-  background: #080b10;
+  background: #080f0a;
 }
 
 body.staff-mode .broadcast-shell-page .site-nav {
