@@ -15126,3 +15126,155 @@ body.staff-mode .donate-page-panel > .donate-panel {
       linear-gradient(180deg, rgba(12, 16, 22, 0.22), transparent 42%, rgba(12, 16, 22, 0.48));
   }
 }
+
+/* ─── STAFF MATERIAL CATALOGS: readable tile grid ─── */
+body.staff-mode .catalog-broadcast-page .staff-material-catalog {
+  overflow: visible;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-section {
+  padding: clamp(0.8rem, 2.2vw, 1.15rem);
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1rem);
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog[data-material-catalog="books"] .archive-record-list {
+  grid-template-columns: minmax(0, 42rem);
+  justify-content: start;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-content: start;
+  min-height: 0;
+  gap: 0;
+  padding: 0.6rem;
+  border-left-width: 5px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 15%, transparent 82%, rgba(0, 0, 0, 0.44)),
+    #20242a;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-width: 2px;
+  box-shadow:
+    inset 0 0 0 1px #737983,
+    0 3px 0 rgba(0, 0, 0, 0.42);
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview-frame:has(.archive-record__preview--cover) {
+  aspect-ratio: 3 / 2;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview {
+  object-fit: cover;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview--cover {
+  padding: 0.55rem;
+  object-fit: contain;
+  object-position: center;
+  background: #0d1116;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy {
+  align-content: start;
+  gap: 0.35rem;
+  padding: 0.7rem 0.15rem 0.15rem;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record strong {
+  display: block;
+  width: 100%;
+  max-width: none;
+  padding: 0.42rem 0.5rem;
+  font-size: clamp(1.02rem, 1.7vw, 1.24rem);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy > span {
+  color: #d0d5db;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy > p {
+  margin: 0;
+  color: #c0c5cc;
+  font-size: 0.96rem;
+  line-height: 1.52;
+  overflow-wrap: anywhere;
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record:hover,
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record:focus-visible {
+  border-color: var(--archive-record-accent);
+  border-left-color: var(--archive-record-accent);
+  box-shadow:
+    inset 0 0 0 1px #737983,
+    0 0 0 2px color-mix(in srgb, var(--archive-record-accent) 38%, transparent),
+    0 5px 0 rgba(0, 0, 0, 0.38);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record:focus-visible {
+  outline: 2px solid var(--broadcast-yellow);
+  outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-section {
+    padding: 0.75rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog[data-material-catalog="books"] .archive-record-list {
+    grid-template-columns: 1fr;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record {
+    padding: 0.65rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview-frame,
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__preview-frame:has(.archive-record__preview--cover) {
+    aspect-ratio: 16 / 10;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy {
+    padding-top: 0.75rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-list .archive-record strong {
+    font-size: 1.08rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy > span {
+    font-size: 0.9rem;
+  }
+
+  body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record__copy > p {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+}

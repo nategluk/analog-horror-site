@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-13 17:00 CDT |
+| Обновлено | 2026-09-13 17:13 CDT |
 | Ветка / HEAD | `main` / `b80a5d7` |
-| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `assets/staff/donate/zhir-donate-fundraising-animator-v1.png`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
-| Активная линия | STAFF donate: фон с аниматором и ведёрком для поддержки проекта |
-| Последний этап | Сгенерирован и подключён только в STAFF-режиме широкий фон donate с аниматором справа и свободной зоной под текст слева. Playwright desktop `1280×900` и mobile `390×844` пройдены; console `0/0`, overflow отсутствует; `git diff --check`, production build и `verify-public-build` пройдены. Commit/push/deploy не выполнялись. |
-| Следующий gate | Commit / push / deploy только по прямой просьбе |
+| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
+| Активная линия | Единый mobile-friendly плиточный стиль STAFF-каталогов `dossiers / protocols / books` |
+| Последний этап | Общий CSS перевёл карточки каталогов в читаемую adaptive tile grid: desktop `3/2` колонки, mobile `1` колонка, крупные preview и copy. Все три маршрута проверены на `1280×900` и `390×844`; overflow отсутствует, console `0/0`; `git diff --check`, `node --check js/app.js`, production build и `verify-public-build` пройдены. Commit/push/deploy не выполнялись. |
+| Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
 ## Write-замок
@@ -27,6 +27,10 @@ FREE
 
 ## Текущая работа и сохранность
 
+- 2026-09-13: `css/style.css` получил scoped STAFF-only tile treatment для
+  `.staff-material-catalog`: изображения вынесены в верх плитки, названия и
+  описания сделаны заметными, `books` ограничен комфортной шириной на desktop;
+  guest locked-state, HTML-маршруты, технические ключи и JS не изменялись.
 - 2026-09-13: built-in ImageGen создал `assets/staff/donate/zhir-donate-fundraising-animator-v1.png` (1672×941); `css/style.css` ограничивает его слоями `.donate-page-panel` только при `body.staff-mode`, с усиленным затемнением и отдельной мобильной позицией. Гостевой режим, donate-разметка и runtime-логика не изменялись.
 - 2026-09-13: в `js/app.js` TXT/AV доступны в `TV OFF`/no-signal, пробуждают аппарат и возвращают корректную подпись заставки; в `css/style.css` экранные панели скрывают только дублирующий статус и сам слой no-signal на время отображения.
 - 2026-09-13: `index.html` больше не выводит количества записей в трёх карточках
