@@ -4442,8 +4442,7 @@
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
-    const settingsToggle = dossier.querySelector("[data-player-settings-toggle]");
-    const settingsPanel = dossier.querySelector("[data-player-settings-panel]");
+    const profileActions = dossier.querySelector("[data-player-profile-actions]");
     const profileMain = dossier.querySelector("[data-player-profile-main]");
     const documentLink = dossier.querySelector("[data-personnel-document]");
     const documentUnavailable = dossier.querySelector("[data-personnel-document-unavailable]");
@@ -4456,8 +4455,13 @@
     const claimButton = dossier.querySelector("[data-player-claim]");
     const nameForm = dossier.querySelector("[data-player-name-form]");
     const nameInput = nameForm?.elements.displayName;
+    const nameCancel = dossier.querySelector("[data-player-name-cancel]");
     const nameState = dossier.querySelector("[data-player-name-state]");
     const nameResponse = dossier.querySelector("[data-player-name-response]");
+    const avatarPickerToggle = dossier.querySelector("[data-player-avatar-open]");
+    const avatarPickerControlLabel = dossier.querySelector(
+      "[data-player-avatar-control-label]"
+    );
     const profileTabs = [...dossier.querySelectorAll("[data-player-tab]")];
     const profileViews = [...dossier.querySelectorAll("[data-player-view]")];
     const unreadCount = dossier.querySelector("[data-player-unread-count]");
@@ -4494,12 +4498,10 @@
     let activeTrigger = null;
     let activeProfileTab = "inbox";
     let activeMessageId = null;
-    let settingsOpen = false;
+    let nameEditorOpen = false;
+    let avatarPickerOpen = false;
 
     const personnelIconMarkup = {
-      settings:
-        '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path>',
-      back: '<path d="M19 12H5M11 18l-6-6 6-6"></path>',
       restore:
         '<path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v6h6"></path>',
       trash:
@@ -4516,28 +4518,34 @@
 
     const setSummaryChannel = () => {
       if (!dossierChannelState) return;
-      dossierChannelState.textContent = settingsOpen
-        ? "СЛУЖЕБНЫЕ НАСТРОЙКИ"
-        : {
-            inbox: "ВХОДЯЩИЕ",
-            materials: "АРХИВ МАТЕРИАЛОВ",
-            trash: "УДАЛЁННЫЕ ЗАПИСИ",
-          }[activeProfileTab] || "ВХОДЯЩИЕ";
+      dossierChannelState.textContent =
+        {
+          inbox: "ВХОДЯЩИЕ",
+          materials: "АРХИВ МАТЕРИАЛОВ",
+          trash: "УДАЛЁННЫЕ ЗАПИСИ",
+        }[activeProfileTab] || "ВХОДЯЩИЕ";
     };
 
-    const setSettingsOpen = (open) => {
-      settingsOpen = Boolean(open && activePersonnelKey === "player");
-      settingsPanel.hidden = !settingsOpen;
-      profileMain.hidden = settingsOpen;
-      summaryTabs.hidden = settingsOpen || activePersonnelKey !== "player";
-      dossierNote.hidden = !settingsOpen && activePersonnelKey === "player";
-      settingsToggle.setAttribute("aria-expanded", String(settingsOpen));
-      setSummaryChannel();
-      setPersonnelIconButton(
-        settingsToggle,
-        settingsOpen ? "back" : "settings",
-        settingsOpen ? "Назад к личному делу" : "Настройки личного дела"
-      );
+    const setNameEditorOpen = (open) => {
+      nameEditorOpen = Boolean(open && activePersonnelKey === "player");
+      nameForm.hidden = !nameEditorOpen;
+      dossierNameOpen.hidden = activePersonnelKey !== "player" || nameEditorOpen;
+      dossierNameOpen.setAttribute("aria-expanded", String(nameEditorOpen));
+    };
+
+    const setAvatarPickerOpen = (open, profile = null) => {
+      avatarPickerOpen = Boolean(open && activePersonnelKey === "player");
+      identification.hidden = !avatarPickerOpen;
+      avatarPickerToggle.hidden = activePersonnelKey !== "player";
+      avatarPickerToggle.setAttribute("aria-expanded", String(avatarPickerOpen));
+      const controlLabel = avatarPickerOpen
+        ? "Скрыть выбор лица"
+        : profile?.avatarId
+          ? "Изменить лицо"
+          : "Выбрать лицо";
+      avatarPickerControlLabel.textContent = controlLabel.toLocaleUpperCase("ru-RU");
+      avatarPickerToggle.setAttribute("aria-label", controlLabel);
+      avatarPickerToggle.title = controlLabel;
     };
 
     const setAvatarAppearance = (element, avatarId) => {
@@ -4898,8 +4906,11 @@
       setAvatarAppearance(dossierAvatar, profile.avatarId);
       employeeActions.hidden = true;
       profilePanel.hidden = false;
-      settingsToggle.hidden = false;
-      setSettingsOpen(settingsOpen);
+      profileMain.hidden = false;
+      summaryTabs.hidden = false;
+      dossierNote.hidden = true;
+      setNameEditorOpen(nameEditorOpen);
+      setAvatarPickerOpen(avatarPickerOpen, profile);
       const progress = getCuratorProgress();
       resumeLink.hidden = progress?.status !== "in_progress";
       reclassifyLink.hidden =
@@ -4908,6 +4919,9 @@
         claimButton.hidden =
           profile.status !== "completed" || hasActiveDossierAuthSession();
       }
+      profileActions.hidden = [resumeLink, reclassifyLink, claimButton].every(
+        (control) => !control || control.hidden
+      );
       nameInput.value = profile.displayName || "";
       nameState.textContent = profile.displayName
         ? "ЗАРЕГИСТРИРОВАНО"
@@ -4968,7 +4982,8 @@
 
       activePersonnelKey = personnelKey;
       activeTrigger = trigger;
-      settingsOpen = false;
+      nameEditorOpen = false;
+      avatarPickerOpen = false;
       intrusion.hidden = true;
       useIdLink.hidden = true;
       if (boothLink) boothLink.hidden = true;
@@ -4986,8 +5001,9 @@
         dossierReviewBadge.hidden = true;
         if (dossierUsefulnessBadge) dossierUsefulnessBadge.hidden = true;
         summaryTabs.hidden = true;
-        settingsToggle.hidden = true;
-        settingsPanel.hidden = true;
+        profileActions.hidden = true;
+        setNameEditorOpen(false);
+        setAvatarPickerOpen(false);
         profileMain.hidden = false;
         dossierNote.hidden = false;
         dossierName.textContent = record.name;
@@ -5139,19 +5155,21 @@
     });
 
     closeButton.addEventListener("click", () => dossier.close());
-    settingsToggle.addEventListener("click", () => {
-      setSettingsOpen(!settingsOpen);
-      if (settingsOpen) {
-        nameInput.focus();
-      } else {
-        profileTabs.find((button) =>
-          button.dataset.playerTab === activeProfileTab
-        )?.focus();
-      }
-    });
     dossierNameOpen.addEventListener("click", () => {
-      setSettingsOpen(true);
+      setNameEditorOpen(true);
+      nameInput.value = readStaffProfile()?.displayName || "";
+      nameResponse.textContent = "";
       nameInput.focus();
+      nameInput.select();
+    });
+    nameCancel.addEventListener("click", () => {
+      setNameEditorOpen(false);
+      nameInput.value = readStaffProfile()?.displayName || "";
+      nameResponse.textContent = "";
+      dossierNameOpen.focus();
+    });
+    avatarPickerToggle.addEventListener("click", () => {
+      setAvatarPickerOpen(!avatarPickerOpen, readStaffProfile());
     });
     dossier.addEventListener("close", () => {
       intrusion.hidden = true;
@@ -5354,8 +5372,10 @@
       profile.displayName = displayName;
       saveStaffProfile(profile);
       renderPlayerCard();
+      nameEditorOpen = false;
       renderPlayerDossier(profile);
       nameResponse.textContent = "ИМЯ ПРИНЯТО К ИСПОЛЬЗОВАНИЮ.";
+      dossierNameOpen.focus();
     });
 
     dossier.querySelectorAll("[data-avatar-choice]").forEach((button) => {

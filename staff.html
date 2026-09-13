@@ -180,22 +180,11 @@
                 <div>
                   <p>TYNDEX HR // КАДРОВАЯ КАРТОЧКА</p>
                   <h2 id="personnel-dossier-title" data-personnel-name>СОТРУДНИК</h2>
+                  <button class="personnel-dossier__header-name" type="button" data-player-name-open aria-controls="player-name-form" aria-expanded="false" aria-label="Изменить имя оператора" title="Изменить имя оператора" hidden>
+                    <strong data-player-dossier-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
+                  </button>
                 </div>
                 <div class="personnel-dossier__header-actions">
-                  <button
-                    class="personnel-dossier__settings personnel-icon-button"
-                    type="button"
-                    data-player-settings-toggle
-                    aria-controls="personnel-profile-settings"
-                    aria-expanded="false"
-                    hidden
-                  >
-                    <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path>
-                    </svg>
-                    <span class="visually-hidden">НАСТРОЙКИ</span>
-                  </button>
                   <button class="personnel-dossier__close personnel-icon-button personnel-icon-button--close" type="button" data-personnel-close aria-label="Закрыть личное дело">
                     <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                       <path d="M6 6l12 12M18 6 6 18"></path>
@@ -208,11 +197,34 @@
 
               <div class="personnel-dossier__identity">
                 <div class="personnel-dossier__identity-copy">
-                  <button class="personnel-dossier__name-control" type="button" data-player-name-open hidden>
-                    <span>ИМЯ ОПЕРАТОРА</span>
-                    <strong data-player-dossier-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
-                    <small>ИЗМЕНИТЬ СЛУЖЕБНУЮ ЗАПИСЬ</small>
-                  </button>
+                  <div class="personnel-dossier__name-area">
+                    <form class="personnel-name personnel-name--inline" id="player-name-form" data-player-name-form hidden>
+                      <div class="personnel-section-heading">
+                        <label for="player-name-input">ИМЯ ОПЕРАТОРА</label>
+                        <span data-player-name-state>НЕ УСТАНОВЛЕНО</span>
+                      </div>
+                      <div class="personnel-name__inline-fields">
+                        <input
+                          id="player-name-input"
+                          type="text"
+                          name="displayName"
+                          maxlength="20"
+                          autocomplete="nickname"
+                          placeholder="ВВЕДИТЕ ИМЯ"
+                          required
+                        />
+                        <button class="personnel-icon-button" type="submit" aria-label="Сохранить имя" title="Сохранить имя">
+                          <span aria-hidden="true">✓</span>
+                          <span class="visually-hidden">СОХРАНИТЬ ИМЯ</span>
+                        </button>
+                        <button class="personnel-icon-button" type="button" data-player-name-cancel aria-label="Отменить изменение имени" title="Отменить изменение имени">
+                          <span aria-hidden="true">×</span>
+                          <span class="visually-hidden">ОТМЕНА</span>
+                        </button>
+                      </div>
+                    </form>
+                    <p class="personnel-dossier__response" data-player-name-response role="status" aria-live="polite"></p>
+                  </div>
 
                   <div class="personnel-dossier__badges">
                     <p class="personnel-dossier__badge">
@@ -255,7 +267,26 @@
                       </svg>
                       <span>БИОСИГНАЛ: АКТИВЕН</span>
                     </span>
+                    <section class="personnel-dossier__avatar-picker" id="personnel-identification" data-player-identification aria-labelledby="personnel-identification-title" hidden>
+                      <h3 class="visually-hidden" id="personnel-identification-title">ОБРАЗ ОПЕРАТОРА</h3>
+                      <p class="visually-hidden" data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
+                      <div class="personnel-avatar-options">
+                        <button type="button" data-avatar-choice="avatar-01" aria-label="Выбрать изображение 1"><span class="personnel-avatar personnel-avatar--avatar-01" aria-hidden="true"></span></button>
+                        <button type="button" data-avatar-choice="avatar-02" aria-label="Выбрать изображение 2"><span class="personnel-avatar personnel-avatar--avatar-02" aria-hidden="true"></span></button>
+                        <button type="button" data-avatar-choice="avatar-03" aria-label="Выбрать изображение 3"><span class="personnel-avatar personnel-avatar--avatar-03" aria-hidden="true"></span></button>
+                        <button type="button" data-avatar-choice="avatar-04" aria-label="Выбрать изображение 4"><span class="personnel-avatar personnel-avatar--avatar-04" aria-hidden="true"></span></button>
+                      </div>
+                      <p class="personnel-dossier__response visually-hidden" data-player-avatar-response role="status" aria-live="polite"></p>
+                    </section>
                   </div>
+                  <button class="personnel-dossier__avatar-control personnel-icon-button" type="button" data-player-avatar-open aria-controls="personnel-identification" aria-expanded="false" aria-label="Выбрать лицо" title="Выбрать лицо">
+                    <svg class="personnel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <circle cx="12" cy="8" r="3.2"></circle>
+                      <path d="M5.5 20c.7-3.3 2.9-5.2 6.5-5.2s5.8 1.9 6.5 5.2"></path>
+                      <path d="M18.2 4.4v4.2M16.1 6.5h4.2"></path>
+                    </svg>
+                    <span class="visually-hidden" data-player-avatar-control-label>ВЫБРАТЬ ЛИЦО</span>
+                  </button>
                   <div class="personnel-dossier__integrity" data-player-integrity data-state="forming">
                     <span>ЦЕЛОСТНОСТЬ ФАЙЛА</span>
                     <strong data-player-integrity-state>ФОРМИРУЕТСЯ</strong>
@@ -290,53 +321,11 @@
               </section>
 
               <section class="personnel-profile" data-personnel-profile hidden>
-                <section
-                  class="personnel-profile__settings"
-                  id="personnel-profile-settings"
-                  data-player-settings-panel
-                  aria-label="Настройки личного дела"
-                  hidden
-                >
-                  <div class="personnel-profile__actions">
-                    <a class="personnel-dossier__action" href="hiring.html?resume=0091-A" data-player-resume data-full-navigation hidden>ВОЗОБНОВИТЬ СЕАНС</a>
-                    <a class="personnel-dossier__action" href="hiring.html?reclassify=0091-A" data-player-reclassify data-full-navigation hidden>ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ</a>
-                    <button class="personnel-dossier__action" type="button" data-player-claim hidden>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
-                  </div>
-
-                  <section class="personnel-name" aria-labelledby="personnel-name-title">
-                    <div class="personnel-section-heading">
-                      <h3 id="personnel-name-title">ИМЯ ОПЕРАТОРА</h3>
-                      <span data-player-name-state>НЕ УСТАНОВЛЕНО</span>
-                    </div>
-                    <form data-player-name-form>
-                      <label>
-                        ИМЯ ДЛЯ СЛУЖЕБНОЙ ЗАПИСИ
-                        <input
-                          type="text"
-                          name="displayName"
-                          maxlength="20"
-                          autocomplete="nickname"
-                          placeholder="ВВЕДИТЕ ИМЯ"
-                          required
-                        />
-                      </label>
-                      <button type="submit">СОХРАНИТЬ ИМЯ</button>
-                    </form>
-                    <p class="personnel-dossier__response" data-player-name-response role="status" aria-live="polite"></p>
-                  </section>
-
-                  <section data-player-identification aria-labelledby="personnel-identification-title">
-                    <h3 id="personnel-identification-title">ИЗОБРАЖЕНИЕ СОТРУДНИКА</h3>
-                    <p data-player-identification-copy>ФОТОГРАФИЯ СОТРУДНИКА ПОВРЕЖДЕНА. ВЫБЕРИТЕ ДОПУСТИМУЮ РЕКОНСТРУКЦИЮ.</p>
-                    <div class="personnel-avatar-options">
-                      <button type="button" data-avatar-choice="avatar-01" aria-label="Выбрать изображение 1"><span class="personnel-avatar personnel-avatar--avatar-01" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 01</span></button>
-                      <button type="button" data-avatar-choice="avatar-02" aria-label="Выбрать изображение 2"><span class="personnel-avatar personnel-avatar--avatar-02" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 02</span></button>
-                      <button type="button" data-avatar-choice="avatar-03" aria-label="Выбрать изображение 3"><span class="personnel-avatar personnel-avatar--avatar-03" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 03</span></button>
-                      <button type="button" data-avatar-choice="avatar-04" aria-label="Выбрать изображение 4"><span class="personnel-avatar personnel-avatar--avatar-04" aria-hidden="true"></span><span>ИЗОБРАЖЕНИЕ 04</span></button>
-                    </div>
-                    <p class="personnel-dossier__response" data-player-avatar-response role="status" aria-live="polite"></p>
-                  </section>
-                </section>
+                <div class="personnel-profile__actions" data-player-profile-actions hidden>
+                  <a class="personnel-dossier__action" href="hiring.html?resume=0091-A" data-player-resume data-full-navigation hidden>ВОЗОБНОВИТЬ СЕАНС</a>
+                  <a class="personnel-dossier__action" href="hiring.html?reclassify=0091-A" data-player-reclassify data-full-navigation hidden>ЗАПРОСИТЬ ПОВТОРНУЮ КЛАССИФИКАЦИЮ</a>
+                  <button class="personnel-dossier__action" type="button" data-player-claim hidden>ЗАКРЕПИТЬ ЛИЧНОЕ ДЕЛО</button>
+                </div>
 
                 <div class="personnel-profile__main" data-player-profile-main>
                   <section data-player-view="inbox" aria-labelledby="personnel-inbox-title">

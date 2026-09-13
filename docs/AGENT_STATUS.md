@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-13 13:12 CDT |
+| Обновлено | 2026-09-13 14:28 CDT |
 | Ветка / HEAD | `main` / `18272a8` |
-| Дерево | dirty: STAFF music-player label reveal в `js/app.js` и `css/style.css`, текущий снимок `docs/AGENT_STATUS.md`; unrelated work не затронут |
-| Активная линия | STAFF music player |
-| Последний этап | Название STAFF-трека скрыто до первого нажатия Play и сохраняется после Pause; гостевой плеер не изменён. Browser QA на `1280x900` и `390x844`: до Play `opacity: 0`, после Play `opacity: 1`, overflow отсутствует, console `0/0`. `node --check js/app.js`, `git diff --check`, production build (`583` файла) и `verify-public-build` (`584` файла) пройдены. Commit / push / deploy не выполнялись. |
-| Следующий gate | commit / push / deploy только по прямой просьбе |
+| Дерево | dirty: inline-редактирование имени, выбор аватара и удаление отдельного экрана настроек в `staff.html`, `js/app.js`, `css/style.css`, текущий снимок `docs/AGENT_STATUS.md`; unrelated work не затронут |
+| Активная линия | Удаление отдельной кнопки настроек из кадровой карточки |
+| Последний этап | Кнопка `settings` и отдельная панель удалены; имя редактируется в шапке, аватар выбирается из карточки, редкие кадровые действия показываются там же только при доступности. Browser QA на `390x844` и `1280x900`: settings-элементы `0`, имя/аватар работают, обычное досье открывается, overflow отсутствует, console `0/0`; `node --check js/app.js`, `git diff --check`, production build (`583` файла) и `verify-public-build` (`584` файла) пройдены. |
+| Следующий gate | Commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
 ## Write-замок

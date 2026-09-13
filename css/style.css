@@ -280,7 +280,8 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier__identity p span {
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier__header h2,
-body.staff-mode .personnel-broadcast-page .personnel-artifact__panel header h2 {
+body.staff-mode .personnel-broadcast-page .personnel-artifact__panel header h2,
+body.staff-mode .personnel-broadcast-page .personnel-dossier__header-name > strong {
   color: #f0d765;
 }
 
@@ -1677,11 +1678,6 @@ body.staff-mode .personnel-dossier button.personnel-icon-button {
   padding: 0.5rem;
 }
 
-body.staff-mode .personnel-dossier button.personnel-dossier__settings {
-  color: #76ae80;
-}
-
-body.staff-mode .personnel-dossier button.personnel-dossier__settings[hidden],
 body.staff-mode .personnel-dossier button.personnel-dossier__name-control[hidden] {
   display: none;
 }
@@ -1693,6 +1689,34 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control[hidden
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+body.staff-mode .personnel-dossier button.personnel-dossier__header-name {
+  display: grid;
+  justify-items: start;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin-top: 0.25rem;
+  padding: 0;
+  color: #71ff89;
+  border: 0;
+  background: transparent;
+  text-align: left;
+}
+
+body.staff-mode .personnel-dossier button.personnel-dossier__header-name[hidden] {
+  display: none;
+}
+
+.personnel-dossier__header-name > strong {
+  max-width: 100%;
+  color: #71ff89;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
 }
 
 .personnel-dossier__identity {
@@ -1735,6 +1759,12 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control[hidden
   gap: 0.4rem;
 }
 
+.personnel-dossier__name-area {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
 body.staff-mode .personnel-dossier button.personnel-dossier__name-control {
   display: grid;
   justify-items: start;
@@ -1770,6 +1800,41 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control {
 body.staff-mode .personnel-dossier button.personnel-dossier__name-control:focus-visible > *,
 body.staff-mode .personnel-dossier button.personnel-dossier__name-control:hover > * {
   color: #071009;
+}
+
+.personnel-name--inline {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.personnel-name--inline[hidden],
+.personnel-dossier__avatar-control[hidden],
+.personnel-dossier__avatar-picker[hidden] {
+  display: none;
+}
+
+.personnel-name--inline .personnel-section-heading {
+  align-items: center;
+}
+
+.personnel-name--inline label {
+  color: #71ff89;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.personnel-name--inline .personnel-section-heading > span {
+  color: #68b876;
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+}
+
+.personnel-name__inline-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 0.45rem;
+  align-items: center;
 }
 
 .personnel-dossier__badge {
@@ -1856,10 +1921,56 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control:hover 
   align-content: start;
   gap: 0.45rem;
   min-width: 0;
+  position: relative;
 }
 
 .personnel-dossier__visual[hidden] {
   display: none;
+}
+
+body.staff-mode .personnel-dossier button.personnel-dossier__avatar-control {
+  justify-self: end;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  margin-top: -1.4rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+  padding: 0.5rem;
+  color: #c7ffcf;
+}
+
+.personnel-dossier__avatar-picker {
+  position: absolute;
+  z-index: 3;
+  top: auto;
+  right: 0;
+  left: 0;
+  bottom: 2.7rem;
+  display: grid;
+  gap: 0;
+  padding: 0.45rem;
+  border: 1px solid #315d39;
+  background: rgba(7, 20, 10, 0.94);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.42);
+}
+
+.personnel-dossier__avatar-picker h3 {
+  margin: 0;
+  color: #71ff89;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.personnel-dossier__avatar-picker > p:not(.personnel-dossier__response) {
+  margin: 0;
+  color: #76ae80;
+  font-size: 0.62rem;
+  line-height: 1.45;
+}
+
+.personnel-dossier__avatar-picker .personnel-avatar-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
 }
 
 .personnel-dossier__signal {
@@ -1989,8 +2100,6 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control:hover 
 .personnel-profile,
 .personnel-profile__main,
 .personnel-profile__main > section,
-.personnel-profile__settings,
-.personnel-profile__settings > section,
 .personnel-profile__actions {
   display: grid;
   gap: 0.75rem;
@@ -2000,7 +2109,7 @@ body.staff-mode .personnel-dossier button.personnel-dossier__name-control:hover 
 .personnel-profile[hidden],
 .personnel-profile__main[hidden],
 .personnel-profile__main > section[hidden],
-.personnel-profile__settings[hidden] {
+.personnel-profile__actions[hidden] {
   display: none;
 }
 
@@ -2404,7 +2513,7 @@ body.staff-mode .personnel-avatar-options button > .personnel-avatar {
   border-radius: 2px;
 }
 
-body.staff-mode .personnel-avatar-options button > span:last-child {
+body.staff-mode .personnel-avatar-options button > span:last-child:not(.personnel-avatar) {
   position: absolute;
   z-index: 2;
   right: 0.55rem;
@@ -2428,7 +2537,7 @@ body.staff-mode .personnel-avatar-options button > span:last-child {
     0 0 14px rgba(113, 255, 137, 0.2);
 }
 
-.personnel-avatar-options button[aria-pressed="true"] > span:last-child {
+.personnel-avatar-options button[aria-pressed="true"] > span:last-child:not(.personnel-avatar) {
   color: #061007;
   background: #8cff9d;
 }
@@ -2511,25 +2620,25 @@ img.personnel-avatar {
 
 .personnel-avatar--avatar-01 {
   --personnel-avatar-size: 170% auto;
-  --personnel-avatar-y: 9%;
+  --personnel-avatar-y: 2%;
   background-image: url("../assets/staff/player-avatars/avatar-01.webp");
 }
 
 .personnel-avatar--avatar-02 {
   --personnel-avatar-size: 175% auto;
-  --personnel-avatar-y: 8%;
+  --personnel-avatar-y: 10%;
   background-image: url("../assets/staff/player-avatars/avatar-02.webp");
 }
 
 .personnel-avatar--avatar-03 {
   --personnel-avatar-size: 180% auto;
-  --personnel-avatar-y: 7%;
+  --personnel-avatar-y: 9%;
   background-image: url("../assets/staff/player-avatars/avatar-03-fox.webp");
 }
 
 .personnel-avatar--avatar-04 {
   --personnel-avatar-size: 175% auto;
-  --personnel-avatar-y: 6%;
+  --personnel-avatar-y: 0%;
   background-image: url("../assets/staff/player-avatars/avatar-04-dog.webp");
 }
 
@@ -3093,17 +3202,18 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
   font-size: clamp(0.72rem, 1.2vw, 0.9rem);
 }
 
-body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header h2 {
-  position: static;
-  width: auto;
-  height: auto;
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header-name {
+  min-height: 0;
   margin-top: 0.4rem;
-  overflow: visible;
-  clip-path: none;
+  padding: 0;
   color: #f0d765;
+  border: 0;
+  background: transparent;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header-name > strong {
   font-size: clamp(1.35rem, 3vw, 2.3rem);
   line-height: 1.08;
-  white-space: normal;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__identity {
@@ -3328,18 +3438,9 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
   line-height: 1.35;
 }
 
-body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__settings {
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__settings > section {
-  padding: clamp(1rem, 2.2vw, 1.5rem);
-  border: 1px solid #555b65;
-  background: rgba(20, 23, 29, 0.62);
-}
-
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__actions {
   grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-name {
@@ -3366,7 +3467,7 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
     gap: 0.75rem;
   }
 
-  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header h2 {
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header-name > strong {
     font-size: clamp(1.2rem, 6vw, 1.65rem);
   }
 
@@ -3400,6 +3501,17 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
     justify-self: center;
   }
 
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__avatar-control {
+    position: relative;
+    z-index: 2;
+    width: 2.75rem;
+    justify-self: end;
+    margin-right: 0.5rem;
+    margin-top: -1.4rem;
+    margin-bottom: 0.2rem;
+    background: rgba(7, 20, 10, 0.94);
+  }
+
   body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__tabs--summary {
     gap: 0.45rem;
   }
@@ -3411,8 +3523,7 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
     text-align: center;
   }
 
-  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__main > section,
-  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__settings > section {
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__main > section {
     padding: 0.9rem;
   }
 
