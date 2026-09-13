@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 18:46 CDT |
-| Ветка / HEAD | `main` / `bec0133` |
-| Дерево | dirty: узкая CSS-правка STAFF HOME для внешнего оформления `EXIT`; unrelated work не затронут |
-| Активная линия | STAFF HOME exit control visual cleanup |
-| Последний этап | У внешнего `status-pill` кнопки выхода убраны голубые фон, рамка и тень; красный `EXIT`, доступное имя и механика выхода сохранены. `git diff --check`, Playwright desktop/mobile, overflow `0`, console `0/0` и фактический переход в гостевой режим пройдены. Commit / push / deploy не выполнялись. |
+| Обновлено | 2026-09-12 21:06 CDT |
+| Ветка / HEAD | `main` / `18272a8` |
+| Дерево | dirty: общий двухрежимный header подключён к семи страницам главного меню; unrelated work не затронут |
+| Активная линия | общий двухрежимный фон главного меню |
+| Последний этап | На `index.html`, `about.html`, `staff.html`, `hiring.html`, `faq.html`, `donate.html` и `episodes.html` добавлен opt-in-класс `menu-broadcast-page`. Guest использует liminal-фон, STAFF — horror v2 с закрытой дверью и красным `EXIT`; специальные TV/Tyndex/immersive-оболочки исключены. `git diff --check`, `node --check js/app.js`, production build `582`, `verify-public-build` `583` и Playwright-матрица 7 маршрутов × 2 режима × desktop/mobile пройдены: overflow `0`, console `0/0`. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 

@@ -14609,8 +14609,8 @@ body:not(.staff-mode) .catalog-locked button.is-denied {
   color: #6f1f35;
 }
 
-/* ─── HOME SITE HEADER: generated guest / STAFF backdrops ─── */
-body:not(.staff-mode) .home-broadcast-page .site-header {
+/* ─── MAIN MENU SITE HEADER: generated guest / STAFF backdrops ─── */
+body:not(.staff-mode) .menu-broadcast-page .site-header {
   background:
     linear-gradient(
       135deg,
@@ -14622,7 +14622,7 @@ body:not(.staff-mode) .home-broadcast-page .site-header {
     var(--surface);
 }
 
-body.staff-mode .home-broadcast-page .site-header {
+body.staff-mode .menu-broadcast-page .site-header {
   background:
     linear-gradient(
       135deg,
@@ -14634,17 +14634,17 @@ body.staff-mode .home-broadcast-page .site-header {
     var(--broadcast-case);
 }
 
-body.staff-mode .home-broadcast-page .status-pill.status-pill--exit .mode-label__icon {
+body.staff-mode .menu-broadcast-page .status-pill.status-pill--exit .mode-label__icon {
   display: none;
 }
 
-body.staff-mode .home-broadcast-page .status-pill.status-pill--exit {
+body.staff-mode .menu-broadcast-page .status-pill.status-pill--exit {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
 }
 
-body.staff-mode .home-broadcast-page .status-pill.status-pill--exit::before {
+body.staff-mode .menu-broadcast-page .status-pill.status-pill--exit::before {
   content: "EXIT";
   display: grid;
   width: 2.15rem;
