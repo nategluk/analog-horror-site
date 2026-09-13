@@ -5772,21 +5772,16 @@
       const revision = cell.dataset.catalogRevision;
       if (!catalogId || !revision) return;
 
-      const count = Math.max(0, Number(cell.dataset.catalogNewCount || 1));
-      const isNew = count > 0 && seen[catalogId] !== revision;
+      const isNew = seen[catalogId] !== revision;
       const newLabel = cell.querySelector("[data-catalog-new-label]");
       const baseLabel = cell.dataset.catalogBaseLabel || cell.getAttribute("aria-label") || "";
-      const materialLabel = count === 1 ? "новый материал" : "новых материалов";
 
       cell.dataset.catalogBaseLabel = baseLabel;
       cell.dataset.catalogNew = String(isNew);
       if (newLabel) {
-        newLabel.hidden = !isNew;
+        newLabel.setAttribute("aria-hidden", String(!isNew));
       }
-      cell.setAttribute(
-        "aria-label",
-        isNew ? `${baseLabel}, ${count} ${materialLabel}` : baseLabel
-      );
+      cell.setAttribute("aria-label", baseLabel);
     });
 
     if (catalogPage && document.body.classList.contains("staff-mode")) {

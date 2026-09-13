@@ -14840,12 +14840,6 @@ body.staff-mode .home-broadcast-page .staff-home-archive-cell .staff-home-archiv
   font-size: clamp(0.86rem, 1.55vw, 1.05rem);
 }
 
-body.staff-mode .home-broadcast-page .staff-home-archive-cell small {
-  color: #aeb7b8;
-  font: 700 0.68rem/1.25 "Courier New", Courier, monospace;
-  letter-spacing: 0.04em;
-}
-
 body.staff-mode .home-broadcast-page .staff-home-archive-cell:hover,
 body.staff-mode .home-broadcast-page .staff-home-archive-cell:focus-visible {
   border-color: var(--archive-accent);
@@ -14920,24 +14914,50 @@ body.staff-mode .home-broadcast-page .staff-home-archive-cell[data-catalog-new="
 }
 
 body.staff-mode .home-broadcast-page .staff-home-archive-cell__new {
-  display: grid;
-  width: 1.8rem;
-  height: 1.8rem;
-  place-items: center;
+  display: flex;
+  min-height: 1.8rem;
+  align-items: center;
+  gap: 0.35rem;
   margin-top: 0.08rem;
   padding: 0;
-  background: transparent;
+  color: var(--archive-accent);
+  font: 800 0.68rem/1.15 "Courier New", Courier, monospace;
+  letter-spacing: 0.04em;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 180ms ease;
 }
 
 body.staff-mode .home-broadcast-page .staff-home-archive-cell__new img {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 1.45rem;
+  height: 1.45rem;
+  flex: 0 0 auto;
   object-fit: contain;
 }
 
-body.staff-mode .home-broadcast-page .staff-home-archive-cell__new[hidden] {
-  display: none;
+body.staff-mode .home-broadcast-page .staff-home-archive-cell[data-catalog-new="true"] .staff-home-archive-cell__new {
+  opacity: 1;
+  visibility: visible;
+}
+
+body.staff-mode .home-broadcast-page .staff-home-archive-cell__new > span {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  body.staff-mode .home-broadcast-page .staff-home-archive-cell__new {
+    min-height: 2.25rem;
+    gap: 0.28rem;
+    font-size: 0.62rem;
+    line-height: 1.1;
+  }
+
+  body.staff-mode .home-broadcast-page .staff-home-archive-cell__new img {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
 }
 
 body.staff-mode .catalog-broadcast-page .catalog-page__back {
