@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 21:06 CDT |
+| Обновлено | 2026-09-12 21:19 CDT |
 | Ветка / HEAD | `main` / `18272a8` |
-| Дерево | dirty: общий двухрежимный header подключён к семи страницам главного меню; unrelated work не затронут |
-| Активная линия | общий двухрежимный фон главного меню |
-| Последний этап | На `index.html`, `about.html`, `staff.html`, `hiring.html`, `faq.html`, `donate.html` и `episodes.html` добавлен opt-in-класс `menu-broadcast-page`. Guest использует liminal-фон, STAFF — horror v2 с закрытой дверью и красным `EXIT`; специальные TV/Tyndex/immersive-оболочки исключены. `git diff --check`, `node --check js/app.js`, production build `582`, `verify-public-build` `583` и Playwright-матрица 7 маршрутов × 2 режима × desktop/mobile пройдены: overflow `0`, console `0/0`. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: новый header-ассет `assets/staff/tv/zhir-tv-header-bg-v1.png` и scoped CSS для `staff/tv.html`; unrelated work не затронут |
+| Активная линия | dedicated STAFF TV header background |
+| Последний этап | Сгенерирован и подключён новый широкий фон хедера TV-страницы; старый фон сцены TV сохранён. Header rule ограничен `.staff-tv-room-page`, поэтому другие страницы и TV-механика не изменены. PNG `1899×828`; `git diff --check`, production build `583`, `verify-public-build` `584`, Playwright desktop `1280×900` и mobile `390×844` пройдены: новый asset загружается, overflow `false`, console `0/0`. Ошибочный промежуточный stage-draft перемещён в `/Users/nateglukhov/.Trash/zhir-tv-kindergarten-room-draft-20260912.png`. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
