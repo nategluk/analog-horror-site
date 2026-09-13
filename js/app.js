@@ -4628,7 +4628,9 @@
         profile.status === "completed"
           ? `${getProfileRole(profile)} // ${getProfileStatus(profile)}`
           : getProfileStatus(profile);
-      setAvatarAppearance(playerCardAvatar, profile.avatarId);
+      const resolvedAvatarId = getStaffAvatarId(profile.avatarId);
+      playerCardAvatar.hidden = !resolvedAvatarId;
+      setAvatarAppearance(playerCardAvatar, resolvedAvatarId);
       return profile;
     };
 

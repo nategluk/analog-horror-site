@@ -88,22 +88,17 @@
             <span>CH 02 // PLAYBACK</span>
           </header>
           <div class="personnel-registry__grid" data-personnel-grid>
-            <article class="personnel-card personnel-card--operator" data-player-card hidden>
+            <article class="personnel-card personnel-card--polaroid personnel-card--player" data-player-card hidden>
               <button class="personnel-card__button" type="button" data-personnel-open="player">
-                <span class="personnel-card__portrait-frame" aria-hidden="true">
-                  <img class="personnel-card__portrait personnel-avatar personnel-avatar--pending" data-player-card-avatar alt="" />
-                  <span class="personnel-card__live">
-                    <svg viewBox="0 0 120 20" focusable="false">
-                      <polyline points="0,10 34,10 40,4 47,17 54,8 60,10 120,10"></polyline>
-                    </svg>
-                    <span>LIVE</span>
+                <span class="personnel-card__portrait-frame personnel-card__portrait-frame--polaroid personnel-card__portrait-frame--player">
+                  <img class="personnel-card__portrait personnel-card__portrait--polaroid personnel-card__portrait--player-frame" src="assets/staff/staff/polaroids/player-empty.png" alt="" width="480" height="600" />
+                  <img class="personnel-card__portrait personnel-card__portrait--polaroid personnel-card__portrait--player-avatar" data-player-card-avatar alt="" aria-hidden="true" width="480" height="600" hidden />
+                  <span class="personnel-card__body">
+                    <span class="personnel-card__label visually-hidden">ТЕКУЩИЙ ОПЕРАТОР</span>
+                    <strong data-player-card-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
+                    <span class="personnel-card__role" data-player-card-status>ЛИЧНОЕ ДЕЛО ФОРМИРУЕТСЯ</span>
+                    <small class="personnel-card__action visually-hidden">ОТКРЫТЬ ЛИЧНОЕ ДЕЛО</small>
                   </span>
-                </span>
-                <span class="personnel-card__body">
-                  <span class="personnel-card__label">ТЕКУЩИЙ ОПЕРАТОР</span>
-                  <strong data-player-card-name>ИМЯ НЕ УСТАНОВЛЕНО</strong>
-                  <span data-player-card-status>ЛИЧНОЕ ДЕЛО ФОРМИРУЕТСЯ</span>
-                  <small>ОТКРЫТЬ ЛИЧНОЕ ДЕЛО</small>
                 </span>
               </button>
             </article>
