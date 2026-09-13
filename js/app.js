@@ -4442,6 +4442,11 @@
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
+    const classGuide = dossier.querySelector("[data-player-class-guide]");
+    const classGuideState = dossier.querySelector("[data-player-class-guide-state]");
+    const classGuideCards = [
+      ...dossier.querySelectorAll("[data-player-class-card]"),
+    ];
     const profileActions = dossier.querySelector("[data-player-profile-actions]");
     const profileMain = dossier.querySelector("[data-player-profile-main]");
     const documentLink = dossier.querySelector("[data-personnel-document]");
@@ -4589,6 +4594,34 @@
       if (profile.role === "volunteer") return "ВОЛОНТЁР";
       if (profile.role === "animator") return "АНИМАТОР";
       return "НЕ НАЗНАЧЕНА";
+    };
+
+    const renderPlayerClassGuide = (profile) => {
+      if (!classGuide) return;
+      const currentRole = ["animator", "volunteer", "impostor"].includes(
+        profile?.role
+      )
+        ? profile.role
+        : null;
+
+      classGuide.hidden = false;
+      if (classGuideState) {
+        classGuideState.textContent = currentRole
+          ? `ВАШ КЛАСС // ${getProfileRole(profile)}`
+          : "КЛАСС ОЖИДАЕТ НАЗНАЧЕНИЯ";
+      }
+      classGuideCards.forEach((card) => {
+        const isCurrent = card.dataset.playerClassCard === currentRole;
+        card.dataset.current = String(isCurrent);
+        const cardState = card.querySelector("[data-player-class-card-state]");
+        if (cardState) {
+          cardState.textContent = currentRole
+            ? isCurrent
+              ? "ВАШ ФИНАЛ"
+              : "ДРУГАЯ ВЕРСИЯ"
+            : "ОЖИДАЕТ НАЗНАЧЕНИЯ";
+        }
+      });
     };
 
     const getProfileName = (profile) =>
@@ -4911,6 +4944,7 @@
       profileMain.hidden = false;
       summaryTabs.hidden = false;
       dossierNote.hidden = true;
+      renderPlayerClassGuide(profile);
       setNameEditorOpen(nameEditorOpen);
       setAvatarPickerOpen(avatarPickerOpen, profile);
       const progress = getCuratorProgress();
