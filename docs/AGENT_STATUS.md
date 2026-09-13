@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-13 16:48 CDT |
+| Обновлено | 2026-09-13 17:00 CDT |
 | Ветка / HEAD | `main` / `b80a5d7` |
-| Дерево | dirty: `css/style.css`, `js/app.js`, `docs/AGENT_STATUS.md`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
-| Активная линия | ЖИР ТВ: доступ TXT/AV на заставке «нет сигнала» |
-| Последний этап | TXT и AV теперь будят ТВ из standby/no-signal и открывают телетекст/VCR; слой заставки не перекрывает панели, возврат восстанавливает «НЕТ СИГНАЛА». `git diff --check`, `node --check js/app.js`, Playwright desktop `1280×900` и mobile `390×844` пройдены; console `0/0`, overflow отсутствует. Commit/push/deploy не выполнялись. |
+| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `assets/staff/donate/zhir-donate-fundraising-animator-v1.png`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
+| Активная линия | STAFF donate: фон с аниматором и ведёрком для поддержки проекта |
+| Последний этап | Сгенерирован и подключён только в STAFF-режиме широкий фон donate с аниматором справа и свободной зоной под текст слева. Playwright desktop `1280×900` и mobile `390×844` пройдены; console `0/0`, overflow отсутствует; `git diff --check`, production build и `verify-public-build` пройдены. Commit/push/deploy не выполнялись. |
 | Следующий gate | Commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -27,6 +27,7 @@ FREE
 
 ## Текущая работа и сохранность
 
+- 2026-09-13: built-in ImageGen создал `assets/staff/donate/zhir-donate-fundraising-animator-v1.png` (1672×941); `css/style.css` ограничивает его слоями `.donate-page-panel` только при `body.staff-mode`, с усиленным затемнением и отдельной мобильной позицией. Гостевой режим, donate-разметка и runtime-логика не изменялись.
 - 2026-09-13: в `js/app.js` TXT/AV доступны в `TV OFF`/no-signal, пробуждают аппарат и возвращают корректную подпись заставки; в `css/style.css` экранные панели скрывают только дублирующий статус и сам слой no-signal на время отображения.
 - 2026-09-13: `index.html` больше не выводит количества записей в трёх карточках
   каталогов и не добавляет их в aria-label; при новой ревизии показывается общий

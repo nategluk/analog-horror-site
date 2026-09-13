@@ -15071,3 +15071,58 @@ body.staff-mode .staff-tv-room-page .site-header {
     url("../assets/staff/tv/zhir-tv-header-bg-v1.png") center / cover no-repeat,
     var(--broadcast-case);
 }
+
+/* ─── STAFF DONATE PAGE: fundraising animator backdrop ─── */
+body.staff-mode .donate-page-panel {
+  isolation: isolate;
+  background: var(--broadcast-case);
+}
+
+body.staff-mode .donate-page-panel::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: url("../assets/staff/donate/zhir-donate-fundraising-animator-v1.png") center / cover no-repeat;
+  opacity: 0.82;
+}
+
+body.staff-mode .donate-page-panel::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(12, 16, 22, 0.98) 0%,
+      rgba(12, 16, 22, 0.9) 42%,
+      rgba(12, 16, 22, 0.56) 72%,
+      rgba(12, 16, 22, 0.28) 100%
+    ),
+    linear-gradient(180deg, rgba(12, 16, 22, 0.16), transparent 42%, rgba(12, 16, 22, 0.42));
+}
+
+body.staff-mode .donate-page-panel > .donate-panel {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  body.staff-mode .donate-page-panel::before {
+    background-position: 76% center;
+    opacity: 0.58;
+  }
+
+  body.staff-mode .donate-page-panel::after {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(12, 16, 22, 0.98) 0%,
+        rgba(12, 16, 22, 0.86) 58%,
+        rgba(12, 16, 22, 0.54) 100%
+      ),
+      linear-gradient(180deg, rgba(12, 16, 22, 0.22), transparent 42%, rgba(12, 16, 22, 0.48));
+  }
+}
