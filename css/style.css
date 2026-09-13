@@ -13748,6 +13748,10 @@ body.staff-mode .broadcast-shell-page .status-pill.status-pill--exit {
   font-size: 0;
 }
 
+body.staff-mode .site-wrapper:not(.staff-home-page) .status-pill.status-pill--exit {
+  display: none;
+}
+
 body.staff-mode .broadcast-shell-page .mode-label__icon {
   width: 1.25rem;
   height: 1.25rem;

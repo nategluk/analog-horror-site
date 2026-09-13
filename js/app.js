@@ -62,19 +62,19 @@
     ],
     staff: [
       {
-        title: "01",
+        title: "Красная комната",
         src: audioAsset("assets/audio/staff/track-01.mp3"),
       },
       {
-        title: "02",
+        title: "Братья Бодяк — Илюша",
         src: audioAsset("assets/audio/staff/track-02.mp3"),
       },
       {
-        title: "03",
+        title: "Детский Жир",
         src: audioAsset("assets/audio/staff/track-03.mp3"),
       },
       {
-        title: "04",
+        title: "Парк Солнышко",
         src: audioAsset("assets/audio/staff/track-04.mp3"),
       },
     ],

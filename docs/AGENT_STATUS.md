@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-12 21:19 CDT |
+| Обновлено | 2026-09-12 21:25 CDT |
 | Ветка / HEAD | `main` / `18272a8` |
-| Дерево | dirty: новый header-ассет `assets/staff/tv/zhir-tv-header-bg-v1.png` и scoped CSS для `staff/tv.html`; unrelated work не затронут |
-| Активная линия | dedicated STAFF TV header background |
-| Последний этап | Сгенерирован и подключён новый широкий фон хедера TV-страницы; старый фон сцены TV сохранён. Header rule ограничен `.staff-tv-room-page`, поэтому другие страницы и TV-механика не изменены. PNG `1899×828`; `git diff --check`, production build `583`, `verify-public-build` `584`, Playwright desktop `1280×900` и mobile `390×844` пройдены: новый asset загружается, overflow `false`, console `0/0`. Ошибочный промежуточный stage-draft перемещён в `/Users/nateglukhov/.Trash/zhir-tv-kindergarten-room-draft-20260912.png`. Commit / push / deploy не выполнялись. |
+| Дерево | dirty: текущий снимок `docs/AGENT_STATUS.md`, labels STAFF-плеера в `js/app.js`, homepage marker в `index.html` и scoped CSS; unrelated work не затронут |
+| Активная линия | STAFF EXIT visibility |
+| Последний этап | EXIT скрыт в STAFF на всех страницах, кроме главной `/`: `index.html` помечен как `staff-home-page`, CSS скрывает `status-pill--exit` вне этого контейнера. Smoke QA desktop: `/about.html` — `display: none`, `/` — видим. `git diff --check` и `node --check js/app.js` пройдены. Commit / push / deploy не выполнялись. |
 | Следующий gate | commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
