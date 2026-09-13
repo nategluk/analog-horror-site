@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-13 17:13 CDT |
+| Обновлено | 2026-09-13 17:23 CDT |
 | Ветка / HEAD | `main` / `b80a5d7` |
-| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
-| Активная линия | Единый mobile-friendly плиточный стиль STAFF-каталогов `dossiers / protocols / books` |
-| Последний этап | Общий CSS перевёл карточки каталогов в читаемую adaptive tile grid: desktop `3/2` колонки, mobile `1` колонка, крупные preview и copy. Все три маршрута проверены на `1280×900` и `390×844`; overflow отсутствует, console `0/0`; `git diff --check`, `node --check js/app.js`, production build и `verify-public-build` пройдены. Commit/push/deploy не выполнялись. |
+| Дерево | dirty: `css/style.css`, `dossiers.html`, `protocols.html`, `books.html`, `docs/AGENT_STATUS.md`; unrelated work не затронут, QA-скриншоты перемещены в корзину |
+| Активная линия | Единый mobile-friendly плиточный стиль STAFF-каталогов и понятная навигация назад |
+| Последний этап | В трёх каталогах удалён повторяющийся внутренний заголовок категорий; секции карточек теперь используют основной заголовок как доступное имя. Подпись возврата — «← НАЗАД В ЛИЧНЫЙ КАБИНЕТ». Representative `books` проверен на `1280×900` и `390×844`; overflow отсутствует, console `0/0`; build, `verify-public-build` и `git diff --check` пройдены. Commit/push/deploy не выполнялись. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | живой сайт оставляем как есть; Codex-пластины не публиковать |
 
@@ -27,6 +27,14 @@ FREE
 
 ## Текущая работа и сохранность
 
+- 2026-09-13: по подтверждению пользователя удалён `.archive-section__header`
+  из `dossiers.html`, `protocols.html` и `books.html`; `aria-labelledby`
+  секций переведён на основной заголовок соответствующего каталога. Маршруты,
+  карточки и runtime-логика сохранены.
+- 2026-09-13: в `dossiers.html`, `protocols.html` и `books.html` удалён
+  технический код `P100` из ссылки возврата; новый текст сохраняет стрелку и
+  ведёт на тот же `index.html`. Вложенный блок `archive-section__header` не
+  удалялся: его судьба оставлена на подтверждение пользователя.
 - 2026-09-13: `css/style.css` получил scoped STAFF-only tile treatment для
   `.staff-material-catalog`: изображения вынесены в верх плитки, названия и
   описания сделаны заметными, `books` ограничен комфортной шириной на desktop;
