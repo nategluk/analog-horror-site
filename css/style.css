@@ -14435,38 +14435,36 @@ body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb {
   border-bottom: 1px solid #080a0d;
   border-radius: 0;
   background-color: #0b1015;
-  background-image:
-    linear-gradient(180deg, rgba(4, 7, 11, 0.22) 0%, rgba(4, 7, 11, 0.48) 48%, rgba(4, 7, 11, 0.78) 100%),
-    var(--staff-route-image);
+  background-image: var(--staff-route-image);
   background-position: center;
   background-size: cover;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.32);
-  filter: grayscale(0.16) saturate(0.62) brightness(0.56) contrast(1.14);
+  filter: none;
   transition: filter 0.2s ease, transform 0.2s ease;
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--losiny {
-  --staff-route-image: url("../assets/guest/locations/losiny-entrance.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-zoo-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--pool {
-  --staff-route-image: url("../assets/guest/thumb-pool.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-pool-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--solnyshko {
-  --staff-route-image: url("../assets/guest/locations/solnyshko-park.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-park-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--cinema {
-  --staff-route-image: url("../assets/guest/thumb-cinema.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-cinema-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--mall {
-  --staff-route-image: url("../assets/guest/locations/detskiy-zhir-mall.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-mall-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb--red-room {
-  --staff-route-image: url("../assets/guest/locations/red-room-cafe.webp");
+  --staff-route-image: url("../assets/staff/home/routes/route-cafe-horror.webp");
 }
 
 body.staff-mode .home-broadcast-page .staff-home-route-card .staff-home-route-card__label {
@@ -14495,7 +14493,7 @@ body.staff-mode .home-broadcast-page .staff-home-route-card:focus-visible {
 
 body.staff-mode .home-broadcast-page .staff-home-route-card:hover .guest-thumb,
 body.staff-mode .home-broadcast-page .staff-home-route-card:focus-visible .guest-thumb {
-  filter: grayscale(0.08) saturate(0.75) brightness(0.68) contrast(1.18);
+  filter: saturate(1.05) contrast(1.04);
   transform: translateY(-1px) scale(1.02);
 }
 
