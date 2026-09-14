@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 01:31 CDT |
+| Обновлено | 2026-09-14 13:15 CDT |
 | Ветка / HEAD | `main` / `7134979` |
-| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `docs/IRINA_CALL_GAME.md`, `docs/STAFF_HOME_BROADCAST.md`, `js/app.js`, `staff.html`, `assets/staff/icons/dossier-seal.svg`; redesign входа в личное дело, прямой старт звонка Ирине и approved player-dossier desktop pass |
-| Активная линия | Одобренный desktop-only минимальный редизайн личного кабинета игрока: исправление grid-растяжения, компактная сводка, SVG-акценты и служебный фон; mobile-порядок и runtime-контракты сохраняются |
-| Последний этап | Одобренный player-dossier desktop pass: исправлена растянутая grid-композиция, добавлены компактные вкладки/действия, role SVG и служебная печать; player route проверен на `1280x900` и `390x844`, включая tabs, avatar picker, close/reopen, обычное досье Ирины, overflow и console `0/0`. `git diff --check`, `node --check js/app.js`, production build (592 файла) и `verify-public-build` (593 файла) пройдены. |
-| Следующий gate | Пользовательский просмотр этой точечной правки; commit / push / deploy только по прямой просьбе |
+| Дерево | dirty: интеграция Children Protocol (`css/style.css`, `docs/AGENT_STATUS.md`, `js/app.js`, `js/sweet-dream-book.js`, `protocols.html`, build/verify scripts, `content/book/children-protocol.js`, `documents/protocol-children.html`, 13 пар ассетов, `output/playwright/`); commit / push / deploy не выполнялись |
+| Активная линия | Удаление повторяющихся заголовков на текстовых продолжениях STAFF-only «ПРОТОКОЛ CHILDREN» завершено; ожидается пользовательский просмотр |
+| Последний этап | В 25-страничном Children Protocol заголовки разделов теперь заданы только на 13 иллюстрированных страницах; 12 текстовых продолжений показывают служебный kicker и текст без повторного H3. Целевые проверки границ и уникальности заголовков пройдены; desktop `1280x900` и mobile `390x844` навигация, image load, overflow `0`, console `0/0`, hash/reload и guest-lock проверены. KIDULTS и «Книга Сладкого Сна» прошли регрессионный smoke. `build-public`, `verify-public-build`, `node --check` и `git diff --check` пройдены. |
+| Следующий gate | Пользовательский просмотр текущей интеграции; commit / push / deploy только по прямой просьбе |
 | Публикация | live-версия пока без этой правки; Codex-пластины не публиковать |
 
 ## Write-замок
@@ -26,6 +26,13 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-14: текст «Книги Сладкого Сна» закреплён отдельным корневым
+  источником `/Users/nateglukhov/md_lore/book-sweet-dream.md`. В файл вошли
+  предисловие и десять глав из `content/book/sweet-dream-book.js`; добавлены
+  только минимальная помета статуса артефакта и ссылка в README. `navigation/`
+  пересобрана через `python3 tools/lore_nav.py build`; runtime сайта и его
+  сохранения не изменялись. Commit/push/deploy не выполнялись.
 
 - 2026-09-14: по одобрению пользователя player dossier получил desktop-only
   минимальный редизайн. В `staff.html` сводка/вкладки/действия собраны в левую

@@ -96,10 +96,11 @@
     const kind = entry.kind || "preface";
     const isCover = kind === "cover";
     const isPlate = kind === "plate";
+    const isPage = kind === "page";
     const isChapterLead = kind === "chapter-lead";
     const isChapterText = kind === "chapter-text";
     const isChapter = isChapterLead || isChapterText;
-    const isVisual = isCover || isChapterLead || isPlate;
+    const isVisual = isCover || isChapterLead || isPlate || (isPage && Boolean(entry.image));
     const chapter = Number(entry.chapter);
     const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
 
@@ -111,11 +112,13 @@
     else delete root.dataset.bookChapter;
     root.classList.toggle("is-cover", isCover);
     root.classList.toggle("is-preface", kind === "preface");
+    root.classList.toggle("is-page", isPage);
+    root.classList.toggle("is-text-only", isPage && !isVisual);
     root.classList.toggle("is-chapter", isChapter);
     root.classList.toggle("is-chapter-lead", isChapterLead);
     root.classList.toggle("is-chapter-text", isChapterText);
     root.classList.toggle("is-visual", isVisual);
-    root.classList.toggle("is-copy", kind === "preface" || isChapterText);
+    root.classList.toggle("is-copy", kind === "preface" || isChapterText || isPage);
     visual.hidden = !isVisual;
     copy.hidden = isCover || isPlate;
 
@@ -134,13 +137,14 @@
       text.replaceChildren();
     } else {
       kicker.textContent =
-        kind === "preface"
+        entry.kicker ||
+        (kind === "preface"
           ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ"
           : isChapterLead && chapterLabel
             ? `ГЛАВА ${chapterLabel}`
-            : "";
-      title.hidden = isChapterText;
-      title.textContent = isChapterText ? "" : entry.title || "";
+            : "");
+      title.hidden = isChapterText || !entry.title;
+      title.textContent = isChapterText || !entry.title ? "" : entry.title;
       const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) => {
         const element = document.createElement("p");
         element.textContent = paragraph;
@@ -283,6 +287,10 @@
   const paginateBook = () => {
     root.dataset.bookPaginating = "true";
     const nextPages = [];
+    if (root.dataset.bookLayout === "explicit") {
+      nextPages.push(...entries.map((entry) => ({ ...entry })));
+      return nextPages;
+    }
     entries.forEach((entry) => {
       if (entry.kind === "cover" || entry.kind === "preface") {
         nextPages.push({ ...entry });
@@ -376,6 +384,8 @@
           ? "обложка"
           : kind === "preface"
             ? "предисловие редакции"
+            : kind === "page"
+              ? `текстовая страница: ${entry.title}`
         : `глава ${chapterLabel}: ${entry.title}`;
       announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }
@@ -413,6 +423,11 @@
             page.chapter === previousEntry.chapter &&
             page.sentenceStart <= previousSentence &&
             previousSentence < page.sentenceEnd
+        );
+        targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
+      } else if (previousEntry.page) {
+        const matchingIndex = pages.findIndex(
+          (page) => page.kind === "page" && page.page === previousEntry.page
         );
         targetIndex = matchingIndex >= 0 ? matchingIndex : targetIndex;
       } else {

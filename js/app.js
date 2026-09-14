@@ -1465,6 +1465,7 @@
   };
 
   const BOOK_CONTENT_SCRIPTS = Object.freeze({
+    "children-protocol": "../content/book/children-protocol.js",
     "kidults-protocol": "../content/book/kidults-protocol.js",
     "sweet-dream": "../content/book/sweet-dream-book.js"
   });
