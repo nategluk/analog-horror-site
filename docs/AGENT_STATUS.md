@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 00:46 CDT |
+| Обновлено | 2026-09-14 01:05 CDT |
 | Ветка / HEAD | `main` / `7134979` |
-| Дерево | dirty: `index.html`, `protocols.html`, `dossiers.html`, `books.html`, `docs/AGENT_STATUS.md`; каталоги получили header image и SPA-навигацию с сохранением аудиоплеера |
-| Активная линия | Исправление header image и сброса глобального аудиоплеера для каталогов материалов завершено |
-| Последний этап | У трёх карточек и трёх обратных ссылок каталогов снят `data-full-navigation`, а `protocols.html`, `dossiers.html` и `books.html` получили `menu-broadcast-page`; `git diff --check`, `node --check js/app.js`, production build (591 файл), `verify-public-build` (592 файла) и browser QA desktop/mobile пройдены. Предыдущая подпись «Секретные материалы» → «Служебные заметки» сохранена как пользовательская правка в том же diff. |
+| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `docs/IRINA_CALL_GAME.md`, `docs/STAFF_HOME_BROADCAST.md`, `js/app.js`; redesign входа в личное дело и прямой старт звонка Ирине |
+| Активная линия | Ячейка `ДОСЬЕ` сначала предлагает новый маршрут к Ирине; восстановление сохранения оставлено отдельным вторым маршрутом |
+| Последний этап | `НАЧАТЬ ПРОВЕРКУ` ведёт в `hiring.html` с одноразовым автозапуском канала `0091-A`; новое окно проверено на desktop и `390x844`, включая restore/back/close, возврат фокуса и отсутствие горизонтального overflow. `git diff --check`, `node --check js/app.js`, production build (591 файл) и `verify-public-build` (592 файла) пройдены. |
 | Следующий gate | Пользовательский просмотр и коммит этой точечной правки; commit / push / deploy только по прямой просьбе |
 | Публикация | live-версия пока без этой правки; Codex-пластины не публиковать |
 

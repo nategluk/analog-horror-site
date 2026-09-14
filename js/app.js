@@ -2952,21 +2952,79 @@
     if (dossierAccessDialog?.isConnected) return dossierAccessDialog;
 
     dossierAccessDialog = document.createElement("dialog");
-    dossierAccessDialog.className = "dossier-claim";
+    dossierAccessDialog.className = "dossier-access";
     dossierAccessDialog.setAttribute("aria-labelledby", "dossier-access-title");
     dossierAccessDialog.innerHTML = `
-      <div class="dossier-claim__panel">
-        <header>
+      <div class="dossier-access__panel">
+        <header class="dossier-access__header">
           <div>
-            <p>TYNDEX HR // КАНАЛ ВОССТАНОВЛЕНИЯ</p>
-            <h2 id="dossier-access-title">ВОССТАНОВЛЕНИЕ ЛИЧНОГО ДЕЛА</h2>
+            <p class="dossier-access__eyebrow">TYNDEX HR // ЯЧЕЙКА P200</p>
+            <h2 id="dossier-access-title">ВХОД В ЛИЧНОЕ ДЕЛО</h2>
           </div>
-          <button type="button" data-access-close aria-label="Закрыть">ЗАКРЫТЬ</button>
+          <div class="dossier-access__header-meta" aria-hidden="true">
+            <span>ACCESS</span>
+            <b>01</b>
+          </div>
+          <button
+            class="dossier-access__close"
+            type="button"
+            data-access-close
+            aria-label="Закрыть окно"
+          >
+            <span aria-hidden="true">×</span>
+            <span>ЗАКРЫТЬ</span>
+          </button>
         </header>
-        <form class="dossier-claim__form" data-access-form>
+        <div class="dossier-access__body" data-access-home>
+          <section class="dossier-access__intro" aria-labelledby="dossier-access-route-title">
+            <p class="dossier-access__section-label">КАДРОВАЯ БАЗА // ТОЧКА ВХОДА</p>
+            <h3 id="dossier-access-route-title">ВЫБЕРИТЕ<br />МАРШРУТ</h3>
+            <p>
+              Здесь начинается служебная история оператора. Если вы впервые
+              открыли эту ячейку, сначала поговорите с куратором Ириной.
+            </p>
+            <span class="dossier-access__note">
+              Роль и личное дело появятся после прохождения проверки.
+            </span>
+          </section>
+
+          <div class="dossier-access__choices">
+            <a
+              class="dossier-access__choice dossier-access__choice--start"
+              href="hiring.html?start=0091-A#bio-contract"
+              data-access-start
+              data-full-navigation
+            >
+              <span class="dossier-access__choice-index">01</span>
+              <span class="dossier-access__choice-copy">
+                <strong>НАЧАТЬ ПРОВЕРКУ</strong>
+                <span>Войти в звонок куратора Ирины и получить назначение.</span>
+              </span>
+              <span class="dossier-access__choice-arrow" aria-hidden="true">↗</span>
+            </a>
+            <button
+              class="dossier-access__choice dossier-access__choice--restore"
+              type="button"
+              data-access-restore
+            >
+              <span class="dossier-access__choice-index">02</span>
+              <span class="dossier-access__choice-copy">
+                <strong>ВОССТАНОВИТЬ ДЕЛО</strong>
+                <span>Если сохранение уже есть на другом устройстве.</span>
+              </span>
+              <span class="dossier-access__choice-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </div>
+
+        <form class="dossier-access__form" data-access-form hidden>
+          <div class="dossier-access__form-heading">
+            <p class="dossier-access__section-label">ВОЗВРАТ // СОХРАНЁННОЕ ДЕЛО</p>
+            <h3>ВОССТАНОВИТЬ<br />СОХРАНЕНИЕ</h3>
+          </div>
           <p>
-            Повторное прохождение не требуется. Система отправит новую
-            одноразовую ссылку для этого устройства.
+            Введите адрес, который был закреплён за личным делом. Система
+            отправит одноразовую ссылку для этого устройства.
           </p>
           <label>
             АДРЕС ВОССТАНОВЛЕНИЯ
@@ -2980,34 +3038,48 @@
               placeholder="operator@example.com"
             />
           </label>
-          <div class="dossier-claim__actions">
-            <button type="submit" data-access-submit>ОТПРАВИТЬ ССЫЛКУ ДОСТУПА</button>
-            <button type="button" data-access-cancel>ОТМЕНА</button>
+          <div class="dossier-access__actions">
+            <button class="dossier-access__primary" type="submit" data-access-submit>
+              ОТПРАВИТЬ ССЫЛКУ
+            </button>
+            <button type="button" data-access-back>← НАЗАД К ВЫБОРУ</button>
           </div>
         </form>
-        <section class="dossier-claim__sent" data-access-sent hidden>
-          <strong>ССЫЛКА ДОСТУПА ОТПРАВЛЕНА</strong>
+
+        <section class="dossier-access__sent" data-access-sent hidden>
+          <p class="dossier-access__section-label">ВОЗВРАТ // КАНАЛ ОТКРЫТ</p>
+          <h3>ССЫЛКА<br />ОТПРАВЛЕНА</h3>
           <p>
             Откройте новое письмо на этом устройстве. Роль и материалы будут
             загружены из серверной кадровой базы.
           </p>
-          <button type="button" data-access-done>ПОНЯТНО</button>
+          <button class="dossier-access__primary" type="button" data-access-done>
+            ЗАКРЫТЬ
+          </button>
         </section>
-        <p
-          class="dossier-claim__status"
-          data-access-status
-          role="status"
-          aria-live="polite"
-        ></p>
+
+        <p class="dossier-access__status" data-access-status role="status" aria-live="polite"></p>
       </div>
     `;
     body.append(dossierAccessDialog);
 
+    const home = dossierAccessDialog.querySelector("[data-access-home]");
     const form = dossierAccessDialog.querySelector("[data-access-form]");
     const sent = dossierAccessDialog.querySelector("[data-access-sent]");
     const emailInput = form.querySelector('input[name="email"]');
     const status = dossierAccessDialog.querySelector("[data-access-status]");
     const submitButton = form.querySelector("[data-access-submit]");
+    const restoreButton = dossierAccessDialog.querySelector("[data-access-restore]");
+    const startLink = dossierAccessDialog.querySelector("[data-access-start]");
+
+    const showHome = () => {
+      home.hidden = false;
+      form.hidden = true;
+      sent.hidden = true;
+      status.textContent = "";
+      startLink.focus();
+    };
+
     const closeDialog = () => {
       if (dossierAccessDialog.open) dossierAccessDialog.close();
     };
@@ -3015,9 +3087,16 @@
     dossierAccessDialog
       .querySelector("[data-access-close]")
       .addEventListener("click", closeDialog);
+    restoreButton.addEventListener("click", () => {
+      home.hidden = true;
+      form.hidden = false;
+      sent.hidden = true;
+      status.textContent = "";
+      emailInput.focus();
+    });
     dossierAccessDialog
-      .querySelector("[data-access-cancel]")
-      .addEventListener("click", closeDialog);
+      .querySelector("[data-access-back]")
+      .addEventListener("click", showHome);
     dossierAccessDialog
       .querySelector("[data-access-done]")
       .addEventListener("click", closeDialog);
@@ -3069,8 +3148,10 @@
     });
 
     dossierAccessDialog.addEventListener("close", () => {
+      body.classList.remove("dossier-access-open");
       form.reset();
-      form.hidden = false;
+      home.hidden = false;
+      form.hidden = true;
       sent.hidden = true;
       status.textContent = "";
       dossierAccessPreviousFocus?.focus?.();
@@ -3081,15 +3162,19 @@
 
   const openDossierAccess = () => {
     const dialog = getDossierAccessDialog();
+    const home = dialog.querySelector("[data-access-home]");
     const form = dialog.querySelector("[data-access-form]");
     const sent = dialog.querySelector("[data-access-sent]");
     const status = dialog.querySelector("[data-access-status]");
-    form.hidden = false;
+    const startLink = dialog.querySelector("[data-access-start]");
+    home.hidden = false;
+    form.hidden = true;
     sent.hidden = true;
     status.textContent = "";
     dossierAccessPreviousFocus = document.activeElement;
+    body.classList.add("dossier-access-open");
     dialog.showModal();
-    form.querySelector('input[name="email"]').focus();
+    startLink.focus();
   };
 
   const initDossierAccess = () => {
@@ -4390,6 +4475,22 @@
 
     updateResumeControl();
     soundButton.title = "Включить сигналы и фон канала";
+
+    const startRequest = new URLSearchParams(window.location.search).get("start");
+    if (startRequest === "0091-A") {
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.searchParams.delete("start");
+      window.history.replaceState({}, "", cleanUrl);
+      const saved = getCuratorProgress();
+      window.setTimeout(
+        () =>
+          openCall({
+            restart: saved?.status === "completed",
+            reclassification: saved?.status === "completed",
+          }),
+        0
+      );
+    }
 
     const resumeRequest = new URLSearchParams(window.location.search).get("resume");
     if (resumeRequest === "0091-A" && getCuratorProgress()?.status === "in_progress") {
