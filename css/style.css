@@ -14478,15 +14478,6 @@ body.staff-mode .home-broadcast-page .staff-home-route-card .staff-home-route-ca
   font-size: 0.76rem;
 }
 
-body.staff-mode .home-broadcast-page .staff-home-route-card .guest-entertainments__text {
-  margin: 0;
-  padding: 0.6rem 0.7rem 0.75rem;
-  color: #aeb4b4;
-  background: #11161c;
-  font-size: 0.8rem;
-  line-height: 1.4;
-}
-
 body.staff-mode .home-broadcast-page .staff-home-route-card:hover,
 body.staff-mode .home-broadcast-page .staff-home-route-card:focus-visible {
   border-color: var(--staff-route-accent);
@@ -14513,14 +14504,8 @@ body.staff-mode .home-broadcast-page .staff-home-route-card:focus-visible .guest
   }
 
   body.staff-mode .home-broadcast-page .staff-home-route-card {
-    padding: 0.85rem 0.9rem;
-    border-radius: 12px;
-  }
-
-  body.staff-mode .home-broadcast-page .staff-home-route-card::before {
-    margin: -0.85rem -0.9rem 0.7rem;
-    width: calc(100% + 1.8rem);
-    border-radius: 12px 12px 0 0;
+    padding: 0;
+    border-radius: 0.2rem;
   }
 
   body.staff-mode .home-broadcast-page .staff-home-route-card .guest-thumb {
@@ -14529,10 +14514,6 @@ body.staff-mode .home-broadcast-page .staff-home-route-card:focus-visible .guest
 
   body.staff-mode .home-broadcast-page .staff-home-route-card .guest-entertainments__title {
     font-size: 1rem;
-  }
-
-  body.staff-mode .home-broadcast-page .staff-home-route-card .guest-entertainments__text {
-    font-size: 0.84rem;
   }
 }
 
