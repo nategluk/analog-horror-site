@@ -67,10 +67,11 @@ const makeIllustratedPage = ({ page, kicker, title, image, alt, paragraphs }) =>
   paragraphs
 });
 
-const makeTextPage = ({ page, kicker, paragraphs }) => ({
+const makeTextPage = ({ page, kicker, paragraphs, image, alt, width = 1024, height = 1536 }) => ({
   kind: "page",
   page,
   kicker,
+  ...(image ? { image, alt, width, height } : {}),
   emphasisTerms: CHILDREN_PROTOCOL_TERMS,
   paragraphs
 });
@@ -151,6 +152,8 @@ const childrenProtocolPages = [
   makeTextPage({
     page: 7,
     kicker: "ФИНАЛ РАЗДЕЛА 03",
+    image: "assets/staff/documents/sweet-dream-book/sweet-dream-08.webp",
+    alt: "Иллюстрация из «Книги Сладкого Сна»: женщина стоит перед промышленной центрифугой в мокром техническом помещении.",
     paragraphs: [
       "Программа экстракции позволяет использовать этот потенциал при изготовлении Формулы 312, помогающей взрослым вновь приблизиться к дорогим переживаниям.",
       "Так забота о маленьком становится частью заботы о многих.",
@@ -175,6 +178,10 @@ const childrenProtocolPages = [
   makeTextPage({
     page: 9,
     kicker: "ФИНАЛ РАЗДЕЛА 04",
+    image: "assets/staff/documents/protocol-children/protocol-children-09-factory.webp",
+    alt: "Учебная иллюстрация: лиминальный кондитерский завод «Пухлый Малыш» с переплетением бледно-розовых и жёлтых труб под потолком и пустыми линиями конвейеров.",
+    width: 1672,
+    height: 941,
     paragraphs: [
       "Не называйте заранее последнюю ложку. Пусть завершение заботы станет приятной новостью.",
       "Запомните: «контингент с недовесом» — текущая оценка готовности. Она может быть пересмотрена."
@@ -197,6 +204,10 @@ const childrenProtocolPages = [
   makeTextPage({
     page: 11,
     kicker: "ФИНАЛ РАЗДЕЛА 05",
+    image: "assets/staff/documents/protocol-children/protocol-children-11-irina-park.webp",
+    alt: "Учебная иллюстрация: аниматор Ирина в коричневом костюме у пустого маршрута парка «Солнышко».",
+    width: 1672,
+    height: 941,
     paragraphs: [
       "В таком случае подбирается другой способ участия.",
       "Вечный ребёнок может стать куратором, встречать новых гостей и помогать им освоиться. Личный опыт ожидания нередко позволяет особенно чутко объяснить, где следует оставаться до прихода сопровождающего.",
@@ -221,6 +232,10 @@ const childrenProtocolPages = [
   makeTextPage({
     page: 13,
     kicker: "ФИНАЛ РАЗДЕЛА 06",
+    image: "assets/staff/documents/protocol-children/protocol-children-13-animator-queue.webp",
+    alt: "Учебная иллюстрация: живая очередь взрослых аниматоров к окну выдачи баночек с жёлтым желе.",
+    width: 1672,
+    height: 941,
     paragraphs: [
       "Сохранённая связь с детством не означает устойчивости к эйфорическому эффекту Формулы 312. Возможность вновь пережить дорогое может стать особенно значимой и сопровождаться устойчивой потребностью в повторном приёме.",
       "Для ясности: взрослый статус, личные воспоминания и реакция на Формулу учитываются отдельно."
@@ -246,6 +261,10 @@ const childrenProtocolPages = [
   makeTextPage({
     page: 15,
     kicker: "ФИНАЛ РАЗДЕЛА 07",
+    image: "assets/staff/documents/protocol-children/protocol-children-15-gas-mask.webp",
+    alt: "Учебная иллюстрация: сотрудник в защитном противогазе в служебном санитарном коридоре.",
+    width: 1672,
+    height: 941,
     paragraphs: [
       "Состав среды может требовать предосторожностей независимо от субъективного самочувствия.",
       "Не предлагайте человеку снять противогаз, чтобы вам было легче оценить выражение его лица.",
@@ -302,8 +321,8 @@ const childrenProtocolPages = [
     page: 20,
     kicker: "РАЗДЕЛ 10",
     title: "ЖИВОЕ НАПОМИНАНИЕ",
-    image: "assets/staff/documents/protocol-children/protocol-children-11-ommazh.webp",
-    alt: "Учебная иллюстрация: взрослый почётный гость небольшого роста в костюме отказывается от угощения; на столе лежат пустой договор и часы.",
+    image: "assets/staff/documents/protocol-children/protocol-children-11-ommazh-uncanny.webp",
+    alt: "Учебная иллюстрация: взрослый человек небольшого роста в сливовом костюме на опустевшем праздничном приёме; рядом оставлен детский стул и открыта служебная дверь.",
     paragraphs: [
       "Когда детей стало меньше в повседневной жизни, взрослые начали особенно ценить знакомые очертания общего снимка.",
       "Рядом с высокой фигурой снова появлялась маленькая. Хотелось предложить угощение, подать пальто, оставить лучшее место за столом.",

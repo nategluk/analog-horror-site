@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 13:41 CDT |
+| Обновлено | 2026-09-14 14:26 CDT |
 | Ветка / HEAD | `main` / `31d2de2` |
-| Дерево | dirty: текущие правки Children (`content/book/children-protocol.js`, `css/style.css`, `docs/AGENT_STATUS.md`, `documents/protocol-children.html`, `js/sweet-dream-book.js`, новая `protocol-children-14-infographic.png`, `output/playwright/`); исходная интеграция находится в HEAD `31d2de2`, новые правки не закоммичены; push / deploy для них не выполнялись |
-| Активная линия | Редакторские блоки «Подпись к…» и «Под рисунком:» удалены из финалов разделов STAFF-only «ПРОТОКОЛ CHILDREN»; ожидается пользовательский просмотр |
-| Последний этап | В Children Protocol сохранены 26 страниц, 14 иллюстрированных и 12 текстовых: удалены 12 пар агентских подписей и предложенных формулировок, литературные финалы, выделение терминов и финальная инфографика не затронуты. Контентная проверка подтвердила 12/12 контрольных окончаний и отсутствие маркеров; полный маршрут прошёл desktop `1280x900` и mobile `390x844`: 26/26 страниц, image load, overflow `0`, console `0/0`. `build-public`, `verify-public-build`, `node --check` и `git diff --check` пройдены. |
+| Дерево | dirty: Children footage (`content/book/children-protocol.js`, `css/style.css`, `js/sweet-dream-book.js`, пять новых WebP в `assets/staff/documents/protocol-children/`, `docs/AGENT_STATUS.md`) и сохранены пользовательские изменения трёх `.DS_Store`; commit / push / deploy не выполнялись |
+| Активная линия | В 26-листовый STAFF-only «ПРОТОКОЛ CHILDREN» добавлены визуалы на страницах 7/9/11/13/15; вертикаль страницы 20 перегенерирована в более выраженной хоррор-манере; ожидается пользовательский просмотр |
+| Последний этап | Children Protocol теперь содержит 19 визуальных и 7 текстовых листов без изменения явной пагинации: 7 использует `sweet-dream-08.webp`, 9/11/13/15 — горизонтальные точные `1664×936` WebP, 20 — новая хоррор-вертикаль `1024×1536`. Добавлен scoped wide-visual layout и корректное объявление alt-текста. `node --check`, `git diff --check`, `build-public` (`612` файлов), `verify-public-build` (`613` файлов) пройдены; Playwright проверил STAFF desktop и mobile `390x844`, image load и overflow `0`; после перегенерации проверены формат, dimensions и source/public parity страницы 20. |
 | Следующий gate | Пользовательский просмотр текущей интеграции; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
@@ -143,6 +143,13 @@ FREE
 
 ## Проверка ревизии
 
+- Children footage: `node --check content/book/children-protocol.js`, `node --check
+  js/sweet-dream-book.js`, `git diff --check`, production build (`612` файлов) и
+  `verify-public-build` (`613` файлов) пройдены; Playwright проверил страницы
+  7/9/11/13/15/20 в STAFF на desktop и `390x844`: все изображения загрузились,
+  горизонтальные источники `1664×936`, вертикальные `1024×1536`, explicit label
+  `26` страниц и overflow `0`; финальная замена страницы 20 повторно проверена
+  через `file`, production parity и `verify-public-build`.
 - Personnel polaroid copy: `git diff --check`, production build (`580` файлов)
   и `verify-public-build` (`581` файлов) пройдены; Playwright проверил STAFF
   на desktop `1280x900` и mobile `390x844`: пять карточек, `КАДРОВАЯ ЗАПИСЬ`

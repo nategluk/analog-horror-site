@@ -145,6 +145,7 @@
     root.classList.toggle("is-chapter-lead", isChapterLead);
     root.classList.toggle("is-chapter-text", isChapterText);
     root.classList.toggle("is-visual", isVisual);
+    root.classList.toggle("is-wide-visual", isVisual && Number(entry.width) > Number(entry.height));
     root.classList.toggle("is-copy", kind === "preface" || isChapterText || isPage);
     visual.hidden = !isVisual;
     copy.hidden = isCover || isPlate;
@@ -410,7 +411,9 @@
           : kind === "preface"
             ? "предисловие редакции"
             : kind === "page"
-              ? `текстовая страница: ${entry.title}`
+              ? entry.image
+                ? `иллюстрация: ${entry.alt || entry.title || entry.kicker || "без описания"}`
+                : `текстовая страница: ${entry.title || entry.kicker || "без заголовка"}`
         : `глава ${chapterLabel}: ${entry.title}`;
       announcer.textContent = `Открыта страница ${formatPage(currentIndex)}: ${place}`;
     }

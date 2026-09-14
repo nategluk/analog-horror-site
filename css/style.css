@@ -14096,6 +14096,36 @@ body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-text
   border-inline-start: 0;
 }
 
+/* Horizontal footage occupies the otherwise empty final leaves without changing
+   the explicit 26-page protocol or its source text. */
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__leaf {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__visual,
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__visual-frame {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__visual-frame {
+  aspect-ratio: 16 / 9;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__visual img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide-visual .sweet-dream-book__copy {
+  padding: 0.95rem 0 0;
+  border-inline-start: 0;
+  border-top: 1px solid var(--sweet-rule);
+}
+
 @media (max-width: 700px) {
   body.staff-mode .sweet-dream-book[data-book-content="children-protocol"] .sweet-dream-book__leaf {
     grid-template-columns: 1fr;
