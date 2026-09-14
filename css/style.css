@@ -14070,6 +14070,20 @@ body.staff-mode .sweet-dream-book[data-book-content="children-protocol"] .sweet-
   margin-bottom: 0;
 }
 
+body.staff-mode .sweet-dream-book[data-book-content="children-protocol"] .sweet-dream-book__term {
+  display: inline;
+  padding-inline: 0.14em;
+  color: #5f2143;
+  border-bottom: 2px solid #8d4668;
+  background: rgba(216, 162, 186, 0.34);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.91em;
+  font-weight: 900;
+  letter-spacing: 0.025em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
 body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-text-only .sweet-dream-book__leaf {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -14113,6 +14127,12 @@ body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-text
   body.staff-mode .sweet-dream-book[data-book-content="children-protocol"] .sweet-dream-book__copy [data-book-text] {
     font-size: 0.98rem;
     line-height: 1.58;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="children-protocol"] .sweet-dream-book__term {
+    padding-inline: 0.08em;
+    font-size: 0.9em;
+    letter-spacing: 0.015em;
   }
 
   body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-text-only .sweet-dream-book__copy {

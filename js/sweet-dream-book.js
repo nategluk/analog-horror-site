@@ -38,6 +38,33 @@
       .map((paragraph) => String(paragraph || "").trim())
       .filter(Boolean);
 
+  const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const renderParagraph = (paragraph, terms) => {
+    const element = document.createElement("p");
+    const uniqueTerms = Array.from(
+      new Set((Array.isArray(terms) ? terms : []).map((term) => String(term || "").trim()).filter(Boolean))
+    ).sort((left, right) => right.length - left.length);
+    if (!uniqueTerms.length) {
+      element.textContent = paragraph;
+      return element;
+    }
+
+    const matcher = new RegExp(uniqueTerms.map(escapeRegExp).join("|"), "giu");
+    let cursor = 0;
+    for (const match of paragraph.matchAll(matcher)) {
+      const start = match.index ?? 0;
+      if (start > cursor) element.append(document.createTextNode(paragraph.slice(cursor, start)));
+      const term = document.createElement("strong");
+      term.className = "sweet-dream-book__term";
+      term.textContent = match[0];
+      element.append(term);
+      cursor = start + match[0].length;
+    }
+    if (cursor < paragraph.length) element.append(document.createTextNode(paragraph.slice(cursor)));
+    return element;
+  };
+
   const tokenizeParagraphs = (paragraphs) => {
     const tokens = [];
     const segmenter =
@@ -145,11 +172,9 @@
             : "");
       title.hidden = isChapterText || !entry.title;
       title.textContent = isChapterText || !entry.title ? "" : entry.title;
-      const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) => {
-        const element = document.createElement("p");
-        element.textContent = paragraph;
-        return element;
-      });
+      const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) =>
+        renderParagraph(paragraph, entry.emphasisTerms)
+      );
       if (entry.warning) {
         const warning = document.createElement("p");
         warning.className = "sweet-dream-book__warning";
