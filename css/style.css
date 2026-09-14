@@ -15795,6 +15795,20 @@ body.staff-mode .staff-tv-room-page .site-header {
     var(--broadcast-case);
 }
 
+/* ─── STAFF MATERIALS: shared archive-room header backdrop ─── */
+body.staff-mode .catalog-broadcast-page .site-header,
+body.staff-mode .document-broadcast-page .site-header {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(8, 12, 16, 0.48) 0%,
+      rgba(8, 12, 16, 0.28) 50%,
+      rgba(8, 12, 16, 0.7) 100%
+    ),
+    url("../assets/staff/documents/zhir-document-header-bg-v1.png") center / cover no-repeat,
+    var(--broadcast-case);
+}
+
 /* ─── STAFF DONATE PAGE: fundraising animator backdrop ─── */
 body.staff-mode .donate-page-panel {
   isolation: isolate;

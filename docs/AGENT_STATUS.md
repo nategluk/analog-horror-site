@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 14:26 CDT |
+| Обновлено | 2026-09-14 14:43 CDT |
 | Ветка / HEAD | `main` / `31d2de2` |
-| Дерево | dirty: Children footage (`content/book/children-protocol.js`, `css/style.css`, `js/sweet-dream-book.js`, пять новых WebP в `assets/staff/documents/protocol-children/`, `docs/AGENT_STATUS.md`) и сохранены пользовательские изменения трёх `.DS_Store`; commit / push / deploy не выполнялись |
-| Активная линия | В 26-листовый STAFF-only «ПРОТОКОЛ CHILDREN» добавлены визуалы на страницах 7/9/11/13/15; вертикаль страницы 20 перегенерирована в более выраженной хоррор-манере; ожидается пользовательский просмотр |
-| Последний этап | Children Protocol теперь содержит 19 визуальных и 7 текстовых листов без изменения явной пагинации: 7 использует `sweet-dream-08.webp`, 9/11/13/15 — горизонтальные точные `1664×936` WebP, 20 — новая хоррор-вертикаль `1024×1536`. Добавлен scoped wide-visual layout и корректное объявление alt-текста. `node --check`, `git diff --check`, `build-public` (`612` файлов), `verify-public-build` (`613` файлов) пройдены; Playwright проверил STAFF desktop и mobile `390x844`, image load и overflow `0`; после перегенерации проверены формат, dimensions и source/public parity страницы 20. |
+| Дерево | dirty: Children footage (`content/book/children-protocol.js`, `css/style.css`, `js/sweet-dream-book.js`, пять новых WebP в `assets/staff/documents/protocol-children/`, `docs/AGENT_STATUS.md`), новый `assets/staff/documents/zhir-document-header-bg-v1.png`, материал-маршруты без full navigation и сохранены пользовательские изменения трёх `.DS_Store`; commit / push / deploy не выполнялись |
+| Активная линия | Генерация единого фона header для каталогов/протоколов и ремонт сохранения музыкального плеера при SPA-навигации по материалам; пользовательские Children footage-изменения сохраняются |
+| Последний этап | Сгенерирован и подключён единый STAFF header-фон `zhir-document-header-bg-v1.png` (`2048×768`) для каталогов и открытых документов. Ссылки возврата протоколов, досье и книг переведены на SPA-навигацию; переходы под soundtrack сохранили трек, playing-state и растущую позицию на desktop/mobile representative flow. `node --check`, `git diff --check`, production build (`613` файлов), `verify-public-build` (`614` файлов), source/public parity, Playwright `1280×900`/`390×844`, overflow `0`, console `0/0` пройдены. Children footage-изменения сохранены. |
 | Следующий gate | Пользовательский просмотр текущей интеграции; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
