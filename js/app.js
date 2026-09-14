@@ -4532,6 +4532,7 @@
     const playerCardAvatar = grid.querySelector("[data-player-card-avatar]");
     const dossierName = dossier.querySelector("[data-personnel-name]");
     const dossierRole = dossier.querySelector("[data-personnel-role]");
+    const dossierRoleIcon = dossier.querySelector("[data-player-role-icon]");
     const dossierStatus = dossier.querySelector("[data-personnel-status]");
     const dossierNote = dossier.querySelector("[data-personnel-note]");
     const dossierIdentity = dossier.querySelector(".personnel-dossier__identity");
@@ -4551,6 +4552,20 @@
     const dossierIntegrityState = dossier.querySelector("[data-player-integrity-state]");
     const dossierChannelState = dossier.querySelector("[data-player-channel-state]");
     const summaryTabs = dossier.querySelector("[data-player-summary-tabs]");
+    const roleIconSources = {
+      animator: {
+        src: "assets/staff/icons/role-animator.svg",
+        alt: "Знак класса «Аниматор»",
+      },
+      volunteer: {
+        src: "assets/staff/icons/role-volunteer.svg",
+        alt: "Знак класса «Волонтёр»",
+      },
+      impostor: {
+        src: "assets/staff/icons/role-impostor.svg",
+        alt: "Знак класса «Самозванец»",
+      },
+    };
     const dossierHeaderImage = dossier.querySelector("[data-personnel-header-image]");
     const employeeActions = dossier.querySelector("[data-personnel-employee-actions]");
     const profilePanel = dossier.querySelector("[data-personnel-profile]");
@@ -5020,6 +5035,17 @@
       dossierPlayerName.textContent = profileName;
       dossierRole.textContent = getProfileRole(profile);
       dossierStatus.textContent = primaryStatus;
+      const roleIcon = roleIconSources[profile.role];
+      if (dossierRoleIcon) {
+        dossierRoleIcon.hidden = !roleIcon;
+        if (roleIcon) {
+          dossierRoleIcon.src = roleIcon.src;
+          dossierRoleIcon.alt = roleIcon.alt;
+        } else {
+          dossierRoleIcon.removeAttribute("src");
+          dossierRoleIcon.alt = "";
+        }
+      }
       const usefulness = getOperatorUsefulness(profile, getCuratorProgress(), readLoraSave());
       if (dossierUsefulnessBadge) dossierUsefulnessBadge.hidden = false;
       if (dossierUsefulness) dossierUsefulness.textContent = usefulness.label;
@@ -5146,6 +5172,11 @@
         dossierMetadata.hidden = true;
         dossierVisual.hidden = true;
         dossierSignal.hidden = true;
+        if (dossierRoleIcon) {
+          dossierRoleIcon.hidden = true;
+          dossierRoleIcon.removeAttribute("src");
+          dossierRoleIcon.alt = "";
+        }
         dossierReviewBadge.hidden = true;
         if (dossierUsefulnessBadge) dossierUsefulnessBadge.hidden = true;
         summaryTabs.hidden = true;

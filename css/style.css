@@ -3688,6 +3688,23 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
   margin: 0 auto;
   padding: clamp(1.1rem, 3vw, 2.75rem) clamp(1rem, 4vw, 4rem) 3rem;
   gap: clamp(1.25rem, 3vw, 2.35rem);
+  isolation: isolate;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("../assets/staff/icons/dossier-seal.svg") no-repeat top right / min(30rem, 42vw) auto;
+  opacity: 0.055;
+  mix-blend-mode: screen;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__panel > * {
+  position: relative;
+  z-index: 1;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__header {
@@ -3718,15 +3735,27 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__identity {
-  grid-template-areas:
-    "copy visual"
-    "tabs visual";
-  grid-template-columns: minmax(0, 1.35fr) clamp(16rem, 27vw, 22rem);
+  grid-template-areas: "copy visual";
+  grid-template-columns: minmax(0, 1.35fr) clamp(15rem, 24vw, 18.5rem);
   gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary {
+  display: grid;
+  grid-area: copy;
+  align-content: start;
+  gap: clamp(0.8rem, 1.5vw, 1.15rem);
+  min-width: 0;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__identity-copy {
   gap: 1rem;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-dossier__identity-copy,
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-profile__tabs--summary,
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-profile__actions {
+  grid-area: auto;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__name-control {
@@ -3746,6 +3775,14 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__badges {
   gap: 0.6rem;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__role-icon {
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-self: center;
+  object-fit: contain;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__badge {
@@ -3777,11 +3814,30 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__visual {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__visual-media {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0;
+  min-width: 0;
+}
+
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__signal {
+  grid-column: 1 / -1;
   border-width: 0.38rem;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__visual-media .personnel-dossier__avatar-control {
+  position: relative;
+  z-index: 2;
+  justify-self: end;
+  margin-top: -1.4rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+  background: rgba(23, 25, 30, 0.96);
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__biosignal {
@@ -3800,6 +3856,11 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
   padding: 0.6rem 0.65rem;
 }
 
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__integrity,
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__channel {
+  min-width: 0;
+}
+
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__integrity > strong,
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__channel > strong {
   font-size: 0.7rem;
@@ -3814,6 +3875,24 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
   min-height: 3.25rem;
   padding: 0.75rem 0.9rem;
   font-size: clamp(0.7rem, 1.2vw, 0.88rem);
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__tab-label {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__tab-icon {
+  flex: 0 0 auto;
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile {
@@ -3940,8 +4019,15 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__actions {
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-  margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__actions .personnel-dossier__action {
+  width: max-content;
+  max-width: 100%;
 }
 
 body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-name {
@@ -4131,6 +4217,15 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 }
 
 @media (max-width: 760px) {
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__panel::before {
+    display: none;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__role-icon,
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-profile__tab-icon {
+    display: none;
+  }
+
   body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__panel {
     padding: max(0.9rem, env(safe-area-inset-top)) max(0.85rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(0.85rem, env(safe-area-inset-left));
     gap: 1.15rem;
@@ -4167,9 +4262,32 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
     grid-template-areas:
       "copy"
       "visual"
-      "tabs";
+      "tabs"
+      "actions";
     grid-template-columns: 1fr;
     gap: 1rem;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary {
+    display: contents;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-dossier__identity-copy {
+    grid-area: copy;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-profile__tabs--summary {
+    grid-area: tabs;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-profile__actions {
+    display: grid;
+    grid-area: actions;
+    gap: 0.6rem;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__summary > .personnel-profile__actions .personnel-dossier__action {
+    width: 100%;
   }
 
   body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__name-control {
@@ -4186,6 +4304,10 @@ body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--
 
   body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__visual {
     grid-template-columns: 1fr;
+  }
+
+  body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__visual-media {
+    grid-column: 1;
   }
 
   body.staff-mode .personnel-broadcast-page .personnel-dossier.personnel-dossier--player .personnel-dossier__signal {

@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 01:05 CDT |
+| Обновлено | 2026-09-14 01:31 CDT |
 | Ветка / HEAD | `main` / `7134979` |
-| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `docs/IRINA_CALL_GAME.md`, `docs/STAFF_HOME_BROADCAST.md`, `js/app.js`; redesign входа в личное дело и прямой старт звонка Ирине |
-| Активная линия | Ячейка `ДОСЬЕ` сначала предлагает новый маршрут к Ирине; восстановление сохранения оставлено отдельным вторым маршрутом |
-| Последний этап | `НАЧАТЬ ПРОВЕРКУ` ведёт в `hiring.html` с одноразовым автозапуском канала `0091-A`; новое окно проверено на desktop и `390x844`, включая restore/back/close, возврат фокуса и отсутствие горизонтального overflow. `git diff --check`, `node --check js/app.js`, production build (591 файл) и `verify-public-build` (592 файла) пройдены. |
-| Следующий gate | Пользовательский просмотр и коммит этой точечной правки; commit / push / deploy только по прямой просьбе |
+| Дерево | dirty: `css/style.css`, `docs/AGENT_STATUS.md`, `docs/IRINA_CALL_GAME.md`, `docs/STAFF_HOME_BROADCAST.md`, `js/app.js`, `staff.html`, `assets/staff/icons/dossier-seal.svg`; redesign входа в личное дело, прямой старт звонка Ирине и approved player-dossier desktop pass |
+| Активная линия | Одобренный desktop-only минимальный редизайн личного кабинета игрока: исправление grid-растяжения, компактная сводка, SVG-акценты и служебный фон; mobile-порядок и runtime-контракты сохраняются |
+| Последний этап | Одобренный player-dossier desktop pass: исправлена растянутая grid-композиция, добавлены компактные вкладки/действия, role SVG и служебная печать; player route проверен на `1280x900` и `390x844`, включая tabs, avatar picker, close/reopen, обычное досье Ирины, overflow и console `0/0`. `git diff --check`, `node --check js/app.js`, production build (592 файла) и `verify-public-build` (593 файла) пройдены. |
+| Следующий gate | Пользовательский просмотр этой точечной правки; commit / push / deploy только по прямой просьбе |
 | Публикация | live-версия пока без этой правки; Codex-пластины не публиковать |
 
 ## Write-замок
@@ -26,6 +26,15 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-14: по одобрению пользователя player dossier получил desktop-only
+  минимальный редизайн. В `staff.html` сводка/вкладки/действия собраны в левую
+  колонку, visual media отделён от двух компактных status-ячееек; сохранены
+  все `data-player-*`/`data-personnel-*` контракты. `css/style.css` добавляет
+  scoped desktop seal, вкладочные SVG и responsive overrides; мобильный порядок
+  и новая декорация не изменяются. `js/app.js` подставляет существующий role
+  SVG по роли игрока и очищает его для обычных досье. Commit/push/deploy не
+  выполнялись.
 
 - 2026-09-13: по подтверждению пользователя удалён `.archive-section__header`
   из `dossiers.html`, `protocols.html` и `books.html`; `aria-labelledby`
