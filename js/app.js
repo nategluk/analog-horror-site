@@ -1467,7 +1467,8 @@
   const BOOK_CONTENT_SCRIPTS = Object.freeze({
     "children-protocol": "../content/book/children-protocol.js",
     "kidults-protocol": "../content/book/kidults-protocol.js",
-    "sweet-dream": "../content/book/sweet-dream-book.js"
+    "sweet-dream": "../content/book/sweet-dream-book.js",
+    "right-path-continuism": "../content/book/right-path-continuism.js"
   });
   const PAGE_BODY_CLASSES = Object.freeze([
     "document-page",
@@ -6001,11 +6002,14 @@
 
     if (homeHeroes.length > 1) {
       const requestedHero = new URLSearchParams(window.location.search).get("hero");
-      const defaultHero =
-        homeHeroes.find((hero) => hero.dataset.homeHero === "wonder") || homeHeroes[0];
+      const rotatingHeroes = homeHeroes.filter((hero) =>
+        ["wonder", "video-archives"].includes(hero.dataset.homeHero)
+      );
+      const randomHero =
+        rotatingHeroes[Math.floor(Math.random() * rotatingHeroes.length)] || homeHeroes[0];
       const selectedHero =
         homeHeroes.find((hero) => hero.dataset.homeHero === requestedHero) ||
-        defaultHero;
+        randomHero;
 
       homeHeroes.forEach((hero) => {
         hero.hidden = hero !== selectedHero;

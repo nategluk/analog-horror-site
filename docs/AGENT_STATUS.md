@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-14 14:43 CDT |
-| Ветка / HEAD | `main` / `31d2de2` |
-| Дерево | dirty: Children footage (`content/book/children-protocol.js`, `css/style.css`, `js/sweet-dream-book.js`, пять новых WebP в `assets/staff/documents/protocol-children/`, `docs/AGENT_STATUS.md`), новый `assets/staff/documents/zhir-document-header-bg-v1.png`, материал-маршруты без full navigation и сохранены пользовательские изменения трёх `.DS_Store`; commit / push / deploy не выполнялись |
-| Активная линия | Генерация единого фона header для каталогов/протоколов и ремонт сохранения музыкального плеера при SPA-навигации по материалам; пользовательские Children footage-изменения сохраняются |
-| Последний этап | Сгенерирован и подключён единый STAFF header-фон `zhir-document-header-bg-v1.png` (`2048×768`) для каталогов и открытых документов. Ссылки возврата протоколов, досье и книг переведены на SPA-навигацию; переходы под soundtrack сохранили трек, playing-state и растущую позицию на desktop/mobile representative flow. `node --check`, `git diff --check`, production build (`613` файлов), `verify-public-build` (`614` файлов), source/public parity, Playwright `1280×900`/`390×844`, overflow `0`, console `0/0` пройдены. Children footage-изменения сохранены. |
-| Следующий gate | Пользовательский просмотр текущей интеграции; commit / push / deploy только по прямой просьбе |
+| Обновлено | 2026-09-15 04:04 CDT |
+| Ветка / HEAD | `main` / `51fb157` |
+| Дерево | dirty: сохраняются пользовательские Children footage/book/archive, телетекстовые изменения и `.DS_Store`; локальный макет «Правильного Пути» переразбит на 22 листа с отдельной обложкой и 11 активными кадрами; commit / push / deploy не выполнялись |
+| Активная линия | Пользовательский отбор и замена иллюстраций «Правильного Пути» на компактном 22-листовом макете |
+| Последний этап | Обложка отдельная; главы 1 и 3 уплотнены, развёртка и завершение главы 04 объединены, глава 8 открывается вертикальными медиками и закрывается текстом, глава 9 занимает два листа с вертикальным кадром в начале; горка на листе 21, лист 22 только текст. Все 68 исходных абзацев сохранены. |
+| Следующий gate | Пользовательский отбор/замена активных изображений; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
 ## Write-замок
@@ -26,6 +26,32 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-15: «Правильный Путь» переразбит по новым указаниям пользователя:
+  22 листа включая отдельную обложку, 11 активных изображений из готового
+  набора, все 68 исходных абзацев сохранены. Глава 1 и её продолжение на одном
+  листе; глава 3 — на одном листе; глава 04: развёртка и завершение на одном
+  текстовом листе; глава 8: вертикальные медики в начале, завершение только текст;
+  глава 9 — два листа, один вертикальный кадр в начале. Горка на предпоследнем
+  листе 21, финальный лист 22 — текстовый. Неиспользованные
+  исходники остаются в папке книги для дальнейшего отбора.
+
+- 2026-09-15: по просьбе пользователя готовые кадры для «Правильного Пути»
+  скопированы в `assets/staff/documents/right-path-continuism/` и подключены
+  к 19 explicit-страницам в `content/book/right-path-continuism.js`. Сохранены
+  исходные пропорции: широкие кадры остаются cinematic-вставками, вертикальные
+  — портретными; страница 24 использует POV-передачу книги Елены от Проводницы,
+  страница 26 — готовый кадр пустой горки с тёмно-красным следом. Пользовательские
+  dirty-изменения и `.DS_Store` не менялись. Commit/push/deploy не выполнялись.
+
+- 2026-09-14: `content/archive/layout-manifest-protocol-children.json` снят из
+  `content/book/children-protocol.js` через `scripts/extract-book-layout-manifest.js`;
+  «Правильный Путь» переведён на explicit 26-листовую сборку с теми же ролями,
+  char-budget и 19 пустыми image slots. Проверены manifest contract, сверка
+  текста с `/Users/nateglukhov/md_lore/book-right-path-continuism.md`,
+  `git diff --check`, `node --check`, production build/verify и Playwright
+  desktop/mobile. Copy Desk smoke остаётся заблокированным прежней ошибкой
+  `irina character roster missing`; unrelated dirty files не менялись.
 
 - 2026-09-14: текст «Книги Сладкого Сна» закреплён отдельным корневым
   источником `/Users/nateglukhov/md_lore/book-sweet-dream.md`. В файл вошли
@@ -143,6 +169,22 @@ FREE
 
 ## Проверка ревизии
 
+- Right Path reflow: все 68 абзацев сверены по порядку с прежним источником;
+  23 листа/11 изображений и их пути проверены, `node --check` книги и reader,
+  `git diff --check`, production build (`626` source files) и
+  `verify-public-build` (`627` public files) пройдены. В локальном STAFF-просмотре
+  проверены обложка и листы 17–20, 22–23; визуально подтверждены вертикальные
+  медики, текстовое завершение главы 8, двухлистовая глава 9 и текстовый финал.
+- Right Path image integration: `node --check content/book/right-path-continuism.js`
+  и `node --check js/sweet-dream-book.js`, `git diff --check`, проверка всех
+  19 source/public image paths и фактических dimensions пройдены; production
+  build (`634` source files, `635` public files) и `verify-public-build`
+  успешны.
+- Guest hero rotation: обычный вход выбирает только `wonder` или
+  `video-archives`; явный `?hero=` override сохранён, остальные варианты не
+  входят в rotation. `node --check js/app.js`, `git diff --check` и Playwright
+  проверка `8` reload/override на локальной guest-главной пройдены; overflow
+  отсутствует, console `0/0`.
 - Children footage: `node --check content/book/children-protocol.js`, `node --check
   js/sweet-dream-book.js`, `git diff --check`, production build (`612` файлов) и
   `verify-public-build` (`613` файлов) пройдены; Playwright проверил страницы

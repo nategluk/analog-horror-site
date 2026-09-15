@@ -127,7 +127,7 @@
     const isChapterLead = kind === "chapter-lead";
     const isChapterText = kind === "chapter-text";
     const isChapter = isChapterLead || isChapterText;
-    const isVisual = isCover || isChapterLead || isPlate || (isPage && Boolean(entry.image));
+    const isVisual = Boolean(entry.image) && (isCover || isChapterLead || isPlate || isPage);
     const chapter = Number(entry.chapter);
     const chapterLabel = Number.isInteger(chapter) ? String(chapter).padStart(2, "0") : "";
 
@@ -140,15 +140,18 @@
     root.classList.toggle("is-cover", isCover);
     root.classList.toggle("is-preface", kind === "preface");
     root.classList.toggle("is-page", isPage);
-    root.classList.toggle("is-text-only", isPage && !isVisual);
+    root.classList.toggle("is-text-only", !isVisual && (isCover || isChapter || isPage));
     root.classList.toggle("is-chapter", isChapter);
     root.classList.toggle("is-chapter-lead", isChapterLead);
     root.classList.toggle("is-chapter-text", isChapterText);
     root.classList.toggle("is-visual", isVisual);
     root.classList.toggle("is-wide-visual", isVisual && Number(entry.width) > Number(entry.height));
-    root.classList.toggle("is-copy", kind === "preface" || isChapterText || isPage);
+    root.classList.toggle(
+      "is-copy",
+      kind === "preface" || isChapterText || isPage || (isCover && !isVisual) || (isChapterLead && !isVisual)
+    );
     visual.hidden = !isVisual;
-    copy.hidden = isCover || isPlate;
+    copy.hidden = isPlate || (isCover && isVisual);
 
     if (isVisual) {
       image.src = resolveAsset(entry.image);
@@ -158,7 +161,7 @@
       image.loading = isCover ? "eager" : "lazy";
     }
 
-    if (isCover || isPlate) {
+    if (isPlate) {
       kicker.textContent = "";
       title.hidden = true;
       title.textContent = entry.title || "";
@@ -166,13 +169,15 @@
     } else {
       kicker.textContent =
         entry.kicker ||
-        (kind === "preface"
+        (isCover
+          ? "ОБЛОЖКА"
+          : kind === "preface"
           ? "ПРЕДИСЛОВИЕ РЕДАКЦИИ"
           : isChapterLead && chapterLabel
             ? `ГЛАВА ${chapterLabel}`
             : "");
-      title.hidden = isChapterText || !entry.title;
-      title.textContent = isChapterText || !entry.title ? "" : entry.title;
+      title.hidden = isChapterText || !entry.title || (isCover && isVisual);
+      title.textContent = title.hidden ? "" : entry.title;
       const nodes = normalizeParagraphs(entry.paragraphs).map((paragraph) =>
         renderParagraph(paragraph, entry.emphasisTerms)
       );
@@ -240,18 +245,25 @@
     }
 
     if (root.dataset.bookLayout === "balanced") {
-      // Keep the illustrated opening, then balance whole paragraphs across text leaves.
-      const leadLimit = findPageEnd(entry, firstKind, tokens, 0);
+      // Illustrated chapters reserve their opening visual. Text-only chapters
+      // must balance the whole chapter, or a greedy lead leaves a tiny tail.
+      const hasVisualLead = Boolean(entry.image);
+      const leadLimit = hasVisualLead ? findPageEnd(entry, firstKind, tokens, 0) : 0;
       const isBoundary = (end) => end === tokens.length ||
         tokens[end - 1].paragraphIndex !== tokens[end].paragraphIndex;
       let leadEnd = leadLimit;
-      while (leadEnd > 1 && !isBoundary(leadEnd)) leadEnd -= 1;
-      if (!isBoundary(leadEnd)) leadEnd = leadLimit;
-      const result = [makeChapterPage(entry, firstKind,
-        tokensToParagraphs(tokens, 0, leadEnd), 0, leadEnd)];
+      if (hasVisualLead) {
+        while (leadEnd > 1 && !isBoundary(leadEnd)) leadEnd -= 1;
+        if (!isBoundary(leadEnd)) leadEnd = leadLimit;
+      }
+      const result = hasVisualLead
+        ? [makeChapterPage(entry, firstKind,
+          tokensToParagraphs(tokens, 0, leadEnd), 0, leadEnd)]
+        : [];
       const best = new Map([[tokens.length, { count: 0, cost: 0, pages: [] }]]);
       for (let start = tokens.length - 1; start >= leadEnd; start -= 1) {
-        const limit = findPageEnd(entry, "chapter-text", tokens, start);
+        const kind = !hasVisualLead && start === 0 ? firstKind : "chapter-text";
+        const limit = findPageEnd(entry, kind, tokens, start);
         let choice = null;
         for (let end = start + 1; end <= limit; end += 1) {
           const tail = best.get(end);
@@ -261,7 +273,7 @@
           const cost = tail.cost + length * length + (isBoundary(end) ? 0 : 1000000);
           if (!choice || count < choice.count || (count === choice.count && cost < choice.cost)) {
             choice = { count, cost, pages: [
-              makeChapterPage(entry, "chapter-text", paragraphs, start, end), ...tail.pages
+              makeChapterPage(entry, kind, paragraphs, start, end), ...tail.pages
             ] };
           }
         }
@@ -377,14 +389,19 @@
 
     const { kind, chapterLabel } = applyEntry(entry);
     root.dataset.bookPage = formatPage(currentIndex);
-    pageLabel.textContent = `СТР. ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
+    const isRightPathCover = root.dataset.bookContent === "right-path-continuism" && kind === "cover";
+    pageLabel.textContent = isRightPathCover
+      ? "ОБЛОЖКА"
+      : `СТР. ${formatPage(currentIndex)} / ${String(pageCount).padStart(2, "0")}`;
     progress.max = String(pageCount);
     progress.value = String(currentIndex + 1);
     progress.setAttribute("aria-valuenow", String(currentIndex + 1));
     progress.setAttribute("aria-valuemax", String(pageCount));
     progress.setAttribute(
       "aria-valuetext",
-      chapterLabel
+      isRightPathCover
+        ? "Обложка книги"
+        : chapterLabel
         ? `Страница ${formatPage(currentIndex)} из ${pageCount}, глава ${chapterLabel}`
         : `Страница ${formatPage(currentIndex)} из ${pageCount}`
     );

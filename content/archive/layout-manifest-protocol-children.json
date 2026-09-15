@@ -1,0 +1,1370 @@
+{
+  "schemaVersion": 1,
+  "kind": "book-layout-manifest",
+  "template": "protocol-children",
+  "reader": {
+    "layout": "explicit",
+    "pageCount": 26,
+    "pageNumberField": "page"
+  },
+  "source": {
+    "content": "content/book/children-protocol.js",
+    "global": "DZ_CHILDREN_PROTOCOL"
+  },
+  "measurement": {
+    "textUnit": "Unicode code points",
+    "includesSpaces": true,
+    "fields": [
+      "kicker",
+      "title",
+      "warning",
+      "paragraphs"
+    ]
+  },
+  "pages": [
+    {
+      "page": 1,
+      "role": "intro",
+      "layout": "portrait-image-with-copy",
+      "kicker": "ПРОТОКОЛ CHILDREN",
+      "title": "Памятка для тех, кто забыл",
+      "warning": null,
+      "text": {
+        "kickerChars": 17,
+        "titleChars": 26,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Маленькое пособие о детстве и его сохранности.",
+            "chars": 46
+          },
+          {
+            "text": "Читайте в удобном темпе.",
+            "chars": 24
+          },
+          {
+            "text": "Страницу, которая вызвала затруднение, можно пропустить вместе с сотрудником.",
+            "chars": 77
+          }
+        ],
+        "paragraphChars": [
+          46,
+          24,
+          77
+        ],
+        "totalParagraphChars": 147
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-01-intro.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 2,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 01",
+      "title": "ВЫ ТОЖЕ БЫЛИ РЕБЁНКОМ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 21,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Возможно, сейчас это трудно представить.",
+            "chars": 40
+          },
+          {
+            "text": "Когда-то ваши ноги не доставали до пола. Чтобы увидеть, что лежит на столе, вы вставали на носки. Варежки соединялись длинной резинкой, чтобы одна никогда не оставалась без другой.",
+            "chars": 180
+          },
+          {
+            "text": "У вас была своя чашка.",
+            "chars": 22
+          },
+          {
+            "text": "Вы узнавали её сразу, хотя она почти не отличалась от остальных.",
+            "chars": 64
+          },
+          {
+            "text": "Был человек, чьи шаги вы слышали раньше других. Иногда он задерживался, но вы ещё не умели смотреть на часы и просто продолжали ждать.",
+            "chars": 134
+          },
+          {
+            "text": "После Терапии такие сведения могут восприниматься как рассказ о ком-то знакомом. Это не повод для беспокойства. Не каждому воспоминанию необходимо возвращаться целиком.",
+            "chars": 168
+          }
+        ],
+        "paragraphChars": [
+          40,
+          180,
+          22,
+          64,
+          134,
+          168
+        ],
+        "totalParagraphChars": 608
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-02-childhood.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 3,
+      "role": "chapter-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ РАЗДЕЛА 01",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Посмотрите на свои руки. Когда-то их обеих хватало, чтобы удержать одно яблоко.",
+            "chars": 79
+          },
+          {
+            "text": "Если представить это не удалось, переходите к следующей странице.",
+            "chars": 65
+          },
+          {
+            "text": "Ваше детство состоялось. Вам необязательно подтверждать его самостоятельно.",
+            "chars": 75
+          }
+        ],
+        "paragraphChars": [
+          79,
+          65,
+          75
+        ],
+        "totalParagraphChars": 219
+      },
+      "image": null
+    },
+    {
+      "page": 4,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 02",
+      "title": "У КАЖДОГО ДЕТСТВА СВОЁ НАЗВАНИЕ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 31,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Вы могли заметить, что одного человека в разных учреждениях называют по-разному.",
+            "chars": 80
+          },
+          {
+            "text": "Это делается для удобства заботы.",
+            "chars": 33
+          },
+          {
+            "text": "Возраст сообщает, сколько лет прошло со дня рождения. Категория помогает понять, какое сопровождение подходит человеку сейчас. Назначение уточняет, где его ждут.",
+            "chars": 161
+          },
+          {
+            "text": "«Взрослый ребёнок» — название для тех, кто достиг совершеннолетия, миновав детскую экстракцию и сохранив связь с детством.",
+            "chars": 122
+          },
+          {
+            "text": "«Вечный ребёнок» — обозначение устойчивых особенностей развития и эмоционального отклика, которые могут сохраняться при разном паспортном возрасте.",
+            "chars": 147
+          }
+        ],
+        "paragraphChars": [
+          80,
+          33,
+          161,
+          122,
+          147
+        ],
+        "totalParagraphChars": 543
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-03-categories.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 5,
+      "role": "chapter-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ РАЗДЕЛА 02",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Эти сведения учитываются отдельно и иногда могут относиться к одному человеку.",
+            "chars": 78
+          },
+          {
+            "text": "Слова «Сахарный Агнец» относятся к области духовного попечения. Для них предусмотрен вкладной лист.",
+            "chars": 99
+          },
+          {
+            "text": "Не старайтесь запомнить всё сразу. Достаточно научиться находить нужную страницу.",
+            "chars": 81
+          }
+        ],
+        "paragraphChars": [
+          78,
+          99,
+          81
+        ],
+        "totalParagraphChars": 258
+      },
+      "image": null
+    },
+    {
+      "page": 6,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 03",
+      "title": "НАШИ МАЛОГАБАРИТНЫЕ ГОСТИ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 25,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "При встрече мы говорим «дети» или «малогабаритные гости».",
+            "chars": 57
+          },
+          {
+            "text": "В списках сопровождения используется слово «контингент». В производственных документах вы можете встретить обозначение «сырьё».",
+            "chars": 127
+          },
+          {
+            "text": "Смена названия связана с этапом обслуживания и не требует повторного знакомства.",
+            "chars": 80
+          },
+          {
+            "text": "Дети умеют заранее радоваться празднику. Доверять обещанию. Беречь предмет, стоимость которого взрослому кажется незначительной. Эти качества составляют особую ценность детства и нуждаются в внимательном обращении.",
+            "chars": 214
+          }
+        ],
+        "paragraphChars": [
+          57,
+          127,
+          80,
+          214
+        ],
+        "totalParagraphChars": 478
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-04-guests.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 7,
+      "role": "chapter-close",
+      "layout": "portrait-image-with-copy",
+      "kicker": "ФИНАЛ РАЗДЕЛА 03",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Программа экстракции позволяет использовать этот потенциал при изготовлении Формулы 312, помогающей взрослым вновь приблизиться к дорогим переживаниям.",
+            "chars": 151
+          },
+          {
+            "text": "Так забота о маленьком становится частью заботы о многих.",
+            "chars": 57
+          },
+          {
+            "text": "Ребёнку достаточно объяснять ближайшее действие: где подождать, кому подать руку, на какой стул сесть. Полный маршрут сопровождающий держит при себе.",
+            "chars": 149
+          },
+          {
+            "text": "Для спокойствия: ласковое обращение сохраняется на всех этапах.",
+            "chars": 63
+          }
+        ],
+        "paragraphChars": [
+          151,
+          57,
+          149,
+          63
+        ],
+        "totalParagraphChars": 420
+      },
+      "image": {
+        "path": "assets/staff/documents/sweet-dream-book/sweet-dream-08.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 8,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 04",
+      "title": "ЕЩЁ НЕМНОГО СЛАДКОГО",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 20,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Иногда результаты замеров показывают, что ребёнок пока не достиг Стандарта 312.",
+            "chars": 79
+          },
+          {
+            "text": "Это поправимо.",
+            "chars": 14
+          },
+          {
+            "text": "Стандарт обозначает целевой выход чистой эссенции — 312 граммов. Он не равен весу самого ребёнка: вес тела и ожидаемый результат учитываются отдельно.",
+            "chars": 150
+          },
+          {
+            "text": "При недостаточном потенциале назначается Докорм. На Фабрике Сладостей «Пухлый Малыш» помогают увеличить жировую массу и поддержать необходимый уровень счастья.",
+            "chars": 159
+          },
+          {
+            "text": "Если ребёнок сообщает, что уже наелся, поблагодарите его за обратную связь. Ощущение сытости важно для наблюдения, а готовность к следующему этапу уточняется специалистом.",
+            "chars": 171
+          }
+        ],
+        "paragraphChars": [
+          79,
+          14,
+          150,
+          159,
+          171
+        ],
+        "totalParagraphChars": 573
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-05-standard.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 9,
+      "role": "chapter-close",
+      "layout": "landscape-image-with-copy",
+      "kicker": "ФИНАЛ РАЗДЕЛА 04",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Не называйте заранее последнюю ложку. Пусть завершение заботы станет приятной новостью.",
+            "chars": 87
+          },
+          {
+            "text": "Запомните: «контингент с недовесом» — текущая оценка готовности. Она может быть пересмотрена.",
+            "chars": 93
+          }
+        ],
+        "paragraphChars": [
+          87,
+          93
+        ],
+        "totalParagraphChars": 180
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-09-factory.webp",
+        "orientation": "landscape",
+        "declaredDimensions": {
+          "width": 1672,
+          "height": 941
+        },
+        "assetDimensions": {
+          "width": 1664,
+          "height": 936
+        },
+        "targetDimensions": {
+          "width": 1664,
+          "height": 936
+        }
+      }
+    },
+    {
+      "page": 10,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 05",
+      "title": "ДЕТСТВО, КОТОРОЕ ЗАДЕРЖАЛОСЬ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 28,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Вечный ребёнок.",
+            "chars": 15
+          },
+          {
+            "text": "У некоторых людей отдельные стороны развития и эмоциональной биохимии приобретают особую устойчивость.",
+            "chars": 102
+          },
+          {
+            "text": "Этому могут предшествовать длительное ожидание, изоляция, трудные переживания, особенности состояния или проведённые процедуры. Иногда причина остаётся на уточнении.",
+            "chars": 165
+          },
+          {
+            "text": "Паспортный возраст сам по себе не определяет эту категорию.",
+            "chars": 59
+          },
+          {
+            "text": "У несовершеннолетнего Вечного ребёнка экстракция не обеспечивает стабильной Формулы 312. У взрослого привычный порядок Терапии может не дать ожидаемого эмоционального выравнивания.",
+            "chars": 180
+          }
+        ],
+        "paragraphChars": [
+          15,
+          102,
+          165,
+          59,
+          180
+        ],
+        "totalParagraphChars": 521
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-06-eternal.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 11,
+      "role": "chapter-close",
+      "layout": "landscape-image-with-copy",
+      "kicker": "ФИНАЛ РАЗДЕЛА 05",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "В таком случае подбирается другой способ участия.",
+            "chars": 49
+          },
+          {
+            "text": "Вечный ребёнок может стать куратором, встречать новых гостей и помогать им освоиться. Личный опыт ожидания нередко позволяет особенно чутко объяснить, где следует оставаться до прихода сопровождающего.",
+            "chars": 201
+          },
+          {
+            "text": "Для ясности: название не устанавливает срок жизни или особенности физического роста. Способности, решения и потребности человека рассматриваются отдельно.",
+            "chars": 154
+          }
+        ],
+        "paragraphChars": [
+          49,
+          201,
+          154
+        ],
+        "totalParagraphChars": 404
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-11-irina-park.webp",
+        "orientation": "landscape",
+        "declaredDimensions": {
+          "width": 1672,
+          "height": 941
+        },
+        "assetDimensions": {
+          "width": 1664,
+          "height": 936
+        },
+        "targetDimensions": {
+          "width": 1664,
+          "height": 936
+        }
+      }
+    },
+    {
+      "page": 12,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 06",
+      "title": "ДЕТСТВО, СОХРАНЁННОЕ ДО СОВЕРШЕННОЛЕТИЯ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 39,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Взрослый ребёнок.",
+            "chars": 17
+          },
+          {
+            "text": "В открытых документах — Бывший ребёнок.",
+            "chars": 39
+          },
+          {
+            "text": "Так называют человека, который достиг восемнадцатилетия, миновав детскую экстракцию и сохранив связь со своим детством.",
+            "chars": 119
+          },
+          {
+            "text": "Он может быть необычно привязан к старой передаче, знакомому маршруту или вещи, давно вышедшей из употребления. Отдельная привычка ещё не определяет категорию: учитывается история человека в целом.",
+            "chars": 197
+          },
+          {
+            "text": "Совершеннолетие открывает возможность взрослого оформления.",
+            "chars": 59
+          },
+          {
+            "text": "Теперь некоторые документы можно подписывать самостоятельно. Сотрудник подскажет, где поставить подпись и к какому месту назначения пройти после завершения формальностей.",
+            "chars": 170
+          }
+        ],
+        "paragraphChars": [
+          17,
+          39,
+          119,
+          197,
+          59,
+          170
+        ],
+        "totalParagraphChars": 601
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-07-adult.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 13,
+      "role": "chapter-close",
+      "layout": "landscape-image-with-copy",
+      "kicker": "ФИНАЛ РАЗДЕЛА 06",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Сохранённая связь с детством не означает устойчивости к эйфорическому эффекту Формулы 312. Возможность вновь пережить дорогое может стать особенно значимой и сопровождаться устойчивой потребностью в повторном приёме.",
+            "chars": 216
+          },
+          {
+            "text": "Для ясности: взрослый статус, личные воспоминания и реакция на Формулу учитываются отдельно.",
+            "chars": 92
+          }
+        ],
+        "paragraphChars": [
+          216,
+          92
+        ],
+        "totalParagraphChars": 308
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-13-animator-queue.webp",
+        "orientation": "landscape",
+        "declaredDimensions": {
+          "width": 1672,
+          "height": 941
+        },
+        "assetDimensions": {
+          "width": 1664,
+          "height": 936
+        },
+        "targetDimensions": {
+          "width": 1664,
+          "height": 936
+        }
+      }
+    },
+    {
+      "page": 14,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 07",
+      "title": "ТРИ МАЛЕНЬКИХ УТОЧНЕНИЯ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 23,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Чтобы сопровождение было точным, ответьте на каждый вопрос отдельно.",
+            "chars": 68
+          },
+          {
+            "text": "Сохраняются ли естественные сновидения?",
+            "chars": 39
+          },
+          {
+            "text": "Имеются в виду сны, возникающие без помощи Формулы 312.",
+            "chars": 55
+          },
+          {
+            "text": "Обеспечивает ли экстракция полноценный результат?",
+            "chars": 49
+          },
+          {
+            "text": "Этот показатель устанавливается независимо от содержания и наличия снов.",
+            "chars": 72
+          },
+          {
+            "text": "Наблюдается ли эйфорический эффект Формулы 312?",
+            "chars": 47
+          },
+          {
+            "text": "Особенности экстракции не позволяют заранее заполнить эту графу.",
+            "chars": 64
+          },
+          {
+            "text": "При отсутствии эйфорического эффекта средства защиты продолжают использоваться в обычном порядке.",
+            "chars": 97
+          }
+        ],
+        "paragraphChars": [
+          68,
+          39,
+          55,
+          49,
+          72,
+          47,
+          64,
+          97
+        ],
+        "totalParagraphChars": 491
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-08-questions.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 15,
+      "role": "chapter-close",
+      "layout": "landscape-image-with-copy",
+      "kicker": "ФИНАЛ РАЗДЕЛА 07",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Состав среды может требовать предосторожностей независимо от субъективного самочувствия.",
+            "chars": 88
+          },
+          {
+            "text": "Не предлагайте человеку снять противогаз, чтобы вам было легче оценить выражение его лица.",
+            "chars": 90
+          },
+          {
+            "text": "«Не установлено» — полноценный ответ. Он оставляет место для внимательного наблюдения.",
+            "chars": 86
+          }
+        ],
+        "paragraphChars": [
+          88,
+          90,
+          86
+        ],
+        "totalParagraphChars": 264
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-15-gas-mask.webp",
+        "orientation": "landscape",
+        "declaredDimensions": {
+          "width": 1672,
+          "height": 941
+        },
+        "assetDimensions": {
+          "width": 1664,
+          "height": 936
+        },
+        "targetDimensions": {
+          "width": 1664,
+          "height": 936
+        }
+      }
+    },
+    {
+      "page": 16,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 08",
+      "title": "ДЕТСТВО С ПОЛНЫМ СОПРОВОЖДЕНИЕМ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 31,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "В документах — Принудительный ребёнок.",
+            "chars": 38
+          },
+          {
+            "text": "Слово «принудительный» указывает на порядок назначения программы: оформление не зависит от готовности человека согласиться с ним в настоящий момент.",
+            "chars": 148
+          },
+          {
+            "text": "При возрастной коррекции повседневные решения постепенно передаются опекунам. Режим питания, одежда, перемещения и общение получают необходимое сопровождение.",
+            "chars": 158
+          },
+          {
+            "text": "В отдельных случаях проводится завершающая процедура согласования. После неё отсутствие самостоятельных возражений и полная опека регистрируются как успешное возвращение в детство.",
+            "chars": 180
+          }
+        ],
+        "paragraphChars": [
+          38,
+          148,
+          158,
+          180
+        ],
+        "totalParagraphChars": 524
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-09-accompaniment.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 17,
+      "role": "chapter-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ РАЗДЕЛА 08",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Дата рождения сохраняется. Меняется объём ответственности, которую человеку требуется нести лично.",
+            "chars": 98
+          },
+          {
+            "text": "Оценка результата проводится по наблюдаемому поведению. Личные переживания не являются обязательным полем итогового бланка.",
+            "chars": 123
+          },
+          {
+            "text": "Для ясности: это административный статус. Он не равнозначен Вечному или Взрослому ребёнку и не определяется одной лишь особенностью тела.",
+            "chars": 137
+          }
+        ],
+        "paragraphChars": [
+          98,
+          123,
+          137
+        ],
+        "totalParagraphChars": 358
+      },
+      "image": null
+    },
+    {
+      "page": 18,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 09",
+      "title": "КЛАСС ПРОДОЛЖАЕТ ЗАНИМАТЬСЯ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 27,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Контингент условного присутствия.",
+            "chars": 33
+          },
+          {
+            "text": "После длительного перерыва школьная обстановка может показаться вам непривычно спокойной.",
+            "chars": 89
+          },
+          {
+            "text": "Ученики не отвлекаются на звонок. Не меняются записками. Сохраняют выбранную позу в течение всего урока.",
+            "chars": 104
+          },
+          {
+            "text": "У каждого есть имя, медицинская карта и личное дело.",
+            "chars": 52
+          },
+          {
+            "text": "В рамках данной памятки уточняем: речь идёт о манекенах, оформленных как ученики. В повседневной школьной речи используются имена и принятое обозначение контингента. Слова «замена» и «пустой класс» не помогают поддерживать учебную обстановку.",
+            "chars": 242
+          }
+        ],
+        "paragraphChars": [
+          33,
+          89,
+          104,
+          52,
+          242
+        ],
+        "totalParagraphChars": 520
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-10-class.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 19,
+      "role": "chapter-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ РАЗДЕЛА 09",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Уроки, проверка заданий, обеды и праздники продолжаются по расписанию. Неподвижность сопровождается соответствующим пояснением в документах.",
+            "chars": 140
+          },
+          {
+            "text": "При посещении школы дождитесь указания, прежде чем занимать парту. Запись в журнале может определять ваш учебный статус независимо от паспортного возраста.",
+            "chars": 155
+          },
+          {
+            "text": "Если имя уже внесено, дальнейшие уточнения проводятся через персонал. Одного сообщения о совершеннолетии может быть недостаточно.",
+            "chars": 129
+          },
+          {
+            "text": "Для удобства: документация позволяет продолжать заботу и в отсутствие прежнего состава учащихся.",
+            "chars": 96
+          }
+        ],
+        "paragraphChars": [
+          140,
+          155,
+          129,
+          96
+        ],
+        "totalParagraphChars": 520
+      },
+      "image": null
+    },
+    {
+      "page": 20,
+      "role": "chapter-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "РАЗДЕЛ 10",
+      "title": "ЖИВОЕ НАПОМИНАНИЕ",
+      "warning": null,
+      "text": {
+        "kickerChars": 9,
+        "titleChars": 17,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Когда детей стало меньше в повседневной жизни, взрослые начали особенно ценить знакомые очертания общего снимка.",
+            "chars": 112
+          },
+          {
+            "text": "Рядом с высокой фигурой снова появлялась маленькая. Хотелось предложить угощение, подать пальто, оставить лучшее место за столом.",
+            "chars": 129
+          },
+          {
+            "text": "С этим связано выражение «живой оммаж ребёнку», применяемое к общественной роли людей с карликовостью.",
+            "chars": 102
+          },
+          {
+            "text": "Оно обозначает переживание окружающих, а не возраст или внутреннее состояние самого человека.",
+            "chars": 93
+          },
+          {
+            "text": "Некоторые люди с карликовостью выступают почётными гостями на праздниках, работают через агентства и получают вознаграждение за присутствие. Другие выбирают иные занятия.",
+            "chars": 170
+          }
+        ],
+        "paragraphChars": [
+          112,
+          129,
+          102,
+          93,
+          170
+        ],
+        "totalParagraphChars": 606
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-11-ommazh-uncanny.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 21,
+      "role": "chapter-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ РАЗДЕЛА 10",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 16,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "У приглашённого взрослого есть собственная профессия, характер и распорядок дня. Он может отказаться от угощения, обсудить оплату или уйти в согласованное время. Эти действия не следует принимать на свой счёт.",
+            "chars": 209
+          },
+          {
+            "text": "Уточните условия договора. Прикосновения, уменьшительные имена и праздничное переодевание могут не входить в программу.",
+            "chars": 119
+          },
+          {
+            "text": "Помните: небольшой рост сам по себе не означает детскую психику, особую пригодность к экстракции, устойчивость к Терапии или принадлежность к другим категориям этой памятки.",
+            "chars": 173
+          },
+          {
+            "text": "Почётному гостю будет приятнее, если вы запомните его имя.",
+            "chars": 58
+          }
+        ],
+        "paragraphChars": [
+          209,
+          119,
+          173,
+          58
+        ],
+        "totalParagraphChars": 559
+      },
+      "image": null
+    },
+    {
+      "page": 22,
+      "role": "insert-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "ВКЛАДНОЙ ЛИСТ",
+      "title": "ОСОБОЕ УПОВАНИЕ",
+      "warning": null,
+      "text": {
+        "kickerChars": 13,
+        "titleChars": 15,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Сахарный Агнец.",
+            "chars": 15
+          },
+          {
+            "text": "Другое название — Дитя-Эталон.",
+            "chars": 30
+          },
+          {
+            "text": "Адепты Вечного Детства верят в ребёнка, чей потенциал многократно превосходит Стандарт 312.",
+            "chars": 91
+          },
+          {
+            "text": "Согласно пророчеству, его Вознесение через экстракцию вызовет Большой Взрыв Ностальгии и вернёт человечеству сны.",
+            "chars": 113
+          },
+          {
+            "text": "В семьях, разделяющих эту веру, признание может сопровождаться особенно внимательным питанием, ограничением внешних контактов и подготовкой к будущему предназначению.",
+            "chars": 166
+          },
+          {
+            "text": "Любовь близких придаёт такому признанию большое значение. При этом оно не заменяет подтверждения самой категории.",
+            "chars": 113
+          }
+        ],
+        "paragraphChars": [
+          15,
+          30,
+          91,
+          113,
+          166,
+          113
+        ],
+        "totalParagraphChars": 528
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-12-lamb.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 23,
+      "role": "insert-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛ ВКЛАДНОГО ЛИСТА",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 21,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Существует также предположение, что особенности некоторых детей могут помочь в восстановлении естественного сна. В рамках этой версии особое значение придаётся сохранению и изучению живого носителя.",
+            "chars": 198
+          },
+          {
+            "text": "Предположение остаётся на уточнении. Его достоверность, осведомлённость Администрации и происхождение пророчества не установлены.",
+            "chars": 129
+          },
+          {
+            "text": "Если рекомендации о сохранении и подготовке к Вознесению поступили одновременно, не выбирайте маршрут самостоятельно.",
+            "chars": 117
+          },
+          {
+            "text": "Сохраните оба направления для сверки.",
+            "chars": 37
+          }
+        ],
+        "paragraphChars": [
+          198,
+          129,
+          117,
+          37
+        ],
+        "totalParagraphChars": 481
+      },
+      "image": null
+    },
+    {
+      "page": 24,
+      "role": "final-open",
+      "layout": "portrait-image-with-copy",
+      "kicker": "ПОСЛЕДНЯЯ СТРАНИЦА",
+      "title": "ТЕПЕРЬ ВАМ БУДЕТ ЛЕГЧЕ",
+      "warning": null,
+      "text": {
+        "kickerChars": 18,
+        "titleChars": 22,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Вы познакомились с основными обозначениями.",
+            "chars": 43
+          },
+          {
+            "text": "Теперь вы знаете, что внешний вид не заменяет сведений, возраст не заполняет все графы, а несколько названий могут относиться к одному человеку.",
+            "chars": 144
+          },
+          {
+            "text": "При встрече с ребёнком начните с простого.",
+            "chars": 42
+          },
+          {
+            "text": "Узнайте, как к нему обращаются. Уточните, кто его сопровождает и где его ждут.",
+            "chars": 78
+          },
+          {
+            "text": "Если он рассказывает сон, дайте ему закончить.",
+            "chars": 46
+          },
+          {
+            "text": "Если ждёт маму, спросите, давно ли она отошла.",
+            "chars": 46
+          }
+        ],
+        "paragraphChars": [
+          43,
+          144,
+          42,
+          78,
+          46,
+          46
+        ],
+        "totalParagraphChars": 399
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-13-final.webp",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    },
+    {
+      "page": 25,
+      "role": "final-close",
+      "layout": "text-only",
+      "kicker": "ФИНАЛЬНАЯ ИНСТРУКЦИЯ",
+      "title": null,
+      "warning": null,
+      "text": {
+        "kickerChars": 20,
+        "titleChars": 0,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Если просит пойти с вами, пригласите сотрудника, который поможет правильно оформить перемещение.",
+            "chars": 96
+          },
+          {
+            "text": "Не обещайте того, что находится вне ваших полномочий. Спокойное присутствие тоже является помощью.",
+            "chars": 98
+          },
+          {
+            "text": "А теперь вернитесь к фотографии на первой странице.",
+            "chars": 51
+          },
+          {
+            "text": "Попробуйте вспомнить имя ребёнка.",
+            "chars": 33
+          },
+          {
+            "text": "Если имя пока не возвращается, укажите подходящую категорию.",
+            "chars": 60
+          },
+          {
+            "text": "Спасибо. Остальное мы поможем оформить.",
+            "chars": 39
+          }
+        ],
+        "paragraphChars": [
+          96,
+          98,
+          51,
+          33,
+          60,
+          39
+        ],
+        "totalParagraphChars": 377
+      },
+      "image": null
+    },
+    {
+      "page": 26,
+      "role": "appendix",
+      "layout": "portrait-image-with-copy",
+      "kicker": "ПРИЛОЖЕНИЕ // СХЕМА СВЕРКИ",
+      "title": "НЕ ПУТАЙТЕ ПОРЯДОК",
+      "warning": null,
+      "text": {
+        "kickerChars": 26,
+        "titleChars": 18,
+        "warningChars": 0,
+        "paragraphs": [
+          {
+            "text": "Паспортный возраст, категория и назначение проверяются отдельно.",
+            "chars": 64
+          },
+          {
+            "text": "«Взрослый ребёнок», «Вечный ребёнок» и «Принудительный ребёнок» не являются взаимозаменяемыми обозначениями.",
+            "chars": 108
+          },
+          {
+            "text": "«Сахарный Агнец» отмечается отдельным вкладным листом.",
+            "chars": 54
+          },
+          {
+            "text": "Схема не заменяет подтверждения самой категории.",
+            "chars": 48
+          }
+        ],
+        "paragraphChars": [
+          64,
+          108,
+          54,
+          48
+        ],
+        "totalParagraphChars": 274
+      },
+      "image": {
+        "path": "assets/staff/documents/protocol-children/protocol-children-14-infographic.png",
+        "orientation": "portrait",
+        "declaredDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "assetDimensions": {
+          "width": 1024,
+          "height": 1536
+        },
+        "targetDimensions": {
+          "width": 1024,
+          "height": 1536
+        }
+      }
+    }
+  ]
+}

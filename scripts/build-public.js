@@ -46,6 +46,7 @@ const SITE_PAGES = [
   "documents/protocol-kidults.html",
   "documents/protocol-children.html",
   "documents/book-sweet-dream.html",
+  "documents/book-right-path-continuism.html",
   "locations/detskiy-zhir-mall.html",
   "locations/dolphin-pool.html",
   "locations/illusion-cinema.html",

@@ -363,11 +363,15 @@ if (archive.nodes.length !== RECORDS.length) {
 }
 const kidults = archive.nodes.find((node) => node.id === "protocol-kidults");
 const dream = archive.nodes.find((node) => node.id === "book-sweet-dream");
+const rightPath = archive.nodes.find((node) => node.id === "book-right-path-continuism");
 if (!kidults || kidults.layout !== "locked" || kidults.readerPages !== 12) {
   throw new Error("kidults should be layout-locked to 12 reader pages");
 }
 if (!dream || dream.layout !== "locked" || dream.readerPages !== 22) {
   throw new Error("sweet-dream book should be layout-locked to 22 reader pages");
+}
+if (!rightPath || rightPath.layout !== "locked" || rightPath.readerPages !== 26) {
+  throw new Error("right-path book should be layout-locked to 26 reader pages");
 }
 if (!archive.lines.some((line) => line.nodeId === "dossier-irina" && line.kind === "dialogue")) {
   throw new Error("dossier-irina body copy was not indexed");

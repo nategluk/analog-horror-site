@@ -106,6 +106,16 @@ const RECORDS = [
     readerPages: 22,
     globalName: "DZ_SWEET_DREAM_BOOK",
   },
+  {
+    id: "book-right-path-continuism",
+    kind: "book",
+    title: "ПРАВИЛЬНЫЙ ПУТЬ: КОНТИНУИЗМ",
+    file: "documents/book-right-path-continuism.html",
+    content: "content/book/right-path-continuism.js",
+    layout: "locked",
+    readerPages: 26,
+    globalName: "DZ_SWEET_DREAM_BOOK",
+  },
 ];
 
 const KIND_GROUP = {

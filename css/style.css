@@ -8751,6 +8751,11 @@ body.staff-mode .broadcast-shell-page .cctv-teletext {
   position: absolute;
   inset: 0;
   z-index: 3;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  gap: clamp(0.35rem, 1.2vw, 0.7rem);
+  box-sizing: border-box;
+  overflow: hidden;
   padding: clamp(0.8rem, 3vw, 2.2rem);
   color: #f4f1df;
   background: #02050d;
@@ -8780,7 +8785,7 @@ body.staff-mode .broadcast-shell-page .cctv-teletext__rule {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   height: clamp(0.4rem, 1.5vw, 0.75rem);
-  margin: clamp(0.5rem, 2vw, 1rem) 0;
+  margin: 0;
 }
 
 body.staff-mode .broadcast-shell-page .cctv-teletext__rule span:nth-child(1) {
@@ -8802,6 +8807,8 @@ body.staff-mode .broadcast-shell-page .cctv-teletext__rule span:nth-child(4) {
 body.staff-mode .broadcast-shell-page .cctv-teletext__section {
   display: inline-block;
   margin: 0;
+  max-width: 100%;
+  overflow: hidden;
   padding: 0.15rem 0.35rem;
   color: #04070d;
   background: var(--broadcast-cyan);
@@ -8811,10 +8818,16 @@ body.staff-mode .broadcast-shell-page .cctv-teletext__section {
 }
 
 body.staff-mode .broadcast-shell-page .cctv-teletext__message {
-  max-width: 21ch;
-  margin: clamp(1.4rem, 7vw, 4rem) auto 0;
+  display: grid;
+  align-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  overflow: hidden;
   color: #f5f1df;
-  font-size: clamp(1rem, 4.6vw, 2.65rem);
+  font-size: clamp(0.72rem, 3.2vw, 1.3rem);
+  font-size: clamp(0.72rem, 4.6cqw, 1.3rem);
   font-weight: 900;
   line-height: 1.12;
   letter-spacing: 0.035em;
@@ -8823,10 +8836,7 @@ body.staff-mode .broadcast-shell-page .cctv-teletext__message {
 }
 
 body.staff-mode .broadcast-shell-page .cctv-teletext__footer {
-  position: absolute;
-  right: clamp(0.8rem, 3vw, 2.2rem);
-  bottom: clamp(0.7rem, 2.4vw, 1.7rem);
-  left: clamp(0.8rem, 3vw, 2.2rem);
+  position: static;
   margin: 0;
   padding-top: 0.4rem;
   border-top: 2px solid var(--broadcast-green);
@@ -14173,6 +14183,228 @@ body.staff-mode .sweet-dream-book[data-book-content="children-protocol"].is-wide
   }
 }
 
+/* RIGHT PATH uses explicit pages, with selected images attached to their records. */
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__leaf {
+  grid-template-columns: minmax(12rem, 0.62fr) minmax(0, 1.38fr);
+  grid-template-rows: auto;
+  align-items: start;
+  width: min(100%, 58rem);
+  height: auto;
+  min-height: 32rem;
+  max-height: none;
+  padding: clamp(0.75rem, 2vw, 1.1rem);
+  overflow: visible;
+  border: 1px solid #aa8e92;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.24), transparent 26%),
+    repeating-linear-gradient(0deg, rgba(75, 54, 47, 0.035) 0 1px, transparent 1px 27px),
+    #eee1cf;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual,
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual-frame {
+  width: min(100%, 19rem);
+  margin: 0 auto;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy {
+  align-self: stretch;
+  padding: 0.15rem 0 0 clamp(1rem, 3vw, 1.6rem);
+  border-inline-start: 1px solid var(--sweet-rule);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy h3 {
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.3rem, 2.4vw, 1.95rem);
+  line-height: 1.08;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy [data-book-text] {
+  font-size: clamp(0.94rem, 1.2vw, 1.03rem);
+  line-height: 1.52;
+  text-wrap: pretty;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy [data-book-text] p {
+  margin-bottom: 0.72rem;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-visual .sweet-dream-book__leaf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 42rem);
+  height: clamp(32rem, 68vh, 44rem);
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-visual .sweet-dream-book__visual,
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-visual .sweet-dream-book__visual-frame {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-visual .sweet-dream-book__visual img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__leaf {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__visual,
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__visual-frame {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__visual-frame {
+  aspect-ratio: 16 / 9;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__visual img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-wide-visual .sweet-dream-book__copy {
+  padding: 0.95rem 0 0;
+  border-inline-start: 0;
+  border-top: 1px solid var(--sweet-rule);
+}
+
+/* RIGHT PATH text-only pages still share the same reader contract when a slot
+   is intentionally left without an image. */
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__leaf {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__visual {
+  display: none;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy {
+  display: flex;
+  width: min(100%, 44rem);
+  min-height: 100%;
+  margin-inline: auto;
+  padding: clamp(1.1rem, 3vw, 2rem);
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid var(--sweet-rule);
+  background:
+    repeating-linear-gradient(0deg, rgba(80, 39, 39, 0.04) 0 1px, transparent 1px 22px),
+    rgba(238, 225, 207, 0.58);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy [data-book-text] {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy [data-book-text] p {
+  margin-bottom: 0.7rem;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-text-only .sweet-dream-book__copy {
+  justify-content: center;
+  text-align: center;
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-text-only .sweet-dream-book__copy h3 {
+  font-size: clamp(1.7rem, 5vw, 2.7rem);
+}
+
+body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-text-only .sweet-dream-book__copy [data-book-text] {
+  width: min(100%, 24rem);
+  margin-inline: auto;
+}
+
+@media (max-width: 700px) {
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__leaf {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: 100%;
+    min-height: 0;
+    padding: 0.72rem;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual,
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual-frame {
+    width: min(100%, 18rem);
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__visual img {
+    margin-inline: auto;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy {
+    padding: 0.9rem 0 0;
+    border-inline-start: 0;
+    border-top: 1px solid var(--sweet-rule);
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy h3 {
+    font-size: 1.35rem;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-visual .sweet-dream-book__copy [data-book-text] {
+    font-size: 0.98rem;
+    line-height: 1.58;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__leaf {
+    grid-template-rows: 1fr;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy {
+    width: 100%;
+    min-height: 0;
+    padding: clamp(0.85rem, 4vw, 1.2rem);
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy [data-book-text] {
+    font-size: clamp(0.86rem, 3.6vw, 0.95rem);
+    line-height: 1.42;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-text-only .sweet-dream-book__copy [data-book-text] p {
+    margin-bottom: 0.48rem;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-text-only .sweet-dream-book__copy {
+    padding: 1rem 0.8rem;
+  }
+
+  body.staff-mode .sweet-dream-book[data-book-content="right-path-continuism"].is-cover.is-text-only .sweet-dream-book__swipe-guide {
+    top: 0.8rem;
+    transform: none;
+  }
+}
+
 /* ─── STAFF HOME: operator desk ─── */
 body.staff-mode .home-broadcast-page .staff-home-dashboard {
   display: grid;
@@ -14594,6 +14826,7 @@ body.staff-mode .staff-tv-room-page .cctv-screen {
   left: 0;
   width: 100%;
   height: 100%;
+  container-type: inline-size;
   border-radius: 7% / 10%;
 }
 
@@ -16014,4 +16247,37 @@ body.staff-mode .catalog-broadcast-page .staff-material-catalog .archive-record-
     font-size: 0.98rem;
     line-height: 1.55;
   }
+}
+
+/* A typographic shelf card keeps the new book honest while its illustrations
+   are still pending. */
+body.staff-mode .catalog-broadcast-page .archive-record--text-preview .archive-record__preview-frame,
+body.staff-mode .archive-broadcast-page .archive-record--text-preview .archive-record__preview-frame {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.38rem;
+  padding: 0.8rem;
+  color: #f0d58f;
+  background:
+    linear-gradient(145deg, rgba(241, 201, 111, 0.2), transparent 48%),
+    repeating-linear-gradient(0deg, rgba(240, 198, 111, 0.08) 0 1px, transparent 1px 5px),
+    #17120a;
+  text-align: center;
+}
+
+body.staff-mode .archive-record--text-preview .archive-record__preview-title {
+  color: #f0d58f;
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 2vw, 1.35rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+body.staff-mode .archive-record--text-preview .archive-record__preview-subtitle {
+  color: #c4a75c;
+  font: 800 0.62rem/1.2 "Courier New", Courier, monospace;
+  letter-spacing: 0.12em;
 }
