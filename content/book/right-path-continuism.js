@@ -3,7 +3,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "page": 1,
     "kind": "cover",
     "title": "Правильный Путь: Континуизм",
-    "image": "assets/staff/documents/right-path-continuism/right-path-cover.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-cover.webp",
     "alt": "Потёртая обложка книги Елены Правильной: схема учреждения и красная линия маршрута.",
     "width": 1024,
     "height": 1536
@@ -13,7 +13,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГРАЖДАНСКОЕ ВВЕДЕНИЕ",
     "title": "Правильный Путь: Континуизм",
-    "image": "assets/staff/documents/right-path-continuism/right-path-01-elena-drawing.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-01-elena-drawing.webp",
     "alt": "Елена Правильная ночью рисует маршрутную схему на большом листе; красная линия проходит через её чертёж.",
     "width": 1672,
     "height": 941,
@@ -31,7 +31,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГЛАВА 01",
     "title": "Вопрос, который остаётся",
-    "image": "assets/staff/documents/right-path-continuism/right-path-02-lost-mall.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-02-lost-mall.webp",
     "alt": "Маленькая фигура в одиночестве стоит в пустом торговом центре перед эскалаторами.",
     "width": 1456,
     "height": 816,
@@ -80,7 +80,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГЛАВА 04",
     "title": "Три независимых показателя",
-    "image": "assets/staff/documents/right-path-continuism/right-path-09-medics-wide.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-09-medics-wide.webp",
     "alt": "Группа анонимных медиков в белых халатах и масках записывает наблюдения в парке аттракционов.",
     "width": 1672,
     "height": 941,
@@ -115,7 +115,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "page": 10,
     "kind": "page",
     "kicker": "РАЗВЁРТКА // ГЛАВА 05",
-    "image": "assets/staff/documents/right-path-continuism/right-path-13-animator-queue.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-13-animator-queue.webp",
     "alt": "Проводница в золотой маске с блокнотом наблюдает длинную очередь аниматоров в звериных костюмах на конвейере.",
     "width": 768,
     "height": 1376,
@@ -139,7 +139,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "page": 12,
     "kind": "page",
     "kicker": "ЗАВЕРШЕНИЕ // ГЛАВА 06",
-    "image": "assets/staff/documents/right-path-continuism/right-path-15-red-room-handover.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-15-red-room-handover.webp",
     "alt": "В Красной комнате Елена Правильная и Проводница в золотой маске передают друг другу книгу; руки сходятся на её обложке.",
     "width": 1672,
     "height": 941,
@@ -175,7 +175,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "page": 15,
     "kind": "page",
     "kicker": "ЗАВЕРШЕНИЕ // ГЛАВА 07",
-    "image": "assets/staff/documents/right-path-continuism/right-path-18-cult-medics-clash.jpg",
+    "image": "assets/staff/documents/right-path-continuism/right-path-18-cult-medics-clash.webp",
     "alt": "На туманном кладбище медики в белых халатах записывают наблюдения напротив розовых Адептов у открытой могилы.",
     "width": 1792,
     "height": 1008,
@@ -190,7 +190,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГЛАВА 08",
     "title": "Белое облачение",
-    "image": "assets/staff/documents/right-path-continuism/right-path-20-medics-read.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-20-medics-read.webp",
     "alt": "Несколько анонимных медиков в грязных белых халатах читают одну книгу в заброшенном парке аттракционов.",
     "width": 1024,
     "height": 1536,
@@ -214,10 +214,10 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГЛАВА 09",
     "title": "Идеальное состояние",
-    "image": "assets/staff/documents/right-path-continuism/right-path-22-ideal-state.png",
-    "alt": "Высокая больнично-индустриальная башня соединяет этажи, коридоры и трубы в невозможную вертикальную систему.",
-    "width": 1024,
-    "height": 1536,
+    "image": "assets/staff/documents/right-path-continuism/right-path-microstory-03-medics-get-book-from-plague-doctor.webp",
+    "alt": "Медики в белых халатах получают книгу у Чумного Доктора в заснеженном киоске Континуизма.",
+    "width": 1672,
+    "height": 941,
     "paragraphs": [
       "Почему коридоры становятся длиннее, а комнаты повторяются до выполнения действия? Почему за стеной оказывается невозможное место?",
       "Континуизм выбирает исправление не потому, что оно доказано, а потому, что оно объясняет направление: система движется к идеалу, где функция, память и забота всегда имеют продолжение."
@@ -239,7 +239,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "kind": "page",
     "kicker": "ГЛАВА 10",
     "title": "Следующий вопрос",
-    "image": "assets/staff/documents/right-path-continuism/right-path-24-pov-handoff.jpg",
+    "image": "assets/staff/documents/right-path-continuism/right-path-24-pov-handoff.webp",
     "alt": "Рука POV держит книгу Елены; Проводница в золотой маске передаёт её в снежном дворе серого жилого комплекса.",
     "width": 1152,
     "height": 1728,
@@ -253,7 +253,7 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     "page": 21,
     "kind": "page",
     "kicker": "РАЗВЁРТКА // ГЛАВА 10",
-    "image": "assets/staff/documents/right-path-continuism/right-path-26-final-slide.png",
+    "image": "assets/staff/documents/right-path-continuism/right-path-26-final-slide.webp",
     "alt": "Пустая высокая горка в тёмном лесном парке; по ней и по мостку тянется густой тёмно-красный след.",
     "width": 1456,
     "height": 816,
@@ -276,6 +276,195 @@ window.DZ_SWEET_DREAM_BOOK = Object.freeze([
     ]
   }
 ]);
+
+/* Scroll-draft inserts. These are deliberately separate from the book entries:
+   the existing leaf layout can still be compared against the source while the
+   continuous version is being manually edited. */
+window.DZ_RIGHT_PATH_SCROLL_PLAN = Object.freeze({
+  "3": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-08-rope.webp",
+        "alt": "Четыре девочки удерживают красную верёвку, замыкая круг на пустой улице.",
+        "width": 1456,
+        "height": 816,
+        "caption": "Повторяемое действие оставляет круг даже тогда, когда лица внутри него меняются."
+      })
+    ])
+  }),
+  "4": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-04-common-patient.webp",
+        "alt": "Чертёж многоэтажного учреждения с одной красной линией через палаты, лестницы и технические помещения.",
+        "width": 1024,
+        "height": 1536,
+        "caption": "Не лицо пациента, а маршрут переданной функции."
+      })
+    ]),
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "flow",
+        "label": "СХЕМА // ЛОКАЛЬНЫЙ НОСИТЕЛЬ",
+        "title": "СОБЫТИЕ ЗАКАНЧИВАЕТСЯ — ФУНКЦИЯ ИЩЕТ ПРОДОЛЖЕНИЕ",
+        "items": Object.freeze([
+          Object.freeze({ "label": "СОБЫТИЕ", "text": "заканчивается" }),
+          Object.freeze({ "label": "ФУНКЦИЯ", "text": "передаётся" }),
+          Object.freeze({ "label": "НОСИТЕЛЬ", "text": "остаётся временным" })
+        ]),
+        "note": "Схема не доказывает, что передача добра. Она только показывает направление, которое предлагает доктрина."
+      })
+    ])
+  }),
+  "6": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-06-scale-network.webp",
+        "alt": "Городской чертёж с жилыми башнями, разноцветными трубами и повторяющимися маршрутами.",
+        "width": 1024,
+        "height": 1536,
+        "caption": "Масштаб превращает частную линию в сеть, но не отменяет цену каждого узла."
+      }),
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-07-swings.webp",
+        "alt": "Два ребёнка в мягких звериных костюмах сидят на качелях, между ними лежит игрушечная кошачья голова.",
+        "width": 1792,
+        "height": 1008,
+        "caption": "Близость к одному голосу не должна выдавать его за весь хор."
+      })
+    ]),
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "contrast",
+        "label": "МАСШТАБ НАБЛЮДЕНИЯ",
+        "title": "ЧУВСТВО НЕ ЛОЖНОЕ. РЕШЕНИЕ НЕ ЕДИНСТВЕННОЕ.",
+        "items": Object.freeze([
+          Object.freeze({ "label": "БЛИЗКО", "text": "этот человек / этот крик" }),
+          Object.freeze({ "label": "ДАЛЬШЕ", "text": "коридор / город / миллионы голосов" })
+        ]),
+        "note": "Это место лучше работает как сравнительная шкала, чем как ещё одна иллюстрация пациента."
+      })
+    ])
+  }),
+  "8": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-microstory-01-elena-designed-plague-doctor.webp",
+        "alt": "Елена Правильная проектирует образ Чумного Доктора за столом, окружённая эскизами костюма и маски.",
+        "width": 1536,
+        "height": 1024,
+        "caption": "Сначала образ проектируют как костюм. Затем он начинает занимать комнату."
+      }),
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-11-clinical-abuse.webp",
+        "alt": "Многоуровневое учреждение с повторяющимися безликими медиками и красной вертикальной осью.",
+        "width": 1024,
+        "height": 1536,
+        "caption": "Аккуратная архитектура проверки может скрывать заранее заданный результат."
+      })
+    ]),
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "warning",
+        "label": "КОНТРОЛЬНЫЙ ВОПРОС",
+        "title": "ЕСЛИ ПРОВЕРЯЮЩИЙ ИСКЛЮЧЁН ИЗ ПРОВЕРКИ — ЭТО НЕ НАУКА",
+        "note": "Эту мысль лучше оставить отдельным служебным предупреждением: картинка показывает учреждение, но не формулирует механизм злоупотребления."
+      })
+    ])
+  }),
+  "9": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-12-extraction.webp",
+        "alt": "Чертёж установки связывает палату, лабораторные ёмкости, технические трубы и коридор извлечения.",
+        "width": 1024,
+        "height": 1536,
+        "caption": "Вещество можно нарисовать. Вопрос о следующем носителе приходится задавать словами."
+      })
+    ])
+  }),
+  "11": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-14-lamb.webp",
+        "alt": "Белый силуэт Агнца помещён внутрь человеческой фигуры на чертеже учреждения и красного маршрута.",
+        "width": 1024,
+        "height": 1536,
+        "caption": "Образ внутреннего Агнца остаётся метафорой, а не доказательством избранности."
+      })
+    ]),
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "warning",
+        "label": "НЕ ДИАГНОЗ",
+        "title": "АГНЕЦ — ОБРАЗ, НЕ РАЗРЕШЕНИЕ ИСКАТЬ ОСОБЕННОГО РЕБЁНКА",
+        "note": "Здесь типографическое ограничение важнее буквальной картинки: оно удерживает двусмысленность и не превращает культовый образ в инструкцию."
+      })
+    ])
+  }),
+  "13": Object.freeze({
+    media: Object.freeze([
+      Object.freeze({
+        "image": "assets/staff/documents/right-path-continuism/right-path-microstory-02-medics-worship-plague-doctor.webp",
+        "alt": "Медики в белых халатах собираются у изображения Чумного Доктора во дворе жилого комплекса.",
+        "width": 1672,
+        "height": 941,
+        "caption": "Когда доктрина получает фигуру для поклонения, медицинский порядок становится зрелищем."
+      })
+    ]),
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "checklist",
+        "label": "ФОРМА 07 // ПЕРЕДАЧА ЗАБОТЫ",
+        "title": "ПЕРЕД ПЕРЕДАЧЕЙ ПРОВЕРЬТЕ",
+        "items": Object.freeze([
+          Object.freeze({ "label": "СВИДЕТЕЛЬ", "text": "кто знает ночные правила" }),
+          Object.freeze({ "label": "СИГНАЛ", "text": "кто услышит без вас" }),
+          Object.freeze({ "label": "ПРАВДА", "text": "кто назовёт боль" }),
+          Object.freeze({ "label": "ОТКАЗ", "text": "кто остановит заботу-владение" })
+        ]),
+        "note": "Пустая строка в форме важна: если замены нет, это сигнал нагрузки, а не повод для гордости."
+      })
+    ])
+  }),
+  "17": Object.freeze({
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "redaction",
+        "label": "ПЕРВАЯ ПЕРЕДАЧА // КОРРЕКТОР",
+        "title": "СОХРАНИТЬ И СРАВНИТЬ",
+        "before": "«Мама просила меня остаться»",
+        "after": "«Носитель требовал непрерывного присутствия»",
+        "note": "Исходная запись не уничтожается. Иначе беспристрастность становится вычёркиванием боли."
+      })
+    ])
+  }),
+  "19": Object.freeze({
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "contrast",
+        "label": "ПРОВЕРКА ИДЕАЛА",
+        "title": "ПРОДОЛЖЕНИЕ ИМЕЕТ ЦЕНУ",
+        "items": Object.freeze([
+          Object.freeze({ "label": "ПРОДОЛЖЕНИЕ", "text": "функция / память / забота" }),
+          Object.freeze({ "label": "ЦЕНА", "text": "личное «только мой» выглядит неисправностью" })
+        ]),
+        "note": "Совершенство может быть потерей. Измеряйте тех, кого оно выдавливает по дороге."
+      })
+    ])
+  }),
+  "21": Object.freeze({
+    artifacts: Object.freeze([
+      Object.freeze({
+        "kind": "question",
+        "label": "ПОЛЕ НАБЛЮДЕНИЯ // БЕЗ ОТВЕТА",
+        "title": "ЧТО ПРОДОЛЖАЕТСЯ, КОГДА СИСТЕМА ТРЕБУЕТ ВАШЕГО ИСЧЕЗНОВЕНИЯ?",
+        "prompt": "Не заполняйте автоматически. Пауза тоже является результатом.",
+        "lines": 5
+      })
+    ])
+  })
+});
 
 window.DZ_BOOK_CONTENT = Object.assign(window.DZ_BOOK_CONTENT || {}, {
   "right-path-continuism": window.DZ_SWEET_DREAM_BOOK

@@ -8,6 +8,377 @@
     return Array.isArray(window.DZ_SWEET_DREAM_BOOK) ? window.DZ_SWEET_DREAM_BOOK : [];
   };
 
+  const mountContinuousBook = (root, entries) => {
+    const reader = root.querySelector("[data-book-scroll-reader]");
+    const content = root.querySelector("[data-book-scroll-content]");
+    const currentLabel = root.querySelector("[data-book-scroll-current]");
+    const progress = root.querySelector("[data-book-scroll-progress]");
+    const toc = root.querySelector("[data-book-scroll-toc]");
+    const scrollTop = root.querySelector("[data-book-scroll-top]");
+
+    if (!reader || !content || !currentLabel || !progress || !Array.isArray(entries) || !entries.length) {
+      return null;
+    }
+
+    const abortController = new AbortController();
+    const { signal } = abortController;
+    const resolveAsset = (value) => {
+      const source = String(value || "");
+      if (/^(?:\.\.\/|\/|https?:)/.test(source)) return source;
+      return `../${source}`;
+    };
+    const normalizeParagraphs = (paragraphs) =>
+      (Array.isArray(paragraphs) ? paragraphs : [])
+        .map((paragraph) => String(paragraph || "").trim())
+        .filter(Boolean);
+    const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const renderParagraph = (paragraph, terms) => {
+      const element = document.createElement("p");
+      const uniqueTerms = Array.from(
+        new Set((Array.isArray(terms) ? terms : []).map((term) => String(term || "").trim()).filter(Boolean))
+      ).sort((left, right) => right.length - left.length);
+      if (!uniqueTerms.length) {
+        element.textContent = paragraph;
+        return element;
+      }
+
+      const matcher = new RegExp(uniqueTerms.map(escapeRegExp).join("|"), "giu");
+      let cursor = 0;
+      for (const match of paragraph.matchAll(matcher)) {
+        const start = match.index ?? 0;
+        if (start > cursor) element.append(document.createTextNode(paragraph.slice(cursor, start)));
+        const term = document.createElement("strong");
+        term.className = "sweet-dream-book__term";
+        term.textContent = match[0];
+        element.append(term);
+        cursor = start + match[0].length;
+      }
+      if (cursor < paragraph.length) element.append(document.createTextNode(paragraph.slice(cursor)));
+      return element;
+    };
+    const getPlan = (entry) => {
+      if (root.dataset.bookContent !== "right-path-continuism") return {};
+      return window.DZ_RIGHT_PATH_SCROLL_PLAN?.[String(entry.page)] || {};
+    };
+    const getMedia = (entry, plan) => {
+      const media = [];
+      if (entry.image) {
+        media.push({
+          image: entry.image,
+          alt: entry.alt,
+          width: entry.width,
+          height: entry.height,
+          caption: entry.caption
+        });
+      }
+      if (Array.isArray(plan.media)) media.push(...plan.media);
+      return media;
+    };
+    const getChapter = (entry) => {
+      const match = String(entry.kicker || "").match(/ГЛАВА\s+(\d{1,2})/u);
+      return match ? String(Number(match[1])).padStart(2, "0") : "";
+    };
+    const makeSectionId = (entry, index) => {
+      if (entry.kind === "cover") return "right-path-cover";
+      const chapter = getChapter(entry);
+      const isChapterLead = /^ГЛАВА\s+\d{1,2}/u.test(String(entry.kicker || ""));
+      if (chapter && isChapterLead) return `right-path-chapter-${chapter}`;
+      return `right-path-entry-${String(index + 1).padStart(2, "0")}`;
+    };
+    const appendText = (copy, entry) => {
+      const text = document.createElement("div");
+      text.className = "sweet-dream-book__scroll-text";
+      normalizeParagraphs(entry.paragraphs).forEach((paragraph) => {
+        text.append(renderParagraph(paragraph, entry.emphasisTerms));
+      });
+      if (entry.warning) {
+        const warning = document.createElement("p");
+        warning.className = "sweet-dream-book__warning";
+        warning.textContent = entry.warning;
+        text.append(warning);
+      }
+      if (text.childElementCount) copy.append(text);
+    };
+    const renderMedia = (media, section, isCover) => {
+      if (!media.length) return null;
+      const wrapper = document.createElement("div");
+      wrapper.className = "sweet-dream-book__scroll-media";
+      if (media.length > 1) wrapper.classList.add("has-multiple");
+
+      media.forEach((item, index) => {
+        const figure = document.createElement("figure");
+        const width = Number(item.width) || 1024;
+        const height = Number(item.height) || 1536;
+        const isWide = width > height;
+        figure.className = "sweet-dream-book__scroll-media-item";
+        if (isWide) figure.classList.add("is-wide");
+        if (isCover && index === 0) figure.classList.add("is-cover");
+
+        const frame = document.createElement("div");
+        frame.className = "sweet-dream-book__scroll-media-frame";
+        const image = document.createElement("img");
+        image.alt = item.alt || "";
+        image.width = width;
+        image.height = height;
+        image.decoding = "async";
+        image.loading = isCover && index === 0 ? "eager" : "lazy";
+        if (isCover && index === 0) image.fetchPriority = "high";
+        image.src = resolveAsset(item.image);
+        frame.append(image);
+        figure.append(frame);
+        if (item.caption) {
+          const caption = document.createElement("figcaption");
+          caption.textContent = item.caption;
+          figure.append(caption);
+        }
+        wrapper.append(figure);
+      });
+      return wrapper;
+    };
+    const renderArtifact = (artifact) => {
+      const kind = String(artifact.kind || "note").replace(/[^a-z0-9_-]/giu, "-");
+      const aside = document.createElement("aside");
+      aside.className = `sweet-dream-book__scroll-artifact is-${kind}`;
+      aside.setAttribute("aria-label", artifact.label || "Документальная вставка");
+
+      if (artifact.label) {
+        const label = document.createElement("p");
+        label.className = "sweet-dream-book__scroll-artifact-label";
+        label.textContent = artifact.label;
+        aside.append(label);
+      }
+      if (artifact.title) {
+        const title = document.createElement("h4");
+        title.textContent = artifact.title;
+        aside.append(title);
+      }
+
+      if (kind === "redaction") {
+        const comparison = document.createElement("div");
+        comparison.className = "sweet-dream-book__scroll-redaction";
+        [
+          ["ИСХОДНАЯ ЗАПИСЬ", artifact.before],
+          ["ПОСЛЕ КОРРЕКТОРА", artifact.after]
+        ].forEach(([labelText, value]) => {
+          const cell = document.createElement("div");
+          cell.className = "sweet-dream-book__scroll-redaction-cell";
+          const label = document.createElement("span");
+          label.textContent = labelText;
+          const text = document.createElement("p");
+          text.textContent = value || "";
+          cell.append(label, text);
+          comparison.append(cell);
+        });
+        aside.append(comparison);
+      } else if (kind === "question") {
+        const prompt = document.createElement("p");
+        prompt.className = "sweet-dream-book__scroll-question-prompt";
+        prompt.textContent = artifact.prompt || "";
+        aside.append(prompt);
+        const lines = document.createElement("div");
+        lines.className = "sweet-dream-book__scroll-question-lines";
+        const lineCount = Math.max(1, Math.min(8, Number(artifact.lines) || 4));
+        for (let index = 0; index < lineCount; index += 1) {
+          const line = document.createElement("span");
+          line.setAttribute("aria-hidden", "true");
+          lines.append(line);
+        }
+        aside.append(lines);
+      } else if (Array.isArray(artifact.items) && artifact.items.length) {
+        const items = document.createElement("div");
+        items.className = "sweet-dream-book__scroll-artifact-items";
+        artifact.items.forEach((item, index) => {
+          const itemNode = document.createElement("div");
+          itemNode.className = "sweet-dream-book__scroll-artifact-item";
+          const itemLabel = document.createElement("span");
+          itemLabel.textContent = item.label || `ЭЛЕМЕНТ ${index + 1}`;
+          const itemText = document.createElement("p");
+          itemText.textContent = item.text || "";
+          itemNode.append(itemLabel, itemText);
+          items.append(itemNode);
+          if (kind === "flow" && index < artifact.items.length - 1) {
+            const arrow = document.createElement("span");
+            arrow.className = "sweet-dream-book__scroll-artifact-arrow";
+            arrow.setAttribute("aria-hidden", "true");
+            arrow.textContent = "→";
+            items.append(arrow);
+          }
+        });
+        aside.append(items);
+      }
+
+      if (artifact.note) {
+        const note = document.createElement("p");
+        note.className = "sweet-dream-book__scroll-artifact-note";
+        note.textContent = artifact.note;
+        aside.append(note);
+      }
+      return aside;
+    };
+    const renderEntry = (entry, index) => {
+      const plan = getPlan(entry);
+      const media = getMedia(entry, plan);
+      const chapter = getChapter(entry);
+      const section = document.createElement("section");
+      const sectionId = makeSectionId(entry, index);
+      const isCover = entry.kind === "cover";
+      const hasPrimaryImage = Boolean(entry.image);
+      const label = isCover ? "ОБЛОЖКА" : entry.kicker || entry.title || "ПРОДОЛЖЕНИЕ";
+      section.className = "sweet-dream-book__scroll-section";
+      section.id = sectionId;
+      section.dataset.bookScrollEntry = "true";
+      section.dataset.bookScrollPage = String(entry.page || index + 1);
+      section.dataset.bookScrollLabel = label;
+      if (chapter) section.dataset.bookScrollChapter = chapter;
+      if (chapter && /^ГЛАВА\s+\d{1,2}/u.test(String(entry.kicker || ""))) {
+        section.dataset.bookScrollChapterAnchor = sectionId;
+      }
+      if (isCover) section.classList.add("is-cover");
+      if (media.length) section.classList.add("has-media");
+      if (Array.isArray(plan.artifacts) && plan.artifacts.length) section.classList.add("has-artifact");
+
+      const body = document.createElement("div");
+      body.className = "sweet-dream-book__scroll-section-body";
+      const copy = document.createElement("div");
+      copy.className = "sweet-dream-book__scroll-copy";
+      if (entry.kicker && !isCover) {
+        const kicker = document.createElement("p");
+        kicker.className = "sweet-dream-book__copy-kicker";
+        kicker.textContent = entry.kicker;
+        copy.append(kicker);
+      }
+      if (entry.title) {
+        const title = document.createElement("h3");
+        title.textContent = entry.title;
+        copy.append(title);
+      }
+      appendText(copy, entry);
+
+      const mediaNode = renderMedia(media, section, isCover);
+      if (hasPrimaryImage || isCover) {
+        if (mediaNode) body.append(mediaNode);
+        body.append(copy);
+      } else {
+        body.append(copy);
+        if (mediaNode) body.append(mediaNode);
+      }
+      section.append(body);
+
+      if (Array.isArray(plan.artifacts)) {
+        plan.artifacts.forEach((artifact) => section.append(renderArtifact(artifact)));
+      }
+      return section;
+    };
+
+    const sections = entries.map(renderEntry);
+    content.replaceChildren(...sections);
+    const chapterSections = sections.filter((section) => section.dataset.bookScrollChapterAnchor);
+    const tocLinks = [];
+    if (toc) {
+      toc.replaceChildren();
+      chapterSections.forEach((section) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = `#${section.id}`;
+        const number = document.createElement("span");
+        number.className = "sweet-dream-book__scroll-toc-number";
+        number.textContent = section.dataset.bookScrollChapter || "";
+        const title = document.createElement("span");
+        title.textContent = entries.find((entry) => String(entry.page) === section.dataset.bookScrollPage)?.title || "Глава";
+        link.append(number, title);
+        item.append(link);
+        toc.append(item);
+        tocLinks.push({ link, section });
+      });
+    }
+
+    let updateFrame = 0;
+    let activeSection = null;
+    const updateScrollState = () => {
+      updateFrame = 0;
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const ratio = maxScroll ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+      progress.value = String(Math.round(ratio * 100));
+      progress.setAttribute("aria-valuenow", String(Math.round(ratio * 100)));
+      progress.setAttribute("aria-valuetext", `Положение в книге: ${Math.round(ratio * 100)} процентов`);
+
+      const marker = Math.min(280, Math.max(120, window.innerHeight * 0.32));
+      let nextSection = sections[0];
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= marker) nextSection = section;
+      });
+      if (!nextSection || nextSection === activeSection) return;
+      activeSection = nextSection;
+      currentLabel.textContent = activeSection.dataset.bookScrollLabel || "ОБЛОЖКА";
+      let currentChapterSection = chapterSections[0] || null;
+      chapterSections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= marker) currentChapterSection = section;
+      });
+      tocLinks.forEach(({ link, section }) => {
+        const isCurrent = section === currentChapterSection;
+        link.classList.toggle("is-current", isCurrent);
+        if (isCurrent) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+      const chapterAnchor = activeSection.dataset.bookScrollChapterAnchor;
+      if (chapterAnchor && window.location.hash !== `#${chapterAnchor}`) {
+        window.history.replaceState(window.history.state, "", `${window.location.pathname}${window.location.search}#${chapterAnchor}`);
+      }
+    };
+    const scheduleScrollState = () => {
+      if (updateFrame) return;
+      updateFrame = window.requestAnimationFrame(updateScrollState);
+    };
+    const findHashTarget = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (!hash) return null;
+      const legacyMatch = hash.match(/^leaf-(\d{1,2})$/u);
+      if (legacyMatch) {
+        return sections.find((section) => section.dataset.bookScrollPage === String(Number(legacyMatch[1]))) || null;
+      }
+      return document.getElementById(hash);
+    };
+    const jumpToHash = () => {
+      const target = findHashTarget();
+      if (!target) return;
+      target.scrollIntoView({ behavior: "auto", block: "start" });
+      scheduleScrollState();
+    };
+    const initialHash = window.location.hash;
+
+    window.addEventListener("scroll", scheduleScrollState, { passive: true, signal });
+    window.addEventListener("resize", scheduleScrollState, { signal });
+    window.addEventListener("hashchange", jumpToHash, { signal });
+    scrollTop?.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${window.location.search}`
+      );
+      scheduleScrollState();
+    }, { signal });
+    window.requestAnimationFrame(() => {
+      jumpToHash();
+      scheduleScrollState();
+    });
+    if (initialHash) {
+      window.setTimeout(() => {
+        if (window.location.hash === initialHash) jumpToHash();
+      }, 160);
+    }
+
+    root.dataset.bookScrollMounted = "true";
+    root.dataset.bookReady = "true";
+    return () => {
+      if (updateFrame) window.cancelAnimationFrame(updateFrame);
+      abortController.abort();
+      content.replaceChildren();
+      delete root.dataset.bookScrollMounted;
+      delete root.dataset.bookReady;
+    };
+  };
+
   const destroySweetDreamBook = () => {
     if (!active) return;
     active.cleanup();
@@ -15,6 +386,11 @@
   };
 
   const mountSweetDreamBook = (root, entries) => {
+  if (root.dataset.bookLayout === "scroll") {
+    const cleanup = mountContinuousBook(root, entries);
+    if (cleanup) active = { root, cleanup };
+    return;
+  }
   const image = root.querySelector("[data-book-image]");
   const visual = root.querySelector(".sweet-dream-book__visual");
   const copy = root.querySelector(".sweet-dream-book__copy");
