@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-16 |
 | Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: image optimization в runtime refs, новые WebP и `docs/IMAGE_ART_DIRECTION_MANIFEST.md`; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | Image asset audit и WebP-конвертация завершены локально; ожидается пользовательский просмотр результата |
-| Последний этап | 9 тяжёлых runtime PNG и STAFF logo переведены в WebP с сохранением dimensions; manifest обновлён до 523 строк, production raster payload — около 55 MiB, в production нет PNG/JPG тяжелее 500 KiB. Build `636` files, verifier, Lora validator, `node --check` и `git diff --check` прошли. |
+| Дерево | dirty: STAFF donate-футер, новые Figma-кропы WebP и прежние пользовательские image-optimization изменения; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | STAFF donate-футер собран как одноярусная реалистичная VHS-полка; VK исключён, Ko-fi получил отдельную hotspot-зону |
+| Последний этап | В `donate.html` удалён VK, а `css/style.css` подключает Figma-кропы `zhir-footer-shelf-web-v1.webp` и mobile-вариант вместо старых SVG-кнопок. Desktop `1280x900` и mobile `390x844`: 7 ссылок кликабельны, overflow отсутствует, console `0/0`; build `638` files и verifier прошли. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
