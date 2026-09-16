@@ -75,7 +75,7 @@ const SKIP_KEYS = new Set([
 const INBOX_GAME_ID = "irina";
 
 const INBOX_AVATARS = {
-  СИСТЕМА: "assets/staff/logo.png",
+  СИСТЕМА: "assets/staff/logo.webp",
   "ИРИНА В.": "assets/staff/staff/irina_sad.jpg",
   ИРИНА: "assets/staff/staff/irina_sad.jpg",
   "ЛОРА П.": "assets/staff/staff/lora-message-avatar.webp",

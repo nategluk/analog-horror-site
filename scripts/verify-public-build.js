@@ -72,7 +72,7 @@ const REQUIRED_PAGES = [
   "_redirects",
   "404.html",
   "assets/guest/logo.svg",
-  "assets/staff/logo.png",
+  "assets/staff/logo.webp",
   "assets/og-image.png",
   "assets/audio/guest/theme.MP3",
   "assets/audio/curator/call-room-tone.ogg",

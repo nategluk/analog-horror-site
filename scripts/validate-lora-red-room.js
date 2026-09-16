@@ -281,7 +281,7 @@ const requiredAssets = [
   "assets/guest/red-room/lora/scenes/v10-fox-dog.webp",
   "assets/guest/red-room/lora/scenes/v11-dog-sleep.webp",
   "assets/guest/red-room/lora/scenes/v12-empty-curtain.webp",
-  "assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png",
+  "assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.webp",
   "assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.mp4",
   "assets/guest/red-room/lora/scenes/v19-pig-tag.png",
   "assets/guest/red-room/lora/scenes/v20-back-room.png",

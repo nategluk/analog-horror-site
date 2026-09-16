@@ -70,7 +70,7 @@
       image: "../assets/guest/red-room/lora/scenes/v01-empty-counter-v1.webp",
     },
     V14_BLUE_KEY_CABINET: {
-      image: "../assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png",
+      image: "../assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.webp",
     },
     V15_PIG_TAG: {
       image: "../assets/guest/red-room/lora/scenes/v19-pig-tag.png",
@@ -112,8 +112,8 @@
     pig_key_cabinet: {
       mode: "transition",
       video: "v18-blue-key-cabinet.mp4",
-      openWith: "v18-blue-key-cabinet.png",
-      frames: ["v18-blue-key-cabinet.png"],
+      openWith: "v18-blue-key-cabinet.webp",
+      frames: ["v18-blue-key-cabinet.webp"],
       holdMs: 900,
       restore: false,
     },

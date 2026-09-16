@@ -4824,7 +4824,7 @@
         button.className = "personnel-material";
         button.dataset.artifactOpen = stored.id;
         image.src =
-          definition.src || audioAsset("assets/staff/logo.png");
+          definition.src || audioAsset("assets/staff/logo.webp");
         image.alt = "";
         code.textContent = `ФАЙЛ: ${definition.code}`;
         title.textContent = definition.title;
@@ -4960,7 +4960,7 @@
           image.src =
             item.kind === "message"
               ? definition.avatar
-              : definition.src || audioAsset("assets/staff/logo.png");
+              : definition.src || audioAsset("assets/staff/logo.webp");
           image.alt = "";
           copy.className = "personnel-trash-item__copy";
           title.textContent =

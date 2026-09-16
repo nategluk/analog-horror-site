@@ -15222,7 +15222,7 @@ body.staff-mode .staff-tv-room-page .staff-tv-room__stage {
   padding: clamp(0.6rem, 2vw, 1.4rem) 0 1.5rem;
   background:
     linear-gradient(180deg, rgba(14, 18, 22, 0.12), rgba(14, 18, 22, 0.04) 55%, rgba(14, 18, 22, 0.24)),
-    url("../assets/staff/tv/zhir-tv-kindergarten-carpet-v1.png") center / cover no-repeat;
+    url("../assets/staff/tv/zhir-tv-kindergarten-carpet-v1.webp") center / cover no-repeat;
   box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.38);
 }
 
@@ -16442,7 +16442,7 @@ body:not(.staff-mode) .menu-broadcast-page .site-header {
       var(--guest-overlay-mid) 54%,
       var(--guest-overlay-bottom) 100%
     ),
-    url("../assets/guest/site-header-bg-liminal-v1.png") center / cover no-repeat,
+    url("../assets/guest/site-header-bg-liminal-v1.webp") center / cover no-repeat,
     var(--surface);
 }
 
@@ -16454,7 +16454,7 @@ body.staff-mode .menu-broadcast-page .site-header {
       rgba(12, 16, 22, 0.3) 48%,
       rgba(12, 16, 22, 0.58) 100%
     ),
-    url("../assets/guest/site-header-bg-horror-v2.png") center / cover no-repeat,
+    url("../assets/guest/site-header-bg-horror-v2.webp") center / cover no-repeat,
     var(--broadcast-case);
 }
 
@@ -16495,7 +16495,7 @@ body:not(.staff-mode) .staff-tv-room-page .site-header {
       rgba(255, 248, 244, 0.08) 54%,
       rgba(255, 248, 244, 0.28) 100%
     ),
-    url("../assets/staff/tv/zhir-tv-header-bg-v1.png") center / cover no-repeat,
+    url("../assets/staff/tv/zhir-tv-header-bg-v1.webp") center / cover no-repeat,
     var(--surface);
 }
 
@@ -16507,7 +16507,7 @@ body.staff-mode .staff-tv-room-page .site-header {
       rgba(8, 12, 16, 0.24) 50%,
       rgba(8, 12, 16, 0.62) 100%
     ),
-    url("../assets/staff/tv/zhir-tv-header-bg-v1.png") center / cover no-repeat,
+    url("../assets/staff/tv/zhir-tv-header-bg-v1.webp") center / cover no-repeat,
     var(--broadcast-case);
 }
 
@@ -16536,7 +16536,7 @@ body.staff-mode .donate-page-panel::before {
   position: absolute;
   z-index: 0;
   inset: 0;
-  background: url("../assets/staff/donate/zhir-donate-fundraising-animator-v1.png") center / cover no-repeat;
+  background: url("../assets/staff/donate/zhir-donate-fundraising-animator-v1.webp") center / cover no-repeat;
   opacity: 0.82;
 }
 

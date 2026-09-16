@@ -397,7 +397,7 @@ const childrenProtocolPages = [
     page: 26,
     kicker: "ПРИЛОЖЕНИЕ // СХЕМА СВЕРКИ",
     title: "НЕ ПУТАЙТЕ ПОРЯДОК",
-    image: "assets/staff/documents/protocol-children/protocol-children-14-infographic.png",
+    image: "assets/staff/documents/protocol-children/protocol-children-14-infographic.webp",
     alt: "Архивная uncanny-инфографика: схемы возрастных отметок, эмоциональных откликов, весов, центральной фигуры и трёх направлений назначения на состаренной бумаге.",
     paragraphs: [
       "Паспортный возраст, категория и назначение проверяются отдельно.",

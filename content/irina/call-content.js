@@ -86,7 +86,7 @@
   const staffMessages = {
     "system-profile-created": {
       sender: "СИСТЕМА",
-      avatar: "assets/staff/logo.png",
+      avatar: "assets/staff/logo.webp",
       subject: "ЛИЧНОЕ ДЕЛО СОЗДАНО",
       preview: "Укажите имя и выберите допустимое изображение.",
       body: (profile) =>

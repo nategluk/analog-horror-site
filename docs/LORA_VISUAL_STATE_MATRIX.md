@@ -44,7 +44,7 @@
 | `V15_PIG_TAG` | Бирка Свиньи | Image | Крупный still мокрой пластиковой бирки на стойке; в окошке — маска, не лицо | Разбивка перед Лисой: игрок протирает стол и впервые видит артефакт |
 | `V16_BACK_ROOM` | Подсобка | Image + short video | Белая плитка, манекен официантки, круглая труба в стене, красный зал за бусами | Разбивка перед Псом; повторный взгляд запускает мерцание и искусственный свет в трубе |
 
-Новых сценических изображений требуется 11: `V01`, `V02`, `V04`–`V12`. Для `V03` нужен видеопереход и его постер. `V00` и `V13` не требуют генерации изображения. `V14` использует уже существующий still `v18-blue-key-cabinet.png` и не регенерируется.
+Новых сценических изображений требуется 11: `V01`, `V02`, `V04`–`V12`. Для `V03` нужен видеопереход и его постер. `V00` и `V13` не требуют генерации изображения. `V14` использует уже существующий still `v18-blue-key-cabinet.webp` и не регенерируется.
 
 ## Reveal Свиньи
 
@@ -89,7 +89,7 @@ pig_escapes
 | `pig_suit`, `pig_center`, `pig_test` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Человеческое лицо появляется только после активного действия игрока |
 | `pig_talk`, `pig_tag`, `pig_hide`, `pig_hide_tag` | `V02_PIG_MASKED` или `V04_PIG_UNMASKED` | Разговор после исповеди выбирается по `pigRevealed`; в подсобку можно уйти с открытым лицом |
 | `pig_wait`, `pig_tech`, `pig_tomorrow`, `pig_deny_leave` | `V02_PIG_MASKED` | Перед публичным ожиданием или выходом Свинья всегда надевает голову обратно |
-| новый `pig_key_cabinet` | `V14_BLUE_KEY_CABINET` | Автоматический one-shot после `give_key`; still `v18-blue-key-cabinet.png`, motion `v18-blue-key-cabinet.mp4`; HTML-пропсы скрыты, чтобы Бирка и Записка не легли на шкаф |
+| новый `pig_key_cabinet` | `V14_BLUE_KEY_CABINET` | Автоматический one-shot после `give_key`; still `v18-blue-key-cabinet.webp`, motion `v18-blue-key-cabinet.mp4`; HTML-пропсы скрыты, чтобы Бирка и Записка не легли на шкаф |
 | `pig_key_given` | `V02_PIG_MASKED` | После шкафа Свинья снова в маске; `visualWhen` не используется |
 | `pig_tech_run` | `V01_EMPTY_COUNTER` | В кадре остаётся бирка; человек уже исчез |
 | `pig_gone` | `V01_EMPTY_COUNTER` | Пауза; игрок выбирает протереть стол |
@@ -212,7 +212,7 @@ assets/guest/red-room/lora/scenes/v11-dog-sleep.webp
 assets/guest/red-room/lora/scenes/dog-suit-sleep-idle-v1.mp4
 assets/guest/red-room/lora/scenes/lora-wait-reward-v1.mp4
 assets/guest/red-room/lora/scenes/v12-empty-curtain.webp
-assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png
+assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.webp
 assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.mp4
 ```
 

@@ -1,12 +1,12 @@
 # Image Art Direction Manifest
 
-Снимок: 2026-09-07
+Снимок: 2026-09-16
 Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 `/Users/nateglukhov/analog-horror-site/assets/staff`.
 
 Это read-only production inventory: одна строка на исходный image asset.
 `Public = yes` означает, что соответствующая копия присутствует в
-`public/` на момент снимка; `no` означает source-only/concept/staging и не
+`public/` на момент текущего снимка; `no` означает source-only/concept/staging и не
 является указанием на удаление. Категории и подтипы предварительные до
 утверждения спорных строк.
 
@@ -14,20 +14,36 @@ Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 
 | Class | Total | Public | Source-only |
 |---|---:|---:|---:|
-| `ADVERTISEMENT` | 28 | 27 | 1 |
-| `PERSONNEL` | 20 | 20 | 0 |
+| `ADVERTISEMENT` | 30 | 28 | 2 |
+| `PERSONNEL` | 25 | 24 | 1 |
 | `CCTV` | 15 | 15 | 0 |
 | `PERSONAL` | 18 | 18 | 0 |
-| `EVENT-RECORD` | 74 | 73 | 1 |
-| `SCHEMA` | 25 | 25 | 0 |
-| `UTILITY` | 12 | 12 | 0 |
-| `IMMERSIVE-SCENE` | 170 | 86 | 84 |
+| `EVENT-RECORD` | 127 | 103 | 24 |
+| `SCHEMA` | 82 | 67 | 15 |
+| `UTILITY` | 55 | 25 | 30 |
+| `IMMERSIVE-SCENE` | 171 | 86 | 85 |
 
-Всего: **362** source assets; public copies: **276**;
-source-only: **86**.
+Всего: **523** source assets; public copies: **366**;
+source-only: **157**.
 `projects/` (110 файлов) намеренно не включён: это отдельный staging/reference
 слой. Геометрия считается по исходным размерам: wide ≈ 1.6–1.9, square ≈ 0.9–1.1,
 portrait — высота заметно больше ширины.
+
+## Optimization audit — 2026-09-16
+
+- В scope inventory входит 522 raster-файла и один brand SVG; production build
+  после конвертации содержит 365 raster-копий и один `assets/guest/logo.svg`.
+- Production raster payload уменьшился примерно с 76 MiB до 55 MiB. Девять
+  runtime PNG и существующий STAFF-логотип переведены в WebP с сохранением
+  dimensions: **18,687,979 → 1,050,664 bytes (-94.4%)**.
+- Все 10 WebP runtime targets прошли проверку формата и dimensions; runtime-ссылки,
+  Lora validator и production allowlist обновлены. Исходные PNG сохранены в
+  `assets/` как резерв и отмечены `Public = no`, если они больше не входят в
+  production allowlist; source-only/concept/staging файлы не удалялись.
+- В production больше нет PNG/JPG тяжелее 500 KiB. Оставшиеся шесть PNG —
+  небольшие Lora stills, training plates и прозрачный `player-empty.png`;
+  их дополнительная конвертация не даёт обязательного выигрыша без смены
+  существующего alpha/quality-контракта.
 
 ## Route / carrier map
 
@@ -291,7 +307,7 @@ change runtime references or change canon.
 | `assets/guest/red-room/lora/scenes/v12-empty-curtain.webp` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1024x576 | yes | OWN-RUNTIME | PROTECTED |
 | `assets/guest/red-room/lora/scenes/v14-fox-gum-bubble.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1672x941 | no | OWN-RUNTIME | PROTECTED |
 | `assets/guest/red-room/lora/scenes/v15-fox-candy-offer.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1672x941 | no | OWN-RUNTIME | PROTECTED |
-| `assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1672x941 | yes | OWN-RUNTIME | PROTECTED |
+| `assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
 | `assets/guest/red-room/lora/scenes/v19-pig-tag.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1024x768 | yes | OWN-RUNTIME | PROTECTED |
 | `assets/guest/red-room/lora/scenes/v20-back-room.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1024x576 | yes | OWN-RUNTIME | PROTECTED |
 | `assets/guest/red-room/lora/scenes/v23-fox-album-start.png` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 752x416 | yes | OWN-RUNTIME | PROTECTED |
@@ -384,7 +400,7 @@ change runtime references or change canon.
 | `assets/staff/documents/dossier-sz-312-04.jpg` | `CCTV` | dossier camera evidence | `PAPER-FILE` | 1024x686 | yes | NATIVE-FRAME | — |
 | `assets/staff/documents/dossier-sz-312-05.jpg` | `PERSONAL` | file / family / object evidence | `PAPER-FILE` | 1024x686 | yes | PRESERVE-CARRIER | AMBIGUOUS |
 | `assets/staff/documents/dossier-sz-312-06.jpg` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1024x681 | yes | EVENT-CAMERA | — |
-| `assets/staff/documents/dossier-sz-312-mask-closeup.webp` | `PERSONNEL` | record strip / mask close-up | `PAPER-FILE` | 1024x1024 | yes | SUBTYPE-CROP | — |
+| `assets/staff/documents/dossier-sz-312-mask-closeup.webp` | `PERSONNEL` | record strip / mask close-up | `PAPER-FILE` | 1024x1024 | no | SUBTYPE-CROP | SOURCE-ONLY |
 | `assets/staff/documents/dossier-sz-312-mugshot.webp` | `PERSONNEL` | record strip / front-profile capture | `PAPER-FILE` | 1024x682 | yes | SUBTYPE-CROP | — |
 | `assets/staff/documents/irina-carousel-record.webp` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1792x1008 | yes | EVENT-CAMERA | — |
 | `assets/staff/documents/irina-cotton-candy-stall.webp` | `EVENT-RECORD` | dossier event / recovered frame | `PAPER-FILE` | 1792x1008 | yes | EVENT-CAMERA | — |
@@ -430,7 +446,7 @@ change runtime references or change canon.
 | `assets/staff/documents/protocol-playground-schema-02.webp` | `SCHEMA` | protocol / administrative reconstruction | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | — |
 | `assets/staff/documents/protocol-playground-schema-03.webp` | `SCHEMA` | protocol / administrative reconstruction | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | — |
 | `assets/staff/documents/ulybarych-message-avatar.webp` | `UTILITY` | UI avatar | `BROADCAST-ZHIR-TV` | 512x512 | yes | CONTEXT-SPECIFIC | — |
-| `assets/staff/logo.png` | `UTILITY` | brand mark | `SHELL` | 760x249 | yes | CONTEXT-SPECIFIC | — |
+| `assets/staff/logo.png` | `UTILITY` | brand mark | `SHELL` | 760x249 | no | SOURCE-RESERVE | WEBP-RUNTIME |
 | `assets/staff/mall/cctv-loop-poster.webp` | `CCTV` | fixed toy-store CCTV loop poster | `TYNDEX-TERMINAL` | 560x560 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/park/cctv-loop-poster.webp` | `CCTV` | fixed carousel CCTV loop poster | `TYNDEX-TERMINAL` | 544x544 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/personnel/irina-record.webp` | `PERSONNEL` | record strip / front-profile capture | `PERSONAL-FILE` | 1536x865 | yes | SUBTYPE-CROP | — |
@@ -458,3 +474,179 @@ change runtime references or change canon.
 | `assets/staff/tv/sytno-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
 | `assets/staff/tv/ulybarych-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
 | `assets/staff/tv/zhmuriki-poster.webp` | `EVENT-RECORD` | VHS playback poster / fallback | `VHS-PLAYBACK` | 720x720 | yes | EVENT-CAMERA | — |
+
+## Assets added or refreshed on 2026-09-16
+
+Эти строки отсутствовали в снимке 2026-09-07. `Public` пересчитан после
+production allowlist build; `SOURCE-RESERVE` означает сохранённый исходник
+с действующей WebP-runtime парой, а `SOURCE-ONLY` — материал вне production.
+
+| Asset | Class | Subtype | Carrier | Size | Public | Treatment | Review |
+|---|---|---|---|---:|:---:|---|---|
+| `assets/guest/logo-imagegen.png` | `UTILITY` | brand mark / source variant | `GUEST-FACADE` | 1671x751 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/guest/red-room/lora/scenes/v18-blue-key-cabinet.webp` | `IMMERSIVE-SCENE` | Lora runtime still / fallback | `IMMERSIVE-SCENE` | 1672x941 | yes | OWN-RUNTIME | PROTECTED |
+| `assets/guest/site-header-bg-horror-v1.png` | `UTILITY` | facade background / source variant | `GUEST-FACADE` | 1902x827 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/guest/site-header-bg-horror-v2.png` | `UTILITY` | facade background / source variant | `GUEST-FACADE` | 1900x828 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/guest/site-header-bg-horror-v2.webp` | `UTILITY` | facade background / source variant | `GUEST-FACADE` | 1900x828 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/guest/site-header-bg-liminal-v1.png` | `UTILITY` | facade background / source variant | `GUEST-FACADE` | 1902x827 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/guest/site-header-bg-liminal-v1.webp` | `UTILITY` | facade background / source variant | `GUEST-FACADE` | 1902x827 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/documents/dossier-previews/dossier-irina.webp` | `EVENT-RECORD` | dossier catalog preview | `PAPER-FILE` | 640x640 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/dossier-previews/dossier-kirill-zaytsev.webp` | `EVENT-RECORD` | dossier catalog preview | `PAPER-FILE` | 640x640 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/dossier-previews/dossier-laura.webp` | `EVENT-RECORD` | dossier catalog preview | `PAPER-FILE` | 640x640 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/dossier-previews/dossier-pavel.webp` | `EVENT-RECORD` | dossier catalog preview | `PAPER-FILE` | 640x640 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/dossier-previews/dossier-sz-312.webp` | `EVENT-RECORD` | dossier catalog preview | `PAPER-FILE` | 640x640 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/protocol-aftermath-preview.webp` | `EVENT-RECORD` | archive catalog / recovered material | `PAPER-FILE` | 1254x1254 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-01-intro.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-01-intro.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-02-childhood.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-02-childhood.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-03-categories.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-03-categories.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-04-guests.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-04-guests.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-05-standard.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-05-standard.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-06-eternal.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-06-eternal.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-07-adult.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-07-adult.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-08-questions.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-08-questions.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-09-accompaniment.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-09-accompaniment.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-09-factory.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1664x936 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-10-class.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-10-class.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-11-irina-park.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1664x936 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-11-ommazh-uncanny.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-11-ommazh.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-11-ommazh.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | NO-CROP | ADDED-2026-09-16 |
+| `assets/staff/documents/protocol-children/protocol-children-12-lamb.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-12-lamb.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-13-animator-queue.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1664x936 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-13-final.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-13-final.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-14-infographic.png` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-14-infographic.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-children/protocol-children-15-gas-mask.webp` | `SCHEMA` | protocol book plate / archival reconstruction | `PAPER-FILE` | 1664x936 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-conduit-preview.webp` | `EVENT-RECORD` | archive catalog / recovered material | `PAPER-FILE` | 1254x1254 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/protocol-faith-preview.webp` | `EVENT-RECORD` | archive catalog / recovered material | `PAPER-FILE` | 1254x1254 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-01-intake.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-02-triple-dose.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-03-individual-correction.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-04-growth-correction.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-05-final-correction.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-01.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-02.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-03.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-04.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-05.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-insert-06.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-preview.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1254x1254 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-kidults/protocol-kidults-title.webp` | `SCHEMA` | protocol book plate / age correction | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/protocol-playground-preview.webp` | `EVENT-RECORD` | archive catalog / recovered material | `PAPER-FILE` | 1254x1254 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/protocol-therapy-preview.webp` | `EVENT-RECORD` | archive catalog / recovered material | `PAPER-FILE` | 1254x1254 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-01-elena-drawing.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-01-elena-drawing.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-02-lost-mall.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-02-lost-mall.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-04-common-patient.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-04-common-patient.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-06-scale-network.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-06-scale-network.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-07-swings.jpg` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1792x1008 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-07-swings.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1792x1008 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-08-rope.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-08-rope.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-09-medics-wide.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-09-medics-wide.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-10-corridor.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | NO-CROP | SOURCE-ONLY |
+| `assets/staff/documents/right-path-continuism/right-path-11-clinical-abuse.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-11-clinical-abuse.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-12-extraction.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-12-extraction.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-13-animator-queue.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 768x1376 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-13-animator-queue.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 768x1376 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-14-lamb.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-14-lamb.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-15-red-room-handover.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-15-red-room-handover.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-16-transfer.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | NO-CROP | SOURCE-ONLY |
+| `assets/staff/documents/right-path-continuism/right-path-18-cult-medics-clash.jpg` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1792x1008 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-18-cult-medics-clash.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1792x1008 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-20-medics-read.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-20-medics-read.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-22-ideal-state.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | NO-CROP | SOURCE-ONLY |
+| `assets/staff/documents/right-path-continuism/right-path-24-pov-handoff.jpg` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1152x1728 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-24-pov-handoff.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1152x1728 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-26-final-slide.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-26-final-slide.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1456x816 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-cover.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-cover.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-01-elena-designed-plague-doctor.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1536x1024 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-01-elena-designed-plague-doctor.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1536x1024 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-02-medics-worship-plague-doctor.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-02-medics-worship-plague-doctor.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-03-medics-get-book-from-plague-doctor.png` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/right-path-continuism/right-path-microstory-03-medics-get-book-from-plague-doctor.webp` | `EVENT-RECORD` | book plate / civilian account | `PAPER-FILE` | 1672x941 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-01.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-02.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-03.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-04.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-05.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-06.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-07.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-08.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-09.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-10.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 1024x1536 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/sweet-dream-book/sweet-dream-cover.webp` | `SCHEMA` | cult archive / book plate | `PAPER-FILE` | 682x1024 | yes | NO-CROP | RUNTIME |
+| `assets/staff/documents/zhir-document-header-bg-v1.png` | `UTILITY` | catalog header backdrop | `SHELL` | 2048x768 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/documents/zhir-document-header-bg-v1.webp` | `UTILITY` | catalog header backdrop | `SHELL` | 2048x768 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/donate/zhir-donate-fundraising-animator-v1.png` | `ADVERTISEMENT` | fundraising backdrop | `BROADCAST-ZHIR-TV` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/donate/zhir-donate-fundraising-animator-v1.webp` | `ADVERTISEMENT` | fundraising backdrop | `BROADCAST-ZHIR-TV` | 1672x941 | yes | CLEAN-WIDE | RUNTIME |
+| `assets/staff/home/routes/route-cafe-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1792x1008 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/routes/route-cinema-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1792x1008 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/routes/route-mall-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1456x816 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/routes/route-park-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1456x816 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/routes/route-pool-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1456x816 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/routes/route-zoo-horror.webp` | `EVENT-RECORD` | STAFF route thumbnail | `BROADCAST-ZHIR-TV` | 1456x816 | yes | EVENT-CAMERA | RUNTIME |
+| `assets/staff/home/staff-archive-cell-01-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/home/staff-archive-cell-02-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/home/staff-archive-cell-03-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/home/staff-dossier-stop-frame-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/home/staff-dossier-stop-frame-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/home/staff-wallpaper-olive-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1254x1254 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/home/vhs-spine-housing.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1400x227 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/home/zhir-tv-desktop-stage-remote-off-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1672x941 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/home/zhir-tv-desktop-stage-remote-off-v1.webp` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1672x941 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/home/zhir-tv-desktop-stage-remote-vhs-off-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1672x941 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-mobile-stage-remote-off-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 851x1848 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-mobile-stage-remote-vhs-off-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 851x1848 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-shelf-imagegen-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1536x1024 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-stage-backdrop-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 941x1672 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-stand-graphite-v2.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1249x524 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/home/zhir-tv-web-backdrop-floor-v1.png` | `UTILITY` | STAFF home / device plate | `BROADCAST-ZHIR-TV` | 1672x941 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/logo-imagegen.png` | `UTILITY` | brand mark / source variant | `SHELL` | 2171x711 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/logo.webp` | `UTILITY` | brand mark / source variant | `SHELL` | 760x249 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/staff/polaroids/irina.webp` | `PERSONNEL` | internal personnel card / Polaroid | `BROADCAST-ZHIR-TV` | 480x600 | yes | SUBTYPE-CROP | RUNTIME |
+| `assets/staff/staff/polaroids/kirill.webp` | `PERSONNEL` | internal personnel card / Polaroid | `BROADCAST-ZHIR-TV` | 480x600 | yes | SUBTYPE-CROP | RUNTIME |
+| `assets/staff/staff/polaroids/lora.webp` | `PERSONNEL` | internal personnel card / Polaroid | `BROADCAST-ZHIR-TV` | 480x600 | yes | SUBTYPE-CROP | RUNTIME |
+| `assets/staff/staff/polaroids/oleg.webp` | `PERSONNEL` | internal personnel card / Polaroid | `BROADCAST-ZHIR-TV` | 480x600 | yes | SUBTYPE-CROP | RUNTIME |
+| `assets/staff/staff/polaroids/pavel.webp` | `PERSONNEL` | internal personnel card / Polaroid | `BROADCAST-ZHIR-TV` | 480x600 | yes | SUBTYPE-CROP | RUNTIME |
+| `assets/staff/staff/polaroids/player-empty.png` | `UTILITY` | empty personnel-card frame | `BROADCAST-ZHIR-TV` | 480x600 | yes | CONTEXT-SPECIFIC | KEEP-PNG |
+| `assets/staff/tv/zhir-tv-header-bg-v1.png` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1899x828 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/tv/zhir-tv-header-bg-v1.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1899x828 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/tv/zhir-tv-kindergarten-carpet-v1.png` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 941x1672 | no | SOURCE-RESERVE | WEBP-RUNTIME |
+| `assets/staff/tv/zhir-tv-kindergarten-carpet-v1.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 941x1672 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/tv/zhir-tv-monitor-graphite-v2.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1024x1024 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-monitor-graphite.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1024x1024 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-monitor-source-v1.png` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 512x512 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/tv/zhir-tv-monitor-vhs.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1024x1024 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-remote-r16.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 864x1152 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/tv/zhir-tv-remote.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 864x1152 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-stand-source-v1.png` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 512x246 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |
+| `assets/staff/tv/zhir-tv-unit-mobile-remote-v1.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 512x726 | yes | CONTEXT-SPECIFIC | RUNTIME |
+| `assets/staff/tv/zhir-tv-unit-mobile-v1.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 512x726 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-unit-v1.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1528x1636 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-vhs.webp` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 1536x1024 | no | CONTEXT-SPECIFIC | ADDED-2026-09-16 |
+| `assets/staff/tv/zhir-tv-wall-floor-neutral-v1.png` | `UTILITY` | TV device / environment asset | `BROADCAST-ZHIR-TV` | 941x1672 | no | CONTEXT-SPECIFIC | SOURCE-ONLY |

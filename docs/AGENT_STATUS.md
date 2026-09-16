@@ -8,11 +8,11 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-16 |
-| Ветка / HEAD | `main` / `11de532` |
-| Дерево | dirty: STAFF route-pages redesign in `index.html`, `css/style.css`, six `staff/locations/*.html`, new `assets/staff/icons/route-signal.svg`, and this status snapshot; public build and verifier pass; commit / push / deploy не выполнялись |
-| Активная линия | Косметический редизайн рубрики «Маршруты» и сохранение глобального аудиоплеера при SPA-навигации |
-| Последний этап | У карточек шести STAFF-маршрутов удалён `data-full-navigation`; добавлены route-specific accent classes, SVG-сигнал, служебная шапка, фон-сетка и CCTV monitor treatment. Desktop `1280x900` и mobile `390x844` прошли без overflow; console `0/0`. |
-| Следующий gate | Ручной просмотр направления редизайна пользователем; commit / push / deploy только по прямой просьбе |
+| Ветка / HEAD | `main` / `9de6f2e` |
+| Дерево | dirty: image optimization в runtime refs, новые WebP и `docs/IMAGE_ART_DIRECTION_MANIFEST.md`; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | Image asset audit и WebP-конвертация завершены локально; ожидается пользовательский просмотр результата |
+| Последний этап | 9 тяжёлых runtime PNG и STAFF logo переведены в WebP с сохранением dimensions; manifest обновлён до 523 строк, production raster payload — около 55 MiB, в production нет PNG/JPG тяжелее 500 KiB. Build `636` files, verifier, Lora validator, `node --check` и `git diff --check` прошли. |
+| Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
 ## Write-замок
