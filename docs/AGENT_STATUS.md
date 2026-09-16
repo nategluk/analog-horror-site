@@ -7,12 +7,12 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-15 15:30 CDT |
-| Ветка / HEAD | `main` / `51fb157` |
-| Дерево | dirty: `books.html`; карточка «Правильный Путь» использует существующую WebP-обложку и короткое описание; public build пересобран и проверен; commit / push / deploy не выполнялись |
-| Активная линия | Точечная правка карточки каталога «Издания» для «Правильного Пути» |
-| Последний этап | В `books.html` типографский preview заменён на `right-path-cover.webp`; описание и ссылка на ридер сохранены. |
-| Следующий gate | Ручная замена/перестановка текста, изображений и документальных вставок пользователем; commit / push / deploy только по прямой просьбе |
+| Обновлено | 2026-09-16 |
+| Ветка / HEAD | `main` / `11de532` |
+| Дерево | dirty: STAFF route-pages redesign in `index.html`, `css/style.css`, six `staff/locations/*.html`, new `assets/staff/icons/route-signal.svg`, and this status snapshot; public build and verifier pass; commit / push / deploy не выполнялись |
+| Активная линия | Косметический редизайн рубрики «Маршруты» и сохранение глобального аудиоплеера при SPA-навигации |
+| Последний этап | У карточек шести STAFF-маршрутов удалён `data-full-navigation`; добавлены route-specific accent classes, SVG-сигнал, служебная шапка, фон-сетка и CCTV monitor treatment. Desktop `1280x900` и mobile `390x844` прошли без overflow; console `0/0`. |
+| Следующий gate | Ручной просмотр направления редизайна пользователем; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
 ## Write-замок
@@ -26,6 +26,8 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-16: STAFF route cards теперь используют существующий SPA-router, поэтому общий `Audio` сохраняет трек, playing-state и прогресс при переходе на `staff/locations/*.html`. Шесть route pages получили единый scoped visual treatment: route accent/background grid, `route-signal.svg`, dossier header и framed CCTV screen; guest routes и сюжетное содержимое не менялись. `node --check js/app.js`, `git diff --check`, production build (`637` files), `verify-public-build`, desktop/mobile browser QA и console `0/0` прошли. Временные route QA screenshots перемещены в корзину; commit / push / deploy не выполнялись.
 
 - 2026-09-15: все 20 активных изображений «Правильного Пути» конвертированы
   в WebP с сохранением dimensions; runtime source теперь содержит только
