@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-16 |
 | Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: STAFF donate-футер, новые Figma-кропы WebP и прежние пользовательские image-optimization изменения; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | STAFF donate-футер собран как одноярусная реалистичная VHS-полка; VK исключён, Ko-fi получил отдельную hotspot-зону |
-| Последний этап | В `donate.html` удалён VK, а `css/style.css` подключает Figma-кропы `zhir-footer-shelf-web-v1.webp` и mobile-вариант вместо старых SVG-кнопок. Desktop `1280x900` и mobile `390x844`: 7 ссылок кликабельны, overflow отсутствует, console `0/0`; build `638` files и verifier прошли. |
+| Дерево | dirty: глобальная STAFF-оболочка футера, runtime-нормализация ссылок, строка главной страницы и Figma-кропы WebP; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | Все STAFF-футеры используют одноярусную реалистичную VHS-полку; строка остаётся per-page DOM, VK скрыт, Ko-fi и support-зоны кликабельны |
+| Последний этап | `css/style.css` подключает text-free v2 WebP на всех `.site-wrapper .site-footer`, `js/app.js` нормализует коды соцсетей и добавляет 06–08 при отсутствии. Проверены donate, главная, документ, location и staff/tv на desktop/mobile: overflow `0`, console `0/0`; build `638` files и verifier прошли. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 

@@ -5963,6 +5963,77 @@
     });
   };
 
+  const STAFF_FOOTER_LINKS = Object.freeze([
+    {
+      code: "06",
+      label: "Boosty",
+      href: "https://boosty.to/aivisions_lab/donate",
+    },
+    {
+      code: "07",
+      label: "PayPal",
+      href: "https://paypal.me/NateGlukhov",
+    },
+    {
+      code: "08",
+      label: "Ko-fi",
+      href: "https://ko-fi.com/detskiyzhir",
+    },
+  ]);
+
+  const STAFF_FOOTER_SOCIAL_CODES = Object.freeze([
+    ["t.me/horror_rules", "01"],
+    ["instagram.com/aivisions_lab", "02"],
+    ["youtube.com/@sunrules", "03"],
+    ["vk.com/horror_rules", "04"],
+    ["tiktok.com/@ai_visions_lab", "05"],
+  ]);
+
+  const initStaffFooter = () => {
+    document.querySelectorAll(".site-footer").forEach((footer) => {
+      const nav = footer.querySelector(".social-links");
+      if (!nav) return;
+
+      const hasSignal = [...footer.children].some((child) =>
+        child.matches(".staff-content")
+      );
+      if (!hasSignal) {
+        const signal = document.createElement("p");
+        signal.className = "staff-content";
+        signal.textContent = "служебный канал // сигнал страницы зарегистрирован";
+        footer.insertBefore(signal, nav);
+      }
+
+      nav.querySelectorAll("a").forEach((link) => {
+        if (link.dataset.vhsCode) return;
+        const href = (link.getAttribute("href") || "").toLowerCase();
+        const match = STAFF_FOOTER_SOCIAL_CODES.find(([fragment]) => href.includes(fragment));
+        if (match) link.dataset.vhsCode = match[1];
+      });
+
+      nav.querySelectorAll('a[href*="vk.com"], a[data-vhs-code="04"]').forEach((link) => {
+        link.remove();
+      });
+
+      STAFF_FOOTER_LINKS.forEach(({ code, label, href }) => {
+        if (nav.querySelector(`a[data-vhs-code="${code}"]`)) return;
+
+        const link = document.createElement("a");
+        link.className = "staff-content";
+        link.href = href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.dataset.vhsCode = code;
+        link.setAttribute("aria-label", label);
+
+        const labelNode = document.createElement("span");
+        labelNode.textContent = label.toUpperCase();
+        link.append(labelNode);
+        nav.append(link);
+      });
+    });
+  };
+
   const initDOMListeners = () => {
     const logo = document.querySelector(".logo");
     const hiddenTrigger = document.querySelector(".footer-trigger");
@@ -5980,6 +6051,7 @@
     initStaffProtocolWarning();
     initArchiveCatalog();
     initMaterialCatalogSignals();
+    initStaffFooter();
     initSweetDreamBook();
     initMobileNavigation();
     initStaffHomeNotice();
