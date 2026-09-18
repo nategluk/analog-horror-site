@@ -13241,14 +13241,16 @@ body.staff-mode .location-cinematic-broadcast-page .location-cinematic .terminal
 /* ─── GUEST homepage: discovery sequence ─── */
 body:not(.staff-mode) .home-discovery--entry {
   border-radius: 4px;
+  background-image: url("../assets/guest/index-atrium-bg-v1.webp");
+  background-position: center;
 }
 
 body:not(.staff-mode) .home-discovery--entry::before {
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.22) 0%,
     rgba(0, 0, 0, 0.3) 52%,
-    rgba(0, 0, 0, 0.5) 100%
+    rgba(0, 0, 0, 0.62) 100%
   );
 }
 

@@ -8,10 +8,10 @@
 | Поле | Значение |
 |---|---|
 | Обновлено | 2026-09-17 |
-| Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: unified гостевая навигация на публичных индексных/locked-страницах и unified hero/surface CSS главной; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | Главная, обычные guest-разделы, locked-каталоги и location routes используют общий overlay header с mobile menu; STAFF-режим и игровые экраны сохранены отдельно |
-| Последний этап | Навигация перенесена на `about`, `staff`, `hiring`, `faq`, `donate`, `episodes`, `locations`, `protocols`, `dossiers`, `books`; desktop `1280x900`, mobile `390x844`, active links, mobile menu, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
+| Ветка / HEAD | `main` / `bbb92ed` |
+| Дерево | dirty: новый фон гостевого entry hero, WebP + PNG reserve, README и снимок статуса; commit / push / deploy не выполнялись |
+| Активная линия | Одобренный фон атриума подключён к «Ваш путь к чуду начинается здесь» только в guest mode |
+| Последний этап | Entry hero WebP 1672×941, ~190 KiB; mobile 390×844: кадрирование/читаемость, overflow 0, console 0/0; build 648, verifier 649; diff check прошёл |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
@@ -26,6 +26,18 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-17: по одобрению пользователя `index-atrium-bg-v1.webp` подключён
+  к guest `.home-discovery--entry`; центрированное кадрирование, затемнение
+  0.22 → 0.62, PNG оставлен резервом. Проверены mobile `390×844`, фактический
+  background URL, визуальная читаемость, overflow `0`, console `0/0`;
+  build `648`, verifier `649`, `git diff --check` прошли. Desktop отдельно
+  не проверялся; commit / push / deploy не выполнялись.
+
+- 2026-09-17: built-in ImageGen создал отдельный вариант фона гостевой главной
+  `assets/guest/index-atrium-bg-v1.png` (1672×941): пустой пастельный атриум.
+  Изображение просмотрено; runtime-подключение, build и browser QA не выполнялись.
+  Commit / push / deploy не выполнялись.
 
 - 2026-09-17: built-in ImageGen создал единый набор шести location hero
   (`1672×941`, 16:9): зоопарк, бассейн, парк «Солнышко», кинотеатр, ТЦ и

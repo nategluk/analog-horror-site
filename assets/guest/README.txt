@@ -1,6 +1,7 @@
 Place the uploaded images here using these filenames:
 
 Section backgrounds (atmosphere):
+- index-atrium-bg-v1.webp (guest homepage entry hero; PNG is the local source reserve)
 - bg-lobby.jpg      (warm lobby / theater hall)
 - bg-corridor.jpg   (pastel corridor with pipes)
 - bg-exterior.jpg   (outside entrance in rain/fog)
