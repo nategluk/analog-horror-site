@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-17 |
 | Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: глобальная STAFF-оболочка футера, runtime-нормализация ссылок, строка главной страницы, Figma-кропы WebP, responsive hero staging-пакет, STAFF-only music player, новые guest hero-ссылки, transparent fixed guest overlay, guest copy cleanup, guest surface cleanup, complex wayfinding background, hero copy cleanup, прозрачные guest cards и location hero set; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | Гостевой индекс и шесть location-страниц используют прозрачную overlay-шапку, edge-to-edge hero и плоскую surface-систему; индекс сохраняет wayfinding plate и полупрозрачные карточки, location heroes используют единый 16:9/4:5 crop, STAFF-режим и трёхкликовый вход сохранены отдельно |
-| Последний этап | Одобрена и интегрирована серия из шести 16:9 location hero; desktop `1280x900` и mobile `390x844` для всех маршрутов, mobile menu, тройной клик в STAFF, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
+| Дерево | dirty: гостевая главная получила unified hero/surface CSS; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | Гостевая главная использует edge-to-edge hero, единый контейнер hero/контента и плоскую тёплую surface-систему; STAFF-режим и location routes не затронуты |
+| Последний этап | Hero ограничен до `clamp(32rem, 72svh, 46rem)`, wayfinding/reviews/rules лишились фоновых фотографических подложек; desktop `1280x900`, mobile `390x844`, оба hero override, mobile menu, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
