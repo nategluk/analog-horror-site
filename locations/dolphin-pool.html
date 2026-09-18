@@ -20,28 +20,42 @@
   </head>
   <body>
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target">
-      <header class="site-header">
-        <div class="logo-area">
-          <h1 class="logo" data-location-cctv-route="../staff/locations/dolphin-pool" aria-label="Развлекательный комплекс Детский Жир">
-            <img class="logo-image" src="../assets/guest/logo.svg" alt="Детский Жир" />
-            <img class="staff-logo-image" src="../assets/staff/logo.webp" alt="Детский Жир" />
-          </h1>
-          <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
-        </div>
-      </header>
+    <div class="site-wrapper glitch-target guest-location-page">
+      <div class="home-topbar" data-home-topbar>
+        <button
+          class="home-mobile-menu-toggle"
+          type="button"
+          data-home-mobile-menu-toggle
+          aria-controls="location-primary-nav"
+          aria-expanded="false"
+          aria-label="Открыть меню"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+        <header class="site-header">
+          <div class="logo-area">
+            <h1 class="logo" data-location-cctv-route="../staff/locations/dolphin-pool" aria-label="Развлекательный комплекс Детский Жир">
+              <img class="logo-image" src="../assets/guest/logo.svg" alt="Детский Жир" />
+              <img class="staff-logo-image" src="../assets/staff/logo.webp" alt="Детский Жир" />
+            </h1>
+            <span class="status-pill" data-mode-label>Режим: Гостевая версия</span>
+          </div>
+        </header>
 
-      <nav class="site-nav" aria-label="Основная навигация">
-        <ul>
-          <li><a href="/">Главная</a></li>
-          <li><a href="../about">О компании</a></li>
-          <li><a href="../staff">Персонал</a></li>
-          <li><a href="../hiring">Работа</a></li>
-          <li><a href="../faq">FAQ</a></li>
-          <li><a href="../donate">Связь и поддержка</a></li>
-          <li><a href="../episodes.html" rel="nofollow">Программа передач</a></li>
-        </ul>
-      </nav>
+        <nav id="location-primary-nav" class="site-nav" data-home-primary-nav aria-label="Основная навигация">
+          <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="../about">О компании</a></li>
+            <li><a href="../staff">Персонал</a></li>
+            <li><a href="../hiring">Работа</a></li>
+            <li><a href="../faq">FAQ</a></li>
+            <li><a href="../donate">Связь и поддержка</a></li>
+            <li><a href="../episodes.html" rel="nofollow">Программа передач</a></li>
+          </ul>
+        </nav>
+      </div>
 
       <section class="hero location-hero location-hero--dolphin guest-content">
         <div class="hero__content">

@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-16 |
+| Обновлено | 2026-09-17 |
 | Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: глобальная STAFF-оболочка футера, runtime-нормализация ссылок, строка главной страницы и Figma-кропы WebP; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | Все STAFF-футеры используют одноярусную реалистичную VHS-полку; строка остаётся per-page DOM, VK скрыт, Ko-fi и support-зоны кликабельны |
-| Последний этап | `css/style.css` подключает text-free v2 WebP на всех `.site-wrapper .site-footer`, `js/app.js` нормализует коды соцсетей и добавляет 06–08 при отсутствии. Проверены donate, главная, документ, location и staff/tv на desktop/mobile: overflow `0`, console `0/0`; build `638` files и verifier прошли. |
+| Дерево | dirty: глобальная STAFF-оболочка футера, runtime-нормализация ссылок, строка главной страницы, Figma-кропы WebP, responsive hero staging-пакет, STAFF-only music player, новые guest hero-ссылки, transparent fixed guest overlay, guest copy cleanup, guest surface cleanup, complex wayfinding background, hero copy cleanup, прозрачные guest cards и location hero set; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | Гостевой индекс и шесть location-страниц используют прозрачную overlay-шапку, edge-to-edge hero и плоскую surface-систему; индекс сохраняет wayfinding plate и полупрозрачные карточки, location heroes используют единый 16:9/4:5 crop, STAFF-режим и трёхкликовый вход сохранены отдельно |
+| Последний этап | Одобрена и интегрирована серия из шести 16:9 location hero; desktop `1280x900` и mobile `390x844` для всех маршрутов, mobile menu, тройной клик в STAFF, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
@@ -26,6 +26,63 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-17: built-in ImageGen создал единый набор шести location hero
+  (`1672×941`, 16:9): зоопарк, бассейн, парк «Солнышко», кинотеатр, ТЦ и
+  «Красная Комната». PNG сохранены как локальный source reserve, WebP подключены
+  в `css/style.css`; шесть location HTML получили `guest-location-page`,
+  прозрачную overlay-шапку и мобильное меню. Постеры и игровые ассеты не менялись.
+  Проверены все шесть маршрутов на desktop `1280x900` и mobile `390x844`,
+  computed background URLs, hero ratios `16:9`/`4:5`, mobile menu, тройной клик
+  в STAFF, overflow `0` и console `0/0`; build `647`, verifier `648`.
+  Использован built-in ImageGen, CLI fallback не применялся. Commit/push/deploy
+  не выполнялись.
+
+- 2026-09-17: по одобрению пользователя гостевые карточки маршрутов и отзывов
+  получили `rgba(255, 241, 228, 0.76)` в текстовой области. Превью остаются
+  непрозрачными, focus/hover-геометрия сохранена. Проверены computed background,
+  фактический WebP wayfinding plate, desktop `1280x900`, mobile `390x844`,
+  overflow `0` и console `0/0`; build `641`, verifier `642`. Commit/push/deploy
+  не выполнялись.
+
+- 2026-09-17: guest entry hero сокращён по просьбе пользователя: удалён текст
+  `Уютные аллеи, мягкий свет и бесконечная музыка игр.`, длинное предупреждение
+  разделено на два `<p>`, финальная строка заменена на `Соблюдай правила`.
+  Проверены source/public text parity, mobile `390x844`, hero `375×468.75`,
+  overflow `0` и console `0/0`; build `641`, verifier `642`. Commit/push/deploy
+  не выполнялись.
+
+- 2026-09-17: ImageGen создал wide background plate `1672×941` для гостевого
+  указателя: спокойный центр, детали по краям, без текста, логотипов и персонажей.
+  PNG сохранён как локальный резерв, runtime использует WebP
+  `assets/guest/complex-wayfinding-bg-v1.webp`; `assets/guest/README.txt`
+  обновлён. Проверены source/public dimensions, desktop `1280x900`, mobile
+  `390x844`, фактическая загрузка background, crop, overflow `0` и console `0/0`.
+  Build `641`, verifier `642`; commit/push/deploy не выполнялись.
+
+- 2026-09-17: гостевая поверхность главной упрощена после overlay-перехода:
+  `main.panel` и `site-footer` стали прозрачными без внешней рамки/blur,
+  route/review backplates получили плоскую геометрию, guest cards сохранили
+  тень, цветовую верхнюю полосу и видимый keyboard focus, thumbnails больше не
+  имеют дополнительной рамки. Mobile menu blur оставлен. Build `640`, verifier
+  `641`, desktop `1280x900`, mobile `390x844`, menu open/close, overflow `0`
+  и console `0/0` прошли. Commit/push/deploy не выполнялись.
+
+- 2026-09-17: с гостевой главной удалены повторяющиеся подписи `00 // ВХОД В
+  КОМПЛЕКС`, `01 // МАРШРУТЫ`, `02 // ОТКЛИКИ ГОСТЕЙ` и `03 // Административная
+  памятка`; крупные заголовки секций и discovery-атрибуты сохранены, у памятки
+  `aria-labelledby` оставлен только на основном заголовке. После build `640` и
+  verifier `641` проверены desktop `1280x900`, mobile `390x844`, overflow `0`,
+  console `0/0`, desktop 3-click/mobile 3-touch и возврат STAFF → guest.
+  Commit/push/deploy не выполнялись.
+
+- 2026-09-17: homepage header/nav обёрнуты в `.home-topbar`; в гостевом режиме
+  это прозрачная fixed overlay поверх hero, а на mobile доступно компактное
+  hamburger-меню. Существующий `.logo` и контракт трёх кликов/тапов сохранены;
+  `applyMode` закрывает меню и оставляет music player только в STAFF. Проверены
+  desktop `1280x900`, mobile `390x844`, Escape/focus, STAFF restore/exit,
+  horizontal overflow `0`, console `0/0`; production build `640` и
+  `verify-public-build` `641` успешны. Commit/push/deploy не выполнялись.
 
 - 2026-09-16: STAFF route cards теперь используют существующий SPA-router, поэтому общий `Audio` сохраняет трек, playing-state и прогресс при переходе на `staff/locations/*.html`. Шесть route pages получили единый scoped visual treatment: route accent/background grid, `route-signal.svg`, dossier header и framed CCTV screen; guest routes и сюжетное содержимое не менялись. `node --check js/app.js`, `git diff --check`, production build (`637` files), `verify-public-build`, desktop/mobile browser QA и console `0/0` прошли. Временные route QA screenshots перемещены в корзину; commit / push / deploy не выполнялись.
 

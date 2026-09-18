@@ -1728,6 +1728,26 @@
     }
   };
 
+  const destroyMusicPlayer = () => {
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+    }
+
+    player?.remove();
+    audio = null;
+    player = null;
+    playButton = null;
+    trackLabel = null;
+    nextButton = null;
+    downloadLink = null;
+    progressRange = null;
+    currentMusicMode = "guest";
+    currentTrackIndex = 0;
+    localStorage.setItem(MUSIC_PLAYING_KEY, "false");
+  };
+
   const setStaffSession = (active) => {
     try {
       if (active) {
@@ -1786,10 +1806,31 @@
     }
   };
 
+  const resetHomeOverlayMenu = () => {
+    const toggle = document.querySelector("[data-home-mobile-menu-toggle]");
+    const nav = document.querySelector("[data-home-primary-nav]");
+    if (!toggle || !nav) return;
+
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("aria-label", "Открыть меню");
+    nav.classList.remove("is-menu-open");
+  };
+
   const applyMode = (isStaff) => {
+    resetHomeOverlayMenu();
     body.classList.toggle("staff-mode", isStaff);
     syncModeLabel(isStaff);
-    setMusicMode(isStaff);
+    if (isStaff) {
+      if (!audio) {
+        currentMusicMode = "staff";
+        currentTrackIndex = 0;
+        initMusicPlayer();
+      } else {
+        setMusicMode(true);
+      }
+    } else {
+      destroyMusicPlayer();
+    }
     updateCctvVideos(isStaff);
     localStorage.setItem(MODE_KEY, isStaff ? "staff" : "guest");
     setStaffSession(isStaff);
@@ -5963,6 +6004,49 @@
     });
   };
 
+  const initHomeOverlayNavigation = () => {
+    const toggle = document.querySelector("[data-home-mobile-menu-toggle]");
+    const nav = document.querySelector("[data-home-primary-nav]");
+    if (!toggle || !nav || toggle.dataset.homeOverlayReady === "true") return;
+
+    toggle.dataset.homeOverlayReady = "true";
+    nav.classList.add("home-mobile-nav-ready");
+
+    const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+    const setOpen = (open) => {
+      const nextOpen = Boolean(open) && isMobile();
+      toggle.setAttribute("aria-expanded", String(nextOpen));
+      toggle.setAttribute("aria-label", nextOpen ? "Закрыть меню" : "Открыть меню");
+      nav.classList.toggle("is-menu-open", nextOpen);
+    };
+
+    toggle.addEventListener("click", () => {
+      setOpen(toggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (isMobile()) setOpen(false);
+      });
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || toggle.getAttribute("aria-expanded") !== "true") return;
+      setOpen(false);
+      toggle.focus();
+    });
+
+    window.addEventListener(
+      "resize",
+      () => {
+        if (!isMobile()) setOpen(false);
+      },
+      { passive: true }
+    );
+
+    setOpen(false);
+  };
+
   const STAFF_FOOTER_LINKS = Object.freeze([
     {
       code: "06",
@@ -6059,6 +6143,7 @@
     initPavelObservationBooth();
     updateCctvVideos(body.classList.contains("staff-mode"));
     syncModeLabel(body.classList.contains("staff-mode"));
+    initHomeOverlayNavigation();
 
     if (statusLabel && statusLabel.dataset.modeExitReady !== "true") {
       statusLabel.dataset.modeExitReady = "true";
@@ -6298,7 +6383,6 @@
   });
 
   const init = () => {
-    initMusicPlayer();
     getNavigationAnnouncer();
     const requestedPersonnel = new URLSearchParams(window.location.search).get("personnel");
     if (requestedPersonnel === "pavel" && hasPavelBridgeAccess()) {
