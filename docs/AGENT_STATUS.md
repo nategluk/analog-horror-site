@@ -9,9 +9,9 @@
 |---|---|
 | Обновлено | 2026-09-17 |
 | Ветка / HEAD | `main` / `9de6f2e` |
-| Дерево | dirty: гостевая главная получила unified hero/surface CSS; production build локальный; commit / push / deploy не выполнялись |
-| Активная линия | Гостевая главная использует edge-to-edge hero, единый контейнер hero/контента и плоскую тёплую surface-систему; STAFF-режим и location routes не затронуты |
-| Последний этап | Hero ограничен до `clamp(32rem, 72svh, 46rem)`, wayfinding/reviews/rules лишились фоновых фотографических подложек; desktop `1280x900`, mobile `390x844`, оба hero override, mobile menu, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
+| Дерево | dirty: unified гостевая навигация на публичных индексных/locked-страницах и unified hero/surface CSS главной; production build локальный; commit / push / deploy не выполнялись |
+| Активная линия | Главная, обычные guest-разделы, locked-каталоги и location routes используют общий overlay header с mobile menu; STAFF-режим и игровые экраны сохранены отдельно |
+| Последний этап | Навигация перенесена на `about`, `staff`, `hiring`, `faq`, `donate`, `episodes`, `locations`, `protocols`, `dossiers`, `books`; desktop `1280x900`, mobile `390x844`, active links, mobile menu, overflow `0` и console `0/0` прошли; build `647` files, verifier `648`. |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 

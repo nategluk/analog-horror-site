@@ -20,7 +20,21 @@
   </head>
   <body class="about-page">
     <div class="vhs-noise" aria-hidden="true"></div>
-    <div class="site-wrapper glitch-target broadcast-shell-page about-broadcast-page menu-broadcast-page">
+    <div class="site-wrapper glitch-target broadcast-shell-page about-broadcast-page menu-broadcast-page guest-index-page">
+      <div class="home-topbar" data-home-topbar>
+        <button
+          class="home-mobile-menu-toggle"
+          type="button"
+          data-home-mobile-menu-toggle
+          aria-controls="guest-primary-nav"
+          aria-expanded="false"
+          aria-label="Открыть меню"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+
       <header class="site-header">
         <div class="logo-area">
           <h1 class="logo" aria-label="Развлекательный комплекс Детский Жир">
@@ -34,7 +48,7 @@
         </div>
       </header>
 
-      <nav class="site-nav" aria-label="Основная навигация">
+      <nav id="guest-primary-nav" class="site-nav" data-home-primary-nav aria-label="Основная навигация">
         <ul>
           <li><a href="/"><span class="staff-nav-code" aria-hidden="true">P100</span>Главная</a></li>
           <li><a href="about" aria-current="page"><span class="staff-nav-code" aria-hidden="true">P110</span>О компании</a></li>
@@ -45,6 +59,7 @@
           <li><a href="episodes.html" rel="nofollow"><span class="staff-nav-code" aria-hidden="true">P400</span>Программа передач</a></li>
         </ul>
       </nav>
+      </div>
 
       <main class="panel about-panel">
         <section class="guest-content">
