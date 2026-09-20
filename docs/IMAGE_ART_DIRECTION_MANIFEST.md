@@ -16,14 +16,14 @@ Scope: `/Users/nateglukhov/analog-horror-site/assets/guest` и
 |---|---:|---:|---:|
 | `ADVERTISEMENT` | 30 | 28 | 2 |
 | `PERSONNEL` | 25 | 24 | 1 |
-| `CCTV` | 15 | 15 | 0 |
+| `CCTV` | 16 | 16 | 0 |
 | `PERSONAL` | 18 | 18 | 0 |
 | `EVENT-RECORD` | 127 | 103 | 24 |
 | `SCHEMA` | 82 | 67 | 15 |
 | `UTILITY` | 55 | 25 | 30 |
 | `IMMERSIVE-SCENE` | 171 | 86 | 85 |
 
-Всего: **523** source assets; public copies: **366**;
+Всего: **524** source assets; public copies: **367**;
 source-only: **157**.
 `projects/` (110 файлов) намеренно не включён: это отдельный staging/reference
 слой. Геометрия считается по исходным размерам: wide ≈ 1.6–1.9, square ≈ 0.9–1.1,
@@ -334,6 +334,7 @@ change runtime references or change canon.
 | `assets/staff/cctv/pool-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
 | `assets/staff/cctv/slide-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
 | `assets/staff/cctv/zoo-poster.jpg` | `CCTV` | fixed camera poster | `BROADCAST-ZHIR-TV` | 480x480 | yes | NATIVE-FRAME | — |
+| `assets/staff/cctv/found-footage-poster.webp` | `CCTV` | hidden found-footage source fallback | `BROADCAST-ZHIR-TV` | 544x544 | yes | NATIVE-FRAME | ADDED-2026-09-20 |
 | `assets/staff/cinema/cctv-loop-poster.webp` | `CCTV` | fixed cinema CCTV loop poster | `TYNDEX-TERMINAL` | 560x560 | yes | NATIVE-FRAME | WEBP-FALLBACK |
 | `assets/staff/classes/animators.png` | `SCHEMA` | training or class plate | `BROADCAST-ZHIR-TV` | 1360x768 | yes | NO-CROP | — |
 | `assets/staff/classes/class-10-sun-mask.webp` | `SCHEMA` | training plate / admin overlay | `BROADCAST-ZHIR-TV` | 900x1190 | yes | NO-CROP | WM-QA; OVERLAY |

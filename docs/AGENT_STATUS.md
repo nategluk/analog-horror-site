@@ -7,11 +7,11 @@
 
 | Поле | Значение |
 |---|---|
-| Обновлено | 2026-09-17 |
+| Обновлено | 2026-09-20 |
 | Ветка / HEAD | `main` / `bbb92ed` |
-| Дерево | dirty: новый фон гостевого entry hero, WebP + PNG reserve, README и снимок статуса; commit / push / deploy не выполнялись |
-| Активная линия | Одобренный фон атриума подключён к «Ваш путь к чуду начинается здесь» только в guest mode |
-| Последний этап | Entry hero WebP 1672×941, ~190 KiB; mobile 390×844: кадрирование/читаемость, overflow 0, console 0/0; build 648, verifier 649; diff check прошёл |
+| Дерево | dirty: пять новых hidden-TV MP4, квадратный fallback-постер, `staff/tv.html`, broadcast docs и asset manifest; commit / push / deploy не выполнялись |
+| Активная линия | `SOURCE 006 // НЕУЧТЁННЫЕ КАДРЫ`: пул из пяти 6-секундных found-footage роликов в служебном телевизоре |
+| Последний этап | Все клипы `544×544`, H.264, `6.041667 s`; desktop `1280×900` и mobile `390×844`, overflow 0, console 0/0; build 654, verifier 655; diff check прошёл |
 | Следующий gate | Пользовательский просмотр; commit / push / deploy только по прямой просьбе |
 | Публикация | текущая правка не публиковалась; live-статус не проверялся |
 
@@ -26,6 +26,17 @@ FREE
 пишет один агент.
 
 ## Текущая работа и сохранность
+
+- 2026-09-20: пять присланных square MP4 сохранены как
+  `assets/staff/cctv/found-footage-01/02/03/04/05.mp4`; исходные H.264/AAC
+  файлы не перекодировались. Из первого кадра создан
+  `found-footage-poster.webp` (`544×544`) как still-fallback. Все шесть
+  файлов добавлены в public allowlist через `SOURCE 006` в `staff/tv.html`;
+  ролики одноразовые и после `video.ended` возвращают CCTV к шуму. Проверены
+  production build `654`, verifier `655`, source/public parity, HTTP `200`,
+  desktop `1280×900`, mobile `390×844`, overflow `0`, console `0/0`,
+  `node --check js/app.js` и `git diff --check`. Commit / push / deploy не
+  выполнялись.
 
 - 2026-09-17: на главной `Соблюдай правила` заменено на `Соблюдайте правила`.
   Проверены целевой текст и `git diff --check`; browser QA не требовался.

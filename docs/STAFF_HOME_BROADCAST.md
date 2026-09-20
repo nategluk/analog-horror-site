@@ -170,6 +170,8 @@ lightbox. Его три бывших изображения `blueprint_01.webp`,
   `intrusion-disco-room.mp4`;
 - `SOURCE 005 // НЕИЗВЕСТНАЯ КАМЕРА` —
   `intrusion-plague-doctor-camera.mp4`.
+- `SOURCE 006 // НЕУЧТЁННЫЕ КАДРЫ` — пул из пяти квадратных found-footage
+  фрагментов `found-footage-01.mp4`–`found-footage-05.mp4`.
 
 Телепередачи и вторжения повторно используют материалы звонка Ирины из
 `assets/staff/curators/irina/`. CCTV-файлы находятся в `assets/staff/cctv/`.
